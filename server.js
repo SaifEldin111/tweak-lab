@@ -68,6 +68,7 @@ const DEFAULT_SETTINGS = {
   videoTitle: 'فيديو الشرح العملي الكامل: إزاي تطبق كل التويكات بأمان وتضاعف الـ FPS',
   videoNotes: 'شاهد الفيديو بالكامل (5 دقائق) قبل تشغيل أداة best optimization for 2027 fps +.bat كمسؤول (Run as Administrator).',
   adminPin: '2027',
+  appUrl: process.env.APP_URL || 'https://tweak-lab-a177.vercel.app',
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '9181613967:AAFrDjGOgAO5QOIrnzuLDpsQM7rfhJVos98',
   telegramChatId: process.env.TELEGRAM_CHAT_ID || '6161881104',
   discordWebhookUrl: ''
@@ -454,7 +455,13 @@ async function handleRequest(req, res) {
       if (orders.length > 5000) orders.length = 5000;
       await saveOrders(orders);
 
-      const hostUrl = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host || 'localhost:' + PORT}`;
+      const defaultAppUrl = settings.appUrl || 'https://tweak-lab-a177.vercel.app';
+      let hostUrl = defaultAppUrl;
+      if (req.headers && req.headers.host) {
+        const proto = req.headers['x-forwarded-proto'] || 'https';
+        const host = req.headers.host;
+        hostUrl = (!host.includes('localhost') && !host.includes('127.0.0.1')) ? `${proto}://${host}` : defaultAppUrl;
+      }
       sendWebhookNotifications(newOrder, settings, hostUrl);
 
       return sendJson(res, 201, {
