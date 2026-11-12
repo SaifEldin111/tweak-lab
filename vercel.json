@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": "{protected_product/**,seed_orders.json}"
+      "includeFiles": "{protected_product/**,seed_orders.json,seed_deleted_orders.json}"
     }
   },
   "rewrites": [

@@ -48,6 +48,8 @@ const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const SEED_ORDERS_FILE = path.join(ROOT_DIR, 'seed_orders.json');
+const DELETED_ORDERS_FILE = path.join(DATA_DIR, 'deleted_orders.json');
+const SEED_DELETED_ORDERS_FILE = path.join(ROOT_DIR, 'seed_deleted_orders.json');
 
 // Ensure writable directories exist
 [DATA_DIR, UPLOADS_DIR].forEach((dir) => {
@@ -81,7 +83,54 @@ const DEFAULT_SETTINGS = {
 
 global.__TWEAKLAB_SETTINGS__ = global.__TWEAKLAB_SETTINGS__ || null;
 global.__TWEAKLAB_ORDERS__ = global.__TWEAKLAB_ORDERS__ || null;
+global.__TWEAKLAB_DELETED_ORDERS__ = global.__TWEAKLAB_DELETED_ORDERS__ || null;
 global.__TWEAKLAB_LAST_SYNC__ = global.__TWEAKLAB_LAST_SYNC__ || 0;
+
+function loadDeletedOrderIds() {
+  if (global.__TWEAKLAB_DELETED_ORDERS__ instanceof Set) {
+    return global.__TWEAKLAB_DELETED_ORDERS__;
+  }
+  const set = new Set();
+  try {
+    if (fs.existsSync(DELETED_ORDERS_FILE)) {
+      const arr = JSON.parse(fs.readFileSync(DELETED_ORDERS_FILE, 'utf8'));
+      if (Array.isArray(arr)) arr.forEach((id) => set.add(String(id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  try {
+    if (fs.existsSync(SEED_DELETED_ORDERS_FILE)) {
+      const arr = JSON.parse(fs.readFileSync(SEED_DELETED_ORDERS_FILE, 'utf8'));
+      if (Array.isArray(arr)) arr.forEach((id) => set.add(String(id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  global.__TWEAKLAB_DELETED_ORDERS__ = set;
+  return set;
+}
+
+async function saveDeletedOrderIds(setOrArray) {
+  const arr = Array.from(setOrArray || []).map((id) => String(id).trim().toUpperCase());
+  const set = new Set(arr);
+  global.__TWEAKLAB_DELETED_ORDERS__ = set;
+  try {
+    fs.writeFileSync(DELETED_ORDERS_FILE, JSON.stringify(arr, null, 2), 'utf8');
+  } catch (e) {}
+  try {
+    fs.writeFileSync(SEED_DELETED_ORDERS_FILE, JSON.stringify(arr, null, 2), 'utf8');
+  } catch (e) {}
+  const blobSdk = getBlobSdk();
+  if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      await blobSdk.put('tweaklab_db/deleted_orders.json', JSON.stringify(arr), {
+        access: 'public',
+        addRandomSuffix: false,
+        contentType: 'application/json'
+      });
+    } catch (e) {
+      console.error('Cloud deleted orders save error:', e.message);
+    }
+  }
+  return set;
+}
 
 const CORE_BASELINE_ORDERS = [
   {
@@ -101,12 +150,14 @@ const CORE_BASELINE_ORDERS = [
 ];
 
 function mergeOrderLists(...lists) {
+  const deletedIds = loadDeletedOrderIds();
   const map = new Map();
   for (const list of lists) {
     if (!Array.isArray(list)) continue;
     for (const raw of list) {
       if (!raw || !raw.id) continue;
       const id = String(raw.id).trim().toUpperCase();
+      if (deletedIds.has(id)) continue;
       const item = { ...raw, id };
       if (!map.has(id)) {
         map.set(id, item);
@@ -137,21 +188,23 @@ function mergeOrderLists(...lists) {
 }
 
 function loadLocalDiskOrders() {
+  const deletedIds = loadDeletedOrderIds();
   let diskOrders = [];
   let seedOrders = [];
   try {
     if (fs.existsSync(ORDERS_FILE)) {
       const parsed = JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8'));
-      if (Array.isArray(parsed)) diskOrders = parsed;
+      if (Array.isArray(parsed)) diskOrders = parsed.filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
     }
   } catch (e) {}
   try {
     if (fs.existsSync(SEED_ORDERS_FILE)) {
       const parsed = JSON.parse(fs.readFileSync(SEED_ORDERS_FILE, 'utf8'));
-      if (Array.isArray(parsed)) seedOrders = parsed;
+      if (Array.isArray(parsed)) seedOrders = parsed.filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
     }
   } catch (e) {}
-  return mergeOrderLists(CORE_BASELINE_ORDERS, seedOrders, diskOrders);
+  const baseline = CORE_BASELINE_ORDERS.filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
+  return mergeOrderLists(baseline, seedOrders, diskOrders);
 }
 
 function getBlobSdk() {
@@ -182,6 +235,24 @@ async function syncFromCloudDb(force = false) {
     const settingBlobs = blobs
       .filter((b) => b.pathname.startsWith('tweaklab_db/settings_'))
       .sort((a, b) => b.pathname.localeCompare(a.pathname));
+
+    // Sync deleted orders from Cloud Blob
+    try {
+      const delBlob = blobs.find((b) => b.pathname === 'tweaklab_db/deleted_orders.json');
+      if (delBlob) {
+        const r = await fetch(delBlob.url + '?t=' + now, { cache: 'no-store' });
+        if (r.ok) {
+          const arr = await r.json();
+          if (Array.isArray(arr)) {
+            const currentDeleted = loadDeletedOrderIds();
+            arr.forEach((id) => currentDeleted.add(String(id).trim().toUpperCase()));
+            await saveDeletedOrderIds(currentDeleted);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Cloud deleted orders sync warning:', e.message);
+    }
 
     let cloudOrders = [];
     if (orderBlobs.length > 0) {
@@ -298,8 +369,10 @@ function loadOrders() {
 }
 
 async function saveOrders(orders) {
+  const deletedIds = loadDeletedOrderIds();
   const local = loadLocalDiskOrders();
-  const fullMaster = mergeOrderLists(local, global.__TWEAKLAB_ORDERS__ || [], orders || []);
+  const cleanIncoming = (orders || []).filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
+  const fullMaster = mergeOrderLists(local, cleanIncoming);
   global.__TWEAKLAB_ORDERS__ = fullMaster;
   try {
     fs.writeFileSync(ORDERS_FILE, JSON.stringify(fullMaster, null, 2), 'utf8');
@@ -770,13 +843,17 @@ async function handleRequest(req, res) {
       if (idx === -1) return sendJson(res, 404, { error: 'الطلب غير موجود' });
 
       if (action === 'delete') {
+        const deletedIds = loadDeletedOrderIds();
+        deletedIds.add(String(orderId).trim().toUpperCase());
+        await saveDeletedOrderIds(deletedIds);
         orders.splice(idx, 1);
+        global.__TWEAKLAB_ORDERS__ = orders;
       } else if (action === 'approve' || action === 'reject' || action === 'pending') {
         orders[idx].status = action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'pending';
         orders[idx].updatedAt = new Date().toISOString();
       }
-      await saveOrders(orders);
-      return sendJson(res, 200, { ok: true, orders });
+      const updatedOrders = await saveOrders(orders);
+      return sendJson(res, 200, { ok: true, orders: updatedOrders });
     }
 
     // 9. Admin API: Update Settings

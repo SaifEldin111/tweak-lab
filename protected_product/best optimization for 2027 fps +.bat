@@ -77,6 +77,7 @@ echo  [SAFETY, GUIDE ^& 1-CLICK PRESETS]
 echo   [S] Create Safety Backup (System Restore Point + Full Registry Backup)
 echo   [A] 1-CLICK PRO GAMING PRESET (Applies All Recommended Safe Tweaks + Backup)
 echo   [C] 1-CLICK ULTIMATE CLEANER ^& RAM OPTIMIZER (Temp + Prefetch + DNS + Idle RAM)
+echo   [U] OFFICIAL GPU DRIVERS ^& WINDOWS 10/11 UPDATE LINKS (NVIDIA / AMD / Intel)
 echo   [G] Read Built-In Customer Guide, GPU Driver Guide ^& BIOS Checklist
 echo   [R] REVERT / UNDO ALL TWEAKS (Restore Factory Windows Defaults)
 echo --------------------------------------------------------------------------------
@@ -108,11 +109,12 @@ echo ===========================================================================
 echo   [0] Exit Tool
 echo ================================================================================
 set "CHOICE="
-set /p "CHOICE=  >> Enter an Option (S, A, C, G, R, 1-35, or 0 to Exit): "
+set /p "CHOICE=  >> Enter an Option (S, A, C, U, G, R, 1-35, or 0 to Exit): "
 
 if /I "%CHOICE%"=="S" goto OPT_BACKUP
 if /I "%CHOICE%"=="A" goto OPT_ALL_PRO
 if /I "%CHOICE%"=="C" goto OPT_QUICK_CLEANER
+if /I "%CHOICE%"=="U" goto OPT_GPU_UPDATES
 if /I "%CHOICE%"=="G" goto OPT_CUSTOMER_GUIDE
 if /I "%CHOICE%"=="R" goto OPT_REVERT_ALL
 if "%CHOICE%"=="0" goto EXIT_TOOL
@@ -188,6 +190,46 @@ echo  [SUCCESS] Registry backups saved to: %BACKUP_DIR%
 echo  [SUCCESS] Windows System Restore Point requested!
 echo.
 pause
+goto MAIN_MENU
+
+:: ============================================================================
+::  [U] GPU DRIVERS & WINDOWS 10/11 UPDATE PORTAL
+:: ============================================================================
+:OPT_GPU_UPDATES
+cls
+color 0B
+echo ================================================================================
+echo   [U] OFFICIAL GPU DRIVERS & WINDOWS 10 / 11 UPDATE PORTAL (TWEAK LAB)
+echo ================================================================================
+echo.
+echo   Keeping your Graphics Driver and Windows 10/11 fully updated is 50%% of
+echo   eliminating stutters, lowering input delay, and optimizing DirectX 12!
+echo.
+echo   [1] Open NVIDIA GeForce Official Driver Download (RTX / GTX Game Ready)
+echo   [2] Open AMD Radeon Adrenalin Official Driver Download (RX Series WHQL)
+echo   [3] Open Intel Graphics Official Driver Download (Arc / Iris Xe / UHD)
+echo   [4] Open Windows 10 & 11 Update Settings directly (Check for updates)
+echo   [5] Return to Main Menu
+echo.
+echo ================================================================================
+set "GPU_OPT="
+set /p "GPU_OPT=  >> Choose an option (1-5): "
+if "%GPU_OPT%"=="1" (
+    start https://www.nvidia.com/Download/index.aspx
+    goto OPT_GPU_UPDATES
+)
+if "%GPU_OPT%"=="2" (
+    start https://www.amd.com/en/support/download/drivers.html
+    goto OPT_GPU_UPDATES
+)
+if "%GPU_OPT%"=="3" (
+    start https://www.intel.com/content/www/us/en/download-center/home.html
+    goto OPT_GPU_UPDATES
+)
+if "%GPU_OPT%"=="4" (
+    start ms-settings:windowsupdate
+    goto OPT_GPU_UPDATES
+)
 goto MAIN_MENU
 
 :: ============================================================================

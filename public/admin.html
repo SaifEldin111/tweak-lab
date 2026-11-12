@@ -124,6 +124,19 @@
       color: var(--red);
       border: 1px solid rgba(255, 71, 87, 0.45);
     }
+    .btn-delete {
+      background: rgba(255, 71, 87, 0.12);
+      color: #ff6b81;
+      border: 1px solid rgba(255, 71, 87, 0.35);
+      font-size: 0.85rem;
+      padding: 7px 12px;
+      transition: all 0.18s;
+    }
+    .btn-delete:hover {
+      background: rgba(255, 71, 87, 0.3);
+      border-color: var(--red);
+      color: #fff;
+    }
     .orders-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -455,7 +468,7 @@ function renderOrders(orders) {
                 ? `<button class="btn btn-reject" onclick="updateOrder('${o.id}', 'reject')">❌ رفض</button>`
                 : ''
             }
-            <button class="btn" onclick="updateOrder('${o.id}', 'delete')" title="حذف الطلب">🗑️</button>
+            <button class="btn btn-delete" onclick="updateOrder('${o.id}', 'delete')" title="حذف هذا الطلب نهائياً">🗑️ حذف نهائي</button>
           </div>
         </div>
       `;
@@ -464,13 +477,24 @@ function renderOrders(orders) {
 }
 
 async function updateOrder(orderId, action) {
-  if (action === 'delete' && !confirm('هل تريد حذف هذا الطلب نهائياً؟')) return;
-  await fetch('/api/admin/order-action', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
-    body: JSON.stringify({ orderId, action })
-  });
-  fetchAdminData();
+  if (action === 'delete') {
+    if (!confirm(`⚠️ هل أنت متأكد من حذف الطلب #${orderId} نهائياً؟\n\nسيتم حذفه من قاعدة البيانات وسينقص من إجمالي الأرباح والمبيعات فوراً.`)) return;
+  }
+  try {
+    const res = await fetch('/api/admin/order-action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+      body: JSON.stringify({ orderId, action })
+    });
+    const result = await res.json();
+    if (result.ok && result.orders) {
+      renderOrders(result.orders);
+    } else {
+      fetchAdminData();
+    }
+  } catch (e) {
+    fetchAdminData();
+  }
 }
 
 function populateSettings(s) {

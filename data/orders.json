@@ -4,6 +4,7 @@
     "accessToken": "7a1aaab182308fdf6399d550402791b6",
     "customerName": "Saif El Masry",
     "senderPhone": "01020670418",
+    "discountCode": "",
     "paymentMethod": "instapay",
     "amountEgp": 100,
     "notes": "",
