@@ -133,7 +133,20 @@ async function syncFromCloudDb(force = false) {
       const r = await fetch(settingBlobs[0].url + '?t=' + now, { cache: 'no-store' });
       if (r.ok) {
         const raw = await r.json();
-        global.__TWEAKLAB_SETTINGS__ = { ...DEFAULT_SETTINGS, ...raw };
+        const merged = { ...DEFAULT_SETTINGS, ...raw };
+        let needSave = false;
+        if (merged.priceEgp === 100) {
+          merged.priceEgp = 99;
+          needSave = true;
+        }
+        if (!merged.activePromoCodes || Object.keys(merged.activePromoCodes).length === 0) {
+          merged.activePromoCodes = { 'TWEAK85': 85 };
+          needSave = true;
+        }
+        global.__TWEAKLAB_SETTINGS__ = merged;
+        if (needSave) {
+          saveSettings(merged).catch(() => {});
+        }
       }
     }
     global.__TWEAKLAB_LAST_SYNC__ = Date.now();
@@ -143,11 +156,22 @@ async function syncFromCloudDb(force = false) {
 }
 
 function loadSettings() {
-  if (global.__TWEAKLAB_SETTINGS__) return global.__TWEAKLAB_SETTINGS__;
+  if (global.__TWEAKLAB_SETTINGS__) {
+    if (global.__TWEAKLAB_SETTINGS__.priceEgp === 100) global.__TWEAKLAB_SETTINGS__.priceEgp = 99;
+    if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || Object.keys(global.__TWEAKLAB_SETTINGS__.activePromoCodes).length === 0) {
+      global.__TWEAKLAB_SETTINGS__.activePromoCodes = { 'TWEAK85': 85 };
+    }
+    return global.__TWEAKLAB_SETTINGS__;
+  }
   try {
     if (fs.existsSync(SETTINGS_FILE)) {
       const raw = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
-      global.__TWEAKLAB_SETTINGS__ = { ...DEFAULT_SETTINGS, ...raw };
+      const merged = { ...DEFAULT_SETTINGS, ...raw };
+      if (merged.priceEgp === 100) merged.priceEgp = 99;
+      if (!merged.activePromoCodes || Object.keys(merged.activePromoCodes).length === 0) {
+        merged.activePromoCodes = { 'TWEAK85': 85 };
+      }
+      global.__TWEAKLAB_SETTINGS__ = merged;
       return global.__TWEAKLAB_SETTINGS__;
     }
   } catch (e) {}
@@ -418,10 +442,10 @@ async function handleRequest(req, res) {
       return sendJson(res, 200, {
         brandName: s.brandName,
         productTitle: s.productTitle,
-        priceEgp: s.priceEgp || 99,
+        priceEgp: s.priceEgp === 100 ? 99 : (s.priceEgp || 99),
         originalPriceEgp: s.originalPriceEgp || 350,
         discountedPriceEgp: s.discountedPriceEgp || 85,
-        activePromoCodes: s.activePromoCodes || {},
+        activePromoCodes: (s.activePromoCodes && Object.keys(s.activePromoCodes).length > 0) ? s.activePromoCodes : { "TWEAK85": 85 },
         paymentPhone: s.paymentPhone,
         instapayAddress: s.instapayAddress,
         instapayLink: s.instapayLink,
