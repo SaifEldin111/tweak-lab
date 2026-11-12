@@ -529,7 +529,14 @@
             <span class="feature-icon">✔</span>
             <div>
               <strong>الأداة الأوتوماتيكية (<code>best optimization for 2027 fps +.bat</code>):</strong>
-              تضم <strong>35+ تويك احترافي آمن</strong> مقسمين في قائمة تفاعلية + زر <em>1-Click Pro Gaming Preset</em> + عمل نقطة استرجاع أوتوماتيكية (System Restore) + زر إلغاء التعديلات (Undo) في أي وقت.
+              تضم <strong>35+ تويك احترافي آمن</strong> مقسمين في قائمة تفاعلية + زر <em>1-Click Pro Gaming Preset</em> + خيار <em>[C] Ultimate Cleaner & RAM Optimizer</em> + عمل نقطة استرجاع أوتوماتيكية (System Restore) + زر إلغاء التعديلات (Undo) في أي وقت.
+            </div>
+          </li>
+          <li>
+            <span class="feature-icon">✔</span>
+            <div>
+              <strong>أداة التنظيف السريع للرامات والملفات المؤقتة (<code>Tweak_Lab_Cleaner_RAM_Optimizer.bat</code>):</strong>
+              ملف مستقل بضغطة واحدة قبل تشغيل أي لعبة لمسح ملفات الـ Temp والـ Prefetch، عمل Flush للـ DNS وإعادة ضبط الـ Winsock لتقليل الـ Ping، وتحرير الـ Idle RAM فوراً.
             </div>
           </li>
           <li>
@@ -723,7 +730,10 @@
 
             <div class="download-grid">
               <a id="dl-bat-btn" href="#" class="btn">
-                ⚙️ تحميل أداة التويكر (.BAT)
+                ⚙️ تحميل أداة التويكر الشاملة (.BAT)
+              </a>
+              <a id="dl-cleaner-btn" href="#" class="btn" style="border-color:var(--green); color:var(--green);">
+                🧹 تحميل أداة تنظيف الرام والـ Temp (.BAT)
               </a>
               <a id="dl-html-btn" href="#" class="btn">
                 📘 تحميل الدليل التفاعلي (.HTML)
@@ -731,7 +741,7 @@
               <a id="dl-md-btn" href="#" class="btn">
                 📄 تحميل الكتيب الإرشادي (.MD)
               </a>
-              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);">
+              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan); grid-column: 1 / -1;">
                 🌐 فتح الدليل التفاعلي في المتصفح الآن
               </a>
             </div>
@@ -1016,6 +1026,7 @@ async function checkOrderStatus() {
       }
       document.getElementById('dl-zip-btn').href = data.delivery.downloads.zip;
       document.getElementById('dl-bat-btn').href = data.delivery.downloads.bat;
+      if (data.delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = data.delivery.downloads.cleaner;
       document.getElementById('dl-html-btn').href = data.delivery.downloads.html;
       document.getElementById('dl-md-btn').href = data.delivery.downloads.md;
       document.getElementById('open-guide-btn').href = data.delivery.downloads.liveGuide;

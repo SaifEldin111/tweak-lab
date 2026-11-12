@@ -76,6 +76,7 @@ echo ===========================================================================
 echo  [SAFETY, GUIDE ^& 1-CLICK PRESETS]
 echo   [S] Create Safety Backup (System Restore Point + Full Registry Backup)
 echo   [A] 1-CLICK PRO GAMING PRESET (Applies All Recommended Safe Tweaks + Backup)
+echo   [C] 1-CLICK ULTIMATE CLEANER ^& RAM OPTIMIZER (Temp + Prefetch + DNS + Idle RAM)
 echo   [G] Read Built-In Customer Guide, GPU Driver Guide ^& BIOS Checklist
 echo   [R] REVERT / UNDO ALL TWEAKS (Restore Factory Windows Defaults)
 echo --------------------------------------------------------------------------------
@@ -107,10 +108,11 @@ echo ===========================================================================
 echo   [0] Exit Tool
 echo ================================================================================
 set "CHOICE="
-set /p "CHOICE=  >> Enter an Option (S, A, G, R, 1-35, or 0 to Exit): "
+set /p "CHOICE=  >> Enter an Option (S, A, C, G, R, 1-35, or 0 to Exit): "
 
 if /I "%CHOICE%"=="S" goto OPT_BACKUP
 if /I "%CHOICE%"=="A" goto OPT_ALL_PRO
+if /I "%CHOICE%"=="C" goto OPT_QUICK_CLEANER
 if /I "%CHOICE%"=="G" goto OPT_CUSTOMER_GUIDE
 if /I "%CHOICE%"=="R" goto OPT_REVERT_ALL
 if "%CHOICE%"=="0" goto EXIT_TOOL
@@ -988,6 +990,47 @@ echo [%date% %time%] Reverted all tweaks to Windows Factory Defaults >> "%LOG_FI
 echo.
 echo  [SUCCESS] All settings restored to Windows Factory Defaults!
 echo            Please restart your PC to complete the restoration.
+pause
+goto MAIN_MENU
+
+:: ============================================================================
+::  [C] TWEAK LAB - ULTIMATE WINDOWS CLEANER & RAM OPTIMIZER
+:: ============================================================================
+:OPT_QUICK_CLEANER
+cls
+color 0A
+echo ===================================================
+echo             TWEAK LAB - SYSTEM OPTIMIZER
+echo ===================================================
+echo.
+
+echo [*] Cleaning User Temp Files...
+del /s /f /q "%temp%\*.*" >nul 2>&1
+rd /s /q "%temp%" >nul 2>&1
+md "%temp%" >nul 2>&1
+
+echo [*] Cleaning Windows Temp Files...
+del /s /f /q "C:\Windows\Temp\*.*" >nul 2>&1
+
+echo [*] Cleaning Prefetch Data (Faster Boot)...
+del /s /f /q "C:\Windows\Prefetch\*.*" >nul 2>&1
+
+echo [*] Flushing DNS Cache (Lower Latency)...
+ipconfig /flushdns >nul 2>&1
+
+echo [*] Resetting Network Interfaces...
+netsh winsock reset >nul 2>&1
+netsh int ip reset >nul 2>&1
+
+echo [*] Forcing Windows to Free Up Idle RAM...
+%windir%\system32\rundll32.exe advapi32.dll,ProcessIdleTasks
+
+echo [%date% %time%] Executed Tweak Lab System Optimizer (Temp, Prefetch, DNS, Winsock, Idle RAM) >> "%LOG_FILE%"
+echo.
+echo ===================================================
+echo    Optimization Complete! Enjoy Higher FPS in Game.
+echo ===================================================
+echo.
 pause
 goto MAIN_MENU
 

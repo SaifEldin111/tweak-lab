@@ -240,6 +240,7 @@ function buildDeliveryPayload(orderId, accessToken, settings) {
     downloads: {
       zip: `/api/download/${orderId}/zip?token=${accessToken}&sig=${sig}`,
       bat: `/api/download/${orderId}/bat?token=${accessToken}&sig=${sig}`,
+      cleaner: `/api/download/${orderId}/cleaner?token=${accessToken}&sig=${sig}`,
       html: `/api/download/${orderId}/html?token=${accessToken}&sig=${sig}`,
       md: `/api/download/${orderId}/md?token=${accessToken}&sig=${sig}`,
       liveGuide: `/api/guide/${orderId}?token=${accessToken}&sig=${sig}`
@@ -381,6 +382,11 @@ const PROTECTED_FILES = {
   bat: {
     filename: 'best optimization for 2027 fps +.bat',
     downloadName: 'best optimization for 2027 fps +.bat',
+    mime: 'application/octet-stream'
+  },
+  cleaner: {
+    filename: 'Tweak_Lab_Cleaner_RAM_Optimizer.bat',
+    downloadName: 'Tweak_Lab_Cleaner_RAM_Optimizer.bat',
     mime: 'application/octet-stream'
   },
   html: {
