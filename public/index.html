@@ -1337,11 +1337,11 @@
               </div>
               <div style="background:rgba(7,10,16,0.92); border:1px solid var(--red); border-radius:999px; padding:6px 16px; display:inline-flex; align-items:center; gap:8px;">
                 <span style="color:#fff; font-size:0.82rem; font-weight:700;">متبقي على إتلاف الرابط:</span>
-                <span id="timebomb-timer" style="color:var(--red); font-size:1.3rem; font-weight:900; font-family:monospace; text-shadow:0 0 10px rgba(255,71,87,0.8);">20:00</span>
+                <span id="timebomb-timer" style="color:var(--red); font-size:1.3rem; font-weight:900; font-family:monospace; text-shadow:0 0 10px rgba(255,71,87,0.8);">60:00</span>
               </div>
             </div>
             <div style="background:rgba(255,71,87,0.08); border-right:3px solid var(--red); padding:10px 14px; border-radius:6px; font-size:0.86rem; color:#f0f6fc; line-height:1.65;">
-              <strong style="color:var(--amber);">⚠️ تنبيه أمني مشدد:</strong> هذا الرابط مخصص لك وحدك ويبدأ عد تنازلي مدته <strong>20 دقيقة فقط</strong> من لحظة فتحه لأول مرة. بمجرد انتهاء الـ 20 دقيقة، يتم <strong>حرق وإتلاف هذا الرابط تماماً (Burned Token)</strong> ولن يعمل مجدداً على هذا الجهاز أو أي جهاز آخر، لحماية الملفات ومنع مشاركة الرابط. يُرجى تحميل ملفاتك وحفظها على جهازك فوراً.
+              <strong style="color:var(--amber);">⚠️ تنبيه أمني مشدد:</strong> هذا الرابط مخصص لك وحدك ويبدأ عد تنازلي مدته <strong>ساعة كاملة (60 دقيقة فقط)</strong> من لحظة فتحه لأول مرة. بمجرد انتهاء الساعة، يتم <strong>حرق وإتلاف هذا الرابط تماماً (Burned Token)</strong> ولن يعمل مجدداً على هذا الجهاز أو أي جهاز آخر، لحماية الملفات ومنع مشاركة الرابط. يُرجى تحميل ملفاتك وحفظها على جهازك فوراً.
             </div>
           </div>
 
@@ -1399,10 +1399,10 @@
           <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);">
             ⛔ انتهت صلاحية الرابط وتم إتلافه (Link Expired & Burned)
           </div>
-          <h2 style="font-size:1.6rem; color:var(--red); margin-bottom:10px;">عفواً، انتهت مهلة الـ 20 دقيقة لهذا الرابط!</h2>
+          <h2 style="font-size:1.6rem; color:var(--red); margin-bottom:10px;">عفواً، انتهت مهلة الساعة (60 دقيقة) لهذا الرابط!</h2>
           <div style="max-width:540px; margin:0 auto 20px; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); border-radius:12px; padding:18px; color:var(--text-main); font-size:0.92rem; line-height:1.7; text-align:right;">
             <p style="margin-bottom:10px;">
-              تم إتلاف هذا الرابط نهائياً بنظام <strong>Time-Bomb</strong> بعد مرور 20 دقيقة من أول فتح له، وذلك لحماية ملفات حزمة <strong>Tweak Lab 2027 FPS+</strong> من النسخ أو المشاركة غير المصرح بها.
+              تم إتلاف هذا الرابط نهائياً بنظام <strong>Time-Bomb</strong> بعد مرور ساعة واحدة (60 دقيقة) من أول فتح له، وذلك لحماية ملفات حزمة <strong>Tweak Lab 2027 FPS+</strong> من النسخ أو المشاركة غير المصرح بها.
             </p>
             <p style="color:var(--text-muted); font-size:0.86rem; margin-bottom:0;">
               إذا واجهت مشكلة أثناء التحميل أو انقطع اتصال الإنترنت لديك، يمكنك التواصل مباشرة مع الإدارة لتجديد مهلة الرابط بعد التحقق من طلبك:
@@ -1817,7 +1817,7 @@ function showExpiredView(orderId) {
 
   const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
   const waMsg = encodeURIComponent(
-    `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة الـ 20 دقيقة المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
+    `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة الساعة (60 دقيقة) المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
   );
   const waBtn = document.getElementById('expired-whatsapp-btn');
   if (waBtn) waBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
@@ -1825,7 +1825,7 @@ function showExpiredView(orderId) {
 
 function startTimeBombCountdown(expiresAtIso) {
   if (timeBombInterval) clearInterval(timeBombInterval);
-  const targetMs = expiresAtIso ? new Date(expiresAtIso).getTime() : (Date.now() + 20 * 60 * 1000);
+  const targetMs = expiresAtIso ? new Date(expiresAtIso).getTime() : (Date.now() + 60 * 60 * 1000);
 
   function tick() {
     const diff = targetMs - Date.now();

@@ -435,12 +435,12 @@ function renderOrders(orders) {
       let timeBombBadge = '';
       if (o.status === 'approved' || o.status === 'expired' || o.isBurned) {
         if (!o.firstAccessedAt) {
-          timeBombBadge = `<div style="font-size:0.83rem; color:var(--cyan); background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:6px; margin-top:6px;">⏳ <strong>Time-Bomb:</strong> لم يُفتح بعد (مهلة 20 دقيقة جاهزة تبدأ عند أول فتح)</div>`;
+          timeBombBadge = `<div style="font-size:0.83rem; color:var(--cyan); background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:6px; margin-top:6px;">⏳ <strong>Time-Bomb:</strong> لم يُفتح بعد (مهلة ساعة واحدة جاهزة تبدأ عند أول فتح)</div>`;
         } else {
           const now = Date.now();
           const expMs = o.accessExpiresAt ? new Date(o.accessExpiresAt).getTime() : 0;
           if (o.isBurned || (expMs && now > expMs)) {
-            timeBombBadge = `<div style="font-size:0.83rem; color:var(--red); background:rgba(255,71,87,0.12); border:1px solid rgba(255,71,87,0.4); padding:4px 8px; border-radius:6px; margin-top:6px;">💣 <strong>Time-Bomb:</strong> محروق / منتهي الصلاحية (مرت 20 دقيقة)</div>`;
+            timeBombBadge = `<div style="font-size:0.83rem; color:var(--red); background:rgba(255,71,87,0.12); border:1px solid rgba(255,71,87,0.4); padding:4px 8px; border-radius:6px; margin-top:6px;">💣 <strong>Time-Bomb:</strong> محروق / منتهي الصلاحية (مرت ساعة واحدة)</div>`;
           } else {
             const remMin = Math.max(1, Math.ceil((expMs - now) / 60000));
             timeBombBadge = `<div style="font-size:0.83rem; color:var(--amber); background:rgba(255,184,0,0.1); border:1px solid rgba(255,184,0,0.4); padding:4px 8px; border-radius:6px; margin-top:6px;">🔥 <strong>Time-Bomb:</strong> نشط (متبقي قرابة ${remMin} دقيقة)</div>`;
@@ -487,7 +487,7 @@ function renderOrders(orders) {
             }
             ${
               (o.status === 'approved' || o.status === 'expired' || o.isBurned)
-                ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer', this)" title="تجديد مهلة الـ 20 دقيقة للعميل وإعادة تفعيل الرابط له">🔄 تجديد 20 دقيقة</button>`
+                ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer', this)" title="تجديد مهلة الساعة (60 دقيقة) للعميل وإعادة تفعيل الرابط له">🔄 تجديد ساعة كاملة</button>`
                 : ''
             }
             <button class="btn btn-delete" onclick="updateOrder('${o.id}', 'delete', this)" title="حذف هذا الطلب نهائياً">🗑️ حذف نهائي</button>

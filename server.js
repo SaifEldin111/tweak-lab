@@ -39,6 +39,8 @@ function getProtectedFileBuffer(filename) {
 }
 
 const PORT = process.env.PORT || 3027;
+const TIME_BOMB_MINUTES = 60;
+const TIME_BOMB_MS = TIME_BOMB_MINUTES * 60 * 1000;
 const IS_VERCEL = !!process.env.VERCEL;
 const ROOT_DIR = __dirname;
 const PUBLIC_DIR = path.join(ROOT_DIR, 'public');
@@ -702,10 +704,10 @@ async function handleRequest(req, res) {
           });
         }
 
-        // First time customer accesses the approved order: start the 20-minute countdown!
+        // First time customer accesses the approved order: start the 1-hour (60-minute) countdown!
         if (!order.firstAccessedAt) {
           order.firstAccessedAt = new Date(now).toISOString();
-          order.accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
+          order.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
           order.isBurned = false;
           order.updatedAt = new Date().toISOString();
           await saveOrders(orders);
@@ -783,9 +785,9 @@ async function handleRequest(req, res) {
           .btn-wa{display:inline-block;padding:12px 24px;background:#25d366;color:#000;text-decoration:none;font-weight:800;border-radius:8px;}
           </style></head><body><div class="box"><div style="font-size:3.5rem;">💣</div>
           <h1>انتهت صلاحية الرابط (Link Expired)</h1>
-          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور 20 دقيقة لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
+          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور ساعة واحدة (60 دقيقة) لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
           <p style="color:#fff;">رقم طلبك: <strong style="color:#00f0ff;">#${orderId}</strong></p>
-          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الـ 20 دقيقة، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
+          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الساعة (60 دقيقة)، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
           </div></body></html>
         `);
       }
@@ -843,9 +845,9 @@ async function handleRequest(req, res) {
           .btn-wa{display:inline-block;padding:12px 24px;background:#25d366;color:#000;text-decoration:none;font-weight:800;border-radius:8px;}
           </style></head><body><div class="box"><div style="font-size:3.5rem;">💣</div>
           <h1>انتهت صلاحية الرابط (Link Expired)</h1>
-          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور 20 دقيقة لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
+          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور ساعة واحدة (60 دقيقة) لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
           <p style="color:#fff;">رقم طلبك: <strong style="color:#00f0ff;">#${orderId}</strong></p>
-          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الـ 20 دقيقة، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
+          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الساعة (60 دقيقة)، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
           </div></body></html>
         `);
       }
@@ -915,7 +917,7 @@ async function handleRequest(req, res) {
       if (action === 'reset-timer') {
         const now = Date.now();
         orders[idx].firstAccessedAt = new Date(now).toISOString();
-        orders[idx].accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
+        orders[idx].accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
         orders[idx].isBurned = false;
         orders[idx].status = 'approved';
         orders[idx].updatedAt = new Date().toISOString();
