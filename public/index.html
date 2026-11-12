@@ -141,70 +141,8 @@
       grid-template-columns: 1.08fr 1fr;
       gap: 28px;
       margin-top: 30px;
+      margin-bottom: 40px;
       align-items: start;
-    }
-    @media (max-width: 940px) {
-      .navbar {
-        position: relative;
-        top: auto;
-        padding: 10px 14px;
-        width: 100%;
-        max-width: 100%;
-      }
-      .navbar-inner {
-        width: 100%;
-        max-width: 100%;
-        justify-content: center;
-        text-align: center;
-        gap: 10px;
-      }
-      .nav-badges {
-        width: 100%;
-        justify-content: center;
-        gap: 8px;
-      }
-      .pill-5min {
-        white-space: normal;
-        text-align: center;
-        max-width: 100%;
-        font-size: 0.76rem;
-        padding: 5px 12px;
-        line-height: 1.35;
-      }
-      header {
-        padding: 26px 14px 22px;
-        width: 100%;
-        max-width: 100%;
-      }
-      .badge-top {
-        white-space: normal;
-        text-align: center;
-        max-width: 100%;
-        font-size: 0.74rem;
-        padding: 5px 12px;
-        line-height: 1.35;
-      }
-      h1 {
-        font-size: clamp(1.4rem, 6.5vw, 2.2rem);
-        word-break: break-word;
-        overflow-wrap: break-word;
-        max-width: 100%;
-      }
-      .container {
-        padding: 0 12px;
-        width: 100%;
-        max-width: 100%;
-      }
-      .card {
-        padding: 18px 14px;
-        max-width: 100%;
-      }
-      .main-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-        margin-top: 20px;
-        max-width: 100%;
-      }
     }
     .card {
       background: var(--bg-card);
@@ -212,6 +150,13 @@
       border-radius: 16px;
       padding: 26px;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    code {
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      white-space: normal;
     }
     .card-glow {
       border-color: var(--cyan);
@@ -275,6 +220,14 @@
       align-items: flex-start;
       gap: 10px;
       font-size: 0.93rem;
+      min-width: 0;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .feature-list li > div {
+      min-width: 0;
+      word-break: break-word;
+      overflow-wrap: anywhere;
     }
     .feature-icon {
       color: var(--green);
@@ -490,12 +443,94 @@
       gap: 10px;
       margin-top: 14px;
     }
-    @media (max-width: 600px) {
-      .download-grid {
-        grid-template-columns: 1fr;
+    /* ==========================================================================
+       RESPONSIVE MOBILE STYLES (Symmetrical Spacing & Flawless Mobile UI)
+       ========================================================================== */
+    @media (max-width: 940px) {
+      .navbar {
+        position: relative;
+        top: auto;
+        padding: 10px 14px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .navbar-inner {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        text-align: center;
+        gap: 10px;
+      }
+      .nav-badges {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+      }
+      .pill-5min {
+        white-space: normal;
+        text-align: center;
+        max-width: 100%;
+        font-size: 0.76rem;
+        padding: 5px 12px;
+        line-height: 1.35;
+      }
+      header {
+        padding: 26px 14px 22px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .badge-top {
+        white-space: normal;
+        text-align: center;
+        max-width: 100%;
+        font-size: 0.74rem;
+        padding: 5px 12px;
+        line-height: 1.35;
+      }
+      h1 {
+        font-size: clamp(1.4rem, 6.5vw, 2.2rem);
+        word-break: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+      }
+      .container {
+        padding: 0 12px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .main-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 24px !important;
+        margin-top: 20px !important;
+        margin-bottom: 40px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 18px 14px !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      .preview-section {
+        margin-top: 45px !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
       .tweaks-grid {
         grid-template-columns: 1fr !important;
+      }
+      .btn-primary {
+        padding: 14px 12px;
+        font-size: 0.98rem;
+        line-height: 1.4;
+      }
+    }
+    @media (max-width: 600px) {
+      .download-grid {
+        grid-template-columns: 1fr;
       }
     }
     /* Preview Section Below Fold (Same look as Best Optimization for 2027 Guide) */
