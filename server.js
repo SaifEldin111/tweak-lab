@@ -242,7 +242,6 @@ function buildDeliveryPayload(orderId, accessToken, settings) {
       bat: `/api/download/${orderId}/bat?token=${accessToken}&sig=${sig}`,
       cleaner: `/api/download/${orderId}/cleaner?token=${accessToken}&sig=${sig}`,
       html: `/api/download/${orderId}/html?token=${accessToken}&sig=${sig}`,
-      md: `/api/download/${orderId}/md?token=${accessToken}&sig=${sig}`,
       liveGuide: `/api/guide/${orderId}?token=${accessToken}&sig=${sig}`
     }
   };
@@ -393,11 +392,6 @@ const PROTECTED_FILES = {
     filename: 'best optimization for 2027 fps +.html',
     downloadName: 'best optimization for 2027 fps +.html',
     mime: 'text/html; charset=utf-8'
-  },
-  md: {
-    filename: 'best optimization for 2027 fps +.md',
-    downloadName: 'best optimization for 2027 fps +.md',
-    mime: 'text/markdown; charset=utf-8'
   }
 };
 

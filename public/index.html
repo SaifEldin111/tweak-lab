@@ -738,10 +738,7 @@
               <a id="dl-html-btn" href="#" class="btn">
                 📘 تحميل الدليل التفاعلي (.HTML)
               </a>
-              <a id="dl-md-btn" href="#" class="btn">
-                📄 تحميل الكتيب الإرشادي (.MD)
-              </a>
-              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan); grid-column: 1 / -1;">
+              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);">
                 🌐 فتح الدليل التفاعلي في المتصفح الآن
               </a>
             </div>
@@ -1028,7 +1025,6 @@ async function checkOrderStatus() {
       document.getElementById('dl-bat-btn').href = data.delivery.downloads.bat;
       if (data.delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = data.delivery.downloads.cleaner;
       document.getElementById('dl-html-btn').href = data.delivery.downloads.html;
-      document.getElementById('dl-md-btn').href = data.delivery.downloads.md;
       document.getElementById('open-guide-btn').href = data.delivery.downloads.liveGuide;
     } else if (data.status === 'rejected') {
       if (countdownInterval) clearInterval(countdownInterval);
