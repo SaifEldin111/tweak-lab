@@ -329,6 +329,14 @@ function testSound() {
   }
 }
 
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function loginWithPin() {
   adminPin = document.getElementById('pin-input').value.trim();
   localStorage.setItem('tweaklab_admin_pin', adminPin);
@@ -407,11 +415,19 @@ function renderOrders(orders) {
               <strong style="font-family:monospace; font-size:1.1rem; color:var(--cyan);">#${o.id}</strong>
               <span class="badge ${badgeClass}">${badgeText}</span>
             </div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${o.customerName}</div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${o.senderPhone}</span></div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${escapeHtml(o.senderPhone)}</span></div>
             <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة:</strong> ${methodLabel} — <strong>${o.amountEgp} ج.م</strong></div>
-            <div style="font-size:0.8rem; color:var(--text-muted);">🕒 وقت الطلب: ${timeStr}</div>
-            ${o.notes ? `<div style="font-size:0.84rem; color:#ffe082; margin-top:4px;">📝 ملاحظة: ${o.notes}</div>` : ''}
+            ${
+              o.discountCode
+                ? `<div style="font-size:0.92rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px;">
+                    🎟️ <strong>كود الخصم (صانع المحتوى):</strong>
+                    <span style="font-family:monospace; font-weight:800; color:#fff; font-size:1rem; letter-spacing:0.5px;">${escapeHtml(o.discountCode)}</span>
+                   </div>`
+                : ''
+            }
+            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">🕒 وقت الطلب: ${timeStr}</div>
+            ${o.notes ? `<div style="font-size:0.84rem; color:#ffe082; margin-top:4px;">📝 ملاحظة: ${escapeHtml(o.notes)}</div>` : ''}
             <a href="${o.screenshotUrl}" target="_blank" title="اضغط لتكبير صورة الإيصال">
               <img src="${o.screenshotUrl}" class="screenshot-thumb" alt="Payment Screenshot" />
             </a>

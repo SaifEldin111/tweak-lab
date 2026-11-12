@@ -302,6 +302,7 @@ function sendWebhookNotifications(order, settings, hostUrl) {
               { name: '👤 العميل', value: order.customerName || 'غير محدد', inline: true },
               { name: '📱 رقم المحول / التواصل', value: order.senderPhone || 'غير محدد', inline: true },
               { name: '💳 طريقة الدفع', value: order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)', inline: true },
+              ...(order.discountCode ? [{ name: '🎟️ كود الخصم (صانع المحتوى)', value: order.discountCode, inline: true }] : []),
               { name: '⚡ رابط القبول الفوري (1-Click Accept)', value: `${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)}` },
               { name: '🖥️ لوحة التحكم', value: `${hostUrl}/admin` }
             ],
@@ -331,6 +332,7 @@ function sendWebhookNotifications(order, settings, hostUrl) {
         `🆔 *رقم الطلب:* \`${order.id}\`\n` +
         `👤 *الاسم:* ${order.customerName}\n` +
         `📱 *رقم الموبايل:* \`${order.senderPhone}\`\n` +
+        (order.discountCode ? `🎟️ *كود الخصم:* \`${order.discountCode}\`\n` : '') +
         `💳 *طريقة الدفع:* ${order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)'}\n` +
         `💰 *المبلغ:* ${order.amountEgp} جنيه مصري\n` +
         `📝 *ملاحظات:* ${order.notes || 'لا يوجد'}\n\n` +
@@ -421,7 +423,7 @@ async function handleRequest(req, res) {
     // 2. Create New Order + Screenshot Upload
     if (req.method === 'POST' && pathname === '/api/orders') {
       const body = await readJsonBody(req);
-      const { customerName, senderPhone, paymentMethod, notes, screenshotDataUrl } = body;
+      const { customerName, senderPhone, discountCode, paymentMethod, notes, screenshotDataUrl } = body;
 
       if (!customerName || !senderPhone || !screenshotDataUrl) {
         return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
@@ -441,6 +443,7 @@ async function handleRequest(req, res) {
         accessToken,
         customerName: String(customerName).trim().slice(0, 80),
         senderPhone: String(senderPhone).trim().slice(0, 40),
+        discountCode: String(discountCode || '').trim().slice(0, 60),
         paymentMethod: paymentMethod === 'vodafone' ? 'vodafone' : 'instapay',
         amountEgp: settings.priceEgp,
         notes: String(notes || '').trim().slice(0, 300),
@@ -478,6 +481,7 @@ async function handleRequest(req, res) {
             `رقم الطلب: ${newOrder.id}\n` +
             `الاسم: ${newOrder.customerName}\n` +
             `الرقم المحول منه: ${newOrder.senderPhone}\n` +
+            (newOrder.discountCode ? `كود الخصم: ${newOrder.discountCode}\n` : '') +
             `برجاء قبول الطلب لتفعيل التحميل!`
         }
       });
@@ -510,6 +514,7 @@ async function handleRequest(req, res) {
       const responseData = {
         id: order.id,
         customerName: order.customerName,
+        discountCode: order.discountCode || '',
         paymentMethod: order.paymentMethod,
         amountEgp: order.amountEgp,
         status: order.status,

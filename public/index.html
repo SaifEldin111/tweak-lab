@@ -375,6 +375,14 @@
     .input-field:focus {
       border-color: var(--cyan);
     }
+    .input-discount {
+      padding-left: 42px;
+      letter-spacing: 0.5px;
+    }
+    .input-discount:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+    }
     /* Upload Dropzone */
     .upload-zone {
       border: 2px dashed rgba(0, 240, 255, 0.45);
@@ -1094,6 +1102,17 @@
             </div>
 
             <div class="form-group">
+              <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>🎟️ كود الخصم (لو معاك كود من صانع محتوى):</span>
+                <span style="font-size:0.75rem; color:var(--green); font-weight:700; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); padding:2px 8px; border-radius:6px;">اختياري ✨</span>
+              </label>
+              <div style="position:relative;">
+                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="مثال: CREATOR10 أو كود التخفيض..." autocomplete="off" />
+                <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:1.15rem; pointer-events:none; opacity:0.85;">🏷️</span>
+              </div>
+            </div>
+
+            <div class="form-group">
               <label>📸 ارفع صورة إيصال الدفع (Screenshot التحويل):</label>
               <div class="upload-zone" onclick="document.getElementById('screenshot-input').click()">
                 <div style="font-size:2rem; margin-bottom:4px;">📤</div>
@@ -1370,6 +1389,7 @@ async function submitOrder(e) {
     const payload = {
       customerName: document.getElementById('cust-name').value,
       senderPhone: document.getElementById('cust-phone').value,
+      discountCode: (document.getElementById('cust-discount').value || '').trim(),
       paymentMethod: selectedPaymentMethod,
       notes: document.getElementById('cust-notes').value,
       screenshotDataUrl
@@ -1491,6 +1511,7 @@ function resetToNewOrder() {
   btn.textContent = '🚀 تأكيد الدفع وإرسال الـ Screenshot للاستلام خلال 5 دقائق';
   document.getElementById('screenshot-preview').style.display = 'none';
   document.getElementById('upload-label').textContent = 'اضغط هنا لاختيار صورة الـ Screenshot من موبايلك أو جهازك';
+  if (document.getElementById('cust-discount')) document.getElementById('cust-discount').value = '';
   showView('checkout-view');
 }
 
