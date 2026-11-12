@@ -64,9 +64,7 @@ const DEFAULT_SETTINGS = {
   priceEgp: 99,
   originalPriceEgp: 350,
   discountedPriceEgp: 85,
-  activePromoCodes: {
-    'TWEAK85': 85
-  },
+  activePromoCodes: {},
   paymentPhone: '01020670418',
   instapayAddress: '01020670418',
   instapayLink: 'https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW',
@@ -269,8 +267,8 @@ async function syncFromCloudDb(force = false) {
           merged.priceEgp = 99;
           needSave = true;
         }
-        if (!merged.activePromoCodes || Object.keys(merged.activePromoCodes).length === 0) {
-          merged.activePromoCodes = { 'TWEAK85': 85 };
+        if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
+          merged.activePromoCodes = {};
           needSave = true;
         }
         global.__TWEAKLAB_SETTINGS__ = merged;
@@ -289,8 +287,8 @@ async function syncFromCloudDb(force = false) {
 function loadSettings() {
   if (global.__TWEAKLAB_SETTINGS__) {
     if (global.__TWEAKLAB_SETTINGS__.priceEgp === 100) global.__TWEAKLAB_SETTINGS__.priceEgp = 99;
-    if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || Object.keys(global.__TWEAKLAB_SETTINGS__.activePromoCodes).length === 0) {
-      global.__TWEAKLAB_SETTINGS__.activePromoCodes = { 'TWEAK85': 85 };
+    if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || typeof global.__TWEAKLAB_SETTINGS__.activePromoCodes !== 'object') {
+      global.__TWEAKLAB_SETTINGS__.activePromoCodes = {};
     }
     return global.__TWEAKLAB_SETTINGS__;
   }
@@ -299,8 +297,8 @@ function loadSettings() {
       const raw = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
       const merged = { ...DEFAULT_SETTINGS, ...raw };
       if (merged.priceEgp === 100) merged.priceEgp = 99;
-      if (!merged.activePromoCodes || Object.keys(merged.activePromoCodes).length === 0) {
-        merged.activePromoCodes = { 'TWEAK85': 85 };
+      if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
+        merged.activePromoCodes = {};
       }
       global.__TWEAKLAB_SETTINGS__ = merged;
       return global.__TWEAKLAB_SETTINGS__;
@@ -350,21 +348,19 @@ function loadOrders() {
 
 async function saveOrders(orders) {
   const deletedIds = loadDeletedOrderIds();
-  const local = loadLocalDiskOrders();
   const cleanIncoming = (orders || []).filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
-  const fullMaster = mergeOrderLists(local, cleanIncoming);
-  global.__TWEAKLAB_ORDERS__ = fullMaster;
+  global.__TWEAKLAB_ORDERS__ = cleanIncoming;
   try {
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify(fullMaster, null, 2), 'utf8');
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(cleanIncoming, null, 2), 'utf8');
   } catch (e) {}
   try {
-    fs.writeFileSync(SEED_ORDERS_FILE, JSON.stringify(fullMaster, null, 2), 'utf8');
+    fs.writeFileSync(SEED_ORDERS_FILE, JSON.stringify(cleanIncoming, null, 2), 'utf8');
   } catch (e) {}
   const blobSdk = getBlobSdk();
   if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
     try {
       const key = `tweaklab_db/orders_${Date.now()}_${Math.random().toString(36).slice(2, 6)}.json`;
-      await blobSdk.put(key, JSON.stringify(fullMaster), {
+      await blobSdk.put(key, JSON.stringify(cleanIncoming), {
         access: 'public',
         addRandomSuffix: false,
         contentType: 'application/json'
@@ -379,7 +375,7 @@ async function saveOrders(orders) {
       console.error('Cloud orders save error:', e.message);
     }
   }
-  return fullMaster;
+  return cleanIncoming;
 }
 
 function computeOrderSignature(orderId, pin) {
@@ -576,7 +572,7 @@ async function handleRequest(req, res) {
         priceEgp: s.priceEgp === 100 ? 99 : (s.priceEgp || 99),
         originalPriceEgp: s.originalPriceEgp || 350,
         discountedPriceEgp: s.discountedPriceEgp || 85,
-        activePromoCodes: (s.activePromoCodes && Object.keys(s.activePromoCodes).length > 0) ? s.activePromoCodes : { "TWEAK85": 85 },
+        activePromoCodes: (s.activePromoCodes && typeof s.activePromoCodes === 'object') ? s.activePromoCodes : {},
         paymentPhone: s.paymentPhone,
         instapayAddress: s.instapayAddress,
         instapayLink: s.instapayLink,
@@ -891,15 +887,22 @@ async function handleRequest(req, res) {
       const { orderId, action } = await readJsonBody(req);
       const orders = loadOrders();
       const idx = orders.findIndex((o) => o.id === orderId);
-      if (idx === -1) return sendJson(res, 404, { error: 'الطلب غير موجود' });
 
       if (action === 'delete') {
         const deletedIds = loadDeletedOrderIds();
         deletedIds.add(String(orderId).trim().toUpperCase());
         await saveDeletedOrderIds(deletedIds);
-        orders.splice(idx, 1);
-        global.__TWEAKLAB_ORDERS__ = orders;
-      } else if (action === 'reset-timer') {
+        if (idx !== -1) {
+          orders.splice(idx, 1);
+        }
+        const remaining = orders.filter((o) => !deletedIds.has(String(o.id).trim().toUpperCase()));
+        const updatedOrders = await saveOrders(remaining);
+        return sendJson(res, 200, { ok: true, orders: updatedOrders });
+      }
+
+      if (idx === -1) return sendJson(res, 404, { error: 'الطلب غير موجود' });
+
+      if (action === 'reset-timer') {
         const now = Date.now();
         orders[idx].firstAccessedAt = new Date(now).toISOString();
         orders[idx].accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
@@ -951,9 +954,9 @@ async function handleRequest(req, res) {
 
 if (require.main === module) {
   const server = http.createServer(handleRequest);
-  server.listen(PORT, '127.0.0.1', () => {
+  server.listen(PORT, () => {
     console.log('========================================================================');
-    console.log(`  ⚡ TWEAK LAB - 2027 FPS+ STORE RUNNING ON: http://127.0.0.1:${PORT}`);
+    console.log(`  ⚡ TWEAK LAB - 2027 FPS+ STORE RUNNING ON: http://localhost:${PORT}`);
     console.log(`  🛒 Customer Checkout Page : http://localhost:${PORT}/`);
     console.log(`  🛡️ Seller Admin Dashboard : http://localhost:${PORT}/admin  (PIN: 2027)`);
     console.log('========================================================================');

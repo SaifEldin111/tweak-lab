@@ -297,8 +297,8 @@
             <input type="number" id="set-priceEgp" class="input-field" value="99" required />
           </div>
           <div>
-            <label>🎟️ أكواد الخصم الترويجية الفعّالة (مثال: TWEAK85:85, VIP:85):</label>
-            <input type="text" id="set-promoCodes" class="input-field" placeholder="مثال: TWEAK85:85" />
+            <label>🎟️ أكواد الخصم الترويجية الفعّالة (اتركه فارغاً لتعطيل أي أكواد خصم):</label>
+            <input type="text" id="set-promoCodes" class="input-field" placeholder="لا يوجد أي كود مفعّل حالياً (فارغ)" />
           </div>
           <div>
             <label>🔗 رابط إنستاباي المباشر (اختياري ipn.eg):</label>
@@ -476,21 +476,21 @@ function renderOrders(orders) {
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
             ${
-              o.status !== 'approved'
-                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve')">✅ Accept (قبول وتفعيل التحميل فوراً)</button>`
-                : `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending')">↩ إعادة لقيد المراجعة</button>`
+              o.status === 'pending'
+                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ Accept (قبول وتفعيل التحميل فوراً)</button>
+                   <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض الطلب</button>`
+                : o.status === 'approved'
+                ? `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة لقيد المراجعة</button>
+                   <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض وإلغاء</button>`
+                : `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ قبول الطلب (تراجع عن الرفض)</button>
+                   <button class="btn" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>`
             }
             ${
               (o.status === 'approved' || o.status === 'expired' || o.isBurned)
-                ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer')" title="تجديد مهلة الـ 20 دقيقة للعميل وإعادة تفعيل الرابط له">🔄 تجديد 20 دقيقة</button>`
+                ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer', this)" title="تجديد مهلة الـ 20 دقيقة للعميل وإعادة تفعيل الرابط له">🔄 تجديد 20 دقيقة</button>`
                 : ''
             }
-            ${
-              o.status !== 'rejected'
-                ? `<button class="btn btn-reject" onclick="updateOrder('${o.id}', 'reject')">❌ رفض</button>`
-                : ''
-            }
-            <button class="btn btn-delete" onclick="updateOrder('${o.id}', 'delete')" title="حذف هذا الطلب نهائياً">🗑️ حذف نهائي</button>
+            <button class="btn btn-delete" onclick="updateOrder('${o.id}', 'delete', this)" title="حذف هذا الطلب نهائياً">🗑️ حذف نهائي</button>
           </div>
         </div>
       `;
@@ -498,9 +498,34 @@ function renderOrders(orders) {
     .join('');
 }
 
-async function updateOrder(orderId, action) {
+function showAdminToast(msg) {
+  let toastEl = document.getElementById('admin-toast');
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.id = 'admin-toast';
+    toastEl.style.cssText = 'position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#0e1420; border:1px solid var(--cyan); color:#fff; padding:12px 24px; border-radius:10px; font-weight:800; font-size:0.95rem; box-shadow:0 10px 30px rgba(0,0,0,0.6); z-index:9999; transition:all 0.3s ease;';
+    document.body.appendChild(toastEl);
+  }
+  toastEl.textContent = msg;
+  toastEl.style.display = 'block';
+  toastEl.style.opacity = '1';
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => {
+    toastEl.style.opacity = '0';
+    setTimeout(() => { toastEl.style.display = 'none'; }, 300);
+  }, 2600);
+}
+
+async function updateOrder(orderId, action, btnEl = null) {
   if (action === 'delete') {
-    if (!confirm(`⚠️ هل أنت متأكد من حذف الطلب #${orderId} نهائياً؟\n\nسيتم حذفه من قاعدة البيانات وسينقص من إجمالي الأرباح والمبيعات فوراً.`)) return;
+    if (!confirm(`⚠️ هل أنت متأكد من حذف الطلب #${orderId} نهائياً؟\n\nسيتم حذفه من قاعدة البيانات فوراً ولن يعود للظهور مجدداً.`)) return;
+  }
+  let originalBtnHtml = '';
+  if (btnEl) {
+    originalBtnHtml = btnEl.innerHTML;
+    btnEl.disabled = true;
+    btnEl.style.opacity = '0.6';
+    btnEl.innerHTML = action === 'delete' ? '⏳ جاري الحذف...' : action === 'reject' ? '⏳ جاري الرفض...' : action === 'approve' ? '⏳ جاري القبول...' : '⏳ معالجة...';
   }
   try {
     const res = await fetch('/api/admin/order-action', {
@@ -509,13 +534,26 @@ async function updateOrder(orderId, action) {
       body: JSON.stringify({ orderId, action })
     });
     const result = await res.json();
-    if (result.ok && result.orders) {
+    if (result.ok && Array.isArray(result.orders)) {
       renderOrders(result.orders);
+      showAdminToast(
+        action === 'delete' ? `🗑️ تم حذف الطلب #${orderId} نهائياً` :
+        action === 'reject' ? `❌ تم رفض الطلب #${orderId} بنجاح` :
+        action === 'approve' ? `✅ تم قبول الطلب #${orderId} وتفعيل التحميل` :
+        `تم تحديث حالة الطلب #${orderId}`
+      );
     } else {
+      if (result.error) alert('خطأ: ' + result.error);
       fetchAdminData();
     }
   } catch (e) {
     fetchAdminData();
+  } finally {
+    if (btnEl && originalBtnHtml) {
+      btnEl.disabled = false;
+      btnEl.style.opacity = '1';
+      btnEl.innerHTML = originalBtnHtml;
+    }
   }
 }
 
@@ -524,11 +562,11 @@ function populateSettings(s) {
   document.getElementById('set-videoNotes').value = s.videoNotes || '';
   document.getElementById('set-paymentPhone').value = s.paymentPhone || '01020670418';
   document.getElementById('set-priceEgp').value = s.priceEgp || 99;
-  if (s.activePromoCodes && typeof s.activePromoCodes === 'object') {
+  if (s.activePromoCodes && typeof s.activePromoCodes === 'object' && Object.keys(s.activePromoCodes).length > 0) {
     const pairs = Object.entries(s.activePromoCodes).map(([k, v]) => `${k}:${v}`);
     document.getElementById('set-promoCodes').value = pairs.join(', ');
   } else {
-    document.getElementById('set-promoCodes').value = 'TWEAK85:85';
+    document.getElementById('set-promoCodes').value = '';
   }
   document.getElementById('set-instapayLink').value = s.instapayLink || '';
   document.getElementById('set-adminPin').value = s.adminPin || '2027';

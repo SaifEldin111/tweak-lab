@@ -4,9 +4,7 @@
   "priceEgp": 99,
   "originalPriceEgp": 350,
   "discountedPriceEgp": 85,
-  "activePromoCodes": {
-    "TWEAK85": 85
-  },
+  "activePromoCodes": {},
   "paymentPhone": "01020670418",
   "instapayAddress": "01020670418",
   "instapayLink": "https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW",

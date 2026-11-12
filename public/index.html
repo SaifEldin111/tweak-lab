@@ -1255,7 +1255,7 @@
                 <span id="discount-badge-status" style="font-size:0.75rem; color:var(--green); font-weight:700; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); padding:2px 8px; border-radius:6px;">اختياري ✨</span>
               </label>
               <div style="position:relative;">
-                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="اكتب كود الخصم هنا (مثال: TWEAK85)..." autocomplete="off" oninput="handleDiscountCodeInput(this.value)" />
+                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="اكتب كود الخصم هنا (لو معاك كود من صانع محتوى)..." autocomplete="off" oninput="handleDiscountCodeInput(this.value)" />
                 <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:1.15rem; pointer-events:none; opacity:0.85;">🏷️</span>
               </div>
               <div id="promo-feedback-box" style="display:none; margin-top:8px; border-radius:8px; padding:10px 12px; font-size:0.84rem; line-height:1.45;"></div>
@@ -1472,9 +1472,7 @@ let storeConfig = {
   priceEgp: 99,
   originalPriceEgp: 350,
   discountedPriceEgp: 85,
-  activePromoCodes: {
-    "TWEAK85": 85
-  },
+  activePromoCodes: {},
   deliveryMinutes: 5
 };
 
@@ -1576,7 +1574,7 @@ function handleDiscountCodeInput(rawVal) {
   const inputEl = document.getElementById('cust-discount');
   const badgeStatus = document.getElementById('discount-badge-status');
   const feedbackBox = document.getElementById('promo-feedback-box');
-  const activePromoCodes = storeConfig.activePromoCodes || { "TWEAK85": 85 };
+  const activePromoCodes = storeConfig.activePromoCodes || {};
   const basePrice = Number(storeConfig.priceEgp || 99);
 
   if (!val) {
