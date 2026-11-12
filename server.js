@@ -132,22 +132,7 @@ async function saveDeletedOrderIds(setOrArray) {
   return set;
 }
 
-const CORE_BASELINE_ORDERS = [
-  {
-    id: 'TL-509761',
-    accessToken: '4db75c2e5513d690a4dfad80d6f3ea1d',
-    customerName: 'Saif El Masry',
-    senderPhone: '01020670418',
-    discountCode: '',
-    paymentMethod: 'instapay',
-    amountEgp: 99,
-    notes: 'الطلب الأساسي المؤكد',
-    screenshotUrl: '/assets/promo.jpg',
-    status: 'approved',
-    createdAt: '2026-11-11T22:14:59.557Z',
-    updatedAt: '2026-11-11T22:15:30.000Z'
-  }
-];
+const CORE_BASELINE_ORDERS = [];
 
 function mergeOrderLists(...lists) {
   const deletedIds = loadDeletedOrderIds();
@@ -165,12 +150,7 @@ function mergeOrderLists(...lists) {
         const existing = map.get(id);
         const tExisting = new Date(existing.updatedAt || existing.createdAt || 0).getTime();
         const tItem = new Date(item.updatedAt || item.createdAt || 0).getTime();
-        let preferredStatus = existing.status;
-        if (existing.status === 'approved' || item.status === 'approved') {
-          preferredStatus = 'approved';
-        } else if (tItem >= tExisting) {
-          preferredStatus = item.status || existing.status;
-        }
+        const preferredStatus = tItem >= tExisting ? (item.status || existing.status) : existing.status;
         map.set(id, {
           ...existing,
           ...item,
@@ -484,8 +464,7 @@ function sendWebhookNotifications(order, settings, hostUrl) {
               { name: '💳 طريقة الدفع', value: order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)', inline: true },
               { name: '💰 المبلغ المطلوب', value: `${order.amountEgp} ج.م`, inline: true },
               ...(order.discountCode ? [{ name: '🎟️ كود الخصم (صانع المحتوى)', value: `${order.discountCode}${order.isDiscountApplied ? ' (خصم 85 ج.م مُطبّق 🎉)' : ''}`, inline: true }] : []),
-              { name: '⚡ رابط القبول الفوري (1-Click Accept)', value: `${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)}` },
-              { name: '🖥️ لوحة التحكم', value: `${hostUrl}/admin` }
+              { name: '🖥️ لوحة التحكم (القبول/الرفض اليدوي)', value: `${hostUrl}/admin` }
             ],
             timestamp: new Date().toISOString()
           }
@@ -517,8 +496,8 @@ function sendWebhookNotifications(order, settings, hostUrl) {
         `💳 *طريقة الدفع:* ${order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)'}\n` +
         `💰 *المبلغ:* ${order.amountEgp} جنيه مصري\n` +
         `📝 *ملاحظات:* ${order.notes || 'لا يوجد'}\n\n` +
-        `⚡ [اضغط هنا لقبول وتفعيل الطلب فوراً](${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)})\n\n` +
-        `🖥️ [فتح لوحة تحكم المتجر](${hostUrl}/admin)`;
+        `⚠️ *الطلب الآن بانتظار مراجعتك اليدوية في لوحة التحكم (Pending):*\n` +
+        `🖥️ [فتح لوحة تحكم الأدمن لمراجعة السكرين شوت والقبول](${hostUrl}/admin)`;
 
       const payload = JSON.stringify({
         chat_id: settings.telegramChatId,
@@ -687,61 +666,16 @@ async function handleRequest(req, res) {
     if (req.method === 'GET' && pathname.startsWith('/api/orders/')) {
       const orderId = pathname.replace('/api/orders/', '').trim();
       const token = parsedUrl.searchParams.get('token') || '';
-      const sig = parsedUrl.searchParams.get('sig') || '';
       const settings = loadSettings();
-      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
 
       const orders = loadOrders();
       const order = orders.find((o) => o.id === orderId && o.accessToken === token);
-
-      // Also allow stateless unlock via signature if approved via direct link
-      if (sig && sig === expectedSig) {
-        let directTimeBomb = null;
-        if (order) {
-          const now = Date.now();
-          const isExpired = order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime());
-          if (isExpired) {
-            if (!order.isBurned || order.status !== 'expired') {
-              order.isBurned = true;
-              order.status = 'expired';
-              order.updatedAt = new Date().toISOString();
-              await saveOrders(orders);
-            }
-            return sendJson(res, 410, {
-              id: orderId,
-              status: 'expired',
-              isBurned: true,
-              error: 'Link Expired',
-              message: 'انتهت صلاحية هذا الرابط وتم إتلافه لحماية الملفات.'
-            });
-          }
-          if (!order.firstAccessedAt) {
-            order.firstAccessedAt = new Date(now).toISOString();
-            order.accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
-            order.isBurned = false;
-            order.updatedAt = new Date().toISOString();
-            await saveOrders(orders);
-          }
-          directTimeBomb = {
-            firstAccessedAt: order.firstAccessedAt,
-            expiresAt: order.accessExpiresAt,
-            remainingSeconds: Math.max(0, Math.floor((new Date(order.accessExpiresAt).getTime() - now) / 1000)),
-            isBurned: false
-          };
-        }
-        return sendJson(res, 200, {
-          id: orderId,
-          status: 'approved',
-          timeBomb: directTimeBomb,
-          delivery: buildDeliveryPayload(orderId, token || 'direct', settings, directTimeBomb)
-        });
-      }
 
       if (!order) {
         return sendJson(res, 404, { error: 'لم يتم العثور على الطلب.' });
       }
 
-      // Check Time-Bomb Status for approved or expired orders
+      // ONLY if admin manually clicked Accept in /admin will order.status be 'approved'
       if (order.status === 'approved' || order.status === 'expired') {
         const now = Date.now();
         const isExpired = order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime());
@@ -794,6 +728,7 @@ async function handleRequest(req, res) {
         return sendJson(res, 200, responseData);
       }
 
+      // Order is still pending (awaiting manual admin accept) or rejected: NEVER send delivery details!
       const responseData = {
         id: order.id,
         customerName: order.customerName,
@@ -813,17 +748,14 @@ async function handleRequest(req, res) {
       const parts = pathname.replace('/api/download/', '').split('/');
       const [orderId, fileKey] = parts;
       const token = parsedUrl.searchParams.get('token') || '';
-      const sig = parsedUrl.searchParams.get('sig') || '';
-      const settings = loadSettings();
-      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
 
       const orders = loadOrders();
       const order = orders.find((o) => o.id === orderId && o.accessToken === token);
-      const isAuthorized = (order && order.status === 'approved') || (sig && sig === expectedSig);
+      const isAuthorized = order && order.status === 'approved';
 
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-        return res.end('⛔ غير مسموح بالتحميل قبل تأكيد وقبول عملية الدفع من الإدارة.');
+        return res.end('⛔ غير مسموح بالتحميل قبل تأكيد وقبول عملية الدفع يدوياً من الإدارة.');
       }
 
       // Time-Bomb Expiration Check for Downloads
@@ -876,17 +808,14 @@ async function handleRequest(req, res) {
     if (req.method === 'GET' && pathname.startsWith('/api/guide/')) {
       const orderId = pathname.replace('/api/guide/', '').trim();
       const token = parsedUrl.searchParams.get('token') || '';
-      const sig = parsedUrl.searchParams.get('sig') || '';
-      const settings = loadSettings();
-      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
 
       const orders = loadOrders();
       const order = orders.find((o) => o.id === orderId && o.accessToken === token);
-      const isAuthorized = (order && order.status === 'approved') || (sig && sig === expectedSig);
+      const isAuthorized = order && order.status === 'approved';
 
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-        return res.end('⛔ غير مسموح بفتح الدليل قبل قبول الطلب.');
+        return res.end('⛔ غير مسموح بفتح الدليل قبل قبول وتأكيد الطلب يدوياً من الإدارة.');
       }
 
       // Time-Bomb Expiration Check for Interactive Guide
@@ -920,35 +849,21 @@ async function handleRequest(req, res) {
       return res.end(htmlBuf || '');
     }
 
-    // 6. Quick 1-Click Link Approval
+    // 6. Quick Action Notice (Directs to /admin for secure manual approval)
     if (req.method === 'GET' && pathname === '/api/quick-action') {
-      const id = parsedUrl.searchParams.get('id');
-      const action = parsedUrl.searchParams.get('action');
-      const pin = parsedUrl.searchParams.get('pin');
-      const settings = loadSettings();
-
-      if (pin !== settings.adminPin) {
-        res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8' });
-        return res.end('<h2>❌ رمز الحماية غير صحيح</h2>');
-      }
-
-      const orders = loadOrders();
-      const idx = orders.findIndex((o) => o.id === id);
-      if (idx !== -1) {
-        orders[idx].status = action === 'approve' ? 'approved' : 'rejected';
-        orders[idx].updatedAt = new Date().toISOString();
-        await saveOrders(orders);
-      }
-
-      const sig = computeOrderSignature(id, settings.adminPin);
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(`
-        <!DOCTYPE html><html lang="ar" dir="rtl"><body style="background:#070a10;color:#00ff88;font-family:sans-serif;text-align:center;padding:60px;">
-        <h1>${action === 'approve' ? '✅ تم قبول الطلب وتفعيل التحميل للعميل فوراً!' : '❌ تم رفض الطلب'}</h1>
-        <p style="color:#fff;font-size:18px;">رقم الطلب: ${id}</p>
-        <p style="color:#8b9bb4;font-size:14px;">رابط التحميل المباشر للعميل (في حال أردت إرساله له على واتساب):<br/>
-        <code style="color:#00f0ff;">/?order=${id}&token=direct&sig=${sig}</code></p>
-        <a href="/admin" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#00f0ff;color:#000;text-decoration:none;border-radius:8px;font-weight:bold;">العودة للوحة التحكم</a>
+        <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>لوحة التحكم | TWEAK LAB</title></head>
+        <body style="background:#070a10;color:#00f0ff;font-family:system-ui,sans-serif;text-align:center;padding:60px 20px;">
+        <div style="max-width:550px;margin:0 auto;background:#0e1420;border:1px solid #1e2c46;padding:32px;border-radius:16px;">
+          <h2 style="color:#00ff88;margin-bottom:12px;">🔒 نظام الأمان: القبول اليدوي الإلزامي</h2>
+          <p style="color:#8b9bb4;font-size:15px;line-height:1.7;margin-bottom:24px;">
+            لحماية المتجر والتأكد من صحة إيصال الدفع، يجب مراجعة صورة السكرين شوت والضغط على Accept يدوياً من داخل لوحة التحكم.
+          </p>
+          <a href="/admin" style="display:inline-block;padding:12px 28px;background:linear-gradient(90deg,#00f0ff,#00ff88);color:#000;text-decoration:none;border-radius:8px;font-weight:900;font-size:16px;">
+            الانتقال للوحة التحكم الآن (/admin)
+          </a>
+        </div>
         </body></html>
       `);
     }
