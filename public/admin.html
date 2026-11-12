@@ -29,9 +29,18 @@
       background: rgba(14, 20, 32, 0.95);
       border-bottom: 1px solid var(--border);
       padding: 18px 24px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 14px 16px;
+      }
+      .container {
+        padding: 0 14px;
+      }
+      .orders-grid {
+        grid-template-columns: 1fr;
+      }
     }
     .header-inner {
       max-width: 1250px;
