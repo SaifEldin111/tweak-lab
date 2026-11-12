@@ -271,6 +271,10 @@ async function syncFromCloudDb(force = false) {
           merged.activePromoCodes = {};
           needSave = true;
         }
+        if (merged.activePromoCodes && merged.activePromoCodes['TWEAK85']) {
+          delete merged.activePromoCodes['TWEAK85'];
+          needSave = true;
+        }
         global.__TWEAKLAB_SETTINGS__ = merged;
         if (needSave) {
           saveSettings(merged).catch(() => {});
@@ -290,6 +294,9 @@ function loadSettings() {
     if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || typeof global.__TWEAKLAB_SETTINGS__.activePromoCodes !== 'object') {
       global.__TWEAKLAB_SETTINGS__.activePromoCodes = {};
     }
+    if (global.__TWEAKLAB_SETTINGS__.activePromoCodes && global.__TWEAKLAB_SETTINGS__.activePromoCodes['TWEAK85']) {
+      delete global.__TWEAKLAB_SETTINGS__.activePromoCodes['TWEAK85'];
+    }
     return global.__TWEAKLAB_SETTINGS__;
   }
   try {
@@ -299,6 +306,9 @@ function loadSettings() {
       if (merged.priceEgp === 100) merged.priceEgp = 99;
       if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
         merged.activePromoCodes = {};
+      }
+      if (merged.activePromoCodes && merged.activePromoCodes['TWEAK85']) {
+        delete merged.activePromoCodes['TWEAK85'];
       }
       global.__TWEAKLAB_SETTINGS__ = merged;
       return global.__TWEAKLAB_SETTINGS__;
