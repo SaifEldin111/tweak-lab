@@ -83,6 +83,77 @@ global.__TWEAKLAB_SETTINGS__ = global.__TWEAKLAB_SETTINGS__ || null;
 global.__TWEAKLAB_ORDERS__ = global.__TWEAKLAB_ORDERS__ || null;
 global.__TWEAKLAB_LAST_SYNC__ = global.__TWEAKLAB_LAST_SYNC__ || 0;
 
+const CORE_BASELINE_ORDERS = [
+  {
+    id: 'TL-509761',
+    accessToken: '4db75c2e5513d690a4dfad80d6f3ea1d',
+    customerName: 'Saif El Masry',
+    senderPhone: '01020670418',
+    discountCode: '',
+    paymentMethod: 'instapay',
+    amountEgp: 99,
+    notes: 'الطلب الأساسي المؤكد',
+    screenshotUrl: '/assets/promo.jpg',
+    status: 'approved',
+    createdAt: '2026-11-11T22:14:59.557Z',
+    updatedAt: '2026-11-11T22:15:30.000Z'
+  }
+];
+
+function mergeOrderLists(...lists) {
+  const map = new Map();
+  for (const list of lists) {
+    if (!Array.isArray(list)) continue;
+    for (const raw of list) {
+      if (!raw || !raw.id) continue;
+      const id = String(raw.id).trim().toUpperCase();
+      const item = { ...raw, id };
+      if (!map.has(id)) {
+        map.set(id, item);
+      } else {
+        const existing = map.get(id);
+        const tExisting = new Date(existing.updatedAt || existing.createdAt || 0).getTime();
+        const tItem = new Date(item.updatedAt || item.createdAt || 0).getTime();
+        let preferredStatus = existing.status;
+        if (existing.status === 'approved' || item.status === 'approved') {
+          preferredStatus = 'approved';
+        } else if (tItem >= tExisting) {
+          preferredStatus = item.status || existing.status;
+        }
+        map.set(id, {
+          ...existing,
+          ...item,
+          status: preferredStatus,
+          updatedAt: Math.max(tExisting, tItem) ? new Date(Math.max(tExisting, tItem)).toISOString() : new Date().toISOString()
+        });
+      }
+    }
+  }
+  return Array.from(map.values()).sort((a, b) => {
+    const tA = new Date(a.createdAt || 0).getTime();
+    const tB = new Date(b.createdAt || 0).getTime();
+    return tB - tA;
+  });
+}
+
+function loadLocalDiskOrders() {
+  let diskOrders = [];
+  let seedOrders = [];
+  try {
+    if (fs.existsSync(ORDERS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8'));
+      if (Array.isArray(parsed)) diskOrders = parsed;
+    }
+  } catch (e) {}
+  try {
+    if (fs.existsSync(SEED_ORDERS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(SEED_ORDERS_FILE, 'utf8'));
+      if (Array.isArray(parsed)) seedOrders = parsed;
+    }
+  } catch (e) {}
+  return mergeOrderLists(CORE_BASELINE_ORDERS, seedOrders, diskOrders);
+}
+
 function getBlobSdk() {
   if (global.__VERCEL_BLOB__) return global.__VERCEL_BLOB__;
   try {
@@ -95,7 +166,10 @@ function getBlobSdk() {
 
 async function syncFromCloudDb(force = false) {
   const blobSdk = getBlobSdk();
-  if (!blobSdk || !process.env.BLOB_READ_WRITE_TOKEN) return;
+  if (!blobSdk || !process.env.BLOB_READ_WRITE_TOKEN) {
+    global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
+    return;
+  }
   const now = Date.now();
   if (!force && global.__TWEAKLAB_ORDERS__ && now - global.__TWEAKLAB_LAST_SYNC__ < 1500) {
     return;
@@ -109,24 +183,29 @@ async function syncFromCloudDb(force = false) {
       .filter((b) => b.pathname.startsWith('tweaklab_db/settings_'))
       .sort((a, b) => b.pathname.localeCompare(a.pathname));
 
+    let cloudOrders = [];
     if (orderBlobs.length > 0) {
-      const r = await fetch(orderBlobs[0].url + '?t=' + now, { cache: 'no-store' });
-      if (r.ok) {
-        global.__TWEAKLAB_ORDERS__ = await r.json();
-        try {
-          fs.writeFileSync(ORDERS_FILE, JSON.stringify(global.__TWEAKLAB_ORDERS__, null, 2), 'utf8');
-        } catch (e) {}
-      }
-    } else {
-      // Very first run on Cloud DB: seed with existing local orders (e.g. TL-509761)
-      let seedOrders = [];
       try {
-        if (fs.existsSync(SEED_ORDERS_FILE)) {
-          seedOrders = JSON.parse(fs.readFileSync(SEED_ORDERS_FILE, 'utf8'));
+        const r = await fetch(orderBlobs[0].url + '?t=' + now, { cache: 'no-store' });
+        if (r.ok) {
+          const parsed = await r.json();
+          if (Array.isArray(parsed)) cloudOrders = parsed;
         }
+      } catch (e) {
+        console.error('Failed reading order blob:', e.message);
+      }
+    }
+
+    const localMaster = loadLocalDiskOrders();
+    const masterOrders = mergeOrderLists(localMaster, global.__TWEAKLAB_ORDERS__ || [], cloudOrders);
+    global.__TWEAKLAB_ORDERS__ = masterOrders;
+
+    if (masterOrders.length > cloudOrders.length || orderBlobs.length === 0) {
+      await saveOrders(masterOrders);
+    } else {
+      try {
+        fs.writeFileSync(ORDERS_FILE, JSON.stringify(masterOrders, null, 2), 'utf8');
       } catch (e) {}
-      global.__TWEAKLAB_ORDERS__ = seedOrders;
-      await saveOrders(seedOrders);
     }
 
     if (settingBlobs.length > 0) {
@@ -152,6 +231,7 @@ async function syncFromCloudDb(force = false) {
     global.__TWEAKLAB_LAST_SYNC__ = Date.now();
   } catch (err) {
     console.error('Cloud DB sync warning:', err.message);
+    global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
   }
 }
 
@@ -211,31 +291,27 @@ async function saveSettings(newSettings) {
 }
 
 function loadOrders() {
-  if (global.__TWEAKLAB_ORDERS__) return global.__TWEAKLAB_ORDERS__;
-  try {
-    if (fs.existsSync(ORDERS_FILE)) {
-      global.__TWEAKLAB_ORDERS__ = JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8'));
-      return global.__TWEAKLAB_ORDERS__;
-    }
-    if (fs.existsSync(SEED_ORDERS_FILE)) {
-      global.__TWEAKLAB_ORDERS__ = JSON.parse(fs.readFileSync(SEED_ORDERS_FILE, 'utf8'));
-      return global.__TWEAKLAB_ORDERS__;
-    }
-  } catch (e) {}
-  global.__TWEAKLAB_ORDERS__ = [];
-  return global.__TWEAKLAB_ORDERS__;
+  const local = loadLocalDiskOrders();
+  const merged = mergeOrderLists(local, global.__TWEAKLAB_ORDERS__ || []);
+  global.__TWEAKLAB_ORDERS__ = merged;
+  return merged;
 }
 
 async function saveOrders(orders) {
-  global.__TWEAKLAB_ORDERS__ = orders;
+  const local = loadLocalDiskOrders();
+  const fullMaster = mergeOrderLists(local, global.__TWEAKLAB_ORDERS__ || [], orders || []);
+  global.__TWEAKLAB_ORDERS__ = fullMaster;
   try {
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf8');
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(fullMaster, null, 2), 'utf8');
+  } catch (e) {}
+  try {
+    fs.writeFileSync(SEED_ORDERS_FILE, JSON.stringify(fullMaster, null, 2), 'utf8');
   } catch (e) {}
   const blobSdk = getBlobSdk();
   if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
     try {
       const key = `tweaklab_db/orders_${Date.now()}_${Math.random().toString(36).slice(2, 6)}.json`;
-      await blobSdk.put(key, JSON.stringify(orders), {
+      await blobSdk.put(key, JSON.stringify(fullMaster), {
         access: 'public',
         addRandomSuffix: false,
         contentType: 'application/json'
@@ -243,13 +319,14 @@ async function saveOrders(orders) {
       global.__TWEAKLAB_LAST_SYNC__ = Date.now();
       const { blobs } = await blobSdk.list({ prefix: 'tweaklab_db/orders_' });
       const sorted = blobs.sort((a, b) => b.pathname.localeCompare(a.pathname));
-      if (sorted.length > 2) {
-        await blobSdk.del(sorted.slice(2).map((b) => b.url));
+      if (sorted.length > 5) {
+        await blobSdk.del(sorted.slice(5).map((b) => b.url));
       }
     } catch (e) {
       console.error('Cloud orders save error:', e.message);
     }
   }
+  return fullMaster;
 }
 
 function computeOrderSignature(orderId, pin) {
@@ -401,7 +478,8 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.webmanifest': 'application/manifest+json'
 };
 
 const PROTECTED_FILES = {
@@ -738,9 +816,9 @@ async function handleRequest(req, res) {
 
 if (require.main === module) {
   const server = http.createServer(handleRequest);
-  server.listen(PORT, () => {
+  server.listen(PORT, '127.0.0.1', () => {
     console.log('========================================================================');
-    console.log(`  ⚡ TWEAK LAB - 2027 FPS+ STORE RUNNING ON: http://localhost:${PORT}`);
+    console.log(`  ⚡ TWEAK LAB - 2027 FPS+ STORE RUNNING ON: http://127.0.0.1:${PORT}`);
     console.log(`  🛒 Customer Checkout Page : http://localhost:${PORT}/`);
     console.log(`  🛡️ Seller Admin Dashboard : http://localhost:${PORT}/admin  (PIN: 2027)`);
     console.log('========================================================================');
