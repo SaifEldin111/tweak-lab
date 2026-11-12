@@ -97,6 +97,28 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+    .nav-actions-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .lang-switch-btn {
+      font-size: 0.78rem !important;
+      padding: 6px 11px !important;
+      border-color: rgba(0, 240, 255, 0.45) !important;
+      background: rgba(0, 240, 255, 0.08) !important;
+      color: var(--cyan) !important;
+      font-weight: 800 !important;
+      white-space: nowrap;
+      border-radius: 999px !important;
+    }
+    .lang-switch-btn:hover {
+      background: rgba(0, 240, 255, 0.22) !important;
+      border-color: var(--cyan) !important;
+      color: #fff !important;
+    }
     .pill-5min {
       background: rgba(0, 255, 136, 0.14);
       border: 1px solid rgba(0, 255, 136, 0.45);
@@ -505,7 +527,7 @@
       border-color: var(--cyan);
     }
     .input-discount {
-      padding-left: 42px;
+      padding-inline-end: 42px;
       letter-spacing: 0.5px;
     }
     .input-discount:focus {
@@ -571,7 +593,7 @@
       border: 2px solid var(--green);
       border-radius: 16px;
       padding: 24px;
-      text-align: right;
+      text-align: start;
       margin-top: 16px;
     }
     .download-grid {
@@ -969,7 +991,7 @@
       padding: 8px 12px;
       border-radius: 10px;
       cursor: pointer;
-      text-align: right;
+      text-align: start;
       transition: all 0.18s;
       outline: none;
       display: flex;
@@ -1077,8 +1099,11 @@
         <span>TWEAK LAB <span style="color:var(--cyan); font-weight:400; font-size:0.9rem;">| 2027 FPS+</span></span>
       </a>
       <div class="nav-badges">
-        <span class="pill-5min">⚡ تسليم أوتوماتيكي خلال 5 دقائق بعد قبول الدفع</span>
-        <button class="btn" onclick="promptRestoreOrder()" style="font-size:0.8rem; padding:6px 12px;">🔍 متابعة طلب سابق</button>
+        <span class="pill-5min" data-i18n="navPill">⚡ تسليم أوتوماتيكي خلال 5 دقائق بعد قبول الدفع</span>
+        <div class="nav-actions-row">
+          <button class="btn" data-i18n="navRestore" onclick="promptRestoreOrder()" style="font-size:0.8rem; padding:6px 12px;">🔍 متابعة طلب سابق</button>
+          <button class="btn lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()" title="Switch Language / تغيير اللغة">🌐 English</button>
+        </div>
       </div>
     </div>
   </nav>
@@ -1087,7 +1112,7 @@
   <header>
     <div class="badge-top">VERIFIED 100% PC SAFE • REVERSIBLE • WINDOWS 10 & 11</div>
     <h1>BEST OPTIMIZATION FOR 2027 FPS+</h1>
-    <p class="subtitle">
+    <p class="subtitle" data-i18n-html="heroSubtitle">
       الحزمة الأقوى في مصر لرفع الفريمات (FPS)، تثبيت الـ 1% Low، وإلغاء الـ Input Lag والـ Stutter بأمان 100%.
       ادفع بسهولة عبر <strong>InstaPay</strong> أو <strong>Vodafone Cash</strong> واستلم الفولدر الكامل + فيديو الشرح خلال <strong>5 دقائق بالضبط!</strong>
     </p>
@@ -1102,7 +1127,7 @@
 
         <div class="price-banner">
           <div>
-            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">السعر الحصري للحزمة الكاملة</div>
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;" data-i18n="priceExclusiveLabel">السعر الحصري للحزمة الكاملة</div>
             <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:6px;">
               <span class="price-num" id="display-price">99 ج.م</span>
               <span class="price-old" id="display-price-old">350 ج.م</span>
@@ -1112,52 +1137,52 @@
               </div>
             </div>
           </div>
-          <div style="text-align:left;">
-            <span class="badge badge-safe" style="font-size:0.82rem; padding:6px 12px;">دفع لمرة واحدة • شامل التحديثات</span>
+          <div style="text-align:end;">
+            <span class="badge badge-safe" style="font-size:0.82rem; padding:6px 12px;" data-i18n="priceLifetimeBadge">دفع لمرة واحدة • شامل التحديثات</span>
           </div>
         </div>
 
         <div class="delivery-guarantee">
           <span style="font-size:1.5rem;">⏱️</span>
-          <div>
+          <div id="delivery-guarantee-text">
             <strong>ضمان الاستلام خلال 5 دقائق بالضبط!</strong><br />
-            بمجرد تحويل <strong id="guarantee-price-text">99 جنيه</strong> إلى الرقم <strong>01020670418</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!
+            بمجرد تحويل <strong id="guarantee-price-text">99 جنيه</strong> إلى الرقم <strong id="guarantee-phone-text">01020670418</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!
           </div>
         </div>
 
-        <h3 style="margin-bottom:12px; color:var(--cyan);">📦 ماذا ستستلم فوراً بعد تأكيد الدفع؟</h3>
+        <h3 style="margin-bottom:12px; color:var(--cyan);" data-i18n="whatYouGetTitle">📦 ماذا ستستلم فوراً بعد تأكيد الدفع؟</h3>
         <ul class="feature-list">
           <li>
             <span class="feature-icon">✔</span>
-            <div>
+            <div data-i18n-html="feat1">
               <strong>الأداة الأوتوماتيكية (<code>best optimization for 2027 fps +.bat</code>):</strong>
               تضم <strong>35+ تويك احترافي آمن</strong> مقسمين في قائمة تفاعلية + زر <em>1-Click Pro Gaming Preset</em> + خيار <em>[C] Ultimate Cleaner & RAM Optimizer</em> + عمل نقطة استرجاع أوتوماتيكية (System Restore) + زر إلغاء التعديلات (Undo) في أي وقت.
             </div>
           </li>
           <li>
             <span class="feature-icon">✔</span>
-            <div>
+            <div data-i18n-html="feat2">
               <strong>أداة التنظيف السريع للرامات والملفات المؤقتة (<code>Tweak_Lab_Cleaner_RAM_Optimizer.bat</code>):</strong>
               ملف مستقل بضغطة واحدة قبل تشغيل أي لعبة لمسح ملفات الـ Temp والـ Prefetch، عمل Flush للـ DNS وإعادة ضبط الـ Winsock لتقليل الـ Ping، وتحرير الـ Idle RAM فوراً.
             </div>
           </li>
           <li>
             <span class="feature-icon">✔</span>
-            <div>
+            <div data-i18n-html="feat3">
               <strong>الدليل التفاعلي الكامل (<code>best optimization for 2027 fps +.html</code>):</strong>
               لوحة تحكم تفاعلية بنفس هذا التصميم تفتح على متصفحك لمتابعة التويكات خطوة بخطوة مع شريط تقدم وجداول إعدادات كروت NVIDIA و AMD و Intel والـ BIOS.
             </div>
           </li>
           <li>
             <span class="feature-icon">✔</span>
-            <div>
+            <div data-i18n-html="feat4">
               <strong>رابط فيديو الشرح الحصري (Video Tutorial):</strong>
               فيديو عملي يوضح لك إزاي تشغل الملف وتختار أفضل الإعدادات لجهازك خطوة بخطوة بدون أي تعقيد.
             </div>
           </li>
           <li>
             <span class="feature-icon">✔</span>
-            <div>
+            <div data-i18n-html="feat5">
               <strong>آمن 100% على جهازك وعلى الألعاب:</strong>
               لا يمسح ملفات الويندوز، ولا يعطل الحماية أو الـ Anti-Cheat (مثل Vanguard و FaceIt و Ricochet).
             </div>
@@ -1171,10 +1196,10 @@
         <!-- VIEW 1: CHECKOUT & SCREENSHOT UPLOAD -->
         <div id="checkout-view">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <h2 style="font-size:1.35rem; color:#fff;">💳 خطوات الدفع والاستلام الفوري</h2>
+            <h2 style="font-size:1.35rem; color:#fff;" data-i18n="checkoutTitle">💳 خطوات الدفع والاستلام الفوري</h2>
             <span class="badge badge-fps" id="checkout-badge-price">99 EGP</span>
           </div>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;" id="checkout-subtext">
             اختر وسيلة الدفع المناسبة لك في مصر، حوّل <strong id="checkout-text-price">99 جنيه مصري</strong> للرقم الموضح، ثم ارفع سكرين شوت الإيصال بالأسفل:
           </p>
 
@@ -1182,34 +1207,34 @@
           <div class="pay-tabs">
             <div id="tab-instapay" class="pay-tab active-instapay" onclick="selectPayMethod('instapay')">
               <span style="font-size:1.3rem;">🏦</span>
-              <span>InstaPay مصر</span>
-              <span style="font-size:0.75rem; color:#d8b4fe;">إنستاباي (تحويل فوري)</span>
+              <span data-i18n="tabInstaTitle">InstaPay مصر</span>
+              <span style="font-size:0.75rem; color:#d8b4fe;" data-i18n="tabInstaSub">إنستاباي (تحويل فوري)</span>
             </div>
             <div id="tab-vodafone" class="pay-tab" onclick="selectPayMethod('vodafone')">
               <span style="font-size:1.3rem;">📲</span>
               <span>Vodafone Cash</span>
-              <span style="font-size:0.75rem; color:#fca5a5;">محفظة فودافون كاش</span>
+              <span style="font-size:0.75rem; color:#fca5a5;" data-i18n="tabVodaSub">محفظة فودافون كاش</span>
             </div>
           </div>
 
           <!-- INSTAPAY INSTRUCTIONS BOX -->
           <div id="box-instapay" class="pay-box">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <strong style="color:#d8b4fe;">🟣 التحويل عبر تطبيق InstaPay (إنستاباي)</strong>
+              <strong style="color:#d8b4fe;" data-i18n="instaBoxTitle">🟣 التحويل عبر تطبيق InstaPay (إنستاباي)</strong>
               <span class="badge badge-safe" id="instapay-amount-badge">99 جنيه مصري</span>
             </div>
-            <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;">
+            <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;" data-i18n-html="instaSteps12">
               1. افتح تطبيق <strong>InstaPay</strong> واختر <strong>إرسال نقود (Send Money)</strong>.<br />
               2. اختر <strong>رقم الهاتف (Mobile Number)</strong> أو محفظة إلكترونية واكتب الرقم التالي:
             </p>
             <div class="number-display">
               <span class="phone-digits" id="instapay-num">01020670418</span>
-              <button type="button" class="btn" onclick="copyText('01020670418', this)">📋 نسخ الرقم</button>
+              <button type="button" class="btn" id="copy-insta-btn" data-i18n="copyNumBtn" onclick="copyText(storeConfig.instapayAddress || storeConfig.paymentPhone || '01020670418', this)">📋 نسخ الرقم</button>
             </div>
-            <p style="font-size:0.85rem; color:var(--text-muted);">
+            <p style="font-size:0.85rem; color:var(--text-muted);" id="insta-step3-text">
               3. اكتب المبلغ <strong id="instapay-amount-step">99 ج.م</strong> وأكمل التحويل ثم خذ <strong>Screenshot (لقطة شاشة)</strong> لإيصال التحويل.
             </p>
-            <a id="instapay-direct-btn" href="https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW" target="_blank" class="btn btn-instapay">
+            <a id="instapay-direct-btn" href="https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW" target="_blank" class="btn btn-instapay" data-i18n="instaDirectBtn">
               ⚡ اضغط هنا لفتح رابط الدفع المباشر على InstaPay (saifelmasry2729)
             </a>
           </div>
@@ -1217,20 +1242,20 @@
           <!-- VODAFONE CASH INSTRUCTIONS BOX -->
           <div id="box-vodafone" class="pay-box" style="display:none;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <strong style="color:#ff6b6b;">🔴 التحويل عبر Vodafone Cash (فودافون كاش)</strong>
+              <strong style="color:#ff6b6b;" data-i18n="vodaBoxTitle">🔴 التحويل عبر Vodafone Cash (فودافون كاش)</strong>
               <span class="badge badge-safe" id="vodafone-amount-badge">99 جنيه مصري</span>
             </div>
-            <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;">
+            <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;" id="voda-subtext">
               حوّل <strong id="vodafone-amount-text">99 جنيه مصري</strong> إلى رقم محفظة فودافون كاش التالي:
             </p>
             <div class="number-display">
               <span class="phone-digits" id="vodafone-num">01020670418</span>
-              <button type="button" class="btn" onclick="copyText('01020670418', this)">📋 نسخ رقم المحفظة</button>
+              <button type="button" class="btn" id="copy-voda-btn" data-i18n="copyWalletBtn" onclick="copyText(storeConfig.paymentPhone || '01020670418', this)">📋 نسخ رقم المحفظة</button>
             </div>
             <div style="background:rgba(230,0,0,0.1); border:1px solid rgba(230,0,0,0.35); border-radius:9px; padding:10px 12px; font-size:0.84rem; margin-bottom:8px;">
-              💡 <strong>كود التحويل السريع من موبايلك:</strong>
+              <span data-i18n-html="vodaUssdLabel">💡 <strong>كود التحويل السريع من موبايلك:</strong></span>
               <code id="vodafone-ussd-code" style="direction:ltr; display:inline-block; color:#fff; font-weight:bold; margin:0 6px;">*9*7*01020670418*99#</code>
-              <button type="button" id="vodafone-ussd-copy-btn" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="copyVodafoneCode(this)">نسخ الكود</button>
+              <button type="button" id="vodafone-ussd-copy-btn" class="btn" data-i18n="copyCodeBtn" style="padding:3px 8px; font-size:0.75rem;" onclick="copyVodafoneCode(this)">نسخ الكود</button>
             </div>
             <a id="vodafone-direct-dial" href="tel:*9*7*01020670418*99%23" class="btn btn-vodafone">
               📞 اضغط هنا للتحويل المباشر من الموبايل (*9*7*01020670418*99#)
@@ -1240,41 +1265,41 @@
           <!-- UPLOAD SCREENSHOT FORM -->
           <form id="order-form" onsubmit="submitOrder(event)">
             <div class="form-group">
-              <label>👤 اسمك (أو الـ Gaming Nickname):</label>
-              <input type="text" id="cust-name" class="input-field" placeholder="مثال: Ahmed / Marwan" required />
+              <label data-i18n="labelName">👤 اسمك (أو الـ Gaming Nickname):</label>
+              <input type="text" id="cust-name" class="input-field" data-i18n-placeholder="phName" placeholder="مثال: Ahmed / Marwan" required />
             </div>
 
             <div class="form-group">
-              <label>📱 رقم الموبايل المحول منه (أو حساب إنستاباي):</label>
-              <input type="text" id="cust-phone" class="input-field" placeholder="مثال: 010xxxxxxxx" required />
+              <label data-i18n="labelPhone">📱 رقم الموبايل المحول منه (أو حساب إنستاباي):</label>
+              <input type="text" id="cust-phone" class="input-field" data-i18n-placeholder="phPhone" placeholder="مثال: 010xxxxxxxx" required />
             </div>
 
             <div class="form-group">
               <label style="display:flex; justify-content:space-between; align-items:center;">
-                <span>🎟️ كود الخصم (لو معاك كود من صانع محتوى):</span>
+                <span data-i18n="labelDiscount">🎟️ كود الخصم (لو معاك كود من صانع محتوى):</span>
                 <span id="discount-badge-status" style="font-size:0.75rem; color:var(--green); font-weight:700; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); padding:2px 8px; border-radius:6px;">اختياري ✨</span>
               </label>
               <div style="position:relative;">
-                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="اكتب كود الخصم هنا (لو معاك كود من صانع محتوى)..." autocomplete="off" oninput="handleDiscountCodeInput(this.value)" />
-                <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:1.15rem; pointer-events:none; opacity:0.85;">🏷️</span>
+                <input type="text" id="cust-discount" class="input-field input-discount" data-i18n-placeholder="phDiscount" placeholder="اكتب كود الخصم هنا (لو معاك كود من صانع محتوى)..." autocomplete="off" oninput="handleDiscountCodeInput(this.value)" />
+                <span style="position:absolute; inset-inline-end:14px; top:50%; transform:translateY(-50%); font-size:1.15rem; pointer-events:none; opacity:0.85;">🏷️</span>
               </div>
               <div id="promo-feedback-box" style="display:none; margin-top:8px; border-radius:8px; padding:10px 12px; font-size:0.84rem; line-height:1.45;"></div>
             </div>
 
             <div class="form-group">
-              <label>📸 ارفع صورة إيصال الدفع (Screenshot التحويل):</label>
+              <label data-i18n="labelScreenshot">📸 ارفع صورة إيصال الدفع (Screenshot التحويل):</label>
               <div class="upload-zone" onclick="document.getElementById('screenshot-input').click()">
                 <div style="font-size:2rem; margin-bottom:4px;">📤</div>
-                <div id="upload-label" style="font-weight:700; color:var(--cyan);">اضغط هنا لاختيار صورة الـ Screenshot من موبايلك أو جهازك</div>
-                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">يدعم PNG, JPG, WEBP — يتم ضغط الصورة ورفعها فوراً</div>
+                <div id="upload-label" style="font-weight:700; color:var(--cyan);" data-i18n="uploadLabel">اضغط هنا لاختيار صورة الـ Screenshot من موبايلك أو جهازك</div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;" data-i18n="uploadSub">يدعم PNG, JPG, WEBP — يتم ضغط الصورة ورفعها فوراً</div>
                 <img id="screenshot-preview" class="screenshot-preview" alt="Screenshot Preview" />
               </div>
               <input type="file" id="screenshot-input" accept="image/*" style="display:none;" onchange="handleScreenshotFile(this)" />
             </div>
 
             <div class="form-group">
-              <label>📝 ملاحظات إضافية (اختياري):</label>
-              <input type="text" id="cust-notes" class="input-field" placeholder="أي ملاحظة تحب تضيفها مع الطلب..." />
+              <label data-i18n="labelNotes">📝 ملاحظات إضافية (اختياري):</label>
+              <input type="text" id="cust-notes" class="input-field" data-i18n-placeholder="phNotes" placeholder="أي ملاحظة تحب تضيفها مع الطلب..." />
             </div>
 
             <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order">
@@ -1291,21 +1316,21 @@
         <!-- VIEW 2: 5-MINUTE WAITING ROOM (PENDING APPROVAL) -->
         <div id="waiting-view" class="status-panel">
           <div class="badge-top" style="background:rgba(255,184,0,0.15); border-color:var(--amber); color:var(--amber);">
-            <span class="pulse-dot"></span> جاري مراجعة إيصال الدفع الآن
+            <span class="pulse-dot"></span> <span data-i18n="waitBadge">جاري مراجعة إيصال الدفع الآن</span>
           </div>
-          <h2 style="font-size:1.45rem; color:#fff; margin-bottom:6px;">تم إرسال الـ Screenshot بنجاح! 🎉</h2>
+          <h2 style="font-size:1.45rem; color:#fff; margin-bottom:6px;" data-i18n="waitTitle">تم إرسال الـ Screenshot بنجاح! 🎉</h2>
           <p style="color:var(--text-muted); font-size:0.92rem;">
-            رقم طلبك: <strong id="wait-order-id" style="color:var(--cyan); font-family:monospace; font-size:1.1rem;">#TL-000000</strong>
+            <span data-i18n="waitOrderIdLabel">رقم طلبك:</span> <strong id="wait-order-id" style="color:var(--cyan); font-family:monospace; font-size:1.1rem;">#TL-000000</strong>
           </p>
 
           <div class="timer-circle" id="countdown-timer">05:00</div>
 
-          <p style="font-size:0.93rem; color:#d8e4f5; max-width:440px; margin:0 auto 18px;">
+          <p style="font-size:0.93rem; color:#d8e4f5; max-width:440px; margin:0 auto 18px;" data-i18n-html="waitDesc">
             وصلت رسالتك وصورة التحويل للإدارة الآن. بمجرد ضغط الإدارة على <strong>Accept (قبول)</strong> خلال <strong>5 دقائق</strong>، ستتحدث هذه الصفحة تلقائياً ويظهر لك <strong>تحميل الفولدر الكامل + رابط الفيديو الشرح</strong> فوراً بدون الحاجة لتحديث الصفحة!
           </p>
 
           <div style="background:#06090f; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px;">
-            <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:10px;">
+            <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:10px;" data-i18n="waitWaHint">
               💡 هل تريد تنبيه الإدارة فوراً على واتساب لتسريع القبول في ثوانٍ؟
             </p>
             <a id="whatsapp-ping-btn" href="#" target="_blank" class="btn" style="background:#1ebe5d; color:#fff; border:none; width:100%; padding:12px;">
@@ -1313,68 +1338,68 @@
             </a>
           </div>
 
-          <button type="button" class="btn" onclick="resetToNewOrder()" style="font-size:0.8rem;">
+          <button type="button" class="btn" data-i18n="newOrderBtn" onclick="resetToNewOrder()" style="font-size:0.8rem;">
             إنشاء طلب جديد
           </button>
         </div>
 
         <!-- VIEW 3: APPROVED & UNLOCKED PRODUCT VAULT -->
         <div id="approved-view" class="status-panel">
-          <div class="badge-top" style="background:rgba(0,255,136,0.18); border-color:var(--green); color:var(--green);">
+          <div class="badge-top" style="background:rgba(0,255,136,0.18); border-color:var(--green); color:var(--green);" data-i18n="approvedBadge">
             ✅ تم تأكيد الدفع وقبول طلبك بنجاح!
           </div>
-          <h2 style="font-size:1.55rem; color:var(--green); margin-bottom:6px;">مبروك! حزمة 2027 FPS+ جاهزة للتحميل الآن 🚀</h2>
+          <h2 style="font-size:1.55rem; color:var(--green); margin-bottom:6px;" data-i18n="approvedTitle">مبروك! حزمة 2027 FPS+ جاهزة للتحميل الآن 🚀</h2>
           <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;">
-            رقم الطلب المعتمد: <strong id="approved-order-id" style="color:#fff;">#TL-000000</strong>
+            <span data-i18n="approvedOrderLabel">رقم الطلب المعتمد:</span> <strong id="approved-order-id" style="color:#fff;">#TL-000000</strong>
           </p>
 
           <!-- TIME-BOMB SELF DESTRUCT BANNER -->
-          <div id="timebomb-banner" style="background:linear-gradient(135deg, rgba(255, 71, 87, 0.16), rgba(255, 184, 0, 0.12)); border:2px solid var(--red); border-radius:14px; padding:16px 18px; margin-bottom:20px; box-shadow:0 0 25px rgba(255, 71, 87, 0.28); text-align:right;">
+          <div id="timebomb-banner" style="background:linear-gradient(135deg, rgba(255, 71, 87, 0.16), rgba(255, 184, 0, 0.12)); border:2px solid var(--red); border-radius:14px; padding:16px 18px; margin-bottom:20px; box-shadow:0 0 25px rgba(255, 71, 87, 0.28); text-align:start;">
             <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
               <div style="display:flex; align-items:center; gap:8px;">
                 <span style="font-size:1.6rem; filter:drop-shadow(0 0 8px rgba(255,71,87,0.8));">💣</span>
-                <span style="color:var(--red); font-weight:900; font-size:1.05rem; letter-spacing:0.5px;">نظام الحماية: رابط التدمير الذاتي (Time-Bomb Link)</span>
+                <span style="color:var(--red); font-weight:900; font-size:1.05rem; letter-spacing:0.5px;" data-i18n="timeBombTitle">نظام الحماية: رابط التدمير الذاتي (Time-Bomb Link)</span>
               </div>
               <div style="background:rgba(7,10,16,0.92); border:1px solid var(--red); border-radius:999px; padding:6px 16px; display:inline-flex; align-items:center; gap:8px;">
-                <span style="color:#fff; font-size:0.82rem; font-weight:700;">متبقي على إتلاف الرابط:</span>
+                <span style="color:#fff; font-size:0.82rem; font-weight:700;" data-i18n="timeBombRemainingLabel">متبقي على إتلاف الرابط:</span>
                 <span id="timebomb-timer" style="color:var(--red); font-size:1.3rem; font-weight:900; font-family:monospace; text-shadow:0 0 10px rgba(255,71,87,0.8);">60:00</span>
               </div>
             </div>
-            <div style="background:rgba(255,71,87,0.08); border-right:3px solid var(--red); padding:10px 14px; border-radius:6px; font-size:0.86rem; color:#f0f6fc; line-height:1.65;">
+            <div style="background:rgba(255,71,87,0.08); border-inline-start:3px solid var(--red); padding:10px 14px; border-radius:6px; font-size:0.86rem; color:#f0f6fc; line-height:1.65;" data-i18n-html="timeBombWarning">
               <strong style="color:var(--amber);">⚠️ تنبيه أمني مشدد:</strong> هذا الرابط مخصص لك وحدك ويبدأ عد تنازلي مدته <strong>ساعة كاملة (60 دقيقة فقط)</strong> من لحظة فتحه لأول مرة. بمجرد انتهاء الساعة، يتم <strong>حرق وإتلاف هذا الرابط تماماً (Burned Token)</strong> ولن يعمل مجدداً على هذا الجهاز أو أي جهاز آخر، لحماية الملفات ومنع مشاركة الرابط. يُرجى تحميل ملفاتك وحفظها على جهازك فوراً.
             </div>
           </div>
 
           <div class="vault-box">
-            <h3 style="color:var(--cyan); margin-bottom:8px;">🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)</h3>
+            <h3 style="color:var(--cyan); margin-bottom:8px;" data-i18n="vaultVideoHeading">🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)</h3>
             <p id="vault-video-notes" style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;"></p>
             <div id="vault-video-embed-wrap" style="position:relative; width:100%; padding-bottom:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--cyan); margin-bottom:14px; background:#000;">
               <iframe id="vault-video-iframe" src="" title="Tweak Lab Video Tutorial" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a id="vault-video-btn" href="https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt" target="_blank" class="btn btn-primary" style="margin-bottom:20px; background:linear-gradient(90deg, #ff4757, #ff7f50); color:#fff;">
+            <a id="vault-video-btn" href="https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt" target="_blank" class="btn btn-primary" style="margin-bottom:20px; background:linear-gradient(90deg, #ff4757, #ff7f50); color:#fff;" data-i18n="vaultVideoBtn">
               ▶️ فتح ومشاهدة فيديو الشرح الكامل على يوتيوب
             </a>
 
-            <h3 style="color:var(--green); margin-bottom:8px;">📦 ثانياً: تحميل فولدر وملفات Best Optimization for 2027 FPS+</h3>
-            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;">
+            <h3 style="color:var(--green); margin-bottom:8px;" data-i18n="vaultFilesHeading">📦 ثانياً: تحميل فولدر وملفات Best Optimization for 2027 FPS+</h3>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;" data-i18n-html="vaultFilesDesc">
               يمكنك تحميل الفولدر بالكامل مضغوط <code>.ZIP</code> أو تحميل كل ملف منفرداً بضغطة واحدة:
             </p>
 
-            <a id="dl-zip-btn" href="#" class="btn btn-primary" style="margin-bottom:12px;">
+            <a id="dl-zip-btn" href="#" class="btn btn-primary" style="margin-bottom:12px;" data-i18n="dlZipBtn">
               ⬇ تحميل الفولدر الكامل مضغوط (Best_Optimization_for_2027_FPS_Plus.zip)
             </a>
 
             <div class="download-grid">
-              <a id="dl-bat-btn" href="#" class="btn">
+              <a id="dl-bat-btn" href="#" class="btn" data-i18n="dlBatBtn">
                 ⚙️ تحميل أداة التويكر الشاملة (.BAT)
               </a>
-              <a id="dl-cleaner-btn" href="#" class="btn" style="border-color:var(--green); color:var(--green);">
+              <a id="dl-cleaner-btn" href="#" class="btn" style="border-color:var(--green); color:var(--green);" data-i18n="dlCleanerBtn">
                 🧹 تحميل أداة تنظيف الرام والـ Temp (.BAT)
               </a>
-              <a id="dl-html-btn" href="#" class="btn">
+              <a id="dl-html-btn" href="#" class="btn" data-i18n="dlHtmlBtn">
                 📘 تحميل الدليل التفاعلي (.HTML)
               </a>
-              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);">
+              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);" data-i18n="openGuideBtn">
                 🌐 فتح الدليل التفاعلي في المتصفح الآن
               </a>
             </div>
@@ -1383,39 +1408,39 @@
 
         <!-- VIEW 4: REJECTED VIEW -->
         <div id="rejected-view" class="status-panel">
-          <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);">
+          <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);" data-i18n="rejectedBadge">
             ❌ لم يتم التحقق من صورة التحويل
           </div>
-          <h3 style="color:#fff; margin-bottom:10px;">عذراً، تم رفض إيصال الدفع لهذا الطلب</h3>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:18px;">
-            يرجى التأكد من تحويل المبلغ المطلوب إلى الرقم <strong>01020670418</strong> ورفع صورة إيصال واضحة، أو التواصل معنا عبر واتساب.
+          <h3 style="color:#fff; margin-bottom:10px;" data-i18n="rejectedTitle">عذراً، تم رفض إيصال الدفع لهذا الطلب</h3>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:18px;" id="rejected-desc">
+            يرجى التأكد من تحويل المبلغ المطلوب إلى الرقم <strong id="rejected-phone-text">01020670418</strong> ورفع صورة إيصال واضحة، أو التواصل معنا عبر واتساب.
           </p>
-          <button class="btn btn-primary" onclick="resetToNewOrder()">🔄 رفع صورة إيصال جديدة</button>
+          <button class="btn btn-primary" data-i18n="rejectedRetryBtn" onclick="resetToNewOrder()">🔄 رفع صورة إيصال جديدة</button>
         </div>
 
         <!-- VIEW 5: EXPIRED & BURNED TIME-BOMB VIEW -->
         <div id="expired-view" class="status-panel" style="text-align:center;">
           <div style="font-size:3.8rem; margin-bottom:12px; filter:drop-shadow(0 0 16px rgba(255,71,87,0.8));">💣</div>
-          <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);">
+          <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);" data-i18n="expiredBadge">
             ⛔ انتهت صلاحية الرابط وتم إتلافه (Link Expired & Burned)
           </div>
-          <h2 style="font-size:1.6rem; color:var(--red); margin-bottom:10px;">عفواً، انتهت مهلة الساعة (60 دقيقة) لهذا الرابط!</h2>
-          <div style="max-width:540px; margin:0 auto 20px; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); border-radius:12px; padding:18px; color:var(--text-main); font-size:0.92rem; line-height:1.7; text-align:right;">
-            <p style="margin-bottom:10px;">
+          <h2 style="font-size:1.6rem; color:var(--red); margin-bottom:10px;" data-i18n="expiredTitle">عفواً، انتهت مهلة الساعة (60 دقيقة) لهذا الرابط!</h2>
+          <div style="max-width:540px; margin:0 auto 20px; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); border-radius:12px; padding:18px; color:var(--text-main); font-size:0.92rem; line-height:1.7; text-align:start;">
+            <p style="margin-bottom:10px;" data-i18n-html="expiredP1">
               تم إتلاف هذا الرابط نهائياً بنظام <strong>Time-Bomb</strong> بعد مرور ساعة واحدة (60 دقيقة) من أول فتح له، وذلك لحماية ملفات حزمة <strong>Tweak Lab 2027 FPS+</strong> من النسخ أو المشاركة غير المصرح بها.
             </p>
-            <p style="color:var(--text-muted); font-size:0.86rem; margin-bottom:0;">
+            <p style="color:var(--text-muted); font-size:0.86rem; margin-bottom:0;" data-i18n="expiredP2">
               إذا واجهت مشكلة أثناء التحميل أو انقطع اتصال الإنترنت لديك، يمكنك التواصل مباشرة مع الإدارة لتجديد مهلة الرابط بعد التحقق من طلبك:
             </p>
           </div>
           <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
-            رقم طلبك: <strong id="expired-order-id" style="color:#fff;">#TL-000000</strong>
+            <span data-i18n="expiredOrderLabel">رقم طلبك:</span> <strong id="expired-order-id" style="color:#fff;">#TL-000000</strong>
           </p>
           <div style="display:flex; flex-direction:column; gap:10px; max-width:380px; margin:0 auto;">
-            <a id="expired-whatsapp-btn" href="#" target="_blank" class="btn" style="background:#25d366; color:#000; font-weight:800; border:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <a id="expired-whatsapp-btn" href="#" target="_blank" class="btn" style="background:#25d366; color:#000; font-weight:800; border:none; display:flex; align-items:center; justify-content:center; gap:8px;" data-i18n-html="expiredWaBtn">
               <span style="font-size:1.2rem;">💬</span> طلب إعادة تفعيل الرابط عبر واتساب
             </a>
-            <button class="btn" onclick="resetToNewOrder()" style="font-size:0.85rem; padding:8px 14px;">
+            <button class="btn" onclick="resetToNewOrder()" style="font-size:0.85rem; padding:8px 14px;" data-i18n="expiredHomeBtn">
               العودة للصفحة الرئيسية
             </button>
           </div>
@@ -1427,8 +1452,8 @@
     <!-- PREVIEW OF THE 35+ TWEAKS INSIDE THE GUIDE (SAME DESIGN AS THE HTML GUIDE) -->
     <div class="preview-section">
       <div class="category-header">
-        <h2 style="color:#fff; font-size:1.35rem;">🔥 لمحة من الـ 35+ تويك الموجودة داخل الملف والدليل التفاعلي</h2>
-        <span style="color:var(--cyan); font-weight:700; font-size:0.85rem;">تُفتح بالكامل فور قبول طلبك</span>
+        <h2 style="color:#fff; font-size:1.35rem;" data-i18n="previewHeading">🔥 لمحة من الـ 35+ تويك الموجودة داخل الملف والدليل التفاعلي</h2>
+        <span style="color:var(--cyan); font-weight:700; font-size:0.85rem;" data-i18n="previewSub">تُفتح بالكامل فور قبول طلبك</span>
       </div>
       <div class="tweaks-grid">
         <div class="tweak-card">
@@ -1436,24 +1461,24 @@
             <span class="badge badge-fps">High FPS Impact</span>
             <span class="badge badge-safe">100% Safe</span>
           </div>
-          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;">1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking</h3>
-          <p style="color:var(--text-muted); font-size:0.88rem;">يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.</p>
+          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard1Title">1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking</h3>
+          <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard1Desc">يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.</p>
         </div>
         <div class="tweak-card">
           <div style="margin-bottom:8px;">
             <span class="badge badge-fps">Zero Input Lag</span>
             <span class="badge badge-safe">100% Safe</span>
           </div>
-          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;">2. ضبط أولوية الألعاب (MMCSS GPU Priority 8 & Win32Priority 0x26)</h3>
-          <p style="color:var(--text-muted); font-size:0.88rem;">يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.</p>
+          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard2Title">2. ضبط أولوية الألعاب (MMCSS GPU Priority 8 & Win32Priority 0x26)</h3>
+          <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard2Desc">يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.</p>
         </div>
         <div class="tweak-card">
           <div style="margin-bottom:8px;">
             <span class="badge badge-fps">Lower Ping</span>
             <span class="badge badge-safe">100% Safe</span>
           </div>
-          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;">3. إلغاء خنق الشبكة (NetworkThrottlingIndex) + ضبط البنج والـ DNS</h3>
-          <p style="color:var(--text-muted); font-size:0.88rem;">يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.</p>
+          <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard3Title">3. إلغاء خنق الشبكة (NetworkThrottlingIndex) + ضبط البنج والـ DNS</h3>
+          <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard3Desc">يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.</p>
         </div>
       </div>
     </div>
@@ -1462,11 +1487,14 @@
 <script>
 let selectedPaymentMethod = 'instapay';
 let screenshotDataUrl = '';
+let uploadedScreenshotName = '';
 let currentOrder = null;
 let pollTimer = null;
 let countdownInterval = null;
 let timeBombInterval = null;
 let activeChargedPrice = 99;
+let lastPriceState = { price: 99, isDiscount: false, code: '' };
+let currentLang = localStorage.getItem('tweaklab_lang') === 'en' ? 'en' : 'ar';
 let storeConfig = {
   paymentPhone: '01020670418',
   priceEgp: 99,
@@ -1475,6 +1503,286 @@ let storeConfig = {
   activePromoCodes: {},
   deliveryMinutes: 5
 };
+
+const I18N = {
+  ar: {
+    pageTitle: 'Tweak Lab | Best Optimization for 2027 FPS+ (الدفع والاستلام الفوري)',
+    toggleBtn: '🌐 English',
+    navPill: '⚡ تسليم أوتوماتيكي خلال 5 دقائق بعد قبول الدفع',
+    navRestore: '🔍 متابعة طلب سابق',
+    heroSubtitle: 'الحزمة الأقوى في مصر لرفع الفريمات (FPS)، تثبيت الـ 1% Low، وإلغاء الـ Input Lag والـ Stutter بأمان 100%. ادفع بسهولة عبر <strong>InstaPay</strong> أو <strong>Vodafone Cash</strong> واستلم الفولدر الكامل + فيديو الشرح خلال <strong>5 دقائق بالضبط!</strong>',
+    priceExclusiveLabel: 'السعر الحصري للحزمة الكاملة',
+    priceLifetimeBadge: 'دفع لمرة واحدة • شامل التحديثات',
+    whatYouGetTitle: '📦 ماذا ستستلم فوراً بعد تأكيد الدفع؟',
+    feat1: '<strong>الأداة الأوتوماتيكية (<code>best optimization for 2027 fps +.bat</code>):</strong> تضم <strong>35+ تويك احترافي آمن</strong> مقسمين في قائمة تفاعلية + زر <em>1-Click Pro Gaming Preset</em> + خيار <em>[C] Ultimate Cleaner &amp; RAM Optimizer</em> + عمل نقطة استرجاع أوتوماتيكية (System Restore) + زر إلغاء التعديلات (Undo) في أي وقت.',
+    feat2: '<strong>أداة التنظيف السريع للرامات والملفات المؤقتة (<code>Tweak_Lab_Cleaner_RAM_Optimizer.bat</code>):</strong> ملف مستقل بضغطة واحدة قبل تشغيل أي لعبة لمسح ملفات الـ Temp والـ Prefetch، عمل Flush للـ DNS وإعادة ضبط الـ Winsock لتقليل الـ Ping، وتحرير الـ Idle RAM فوراً.',
+    feat3: '<strong>الدليل التفاعلي الكامل (<code>best optimization for 2027 fps +.html</code>):</strong> لوحة تحكم تفاعلية بنفس هذا التصميم تفتح على متصفحك لمتابعة التويكات خطوة بخطوة مع شريط تقدم وجداول إعدادات كروت NVIDIA و AMD و Intel والـ BIOS.',
+    feat4: '<strong>رابط فيديو الشرح الحصري (Video Tutorial):</strong> فيديو عملي يوضح لك إزاي تشغل الملف وتختار أفضل الإعدادات لجهازك خطوة بخطوة بدون أي تعقيد.',
+    feat5: '<strong>آمن 100% على جهازك وعلى الألعاب:</strong> لا يمسح ملفات الويندوز، ولا يعطل الحماية أو الـ Anti-Cheat (مثل Vanguard و FaceIt و Ricochet).',
+    checkoutTitle: '💳 خطوات الدفع والاستلام الفوري',
+    tabInstaTitle: 'InstaPay مصر',
+    tabInstaSub: 'إنستاباي (تحويل فوري)',
+    tabVodaSub: 'محفظة فودافون كاش',
+    instaBoxTitle: '🟣 التحويل عبر تطبيق InstaPay (إنستاباي)',
+    instaSteps12: '1. افتح تطبيق <strong>InstaPay</strong> واختر <strong>إرسال نقود (Send Money)</strong>.<br />2. اختر <strong>رقم الهاتف (Mobile Number)</strong> أو محفظة إلكترونية واكتب الرقم التالي:',
+    copyNumBtn: '📋 نسخ الرقم',
+    instaDirectBtn: '⚡ اضغط هنا لفتح رابط الدفع المباشر على InstaPay (saifelmasry2729)',
+    vodaBoxTitle: '🔴 التحويل عبر Vodafone Cash (فودافون كاش)',
+    copyWalletBtn: '📋 نسخ رقم المحفظة',
+    vodaUssdLabel: '💡 <strong>كود التحويل السريع من موبايلك:</strong>',
+    copyCodeBtn: 'نسخ الكود',
+    labelName: '👤 اسمك (أو الـ Gaming Nickname):',
+    phName: 'مثال: Ahmed / Marwan',
+    labelPhone: '📱 رقم الموبايل المحول منه (أو حساب إنستاباي):',
+    phPhone: 'مثال: 010xxxxxxxx',
+    labelDiscount: '🎟️ كود الخصم (لو معاك كود من صانع محتوى):',
+    phDiscount: 'اكتب كود الخصم هنا (لو معاك كود من صانع محتوى)...',
+    labelScreenshot: '📸 ارفع صورة إيصال الدفع (Screenshot التحويل):',
+    uploadLabel: 'اضغط هنا لاختيار صورة الـ Screenshot من موبايلك أو جهازك',
+    uploadSub: 'يدعم PNG, JPG, WEBP — يتم ضغط الصورة ورفعها فوراً',
+    labelNotes: '📝 ملاحظات إضافية (اختياري):',
+    phNotes: 'أي ملاحظة تحب تضيفها مع الطلب...',
+    waitBadge: 'جاري مراجعة إيصال الدفع الآن',
+    waitTitle: 'تم إرسال الـ Screenshot بنجاح! 🎉',
+    waitOrderIdLabel: 'رقم طلبك:',
+    waitDesc: 'وصلت رسالتك وصورة التحويل للإدارة الآن. بمجرد ضغط الإدارة على <strong>Accept (قبول)</strong> خلال <strong>5 دقائق</strong>، ستتحدث هذه الصفحة تلقائياً ويظهر لك <strong>تحميل الفولدر الكامل + رابط الفيديو الشرح</strong> فوراً بدون الحاجة لتحديث الصفحة!',
+    waitWaHint: '💡 هل تريد تنبيه الإدارة فوراً على واتساب لتسريع القبول في ثوانٍ؟',
+    newOrderBtn: 'إنشاء طلب جديد',
+    approvedBadge: '✅ تم تأكيد الدفع وقبول طلبك بنجاح!',
+    approvedTitle: 'مبروك! حزمة 2027 FPS+ جاهزة للتحميل الآن 🚀',
+    approvedOrderLabel: 'رقم الطلب المعتمد:',
+    timeBombTitle: 'نظام الحماية: رابط التدمير الذاتي (Time-Bomb Link)',
+    timeBombRemainingLabel: 'متبقي على إتلاف الرابط:',
+    timeBombWarning: '<strong style="color:var(--amber);">⚠️ تنبيه أمني مشدد:</strong> هذا الرابط مخصص لك وحدك ويبدأ عد تنازلي مدته <strong>ساعة كاملة (60 دقيقة فقط)</strong> من لحظة فتحه لأول مرة. بمجرد انتهاء الساعة، يتم <strong>حرق وإتلاف هذا الرابط تماماً (Burned Token)</strong> ولن يعمل مجدداً على هذا الجهاز أو أي جهاز آخر، لحماية الملفات ومنع مشاركة الرابط. يُرجى تحميل ملفاتك وحفظها على جهازك فوراً.',
+    vaultVideoHeading: '🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)',
+    vaultVideoBtn: '▶️ فتح ومشاهدة فيديو الشرح الكامل على يوتيوب',
+    vaultFilesHeading: '📦 ثانياً: تحميل فولدر وملفات Best Optimization for 2027 FPS+',
+    vaultFilesDesc: 'يمكنك تحميل الفولدر بالكامل مضغوط <code>.ZIP</code> أو تحميل كل ملف منفرداً بضغطة واحدة:',
+    dlZipBtn: '⬇ تحميل الفولدر الكامل مضغوط (Best_Optimization_for_2027_FPS_Plus.zip)',
+    dlBatBtn: '⚙️ تحميل أداة التويكر الشاملة (.BAT)',
+    dlCleanerBtn: '🧹 تحميل أداة تنظيف الرام والـ Temp (.BAT)',
+    dlHtmlBtn: '📘 تحميل الدليل التفاعلي (.HTML)',
+    openGuideBtn: '🌐 فتح الدليل التفاعلي في المتصفح الآن',
+    rejectedBadge: '❌ لم يتم التحقق من صورة التحويل',
+    rejectedTitle: 'عذراً، تم رفض إيصال الدفع لهذا الطلب',
+    rejectedRetryBtn: '🔄 رفع صورة إيصال جديدة',
+    expiredBadge: '⛔ انتهت صلاحية الرابط وتم إتلافه (Link Expired & Burned)',
+    expiredTitle: 'عفواً، انتهت مهلة الساعة (60 دقيقة) لهذا الرابط!',
+    expiredP1: 'تم إتلاف هذا الرابط نهائياً بنظام <strong>Time-Bomb</strong> بعد مرور ساعة واحدة (60 دقيقة) من أول فتح له، وذلك لحماية ملفات حزمة <strong>Tweak Lab 2027 FPS+</strong> من النسخ أو المشاركة غير المصرح بها.',
+    expiredP2: 'إذا واجهت مشكلة أثناء التحميل أو انقطع اتصال الإنترنت لديك، يمكنك التواصل مباشرة مع الإدارة لتجديد مهلة الرابط بعد التحقق من طلبك:',
+    expiredOrderLabel: 'رقم طلبك:',
+    expiredWaBtn: '<span style="font-size:1.2rem;">💬</span> طلب إعادة تفعيل الرابط عبر واتساب',
+    expiredHomeBtn: 'العودة للصفحة الرئيسية',
+    previewHeading: '🔥 لمحة من الـ 35+ تويك الموجودة داخل الملف والدليل التفاعلي',
+    previewSub: 'تُفتح بالكامل فور قبول طلبك',
+    prevCard1Title: '1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking',
+    prevCard1Desc: 'يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.',
+    prevCard2Title: '2. ضبط أولوية الألعاب (MMCSS GPU Priority 8 & Win32Priority 0x26)',
+    prevCard2Desc: 'يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.',
+    prevCard3Title: '3. إلغاء خنق الشبكة (NetworkThrottlingIndex) + ضبط البنج والـ DNS',
+    prevCard3Desc: 'يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.',
+    chatOnline: 'متصل الآن (مساعدك الآلي)',
+    chatWelcome: 'مرحباً بك في <strong>Tweak Lab</strong>! ⚡🎮<br>أنا مساعدك الذكي السريع للإجابة عن أي استفسار بخصوص الحزمة، طرق الدفع، وخطوات التشغيل.<br><br>اختر سؤالاً سريعاً من الأسفل أو اكتب سؤالك مباشرة:',
+    chipPay: '💳 إزاي أدفع واستلم الحزمة؟',
+    chipRun: '⚙️ إزاي أشغل السكريبت بأمان؟',
+    chipSafe: '🛡️ هل السكريبت آمن على جهازي وحساباتي؟',
+    chipGames: '🚀 إيه الألعاب والأنظمة المدعومة؟',
+    chipWa: '💬 تواصل مباشرة مع الدعم على واتساب',
+    chatInputPh: 'اكتب سؤالك هنا...'
+  },
+  en: {
+    pageTitle: 'Tweak Lab | Best Optimization for 2027 FPS+ (Instant Storefront)',
+    toggleBtn: '🌐 العربية',
+    navPill: '⚡ Automatic delivery within 5 mins after payment approval',
+    navRestore: '🔍 Track Previous Order',
+    heroSubtitle: 'Egypt\'s #1 PC optimization pack to boost FPS, stabilize 1% Lows, and eliminate Input Lag &amp; Stutters 100% safely. Pay easily via <strong>InstaPay</strong> or <strong>Vodafone Cash</strong> and unlock the full pack + video guide in <strong>5 minutes!</strong>',
+    priceExclusiveLabel: 'Exclusive Full Pack Price',
+    priceLifetimeBadge: 'One-Time Payment • Free Updates',
+    whatYouGetTitle: '📦 What You Get Instantly After Payment:',
+    feat1: '<strong>Automated Optimizer Tool (<code>best optimization for 2027 fps +.bat</code>):</strong> Includes <strong>35+ safe pro tweaks</strong> in an interactive menu + <em>1-Click Pro Gaming Preset</em> + <em>[C] Ultimate Cleaner &amp; RAM Optimizer</em> + Automatic System Restore Point + Full <em>Undo</em> anytime.',
+    feat2: '<strong>Quick RAM &amp; Temp Cleaner (<code>Tweak_Lab_Cleaner_RAM_Optimizer.bat</code>):</strong> Standalone 1-click pre-game script to purge Temp &amp; Prefetch junk, flush DNS &amp; reset Winsock to lower Ping, and free Idle RAM instantly.',
+    feat3: '<strong>Interactive Control Guide (<code>best optimization for 2027 fps +.html</code>):</strong> Sleek browser dashboard matching this UI to track tweaks step-by-step with a progress bar plus NVIDIA, AMD, Intel &amp; BIOS guides.',
+    feat4: '<strong>Exclusive Setup Video (Video Tutorial):</strong> Step-by-step walkthrough showing how to run the tool and pick the best settings for your hardware effortlessly.',
+    feat5: '<strong>100% PC &amp; Anti-Cheat Safe:</strong> Never touches critical Windows files and never interferes with Anti-Cheats (Vanguard, FaceIt, EAC, Ricochet).',
+    checkoutTitle: '💳 Payment & Instant Delivery',
+    tabInstaTitle: 'InstaPay Egypt',
+    tabInstaSub: 'Instant Bank / Wallet Transfer',
+    tabVodaSub: 'Vodafone Cash Wallet',
+    instaBoxTitle: '🟣 Pay via InstaPay App',
+    instaSteps12: '1. Open the <strong>InstaPay</strong> app and tap <strong>Send Money</strong>.<br />2. Choose <strong>Mobile Number</strong> or e-Wallet and send to:',
+    copyNumBtn: '📋 Copy Number',
+    instaDirectBtn: '⚡ Tap here for Direct InstaPay Link (saifelmasry2729)',
+    vodaBoxTitle: '🔴 Pay via Vodafone Cash',
+    copyWalletBtn: '📋 Copy Wallet Number',
+    vodaUssdLabel: '💡 <strong>Quick USSD Dial Code:</strong>',
+    copyCodeBtn: 'Copy Code',
+    labelName: '👤 Your Name (or Gaming Nickname):',
+    phName: 'e.g. Ahmed / Marwan',
+    labelPhone: '📱 Sender Phone Number (or InstaPay Handle):',
+    phPhone: 'e.g. 010xxxxxxxx',
+    labelDiscount: '🎟️ Promo / Creator Code (if you have one):',
+    phDiscount: 'Enter promo or creator code (optional)...',
+    labelScreenshot: '📸 Upload Payment Receipt (Transfer Screenshot):',
+    uploadLabel: 'Click here to select your Transfer Screenshot from phone or PC',
+    uploadSub: 'Supports PNG, JPG, WEBP — compressed & uploaded instantly',
+    labelNotes: '📝 Additional Notes (Optional):',
+    phNotes: 'Any note you would like to add to your order...',
+    waitBadge: 'Verifying Your Payment Receipt Now',
+    waitTitle: 'Screenshot Submitted Successfully! 🎉',
+    waitOrderIdLabel: 'Your Order ID:',
+    waitDesc: 'Your details and payment screenshot have reached our team. As soon as we hit <strong>Accept</strong> (within <strong>5 minutes</strong>), this page updates automatically and unlocks your <strong>full download vault + tutorial video</strong> with no refresh needed!',
+    waitWaHint: '💡 Want to ping admin on WhatsApp for even faster approval in seconds?',
+    newOrderBtn: 'Start New Order',
+    approvedBadge: '✅ Payment Confirmed & Order Approved!',
+    approvedTitle: 'Congrats! 2027 FPS+ Pack Is Ready to Download 🚀',
+    approvedOrderLabel: 'Approved Order ID:',
+    timeBombTitle: 'Security Shield: Self-Destruct Time-Bomb Link',
+    timeBombRemainingLabel: 'Time left before link expires:',
+    timeBombWarning: '<strong style="color:var(--amber);">⚠️ Strict Security Notice:</strong> This private link belongs only to you and starts a <strong>1-hour (60 minutes)</strong> countdown from the first unlock. Once the hour ends, this token is permanently <strong>burned (Burned Token)</strong> and stops working on any device to prevent unauthorized sharing. Please download and save your files immediately.',
+    vaultVideoHeading: '🎬 Step 1: Full Video Tutorial',
+    vaultVideoBtn: '▶️ Watch Full Setup Video on YouTube',
+    vaultFilesHeading: '📦 Step 2: Download Best Optimization for 2027 FPS+ Files',
+    vaultFilesDesc: 'Download the complete <code>.ZIP</code> folder or grab each file individually in one click:',
+    dlZipBtn: '⬇ Download Full Bundle ZIP (Best_Optimization_for_2027_FPS_Plus.zip)',
+    dlBatBtn: '⚙️ Download Main Optimizer (.BAT)',
+    dlCleanerBtn: '🧹 Download RAM & Temp Cleaner (.BAT)',
+    dlHtmlBtn: '📘 Download Interactive Guide (.HTML)',
+    openGuideBtn: '🌐 Open Interactive Guide in Browser',
+    rejectedBadge: '❌ Transfer Screenshot Could Not Be Verified',
+    rejectedTitle: 'Sorry, this payment receipt was declined',
+    rejectedRetryBtn: '🔄 Upload a New Screenshot',
+    expiredBadge: '⛔ Link Expired & Permanently Burned',
+    expiredTitle: 'Sorry, the 1-hour (60-minute) window has ended!',
+    expiredP1: 'This download link was permanently burned by our <strong>Time-Bomb</strong> protection 60 minutes after first access to protect the <strong>Tweak Lab 2027 FPS+</strong> bundle from unauthorized sharing.',
+    expiredP2: 'If your internet disconnected or you ran into an issue while downloading, reach out directly on WhatsApp and we will re-activate your access after checking your order:',
+    expiredOrderLabel: 'Your Order ID:',
+    expiredWaBtn: '<span style="font-size:1.2rem;">💬</span> Request Link Reactivation on WhatsApp',
+    expiredHomeBtn: 'Back to Storefront Home',
+    previewHeading: '🔥 Preview of the 35+ Tweaks Inside the Tool & Interactive Guide',
+    previewSub: 'All unlocked immediately upon approval',
+    prevCard1Title: '1. Ultimate Performance Power Plan + Disable Core Parking',
+    prevCard1Desc: 'Prevents your CPU from downclocking mid-game, eliminates micro-stutters, and boosts 1% Low FPS.',
+    prevCard2Title: '2. Gaming Priority Tuning (MMCSS GPU Priority 8 & Win32Priority 0x26)',
+    prevCard2Desc: 'Directs 100% of CPU & GPU scheduling to your active game window and reduces mouse & keyboard latency.',
+    prevCard3Title: '3. Remove Network Throttling (NetworkThrottlingIndex) + DNS Switcher',
+    prevCard3Desc: 'Removes Windows packet throttling during voice/Discord usage with 1-click Cloudflare DNS 1.1.1.1 switching.',
+    chatOnline: 'Online Now (Automated Assistant)',
+    chatWelcome: 'Welcome to <strong>Tweak Lab</strong>! ⚡🎮<br>I am your fast assistant for any questions about the FPS pack, payment steps, and safe setup.<br><br>Pick a quick question below or type yours directly:',
+    chipPay: '💳 How do I pay and receive the pack?',
+    chipRun: '⚙️ How do I run the script safely?',
+    chipSafe: '🛡️ Is it safe for my PC & game accounts?',
+    chipGames: '🚀 Which games & Windows versions are supported?',
+    chipWa: '💬 Chat directly with Support on WhatsApp',
+    chatInputPh: 'Type your question here...'
+  }
+};
+
+function toggleLanguage() {
+  applyLanguage(currentLang === 'ar' ? 'en' : 'ar');
+}
+
+function applyLanguage(lang) {
+  currentLang = lang === 'en' ? 'en' : 'ar';
+  try { localStorage.setItem('tweaklab_lang', currentLang); } catch (e) {}
+
+  const t = I18N[currentLang];
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === 'en' ? 'ltr' : 'rtl';
+  document.title = t.pageTitle;
+
+  const toggleBtn = document.getElementById('lang-toggle-btn');
+  if (toggleBtn) toggleBtn.textContent = t.toggleBtn;
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const k = el.getAttribute('data-i18n');
+    if (k === 'uploadLabel' && uploadedScreenshotName) return;
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    const k = el.getAttribute('data-i18n-html');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const k = el.getAttribute('data-i18n-placeholder');
+    if (t[k] !== undefined) el.placeholder = t[k];
+  });
+
+  const phone = escapeHtml(storeConfig.paymentPhone || '01020670418');
+  const price = Number(activeChargedPrice) || 99;
+
+  const gTextEl = document.getElementById('delivery-guarantee-text');
+  if (gTextEl) {
+    gTextEl.innerHTML = currentLang === 'en'
+      ? `<strong>Guaranteed Delivery Within 5 Minutes!</strong><br />Once you transfer <strong id="guarantee-price-text">${price} EGP</strong> to <strong id="guarantee-phone-text">${phone}</strong> and upload your screenshot here, we get an instant alert — and as soon as we tap <strong>Accept</strong>, your full pack + setup video unlocks right on this page!`
+      : `<strong>ضمان الاستلام خلال 5 دقائق بالضبط!</strong><br />بمجرد تحويل <strong id="guarantee-price-text">${price} جنيه</strong> إلى الرقم <strong id="guarantee-phone-text">${phone}</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!`;
+  }
+
+  const checkoutSub = document.getElementById('checkout-subtext');
+  if (checkoutSub) {
+    checkoutSub.innerHTML = currentLang === 'en'
+      ? `Pick your preferred payment method in Egypt, send <strong id="checkout-text-price">${price} EGP</strong> to the number shown, then upload your transfer screenshot below:`
+      : `اختر وسيلة الدفع المناسبة لك في مصر، حوّل <strong id="checkout-text-price">${price} جنيه مصري</strong> للرقم الموضح، ثم ارفع سكرين شوت الإيصال بالأسفل:`;
+  }
+
+  const instaStep3 = document.getElementById('insta-step3-text');
+  if (instaStep3) {
+    instaStep3.innerHTML = currentLang === 'en'
+      ? `3. Enter <strong id="instapay-amount-step">${price} EGP</strong>, complete the transfer, and take a <strong>Screenshot</strong> of the confirmation.`
+      : `3. اكتب المبلغ <strong id="instapay-amount-step">${price} ج.م</strong> وأكمل التحويل ثم خذ <strong>Screenshot (لقطة شاشة)</strong> لإيصال التحويل.`;
+  }
+
+  const vodaSub = document.getElementById('voda-subtext');
+  if (vodaSub) {
+    vodaSub.innerHTML = currentLang === 'en'
+      ? `Send <strong id="vodafone-amount-text">${price} EGP</strong> to this Vodafone Cash wallet number:`
+      : `حوّل <strong id="vodafone-amount-text">${price} جنيه مصري</strong> إلى رقم محفظة فودافون كاش التالي:`;
+  }
+
+  const rejDesc = document.getElementById('rejected-desc');
+  if (rejDesc) {
+    rejDesc.innerHTML = currentLang === 'en'
+      ? `Please verify that the required amount was sent to <strong id="rejected-phone-text">${phone}</strong> and upload a clear receipt screenshot, or contact us on WhatsApp.`
+      : `يرجى التأكد من تحويل المبلغ المطلوب إلى الرقم <strong id="rejected-phone-text">${phone}</strong> ورفع صورة إيصال واضحة، أو التواصل معنا عبر واتساب.`;
+  }
+
+  const waPingBtn = document.getElementById('whatsapp-ping-btn');
+  if (waPingBtn) {
+    waPingBtn.textContent = currentLang === 'en'
+      ? `💬 Send Instant WhatsApp Ping to ${phone}`
+      : `💬 إرسال تنبيه سريع لرقم ${phone} على واتساب`;
+  }
+
+  const chatSendBtn = document.getElementById('chat-send-btn');
+  if (chatSendBtn) chatSendBtn.title = currentLang === 'en' ? 'Send' : 'إرسال';
+
+  if (uploadedScreenshotName) {
+    const upEl = document.getElementById('upload-label');
+    if (upEl) {
+      upEl.textContent = (currentLang === 'en' ? '✅ Screenshot ready: ' : '✅ تم تجهيز صورة الإيصال: ') + uploadedScreenshotName;
+    }
+  }
+
+  const discInput = document.getElementById('cust-discount');
+  handleDiscountCodeInput(discInput ? discInput.value : '');
+  if (lastPriceState.isDiscount) {
+    updatePriceUi(lastPriceState.price, true, lastPriceState.code);
+  }
+  renderSubmitButtonText();
+
+  if (currentOrder && currentOrder.id) {
+    const expView = document.getElementById('expired-view');
+    if (expView && expView.style.display === 'block') {
+      const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+      const waMsg = encodeURIComponent(
+        currentLang === 'en'
+          ? `Hello Tweak Lab, my Order ID is ${currentOrder.id} and the 1-hour (60-minute) download window has expired. Please reactivate my link.`
+          : `مرحباً Tweak Lab، رقم طلبي هو ${currentOrder.id} وانتهت مهلة الساعة (60 دقيقة) المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
+      );
+      const waBtn = document.getElementById('expired-whatsapp-btn');
+      if (waBtn) waBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
+    }
+  }
+}
 
 function escapeHtml(str) {
   return String(str || '')
@@ -1486,44 +1794,62 @@ function escapeHtml(str) {
 
 function renderSubmitButtonText() {
   const btn = document.getElementById('submit-btn');
-  if (btn) {
-    btn.innerHTML = `
-      <span class="btn-submit-main">
-        <span>🚀 تأكيد الدفع</span>
-        <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> ج.م)</span>
-        <span>• إرسال الإيصال</span>
-      </span>
-      <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
-    `;
+  if (btn && !btn.disabled) {
+    if (currentLang === 'en') {
+      btn.innerHTML = `
+        <span class="btn-submit-main">
+          <span>🚀 Confirm Payment</span>
+          <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> EGP)</span>
+          <span>• Send Receipt</span>
+        </span>
+        <span class="btn-submit-sub">⚡ Instant delivery within 5 minutes</span>
+      `;
+    } else {
+      btn.innerHTML = `
+        <span class="btn-submit-main">
+          <span>🚀 تأكيد الدفع</span>
+          <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> ج.م)</span>
+          <span>• إرسال الإيصال</span>
+        </span>
+        <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
+      `;
+    }
   }
 }
 
 function updatePriceUi(price, isDiscount, code) {
   activeChargedPrice = Number(price) || 99;
+  lastPriceState = { price: activeChargedPrice, isDiscount: !!isDiscount, code: code || '' };
   const phone = storeConfig.paymentPhone || '01020670418';
+  const origPrice = Number(storeConfig.originalPriceEgp || 350);
+  const savedAmt = Math.max(0, origPrice - activeChargedPrice);
+  const pct = origPrice > 0 ? Math.round((savedAmt / origPrice) * 100) : 72;
 
   // 1. Header price banner
   const displayPriceEl = document.getElementById('display-price');
-  if (displayPriceEl) displayPriceEl.textContent = activeChargedPrice + ' ج.م';
+  if (displayPriceEl) displayPriceEl.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' ج.م');
+
+  const displayOldEl = document.getElementById('display-price-old');
+  if (displayOldEl) displayOldEl.textContent = origPrice + (currentLang === 'en' ? ' EGP' : ' ج.م');
 
   // 2. Checkout view badges & text
   const checkoutBadge = document.getElementById('checkout-badge-price');
   if (checkoutBadge) checkoutBadge.textContent = activeChargedPrice + ' EGP';
 
   const checkoutText = document.getElementById('checkout-text-price');
-  if (checkoutText) checkoutText.textContent = activeChargedPrice + ' جنيه مصري';
+  if (checkoutText) checkoutText.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' جنيه مصري');
 
   // 3. InstaPay
   const instaBadge = document.getElementById('instapay-amount-badge');
-  if (instaBadge) instaBadge.textContent = activeChargedPrice + ' جنيه مصري';
+  if (instaBadge) instaBadge.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' جنيه مصري');
   const instaStep = document.getElementById('instapay-amount-step');
-  if (instaStep) instaStep.textContent = activeChargedPrice + ' ج.م';
+  if (instaStep) instaStep.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' ج.م');
 
   // 4. Vodafone Cash
   const vodaBadge = document.getElementById('vodafone-amount-badge');
-  if (vodaBadge) vodaBadge.textContent = activeChargedPrice + ' جنيه مصري';
+  if (vodaBadge) vodaBadge.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' جنيه مصري');
   const vodaText = document.getElementById('vodafone-amount-text');
-  if (vodaText) vodaText.textContent = activeChargedPrice + ' جنيه مصري';
+  if (vodaText) vodaText.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' جنيه مصري');
 
   // 5. Vodafone USSD
   const ussdCode = `*9*7*${phone}*${activeChargedPrice}#`;
@@ -1533,12 +1859,14 @@ function updatePriceUi(price, isDiscount, code) {
   const dialBtn = document.getElementById('vodafone-direct-dial');
   if (dialBtn) {
     dialBtn.href = `tel:*9*7*${phone}*${activeChargedPrice}%23`;
-    dialBtn.textContent = `📞 اضغط هنا للتحويل المباشر من الموبايل (${ussdCode})`;
+    dialBtn.textContent = currentLang === 'en'
+      ? `📞 Tap here to dial directly from mobile (${ussdCode})`
+      : `📞 اضغط هنا للتحويل المباشر من الموبايل (${ussdCode})`;
   }
 
   // 6. Guarantee text
   const guaranteeEl = document.getElementById('guarantee-price-text');
-  if (guaranteeEl) guaranteeEl.textContent = activeChargedPrice + ' جنيه';
+  if (guaranteeEl) guaranteeEl.textContent = activeChargedPrice + (currentLang === 'en' ? ' EGP' : ' جنيه');
 
   // 7. Submit button
   const submitPriceEl = document.getElementById('submit-btn-price');
@@ -1552,12 +1880,12 @@ function updatePriceUi(price, isDiscount, code) {
   const goldTop = document.querySelector('.gold-box-top');
   const goldSub = document.querySelector('.gold-box-sub');
   if (goldTop && goldSub) {
-    if (isDiscount) {
-      goldTop.textContent = 'وفر 265 ج.م';
-      goldSub.textContent = 'خصم 76% كود 🔥';
+    if (currentLang === 'en') {
+      goldTop.textContent = `Save ${savedAmt} EGP`;
+      goldSub.textContent = isDiscount ? `${pct}% OFF CODE 🔥` : `${pct}% OFF 🔥`;
     } else {
-      goldTop.textContent = 'وفر 251 ج.م';
-      goldSub.textContent = 'خصم 72% 🔥';
+      goldTop.textContent = `وفر ${savedAmt} ج.م`;
+      goldSub.textContent = isDiscount ? `خصم ${pct}% كود 🔥` : `خصم ${pct}% 🔥`;
     }
   }
 }
@@ -1580,7 +1908,7 @@ function handleDiscountCodeInput(rawVal) {
   if (!val) {
     if (inputEl) inputEl.classList.remove('promo-glow-active');
     if (badgeStatus) {
-      badgeStatus.textContent = 'اختياري ✨';
+      badgeStatus.textContent = currentLang === 'en' ? 'Optional ✨' : 'اختياري ✨';
       badgeStatus.style.background = 'rgba(0,255,136,0.12)';
       badgeStatus.style.borderColor = 'rgba(0,255,136,0.35)';
       badgeStatus.style.color = 'var(--green)';
@@ -1599,47 +1927,65 @@ function handleDiscountCodeInput(rawVal) {
     const saving = basePrice - discountedPrice;
     if (inputEl) inputEl.classList.add('promo-glow-active');
     if (badgeStatus) {
-      badgeStatus.textContent = 'خصم مفعل 🔥';
+      badgeStatus.textContent = currentLang === 'en' ? 'Discount Active 🔥' : 'خصم مفعل 🔥';
       badgeStatus.style.background = 'rgba(255,184,0,0.2)';
       badgeStatus.style.borderColor = 'var(--amber)';
       badgeStatus.style.color = '#ffe066';
     }
     if (feedbackBox) {
       feedbackBox.style.display = 'block';
-      feedbackBox.innerHTML = `
-        <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
-          <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
-            <span>🎉 تم تطبيق كود الخصم (${escapeHtml(upper)}) بنجاح!</span>
+      feedbackBox.innerHTML = currentLang === 'en'
+        ? `
+          <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
+            <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
+              <span>🎉 Promo code (${escapeHtml(upper)}) applied successfully!</span>
+            </div>
+            <div style="margin-top:4px; font-size:0.87rem;">
+              Your price is now <strong>${discountedPrice} EGP only</strong> instead of <del style="opacity:0.75;">${basePrice} EGP</del> (extra <strong>${saving} EGP</strong> saved!)
+            </div>
           </div>
-          <div style="margin-top:4px; font-size:0.87rem;">
-            السعر أصبح الآن <strong>${discountedPrice} ج.م فقط</strong> بدلاً من <del style="opacity:0.75;">${basePrice} ج.م</del> (وفرت <strong>${saving} ج.م</strong> إضافية!)
+        `
+        : `
+          <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
+            <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
+              <span>🎉 تم تطبيق كود الخصم (${escapeHtml(upper)}) بنجاح!</span>
+            </div>
+            <div style="margin-top:4px; font-size:0.87rem;">
+              السعر أصبح الآن <strong>${discountedPrice} ج.م فقط</strong> بدلاً من <del style="opacity:0.75;">${basePrice} ج.م</del> (وفرت <strong>${saving} ج.م</strong> إضافية!)
+            </div>
           </div>
-        </div>
-      `;
+        `;
     }
     updatePriceUi(discountedPrice, true, upper);
   } else {
     // Affiliate / Creator tracking code
     if (inputEl) inputEl.classList.remove('promo-glow-active');
     if (badgeStatus) {
-      badgeStatus.textContent = 'كود صانع محتوى 👤';
+      badgeStatus.textContent = currentLang === 'en' ? 'Creator Code 👤' : 'كود صانع محتوى 👤';
       badgeStatus.style.background = 'rgba(0,240,255,0.12)';
       badgeStatus.style.borderColor = 'rgba(0,240,255,0.35)';
       badgeStatus.style.color = 'var(--cyan)';
     }
     if (feedbackBox) {
       feedbackBox.style.display = 'block';
-      feedbackBox.innerHTML = `
-        <div style="background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); border-radius:8px; padding:8px 12px; color:#cbebf5; font-size:0.83rem;">
-          🏷️ <strong>كود (${escapeHtml(upper)}) مسجل:</strong> سيتم احتساب طلبك لصالح صانع المحتوى. (السعر الحالي: <strong>${basePrice} ج.م</strong>).
-        </div>
-      `;
+      feedbackBox.innerHTML = currentLang === 'en'
+        ? `
+          <div style="background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); border-radius:8px; padding:8px 12px; color:#cbebf5; font-size:0.83rem;">
+            🏷️ <strong>Code (${escapeHtml(upper)}) recorded:</strong> Your order will be credited to this creator. (Current price: <strong>${basePrice} EGP</strong>).
+          </div>
+        `
+        : `
+          <div style="background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); border-radius:8px; padding:8px 12px; color:#cbebf5; font-size:0.83rem;">
+            🏷️ <strong>كود (${escapeHtml(upper)}) مسجل:</strong> سيتم احتساب طلبك لصالح صانع المحتوى. (السعر الحالي: <strong>${basePrice} ج.م</strong>).
+          </div>
+        `;
     }
     updatePriceUi(basePrice, false, upper);
   }
 }
 
 async function initStore() {
+  applyLanguage(currentLang);
   try {
     const res = await fetch('/api/config');
     if (res.ok) {
@@ -1647,6 +1993,7 @@ async function initStore() {
       updatePriceUi(storeConfig.priceEgp || 99, false, '');
       document.getElementById('instapay-num').textContent = storeConfig.instapayAddress || storeConfig.paymentPhone;
       document.getElementById('vodafone-num').textContent = storeConfig.paymentPhone;
+      applyLanguage(currentLang);
       if (storeConfig.instapayLink) {
         const btn = document.getElementById('instapay-direct-btn');
         btn.href = storeConfig.instapayLink;
@@ -1703,7 +2050,7 @@ function selectPayMethod(method) {
 function copyText(text, btn) {
   navigator.clipboard.writeText(text);
   const old = btn.textContent;
-  btn.textContent = '✅ تم النسخ!';
+  btn.textContent = currentLang === 'en' ? '✅ Copied!' : '✅ تم النسخ!';
   setTimeout(() => (btn.textContent = old), 1500);
 }
 
@@ -1734,11 +2081,13 @@ function handleScreenshotFile(input) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, w, h);
       screenshotDataUrl = canvas.toDataURL('image/jpeg', 0.84);
+      uploadedScreenshotName = file.name;
 
       const preview = document.getElementById('screenshot-preview');
       preview.src = screenshotDataUrl;
       preview.style.display = 'inline-block';
-      document.getElementById('upload-label').textContent = '✅ تم تجهيز صورة الإيصال: ' + file.name;
+      document.getElementById('upload-label').textContent =
+        (currentLang === 'en' ? '✅ Screenshot ready: ' : '✅ تم تجهيز صورة الإيصال: ') + file.name;
     };
     img.src = e.target.result;
   };
@@ -1748,13 +2097,20 @@ function handleScreenshotFile(input) {
 async function submitOrder(e) {
   e.preventDefault();
   if (!screenshotDataUrl) {
-    alert('⚠️ من فضلك قم برفع صورة سكرين شوت التحويل أولاً.');
+    alert(
+      currentLang === 'en'
+        ? '⚠️ Please upload your transfer screenshot first.'
+        : '⚠️ من فضلك قم برفع صورة سكرين شوت التحويل أولاً.'
+    );
     return;
   }
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="btn-submit-main">⏳ جاري رفع السكرين شوت وإرسال الطلب...</span>';
+  btn.innerHTML =
+    currentLang === 'en'
+      ? '<span class="btn-submit-main">⏳ Uploading screenshot &amp; submitting order...</span>'
+      : '<span class="btn-submit-main">⏳ جاري رفع السكرين شوت وإرسال الطلب...</span>';
 
   try {
     const payload = {
@@ -1773,7 +2129,7 @@ async function submitOrder(e) {
     });
     const data = await res.json();
     if (!res.ok) {
-      alert(data.error || 'حدث خطأ أثناء إرسال الطلب');
+      alert(data.error || (currentLang === 'en' ? 'Error submitting order.' : 'حدث خطأ أثناء إرسال الطلب'));
       btn.disabled = false;
       renderSubmitButtonText();
       return;
@@ -1792,7 +2148,11 @@ async function submitOrder(e) {
     if (pollTimer) clearInterval(pollTimer);
     pollTimer = setInterval(checkOrderStatus, 2500);
   } catch (err) {
-    alert('تعذر الاتصال بالخادم، حاول مرة أخرى.');
+    alert(
+      currentLang === 'en'
+        ? 'Could not reach server, please try again.'
+        : 'تعذر الاتصال بالخادم، حاول مرة أخرى.'
+    );
     btn.disabled = false;
     renderSubmitButtonText();
   }
@@ -1817,7 +2177,9 @@ function showExpiredView(orderId) {
 
   const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
   const waMsg = encodeURIComponent(
-    `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة الساعة (60 دقيقة) المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
+    currentLang === 'en'
+      ? `Hello Tweak Lab, my Order ID is ${oid} and the 1-hour (60-minute) download window has expired. Please reactivate my link.`
+      : `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة الساعة (60 دقيقة) المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
   );
   const waBtn = document.getElementById('expired-whatsapp-btn');
   if (waBtn) waBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
@@ -1856,12 +2218,21 @@ function showWaitingRoom() {
   showView('waiting-view');
   document.getElementById('wait-order-id').textContent = '#' + currentOrder.id;
 
-  const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+  const rawPhone = storeConfig.paymentPhone || '01020670418';
+  const waPhone = '2' + rawPhone;
   const waMsg = encodeURIComponent(
     currentOrder.whatsappText ||
-      `مرحباً Tweak Lab، قمت بتحويل ${activeChargedPrice || 99} ج.م ورفع السكرين شوت على الموقع. رقم طلبي: ${currentOrder.id}`
+      (currentLang === 'en'
+        ? `Hello Tweak Lab, I transferred ${activeChargedPrice || 99} EGP and uploaded my screenshot on the site. Order ID: ${currentOrder.id}`
+        : `مرحباً Tweak Lab، قمت بتحويل ${activeChargedPrice || 99} ج.م ورفع السكرين شوت على الموقع. رقم طلبي: ${currentOrder.id}`)
   );
-  document.getElementById('whatsapp-ping-btn').href = `https://wa.me/${waPhone}?text=${waMsg}`;
+  const waPingBtn = document.getElementById('whatsapp-ping-btn');
+  if (waPingBtn) {
+    waPingBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
+    waPingBtn.textContent = currentLang === 'en'
+      ? `💬 Send Instant WhatsApp Ping to ${rawPhone}`
+      : `💬 إرسال تنبيه سريع لرقم ${rawPhone} على واتساب`;
+  }
 
   startFiveMinuteCountdown(currentOrder.createdAt);
 }
@@ -1946,23 +2317,37 @@ function resetToNewOrder() {
   localStorage.removeItem('tweaklab_active_order');
   currentOrder = null;
   screenshotDataUrl = '';
+  uploadedScreenshotName = '';
   window.history.replaceState({}, '', '/');
   const btn = document.getElementById('submit-btn');
-  btn.disabled = false;
-  btn.textContent = '🚀 تأكيد الدفع وإرسال الـ Screenshot للاستلام خلال 5 دقائق';
+  if (btn) {
+    btn.disabled = false;
+    renderSubmitButtonText();
+  }
   document.getElementById('screenshot-preview').style.display = 'none';
-  document.getElementById('upload-label').textContent = 'اضغط هنا لاختيار صورة الـ Screenshot من موبايلك أو جهازك';
-  if (document.getElementById('cust-discount')) document.getElementById('cust-discount').value = '';
+  document.getElementById('upload-label').textContent = I18N[currentLang].uploadLabel;
+  if (document.getElementById('cust-discount')) {
+    document.getElementById('cust-discount').value = '';
+    handleDiscountCodeInput('');
+  }
   showView('checkout-view');
 }
 
 function promptRestoreOrder() {
   if (currentOrder && currentOrder.id) {
     checkOrderStatus();
-    alert('يوجد طلب مسجل على متصفحك برقم: ' + currentOrder.id);
+    alert(
+      (currentLang === 'en'
+        ? 'An active order is saved on this browser with ID: '
+        : 'يوجد طلب مسجل على متصفحك برقم: ') + currentOrder.id
+    );
     return;
   }
-  alert('إذا قمت بالطلب من هذا المتصفح فسيتم فتح طلبك تلقائياً، أو افتح الرابط الذي ظهر لك بعد إرسال الطلب.');
+  alert(
+    currentLang === 'en'
+      ? 'If you ordered from this browser, your order will reopen automatically — or open the order link shown right after you submitted.'
+      : 'إذا قمت بالطلب من هذا المتصفح فسيتم فتح طلبك تلقائياً، أو افتح الرابط الذي ظهر لك بعد إرسال الطلب.'
+  );
 }
 
 initStore();
@@ -2005,23 +2390,38 @@ function appendChatMessage(sender, htmlContent) {
 }
 
 function handleQuickQuestion(type) {
-  const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+  const payPhone = storeConfig.paymentPhone || '01020670418';
+  const waPhone = '2' + payPhone;
+  const isEn = currentLang === 'en';
   if (type === 'pay') {
-    appendChatMessage('user', '💳 إزاي أدفع واستلم الحزمة؟');
+    appendChatMessage('user', isEn ? '💳 How do I pay and receive the pack?' : '💳 إزاي أدفع واستلم الحزمة؟');
     setTimeout(() => {
-      appendChatMessage('bot', `
+      appendChatMessage('bot', isEn ? `
+        <strong>Payment &amp; Instant Delivery Steps:</strong><br><br>
+        1️⃣ Pick a payment method on the page (<strong>InstaPay</strong> or <strong>Vodafone Cash</strong>).<br>
+        2️⃣ Send <strong>${activeChargedPrice || 99} EGP only</strong> to: <code style="color:var(--green); font-weight:bold;">${escapeHtml(payPhone)}</code> or use the direct InstaPay link.<br>
+        3️⃣ Upload your transfer <strong>Screenshot</strong> and click <strong>Confirm Payment</strong>.<br>
+        4️⃣ Once verified (within 5 mins), the full bundle &amp; setup video unlock right on this page! 🚀
+      ` : `
         <strong>خطوات الدفع والاستلام الفوري:</strong><br><br>
         1️⃣ اختر وسيلة الدفع من صفحة الموقع (<strong>InstaPay</strong> أو <strong>Vodafone Cash</strong>).<br>
-        2️⃣ حوّل <strong>99 جنيه فقط</strong> (أو <strong>85 جنيه</strong> بكود الخصم) إلى الرقم: <code style="color:var(--green); font-weight:bold;">01020670418</code> أو عبر رابط إنستاباي المباشر.<br>
+        2️⃣ حوّل <strong>${activeChargedPrice || 99} جنيه فقط</strong> إلى الرقم: <code style="color:var(--green); font-weight:bold;">${escapeHtml(payPhone)}</code> أو عبر رابط إنستاباي المباشر.<br>
         3️⃣ ارفع صورة إيصال التحويل (Screenshot) واضغط <strong>تأكيد الدفع</strong>.<br>
         4️⃣ بمجرد مراجعة التحويل (خلال 5 دقائق)، يفتح لك التحميل الفوري للملفات وفيديو الشرح في نفس الصفحة! 🚀
       `);
       addChipsAfterAnswer();
     }, 280);
   } else if (type === 'run') {
-    appendChatMessage('user', '⚙️ إزاي أشغل السكريبت بأمان؟');
+    appendChatMessage('user', isEn ? '⚙️ How do I run the script safely?' : '⚙️ إزاي أشغل السكريبت بأمان؟');
     setTimeout(() => {
-      appendChatMessage('bot', `
+      appendChatMessage('bot', isEn ? `
+        <strong>How to Run the Tool Safely:</strong><br><br>
+        1️⃣ After approval, download <code>Best_Optimization_for_2027_FPS_Plus.zip</code> and extract it.<br>
+        2️⃣ Right-click <code>best optimization for 2027 fps +.bat</code> and choose <strong>Run as Administrator</strong>.<br>
+        3️⃣ Press <strong>[S]</strong> inside the tool to create a full System Restore Point for safety.<br>
+        4️⃣ Press <strong>[A]</strong> for the 1-Click Pro Gaming Preset, or <strong>[C]</strong> to clean RAM &amp; Temp files.<br>
+        5️⃣ Restart your PC and enjoy maximum smoothness and stable FPS! 🎮
+      ` : `
         <strong>طريقة تشغيل الأداة بسهولة:</strong><br><br>
         1️⃣ بعد قبول طلبك، حمّل فولدر <code>Best_Optimization_for_2027_FPS_Plus.zip</code> وفك الضغط عنه.<br>
         2️⃣ اضغط كليك يمين على أداة <code>best optimization for 2027 fps +.bat</code> واختار <strong>Run as Administrator (تشغيل كمسؤول)</strong>.<br>
@@ -2032,9 +2432,14 @@ function handleQuickQuestion(type) {
       addChipsAfterAnswer();
     }, 280);
   } else if (type === 'safe') {
-    appendChatMessage('user', '🛡️ هل السكريبت آمن على جهازي وحساباتي؟');
+    appendChatMessage('user', isEn ? '🛡️ Is it safe for my PC & accounts?' : '🛡️ هل السكريبت آمن على جهازي وحساباتي؟');
     setTimeout(() => {
-      appendChatMessage('bot', `
+      appendChatMessage('bot', isEn ? `
+        <strong>100% Safe &amp; Guaranteed:</strong><br><br>
+        ✅ <strong>No Overclocking:</strong> Tweaks focus on disabling unnecessary background processes and optimizing CPU/GPU scheduling.<br>
+        ✅ <strong>Anti-Cheat Compatible:</strong> Never conflicts with Vanguard (Valorant), FaceIt (CS2), Easy Anti-Cheat, or Ricochet.<br>
+        ✅ <strong>Full Rollback Anytime:</strong> Option <strong>[R]</strong> restores Windows back to stock defaults in one click!
+      ` : `
         <strong>أمان بنسبة 100% ومضمون:</strong><br><br>
         ✅ <strong>لا كسر سرعة (No Overclocking):</strong> التعديلات تركز على إيقاف العمليات الخفية غير الضرورية وتحسين توجيه موارد المعالج والكرت.<br>
         ✅ <strong>متوافق مع كل أنظمة الحماية:</strong> لا يتعارض أبداً مع Vanguard (Valorant), FaceIt (CS2), Easy Anti-Cheat, أو Ricochet.<br>
@@ -2043,9 +2448,14 @@ function handleQuickQuestion(type) {
       addChipsAfterAnswer();
     }, 280);
   } else if (type === 'games') {
-    appendChatMessage('user', '🚀 إيه الألعاب والأنظمة المدعومة؟');
+    appendChatMessage('user', isEn ? '🚀 Which games & Windows versions are supported?' : '🚀 إيه الألعاب والأنظمة المدعومة؟');
     setTimeout(() => {
-      appendChatMessage('bot', `
+      appendChatMessage('bot', isEn ? `
+        <strong>Supported Systems &amp; Games:</strong><br><br>
+        💻 <strong>OS:</strong> All Windows 10 &amp; Windows 11 (64-bit) editions.<br>
+        🎯 <strong>Games:</strong> Ideal for all competitive &amp; shooter titles such as:<br>
+        (Valorant • CS2 • Fortnite • Warzone • Apex Legends • GTA V / FiveM • PUBG • League of Legends • Overwatch 2).
+      ` : `
         <strong>الأنظمة والألعاب المدعومة:</strong><br><br>
         💻 <strong>الأنظمة:</strong> جميع إصدارات Windows 10 و Windows 11 (64-bit).<br>
         🎯 <strong>الألعاب:</strong> مثالي لجميع ألعاب الشوتر والتنافس مثل:<br>
@@ -2054,10 +2464,19 @@ function handleQuickQuestion(type) {
       addChipsAfterAnswer();
     }, 280);
   } else if (type === 'whatsapp') {
-    appendChatMessage('user', '💬 تواصل مع الدعم الفني على واتساب');
+    appendChatMessage('user', isEn ? '💬 Chat with Support on WhatsApp' : '💬 تواصل مع الدعم الفني على واتساب');
     setTimeout(() => {
-      const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent('مرحباً Tweak Lab ⚡، أحتاج مساعدة أو استفسار بخصوص المتجر والحزمة')}`;
-      appendChatMessage('bot', `
+      const waMsg = isEn
+        ? 'Hello Tweak Lab ⚡, I need help or have a question about the store & FPS pack'
+        : 'مرحباً Tweak Lab ⚡، أحتاج مساعدة أو استفسار بخصوص المتجر والحزمة';
+      const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`;
+      appendChatMessage('bot', isEn ? `
+        Happy to help anytime! 🤝<br>
+        Reach out directly to our support team on WhatsApp and we will reply right away:<br><br>
+        <a href="${waUrl}" target="_blank" class="chat-wa-direct-btn">
+          🟢 Open WhatsApp Chat Now
+        </a>
+      ` : `
         يسعدنا دائماً خدمتك! 🤝<br>
         تفضل بالتواصل المباشر مع الدعم الفني عبر واتساب وسنرد عليك فوراً:<br><br>
         <a href="${waUrl}" target="_blank" class="chat-wa-direct-btn">
@@ -2072,9 +2491,15 @@ function handleQuickQuestion(type) {
 function addChipsAfterAnswer() {
   const container = document.getElementById('chat-messages');
   if (!container) return;
+  const isEn = currentLang === 'en';
   const chipsDiv = document.createElement('div');
   chipsDiv.className = 'chat-chips-wrap';
-  chipsDiv.innerHTML = `
+  chipsDiv.innerHTML = isEn ? `
+    <button class="chat-chip" onclick="handleQuickQuestion('pay')">💳 How do I pay?</button>
+    <button class="chat-chip" onclick="handleQuickQuestion('run')">⚙️ How to run it?</button>
+    <button class="chat-chip" onclick="handleQuickQuestion('safe')">🛡️ Is it safe?</button>
+    <button class="chat-chip chat-chip-wa" onclick="handleQuickQuestion('whatsapp')">💬 WhatsApp Chat</button>
+  ` : `
     <button class="chat-chip" onclick="handleQuickQuestion('pay')">💳 أدفع إزاي؟</button>
     <button class="chat-chip" onclick="handleQuickQuestion('run')">⚙️ إزاي أشغل الأداة؟</button>
     <button class="chat-chip" onclick="handleQuickQuestion('safe')">🛡️ هل آمن؟</button>
@@ -2096,20 +2521,27 @@ function handleChatSubmit(e) {
 
   const lower = text.toLowerCase();
   const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+  const isEn = currentLang === 'en';
 
   setTimeout(() => {
-    if (lower.includes('دفع') || lower.includes('ادفع') || lower.includes('تحويل') || lower.includes('كاش') || lower.includes('انستاباي') || lower.includes('instapay') || lower.includes('سعر') || lower.includes('فلوس') || lower.includes('كام')) {
+    if (lower.includes('دفع') || lower.includes('ادفع') || lower.includes('تحويل') || lower.includes('كاش') || lower.includes('انستاباي') || lower.includes('instapay') || lower.includes('سعر') || lower.includes('فلوس') || lower.includes('كام') || lower.includes('pay') || lower.includes('price') || lower.includes('cost') || lower.includes('vodafone') || lower.includes('cash')) {
       handleQuickQuestion('pay');
-    } else if (lower.includes('شغل') || lower.includes('تشغيل') || lower.includes('ازاي') || lower.includes('طريقة') || lower.includes('خطوات') || lower.includes('bat') || lower.includes('run')) {
+    } else if (lower.includes('شغل') || lower.includes('تشغيل') || lower.includes('ازاي') || lower.includes('طريقة') || lower.includes('خطوات') || lower.includes('bat') || lower.includes('run') || lower.includes('install') || lower.includes('script') || lower.includes('how')) {
       handleQuickQuestion('run');
-    } else if (lower.includes('امان') || lower.includes('أمان') || lower.includes('امن') || lower.includes('بان') || lower.includes('حظر') || lower.includes('خطر') || lower.includes('فيروس') || lower.includes('vanguard')) {
+    } else if (lower.includes('امان') || lower.includes('أمان') || lower.includes('امن') || lower.includes('بان') || lower.includes('حظر') || lower.includes('خطر') || lower.includes('فيروس') || lower.includes('vanguard') || lower.includes('safe') || lower.includes('ban') || lower.includes('virus') || lower.includes('anti')) {
       handleQuickQuestion('safe');
-    } else if (lower.includes('لعبه') || lower.includes('لعبة') || lower.includes('العاب') || lower.includes('ألعاب') || lower.includes('فورت') || lower.includes('فالورانت') || lower.includes('ويندوز')) {
+    } else if (lower.includes('لعبه') || lower.includes('لعبة') || lower.includes('العاب') || lower.includes('ألعاب') || lower.includes('فورت') || lower.includes('فالورانت') || lower.includes('ويندوز') || lower.includes('game') || lower.includes('fps') || lower.includes('windows') || lower.includes('valorant') || lower.includes('fortnite')) {
       handleQuickQuestion('games');
     } else {
-      // أي سؤال خارج هذه الأسئلة: تحويل فوري لواتساب مع إرفاق نص السؤال!
-      const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent('مرحباً Tweak Lab ⚡، سؤالي هو: ' + text)}`;
-      appendChatMessage('bot', `
+      const waPrefix = isEn ? 'Hello Tweak Lab ⚡, my question is: ' : 'مرحباً Tweak Lab ⚡، سؤالي هو: ';
+      const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waPrefix + text)}`;
+      appendChatMessage('bot', isEn ? `
+        Thanks for asking! For a quick, detailed answer about: <em>"${escapeChatHtml(text)}"</em><br><br>
+        Message our support team directly on WhatsApp and we will assist you right away:<br><br>
+        <a href="${waUrl}" target="_blank" class="chat-wa-direct-btn">
+          🟢 Send Your Question on WhatsApp
+        </a>
+      ` : `
         شكراً لسؤالك! للحصول على إجابة دقيقة وسريعة بخصوص: <em>"${escapeChatHtml(text)}"</em><br><br>
         تفضل بالتواصل المباشر مع فريق الدعم الفني عبر واتساب وسنساعدك فوراً:<br><br>
         <a href="${waUrl}" target="_blank" class="chat-wa-direct-btn">
@@ -2198,18 +2630,18 @@ function escapeChatHtml(str) {
           <div>
             <div class="chat-title">Tweak Lab Support ⚡</div>
             <div class="chat-status">
-              <span class="status-indicator"></span> متصل الآن (مساعدك الآلي)
+              <span class="status-indicator"></span> <span data-i18n="chatOnline">متصل الآن (مساعدك الآلي)</span>
             </div>
           </div>
         </div>
-        <button class="chat-close-btn" onclick="toggleChatWindow()" title="إغلاق الشات">✕</button>
+        <button class="chat-close-btn" onclick="toggleChatWindow()" title="Close / إغلاق">✕</button>
       </div>
 
       <!-- Messages Body -->
       <div id="chat-messages" class="chat-messages">
         <!-- Welcome message -->
         <div class="chat-msg bot">
-          <div class="msg-bubble">
+          <div class="msg-bubble" data-i18n-html="chatWelcome">
             مرحباً بك في <strong>Tweak Lab</strong>! ⚡🎮<br>
             أنا مساعدك الذكي السريع للإجابة عن أي استفسار بخصوص الحزمة، طرق الدفع، وخطوات التشغيل.
             <br><br>
@@ -2219,17 +2651,17 @@ function escapeChatHtml(str) {
 
         <!-- Quick Option Chips Container -->
         <div id="chat-chips-container" class="chat-chips-wrap">
-          <button class="chat-chip" onclick="handleQuickQuestion('pay')">💳 إزاي أدفع واستلم الحزمة؟</button>
-          <button class="chat-chip" onclick="handleQuickQuestion('run')">⚙️ إزاي أشغل السكريبت بأمان؟</button>
-          <button class="chat-chip" onclick="handleQuickQuestion('safe')">🛡️ هل السكريبت آمن على جهازي وحساباتي؟</button>
-          <button class="chat-chip" onclick="handleQuickQuestion('games')">🚀 إيه الألعاب والأنظمة المدعومة؟</button>
-          <button class="chat-chip chat-chip-wa" onclick="handleQuickQuestion('whatsapp')">💬 تواصل مباشرة مع الدعم على واتساب</button>
+          <button class="chat-chip" data-i18n="chipPay" onclick="handleQuickQuestion('pay')">💳 إزاي أدفع واستلم الحزمة؟</button>
+          <button class="chat-chip" data-i18n="chipRun" onclick="handleQuickQuestion('run')">⚙️ إزاي أشغل السكريبت بأمان؟</button>
+          <button class="chat-chip" data-i18n="chipSafe" onclick="handleQuickQuestion('safe')">🛡️ هل السكريبت آمن على جهازي وحساباتي؟</button>
+          <button class="chat-chip" data-i18n="chipGames" onclick="handleQuickQuestion('games')">🚀 إيه الألعاب والأنظمة المدعومة؟</button>
+          <button class="chat-chip chat-chip-wa" data-i18n="chipWa" onclick="handleQuickQuestion('whatsapp')">💬 تواصل مباشرة مع الدعم على واتساب</button>
         </div>
       </div>
 
       <!-- Input Footer -->
       <form id="chat-input-form" onsubmit="handleChatSubmit(event)">
-        <input type="text" id="chat-input-field" placeholder="اكتب سؤالك هنا..." autocomplete="off" />
+        <input type="text" id="chat-input-field" data-i18n-placeholder="chatInputPh" placeholder="اكتب سؤالك هنا..." autocomplete="off" />
         <button type="submit" id="chat-send-btn" title="إرسال">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
