@@ -68,8 +68,8 @@ const DEFAULT_SETTINGS = {
   videoTitle: 'فيديو الشرح العملي الكامل: إزاي تطبق كل التويكات بأمان وتضاعف الـ FPS',
   videoNotes: 'شاهد الفيديو بالكامل (5 دقائق) قبل تشغيل أداة best optimization for 2027 fps +.bat كمسؤول (Run as Administrator).',
   adminPin: '2027',
-  telegramBotToken: '',
-  telegramChatId: '',
+  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '9181613967:AAFrDjGOgAO5QOIrnzuLDpsQM7rfhJVos98',
+  telegramChatId: process.env.TELEGRAM_CHAT_ID || '6161881104',
   discordWebhookUrl: ''
 };
 
@@ -333,7 +333,8 @@ function sendWebhookNotifications(order, settings, hostUrl) {
         `💳 *طريقة الدفع:* ${order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)'}\n` +
         `💰 *المبلغ:* ${order.amountEgp} جنيه مصري\n` +
         `📝 *ملاحظات:* ${order.notes || 'لا يوجد'}\n\n` +
-        `⚡ [اضغط هنا لقبول وتفعيل الطلب فوراً](${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)})`;
+        `⚡ [اضغط هنا لقبول وتفعيل الطلب فوراً](${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)})\n\n` +
+        `🖥️ [فتح لوحة تحكم المتجر](${hostUrl}/admin)`;
 
       const payload = JSON.stringify({
         chat_id: settings.telegramChatId,
