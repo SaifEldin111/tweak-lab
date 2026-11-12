@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TWEAK LAB | لوحة تحكم الإدارة وقبول طلبات InstaPay & Vodafone Cash</title>
+  <style>
+    :root {
+      --bg-dark: #070a10;
+      --bg-card: #0e1420;
+      --bg-card-hover: #131c2e;
+      --border: #1e2c46;
+      --cyan: #00f0ff;
+      --green: #00ff88;
+      --amber: #ffb800;
+      --red: #ff4757;
+      --text-main: #f0f6fc;
+      --text-muted: #8b9bb4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
+      background: radial-gradient(circle at top right, #0f203c 0%, var(--bg-dark) 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    header {
+      background: rgba(14, 20, 32, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 1250px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: #fff;
+    }
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--cyan);
+    }
+    .container {
+      max-width: 1250px;
+      margin: 26px auto;
+      padding: 0 20px;
+    }
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .stat-val {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--cyan);
+    }
+    .btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.18s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover { border-color: var(--cyan); }
+    .btn-accept {
+      background: var(--green);
+      color: #03150c;
+      border: none;
+      font-weight: 900;
+      padding: 12px 20px;
+      font-size: 0.96rem;
+    }
+    .btn-accept:hover { opacity: 0.9; }
+    .btn-reject {
+      background: rgba(255, 71, 87, 0.16);
+      color: var(--red);
+      border: 1px solid rgba(255, 71, 87, 0.45);
+    }
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+    .order-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .order-card.pending {
+      border-color: var(--amber);
+      box-shadow: 0 0 28px rgba(255, 184, 0, 0.16);
+    }
+    .order-card.approved {
+      border-color: rgba(0, 255, 136, 0.45);
+    }
+    .screenshot-thumb {
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      background: #05080d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 12px 0;
+      cursor: zoom-in;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .badge-pending { background: rgba(255, 184, 0, 0.18); color: var(--amber); }
+    .badge-approved { background: rgba(0, 255, 136, 0.18); color: var(--green); }
+    .badge-rejected { background: rgba(255, 71, 87, 0.18); color: var(--red); }
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 34px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 11px 14px;
+      background: #06090f;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: #fff;
+      margin-top: 6px;
+    }
+    /* Login Modal */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 16, 0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .login-box {
+      background: var(--bg-card);
+      border: 1px solid var(--cyan);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PIN LOGIN OVERLAY -->
+  <div id="login-overlay" style="display:none;">
+    <div class="login-box">
+      <h2 style="color:var(--cyan); margin-bottom:10px;">🛡️ دخول لوحة تحكم TWEAK LAB</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+        أدخل رمز الإدارة (الافتراضي: <code>2027</code>)
+      </p>
+      <input type="password" id="pin-input" class="input-field" placeholder="رمز الدخول (2027)" style="text-align:center; font-size:1.2rem; margin-bottom:14px;" />
+      <button class="btn btn-accept" style="width:100%; justify-content:center;" onclick="loginWithPin()">دخول لوحة التحكم</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img src="/assets/logo.png" alt="Logo" />
+        <span>لوحة تحكم TWEAK LAB <span style="color:var(--green); font-size:0.85rem;">• متابعة وقبول الطلبات الفورية</span></span>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn" onclick="testSound()">🔔 تجربة صوت الإشعار</button>
+        <a href="/" target="_blank" class="btn">🛒 فتح صفحة العميل</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div style="color:var(--text-muted); font-size:0.85rem;">⏳ طلبات بانتظار المراجعة (Accept)</div>
+        <div class="stat-val" id="stat-pending" style="color:var(--amber);">0</div>
+      </div>
+      <div class="stat-card">
+        <div style="color:var(--text-muted); font-size:0.85rem;">👥 عدد المشترين المؤكدين (تم القبول)</div>
+        <div class="stat-val" id="stat-approved" style="color:var(--green);">0</div>
+      </div>
+      <div class="stat-card">
+        <div style="color:var(--text-muted); font-size:0.85rem;">💰 إجمالي الأرباح المؤكدة</div>
+        <div class="stat-val" id="stat-revenue">0 ج.م</div>
+      </div>
+      <div class="stat-card">
+        <div style="color:var(--text-muted); font-size:0.85rem;">☁️ إجمالي الطلبات (حفظ سحابي دائم)</div>
+        <div class="stat-val" id="stat-total" style="color:#b8c7e0;">0</div>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:16px; color:#fff;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
+    <div id="orders-container" class="orders-grid"></div>
+
+    <!-- STORE & VIDEO SETTINGS -->
+    <div class="settings-card">
+      <h2 style="color:var(--cyan); margin-bottom:6px;">⚙️ إعدادات المتجر، رابط الفيديو، وإشعارات الموبايل (Telegram)</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem;">
+        من هنا يمكنك تعديل <strong>رابط الفيديو الشرح</strong> الذي يظهر للعميل بعد ضغطك على Accept، أو ربط بوت تليجرام ليصلك إشعار على موبايلك فيه زرار <strong>Accept</strong> مباشرة!
+      </p>
+
+      <form onsubmit="saveStoreSettings(event)">
+        <div class="form-grid">
+          <div>
+            <label>🎬 رابط فيديو الشرح (يظهر للعميل بعد القبول):</label>
+            <input type="text" id="set-videoUrl" class="input-field" placeholder="https://youtube.com/..." required />
+          </div>
+          <div>
+            <label>📝 رسالة/ملاحظة فوق الفيديو للعميل:</label>
+            <input type="text" id="set-videoNotes" class="input-field" />
+          </div>
+          <div>
+            <label>📱 رقم فودافون كاش وإنستاباي:</label>
+            <input type="text" id="set-paymentPhone" class="input-field" value="01020670418" required />
+          </div>
+          <div>
+            <label>💰 السعر بالجنيه المصري:</label>
+            <input type="number" id="set-priceEgp" class="input-field" value="100" required />
+          </div>
+          <div>
+            <label>🔗 رابط إنستاباي المباشر (اختياري ipn.eg):</label>
+            <input type="text" id="set-instapayLink" class="input-field" placeholder="https://ipn.eg/..." />
+          </div>
+          <div>
+            <label>🔑 رمز حماية لوحة التحكم (PIN):</label>
+            <input type="text" id="set-adminPin" class="input-field" value="2027" required />
+          </div>
+          <div>
+            <label>🤖 Telegram Bot Token (لإشعار وقبول من الموبايل):</label>
+            <input type="text" id="set-telegramBotToken" class="input-field" placeholder="اختياري: 123456:ABC-DEF..." />
+          </div>
+          <div>
+            <label>💬 Telegram Chat ID:</label>
+            <input type="text" id="set-telegramChatId" class="input-field" placeholder="اختياري: 987654321" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-accept" style="margin-top:18px;">💾 حفظ الإعدادات</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+let adminPin = localStorage.getItem('tweaklab_admin_pin') || '2027';
+let knownPendingIds = new Set();
+let firstLoad = true;
+let settingsLoaded = false;
+
+function playAlertChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [587.33, 880, 1174.66].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + i * 0.14);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.14 + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i * 0.14);
+      osc.stop(ctx.currentTime + i * 0.14 + 0.35);
+    });
+  } catch (e) {}
+}
+
+function testSound() {
+  playAlertChime();
+  if ('Notification' in window && Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
+}
+
+function loginWithPin() {
+  adminPin = document.getElementById('pin-input').value.trim();
+  localStorage.setItem('tweaklab_admin_pin', adminPin);
+  document.getElementById('login-overlay').style.display = 'none';
+  settingsLoaded = false;
+  fetchAdminData();
+}
+
+async function fetchAdminData() {
+  try {
+    const res = await fetch('/api/admin/data', {
+      headers: { 'x-admin-pin': adminPin }
+    });
+    if (res.status === 401) {
+      document.getElementById('login-overlay').style.display = 'flex';
+      return;
+    }
+    const data = await res.json();
+    renderOrders(data.orders || []);
+    if (!settingsLoaded && data.settings) {
+      populateSettings(data.settings);
+      settingsLoaded = true;
+    }
+  } catch (e) {}
+}
+
+function renderOrders(orders) {
+  const pending = orders.filter((o) => o.status === 'pending');
+  const approved = orders.filter((o) => o.status === 'approved');
+  const revenue = approved.reduce((sum, o) => sum + (Number(o.amountEgp) || 100), 0);
+
+  document.getElementById('stat-pending').textContent = pending.length;
+  document.getElementById('stat-approved').textContent = approved.length;
+  document.getElementById('stat-revenue').textContent = revenue + ' ج.م';
+  const totalEl = document.getElementById('stat-total');
+  if (totalEl) totalEl.textContent = orders.length;
+
+  // Check if there is a brand-new pending order to chime!
+  let hasNewPending = false;
+  pending.forEach((o) => {
+    if (!knownPendingIds.has(o.id)) {
+      knownPendingIds.add(o.id);
+      if (!firstLoad) hasNewPending = true;
+    }
+  });
+  firstLoad = false;
+
+  if (hasNewPending) {
+    playAlertChime();
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('🚨 طلب دفع جديد في TWEAK LAB!', {
+        body: 'قام عميل برفع سكرين شوت تحويل 100 ج.م وينتظر ضغطك على Accept.'
+      });
+    }
+  }
+
+  const container = document.getElementById('orders-container');
+  if (orders.length === 0) {
+    container.innerHTML = `<div style="grid-column:1/-1; background:var(--bg-card); border:1px dashed var(--border); padding:40px; border-radius:14px; text-align:center; color:var(--text-muted);">لا توجد طلبات حتى الآن. بمجرد قيام أي عميل برفع الـ Screenshot سيظهر هنا فوراً مع جرس تنبيه 🔔</div>`;
+    return;
+  }
+
+  container.innerHTML = orders
+    .map((o) => {
+      const badgeClass =
+        o.status === 'approved' ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
+      const badgeText =
+        o.status === 'approved' ? '✅ مقبول وتم التسليم' : o.status === 'rejected' ? '❌ مرفوض' : '⏳ بانتظار القبول (5 دقائق)';
+      const methodLabel = o.paymentMethod === 'instapay' ? '🟣 InstaPay (إنستاباي)' : '🔴 Vodafone Cash (فودافون كاش)';
+      const timeStr = new Date(o.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      return `
+        <div class="order-card ${o.status}">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <strong style="font-family:monospace; font-size:1.1rem; color:var(--cyan);">#${o.id}</strong>
+              <span class="badge ${badgeClass}">${badgeText}</span>
+            </div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${o.customerName}</div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${o.senderPhone}</span></div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة:</strong> ${methodLabel} — <strong>${o.amountEgp} ج.م</strong></div>
+            <div style="font-size:0.8rem; color:var(--text-muted);">🕒 وقت الطلب: ${timeStr}</div>
+            ${o.notes ? `<div style="font-size:0.84rem; color:#ffe082; margin-top:4px;">📝 ملاحظة: ${o.notes}</div>` : ''}
+            <a href="${o.screenshotUrl}" target="_blank" title="اضغط لتكبير صورة الإيصال">
+              <img src="${o.screenshotUrl}" class="screenshot-thumb" alt="Payment Screenshot" />
+            </a>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+            ${
+              o.status !== 'approved'
+                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve')">✅ Accept (قبول وتفعيل التحميل فوراً)</button>`
+                : `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending')">↩ إعادة لقيد المراجعة</button>`
+            }
+            ${
+              o.status !== 'rejected'
+                ? `<button class="btn btn-reject" onclick="updateOrder('${o.id}', 'reject')">❌ رفض</button>`
+                : ''
+            }
+            <button class="btn" onclick="updateOrder('${o.id}', 'delete')" title="حذف الطلب">🗑️</button>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+async function updateOrder(orderId, action) {
+  if (action === 'delete' && !confirm('هل تريد حذف هذا الطلب نهائياً؟')) return;
+  await fetch('/api/admin/order-action', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+    body: JSON.stringify({ orderId, action })
+  });
+  fetchAdminData();
+}
+
+function populateSettings(s) {
+  document.getElementById('set-videoUrl').value = s.videoUrl || '';
+  document.getElementById('set-videoNotes').value = s.videoNotes || '';
+  document.getElementById('set-paymentPhone').value = s.paymentPhone || '01020670418';
+  document.getElementById('set-priceEgp').value = s.priceEgp || 100;
+  document.getElementById('set-instapayLink').value = s.instapayLink || '';
+  document.getElementById('set-adminPin').value = s.adminPin || '2027';
+  document.getElementById('set-telegramBotToken').value = s.telegramBotToken || '';
+  document.getElementById('set-telegramChatId').value = s.telegramChatId || '';
+}
+
+async function saveStoreSettings(e) {
+  e.preventDefault();
+  const newPin = document.getElementById('set-adminPin').value.trim();
+  const payload = {
+    videoUrl: document.getElementById('set-videoUrl').value.trim(),
+    videoNotes: document.getElementById('set-videoNotes').value.trim(),
+    paymentPhone: document.getElementById('set-paymentPhone').value.trim(),
+    instapayAddress: document.getElementById('set-paymentPhone').value.trim(),
+    priceEgp: Number(document.getElementById('set-priceEgp').value) || 100,
+    instapayLink: document.getElementById('set-instapayLink').value.trim(),
+    adminPin: newPin,
+    telegramBotToken: document.getElementById('set-telegramBotToken').value.trim(),
+    telegramChatId: document.getElementById('set-telegramChatId').value.trim()
+  };
+
+  const res = await fetch('/api/admin/settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+    body: JSON.stringify(payload)
+  });
+  if (res.ok) {
+    adminPin = newPin;
+    localStorage.setItem('tweaklab_admin_pin', adminPin);
+    alert('✅ تم حفظ الإعدادات وتحديث رابط الفيديو وبيانات الدفع بنجاح!');
+  }
+}
+
+fetchAdminData();
+setInterval(fetchAdminData, 3000);
+</script>
+</body>
+</html>

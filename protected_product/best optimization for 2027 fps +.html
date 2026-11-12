@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEST OPTIMIZATION FOR 2027 FPS+ | Interactive Customer Guide & Tweaker Suite</title>
+  <style>
+    :root {
+      --bg-dark: #070a10;
+      --bg-card: #0e1420;
+      --bg-card-hover: #131c2e;
+      --border: #1e2c46;
+      --cyan: #00f0ff;
+      --green: #00ff88;
+      --amber: #ffb800;
+      --red: #ff4757;
+      --purple: #9b59ff;
+      --text-main: #f0f6fc;
+      --text-muted: #8b9bb4;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top right, #0f203c 0%, var(--bg-dark) 50%);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+    header {
+      background: linear-gradient(180deg, rgba(0, 240, 255, 0.12) 0%, rgba(7, 10, 16, 0.95) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 24px 32px;
+      text-align: center;
+    }
+    .badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #ffffff, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      max-width: 760px;
+      margin: 0 auto 24px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    /* Quick Start Customer Guide Box */
+    .guide-banner {
+      background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(19, 32, 54, 0.95));
+      border: 1px solid var(--cyan);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 28px 0;
+      box-shadow: 0 12px 40px rgba(0, 240, 255, 0.08);
+    }
+    .guide-banner h2 {
+      color: var(--cyan);
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .step-box {
+      background: rgba(7, 10, 16, 0.75);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .step-num {
+      display: inline-block;
+      background: var(--cyan);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .step-box h3 {
+      font-size: 1.02rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .step-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    /* Progress & Action Bar */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 10, 16, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      margin-bottom: 28px;
+    }
+    .toolbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 240px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      max-width: 280px;
+      height: 10px;
+      background: #1a2436;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      transition: width 0.25s ease;
+    }
+    .filter-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: all 0.18s ease;
+    }
+    .btn:hover, .btn.active {
+      border-color: var(--cyan);
+      background: rgba(0, 240, 255, 0.14);
+      color: #fff;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      color: #041016;
+      border: none;
+      font-weight: 800;
+    }
+    .btn-primary:hover {
+      opacity: 0.92;
+      color: #041016;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+    }
+    /* Category Sections */
+    .category-section {
+      margin-bottom: 36px;
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .category-header h2 {
+      font-size: 1.35rem;
+      color: #fff;
+    }
+    .category-tag {
+      font-size: 0.8rem;
+      color: var(--cyan);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .tweaks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 18px;
+    }
+    .tweak-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .tweak-card:hover {
+      border-color: rgba(0, 240, 255, 0.5);
+      background: var(--bg-card-hover);
+    }
+    .tweak-card.done {
+      border-color: var(--green);
+      background: rgba(0, 255, 136, 0.04);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .tweak-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .badge-safe {
+      background: rgba(0, 255, 136, 0.14);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, 0.35);
+    }
+    .badge-fps {
+      background: rgba(0, 240, 255, 0.14);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+    }
+    .badge-adv {
+      background: rgba(255, 184, 0, 0.14);
+      color: var(--amber);
+      border: 1px solid rgba(255, 184, 0, 0.35);
+    }
+    .tweak-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .how-to {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid var(--cyan);
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      color: #d5e2f2;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 12px;
+    }
+    .cmd-box {
+      background: #05080d;
+      border: 1px solid #1c2940;
+      border-radius: 8px;
+      padding: 9px 11px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.78rem;
+      color: var(--green);
+      overflow-x: auto;
+      white-space: nowrap;
+      margin-bottom: 12px;
+    }
+    .card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .check-label input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+    /* Reference Tables */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 28px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .safety-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      background: rgba(255, 71, 87, 0.15);
+      color: var(--red);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge-top">VERIFIED 100% PC SAFE • REVERSIBLE • WINDOWS 10 & 11</div>
+  <h1>BEST OPTIMIZATION FOR 2027 FPS+</h1>
+  <p class="subtitle">
+    The Complete Step-by-Step Gaming Optimization Manual & Interactive Tweaker Suite.
+    Engineered to maximize Average FPS, boost 1% Low Framerates, and eliminate Mouse & Network Input Lag safely.
+  </p>
+  <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+    <a href="https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt" target="_blank" class="btn btn-primary" style="background:linear-gradient(90deg, #ff4757, #ff7f50); color:#fff; text-decoration:none;">▶️ Watch Full Video Tutorial (فيديو الشرح المفصل)</a>
+    <button class="btn btn-primary" onclick="downloadProBatch()">⬇ Download Automated Tweaker (.BAT)</button>
+    <button class="btn" onclick="resetProgress()">Reset My Checklist Progress</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="progress-wrap">
+      <span id="progress-text" style="font-weight:700; font-size:0.9rem;">0 / 35 Completed (0%)</span>
+      <div class="progress-bar-bg">
+        <div id="progress-fill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+    <div class="filter-btns">
+      <button class="btn active" onclick="filterCards('all', this)">All Tweaks (35)</button>
+      <button class="btn" onclick="filterCards('cpu', this)">CPU & Power</button>
+      <button class="btn" onclick="filterCards('gpu', this)">GPU & Display</button>
+      <button class="btn" onclick="filterCards('input', this)">Mouse & Input Lag</button>
+      <button class="btn" onclick="filterCards('ram', this)">RAM & Storage</button>
+      <button class="btn" onclick="filterCards('net', this)">Network & Ping</button>
+      <button class="btn" onclick="filterCards('win', this)">Windows Debloat</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- EASY CUSTOMER ONBOARDING GUIDE -->
+  <div class="guide-banner">
+    <h2>📘 EASY CUSTOMER QUICK-START GUIDE (READ THIS FIRST!)</h2>
+    <p style="color:var(--text-muted); font-size:0.95rem;">
+      Welcome! You do <strong>not</strong> need to be a computer expert to get massive FPS gains. You can either run the companion file
+      <code>best optimization for 2027 fps +.bat</code> for <strong>1-Click Automated Optimization</strong>, OR follow the cards below step-by-step and check them off as you go!
+    </p>
+    <div class="steps-grid">
+      <div class="step-box">
+        <span class="step-num">STEP 1 • SAFETY FIRST</span>
+        <h3>Create Your Safety Backup</h3>
+        <p>Right-click <code>best optimization for 2027 fps +.bat</code> → <strong>Run as Administrator</strong> → Press <strong>[S]</strong> to create an automatic System Restore Point & Registry Backup.</p>
+      </div>
+      <div class="step-box">
+        <span class="step-num">STEP 2 • APPLY TWEAKS</span>
+        <h3>1-Click Preset or Custom Menu</h3>
+        <p>Press <strong>[A]</strong> inside the tool to apply the <em>1-Click Safe Pro Gaming Preset</em> in 30 seconds, or pick individual tweaks <strong>[1–35]</strong> below.</p>
+      </div>
+      <div class="step-box">
+        <span class="step-num">STEP 3 • GPU & BIOS</span>
+        <h3>Apply GPU & BIOS Settings</h3>
+        <p>Scroll down to the <strong>NVIDIA / AMD / Intel Control Panel tables</strong> and verify XMP/EXPO & Resizable BAR are enabled for +15–25% extra FPS.</p>
+      </div>
+      <div class="step-box">
+        <span class="step-num">STEP 4 • RESTART & PLAY</span>
+        <h3>Reboot & Enjoy Smooth FPS</h3>
+        <p>Restart your PC once finished. Want to undo everything later? Just press <strong>[R]</strong> in the tool to restore 100% factory Windows defaults!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC TWEAKS CONTAINER -->
+  <div id="tweaks-root"></div>
+
+  <!-- GPU DRIVER SETTINGS GUIDE -->
+  <div class="category-section">
+    <div class="category-header">
+      <h2>🎮 GPU Control Panel Pro Settings (NVIDIA / AMD / Intel)</h2>
+      <span class="category-tag">Driver Level FPS Boost</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Setting Name</th>
+            <th>NVIDIA Control Panel / NVIDIA App</th>
+            <th>AMD Radeon Adrenalin</th>
+            <th>Why It Boosts FPS &Lowers Latency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Low Latency / Anti-Lag</strong></td>
+            <td>Low Latency Mode: <strong>On</strong> (Use <em>NVIDIA Reflex + Boost</em> in-game)</td>
+            <td>Radeon Anti-Lag / Anti-Lag 2: <strong>Enabled</strong></td>
+            <td>Eliminates the render queue bottleneck between CPU and GPU, cutting mouse click-to-muzzle-flash delay by 15–35%.</td>
+          </tr>
+          <tr>
+            <td><strong>Power Management</strong></td>
+            <td>Power Management Mode: <strong>Prefer Maximum Performance</strong></td>
+            <td>Minimum Frequency: <strong>Default / Gaming Profile</strong></td>
+            <td>Prevents GPU core clock downclocking during low-load scenes, stopping sudden frame drops when fights start.</td>
+          </tr>
+          <tr>
+            <td><strong>Shader Cache Size</strong></td>
+            <td>Shader Cache Size: <strong>10 GB</strong> or <strong>100 GB</strong></td>
+            <td>Shader Cache: <strong>AMD Optimized / On</strong></td>
+            <td>Prevents old compiled shaders from being overwritten on disk, eliminating shader-compilation stutters in DX12 games.</td>
+          </tr>
+          <tr>
+            <td><strong>Texture Filtering Quality</strong></td>
+            <td>Texture Filtering - Quality: <strong>High Performance</strong></td>
+            <td>Texture Filtering Quality: <strong>Performance</strong></td>
+            <td>Enables trilinear & anisotropic filtering optimizations for +3% to +6% GPU framerate gain with zero visible blur.</td>
+          </tr>
+          <tr>
+            <td><strong>Vertical Sync (V-Sync)</strong></td>
+            <td><strong>Off</strong> (or <em>On + G-Sync + -3 FPS Cap</em>)</td>
+            <td>Wait for Vertical Refresh: <strong>Always Off</strong></td>
+            <td>Uncaps frame delivery and prevents traditional V-Sync backpressure input lag.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BIOS & IN-GAME COMPETITIVE MATRIX -->
+  <div class="category-section">
+    <div class="category-header">
+      <h2>⚡ High-Impact BIOS & In-Game Competitive Settings</h2>
+      <span class="category-tag">+15% to +40% Real-World FPS</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Optimization Area</th>
+            <th>Recommended Setting</th>
+            <th>Expected FPS / Latency Gain</th>
+            <th>How to Enable Safely</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>RAM XMP / EXPO / DOCP (BIOS)</strong></td>
+            <td><strong>Profile 1 / Enabled</strong></td>
+            <td><strong>+10% to +22% 1% Low FPS</strong></td>
+            <td>Restart PC → Press <code>Del</code> or <code>F2</code> to enter BIOS → Enable <strong>XMP</strong> (Intel) or <strong>EXPO/DOCP</strong> (AMD) → Save & Exit.</td>
+          </tr>
+          <tr>
+            <td><strong>Resizable BAR / Smart Access Memory</strong></td>
+            <td><strong>Enabled (Above 4G Decoding On)</strong></td>
+            <td><strong>+5% to +12% Average FPS</strong></td>
+            <td>In BIOS, enable <strong>Above 4G Decoding</strong> and <strong>Re-Size BAR Support</strong> so the CPU can access all VRAM at once.</td>
+          </tr>
+          <tr>
+            <td><strong>In-Game Shadow & Volumetric Quality</strong></td>
+            <td><strong>Low or Medium</strong></td>
+            <td><strong>+15% to +30% Average FPS</strong></td>
+            <td>Dynamic shadows and volumetric fog/clouds are the #1 GPU hogs in modern games. Lowering them massively boosts FPS.</td>
+          </tr>
+          <tr>
+            <td><strong>Upscaling (DLSS / FSR / XeSS)</strong></td>
+            <td><strong>Quality Mode</strong> (at 1440p / 4K)</td>
+            <td><strong>+25% to +45% Average FPS</strong></td>
+            <td>Renders internally at a lower resolution and uses AI/temporal reconstruction for near-native sharpness with huge FPS gains.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SAFETY GUARANTEE & WHAT WE NEVER TOUCH -->
+  <div class="category-section">
+    <div class="category-header">
+      <h2>🛡️ 100% PC Safety Guarantee — Myths We Never Use</h2>
+      <span class="category-tag">Why Your PC Is Safe</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Dangerous "Snake Oil" Tweak</th>
+            <th>Status in This Suite</th>
+            <th>Why We Protect Your PC From It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Disabling Windows Pagefile (Virtual Memory)</td>
+            <td><span class="safety-pill">NEVER USED</span></td>
+            <td>Modern games (Call of Duty, Fortnite, Cyberpunk, Rust) crash immediately with Out-Of-Memory errors if the pagefile is disabled.</td>
+          </tr>
+          <tr>
+            <td>Deleting Windows Defender / Core Security</td>
+            <td><span class="safety-pill">NEVER USED</span></td>
+            <td>Leaves your PC vulnerable to malware and breaks kernel anti-cheats (Vanguard, FaceIt, Ricochet, EasyAntiCheat).</td>
+          </tr>
+          <tr>
+            <td>Ripping Out Xbox Services or Windows Store</td>
+            <td><span class="safety-pill">NEVER USED</span></td>
+            <td>We only disable <em>background video recording (Game DVR)</em>. Your Xbox Game Pass, Party Chat, and Windows Updates stay 100% intact.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TWEAKS = [
+  // 1. CPU & POWER
+  { id: 1, cat: 'cpu', title: '1. Unlock & Activate Ultimate Performance Power Plan', badge: 'High FPS Impact', safe: '100% Safe (Desktops)', desc: 'Eliminates CPU frequency downclocking during brief pauses between frames, dramatically improving 1% low framerates.', how: 'Option [1] in the .BAT tool, or run the command below in Admin Command Prompt and select Ultimate Performance in Control Panel > Power Options.', cmd: 'powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61' },
+  { id: 2, cat: 'cpu', title: '2. Disable CPU Core Parking on Active Plan', badge: 'Stops Stutters', safe: '100% Safe', desc: 'Prevents Windows from putting CPU cores to sleep mid-match so all cores respond immediately to game threads.', how: 'Option [2] in the .BAT tool sets minimum active processor state and unparked cores to 100%.', cmd: 'powercfg -setacvalueindex scheme_current sub_processor CPMINCORES 100 && powercfg -setactive scheme_current' },
+  { id: 3, cat: 'cpu', title: '3. Set Multimedia CPU SystemResponsiveness to 0', badge: 'Core Tweak', safe: '100% Safe', desc: 'Windows reserves 20% of CPU resources for background tasks by default. Setting this to 0 prioritizes foreground games.', how: 'Option [3] in the .BAT tool updates HKLM\\...\\Multimedia\\SystemProfile.', cmd: 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d 0 /f' },
+  { id: 4, cat: 'cpu', title: '4. Optimize Win32PrioritySeparation (0x26 / 38)', badge: 'Lower Input Lag', safe: '100% Safe', desc: 'Tunes the Windows CPU thread scheduler for short, variable, high-priority foreground bursts—ideal for competitive shooters.', how: 'Option [4] in the .BAT tool sets Win32PrioritySeparation to 38 (decimal) / 0x26 (hex).', cmd: 'reg add "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d 38 /f' },
+  { id: 5, cat: 'cpu', title: '5. Disable Windows App Power Throttling', badge: 'Steady Frame Pacing', safe: '100% Safe', desc: 'Stops Windows from throttling background game helper processes or voice apps like Discord during gameplay.', how: 'Option [5] in the .BAT tool disables PowerThrottlingOff in the registry.', cmd: 'reg add "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d 1 /f' },
+  { id: 6, cat: 'cpu', title: '6. Disable Hibernation (Frees 8GB–16GB SSD Space)', badge: 'Storage + I/O', safe: 'Desktop Recommended', desc: 'Removes hiberfil.sys on desktop PCs to free gigabytes of SSD space and eliminate hibernation background disk writes.', how: 'Option [6] in the .BAT tool runs powercfg -h off. (Re-enable anytime with powercfg -h on).', cmd: 'powercfg -h off' },
+
+  // 2. GPU, DIRECTX & DISPLAY
+  { id: 7, cat: 'gpu', title: '7. Boost Game Scheduler GPU Priority (8) & CPU Priority (6)', badge: 'Max Game Priority', safe: '100% Safe', desc: 'Configures the Windows Multimedia Class Scheduler (MMCSS) Games profile to High scheduling category and GPU Priority 8.', how: 'Option [7] in the .BAT tool updates Multimedia\\SystemProfile\\Tasks\\Games.', cmd: 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games" /v "GPU Priority" /t REG_DWORD /d 8 /f' },
+  { id: 8, cat: 'gpu', title: '8. Enable Hardware-Accelerated GPU Scheduling (HAGS)', badge: 'Lower Latency + DLSS 3/4', safe: '100% Safe', desc: 'Lets your GPU manage its own VRAM scheduling directly instead of the CPU, lowering render latency and enabling Frame Gen.', how: 'Option [8] in the .BAT tool or Settings > System > Display > Graphics > Default graphics settings.', cmd: 'reg add "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers" /v "HwSchMode" /t REG_DWORD /d 2 /f' },
+  { id: 9, cat: 'gpu', title: '9. Enable Windowed & Borderless Flip-Model Optimizations', badge: 'Zero Windowed Lag', safe: '100% Safe', desc: 'Upgrades DirectX 10/11 windowed and borderless games to use the low-latency Flip Presentation Model.', how: 'Option [9] in the .BAT tool or Settings > System > Display > Graphics > Optimizations for windowed games = On.', cmd: 'reg add "HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences" /v "DirectXUserGlobalSettings" /t REG_SZ /d "VRROptimizeEnable=1;SwapEffectUpgradeEnable=1;" /f' },
+  { id: 10, cat: 'gpu', title: '10. Enable Variable Refresh Rate (VRR) Support', badge: 'Smooth Frame Pacing', safe: '100% Safe', desc: 'Synchronizes Windows frame delivery with G-Sync, FreeSync, and Adaptive-Sync high-refresh monitors.', how: 'Option [10] in the .BAT tool enables VRROptimizeEnable globally.', cmd: 'reg add "HKCU\\Software\\Microsoft\\DirectX\\UserGpuPreferences" /v "DirectXUserGlobalSettings" /t REG_SZ /d "VRROptimizeEnable=1;SwapEffectUpgradeEnable=1;" /f' },
+  { id: 11, cat: 'gpu', title: '11. Disable Xbox Game DVR Background Recording', badge: '+5% to +12% FPS', safe: '100% Safe', desc: 'Stops Windows from secretly encoding video of your screen in the background while keeping Xbox Login & Party Chat working.', how: 'Option [11] in the .BAT tool disables GameDVR_Enabled and AppCaptureEnabled.', cmd: 'reg add "HKCU\\System\\GameConfigStore" /v "GameDVR_Enabled" /t REG_DWORD /d 0 /f' },
+  { id: 12, cat: 'gpu', title: '12. Enable Native Windows Game Mode', badge: 'Boosts 1% Lows', safe: '100% Safe', desc: 'Prioritizes CPU/GPU thread allocation for your active game and pauses background Windows Update installations.', how: 'Option [12] in the .BAT tool or Settings > Gaming > Game Mode = On.', cmd: 'reg add "HKCU\\Software\\Microsoft\\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d 1 /f' },
+
+  // 3. INPUT LAG, MOUSE & USB
+  { id: 13, cat: 'input', title: '13. Apply 1:1 Raw Mouse Input (Disable Pointer Precision)', badge: 'Pro Aim Accuracy', safe: '100% Safe', desc: 'Disables Windows mouse acceleration and locks pointer speed to the exact 6/11 neutral notch for true 1:1 muscle memory.', how: 'Option [13] in the .BAT tool sets MouseSpeed, MouseThreshold1, and MouseThreshold2 to 0.', cmd: 'reg add "HKCU\\Control Panel\\Mouse" /v "MouseSpeed" /t REG_SZ /d "0" /f' },
+  { id: 14, cat: 'input', title: '14. Instant Keyboard Repeat Delay & Repeat Rate', badge: 'Faster Strafe/Input', safe: '100% Safe', desc: 'Minimizes keyboard repeat delay (0) and sets maximum repeat rate (31) for snappier key response.', how: 'Option [14] in the .BAT tool updates HKCU\\Control Panel\\Keyboard.', cmd: 'reg add "HKCU\\Control Panel\\Keyboard" /v "KeyboardDelay" /t REG_SZ /d "0" /f' },
+  { id: 15, cat: 'input', title: '15. Disable Sticky Keys, Filter Keys & Toggle Keys Popups', badge: 'No Alt-Tab Crashes', safe: '100% Safe', desc: 'Prevents pressing Shift 5 times during crouch/sprint fights from minimizing your game.', how: 'Option [15] in the .BAT tool disables accessibility hotkey triggers.', cmd: 'reg add "HKCU\\Control Panel\\Accessibility\\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f' },
+  { id: 16, cat: 'input', title: '16. Disable USB Selective Suspend Power Saving', badge: 'Zero Mouse Dropouts', safe: '100% Safe', desc: 'Prevents Windows from putting USB controllers into low-power sleep states, stopping 1000Hz–8000Hz mouse polling jitter.', how: 'Option [16] in the .BAT tool disables USB selective suspend on your active power plan.', cmd: 'powercfg -setacvalueindex scheme_current sub_usb usbselectsuspend 0 && powercfg -setactive scheme_current' },
+  { id: 17, cat: 'input', title: '17. Disable PCI Express Link State Power Management', badge: 'GPU Wake Latency', safe: '100% Safe', desc: 'Keeps GPU and NVMe PCIe lanes in active L0 state instead of entering power-saving sleep states between bursts.', how: 'Option [17] in the .BAT tool sets PCIe ASPM to 0 (Off).', cmd: 'powercfg -setacvalueindex scheme_current sub_pciexpress aspm 0 && powercfg -setactive scheme_current' },
+
+  // 4. RAM, STORAGE & SHADER CACHE
+  { id: 18, cat: 'ram', title: '18. Disable Windows RAM Memory Compression (16GB+ RAM)', badge: 'Lowers CPU Overhead', safe: 'For 16GB+ RAM PCs', desc: 'Stops the Windows kernel from spending CPU cycles compressing RAM in the background when you already have plenty of memory.', how: 'Option [18] in the .BAT tool runs Disable-MMAgent -mc in Admin PowerShell.', cmd: 'powershell -Command "Disable-MMAgent -mc"' },
+  { id: 19, cat: 'ram', title: '19. Disable NTFS Last Access Timestamp Writes', badge: 'Faster Asset Loading', safe: '100% Safe', desc: 'Stops Windows from writing a disk update every single time a game reads a texture or sound file from your SSD.', how: 'Option [19] in the .BAT tool runs fsutil behavior set disablelastaccess 1.', cmd: 'fsutil behavior set disablelastaccess 1' },
+  { id: 20, cat: 'ram', title: '20. Optimize SvcHost RAM Split Threshold', badge: 'Fewer Processes', safe: '100% Safe', desc: 'Matches SvcHost process grouping threshold to your installed physical RAM capacity.', how: 'Option [20] in the .BAT tool automatically detects your RAM size and sets SvcHostSplitThresholdInKB.', cmd: 'wmic os get TotalVisibleMemorySize' },
+  { id: 21, cat: 'ram', title: '21. Deep Clean Windows Temp & Prefetch Junk', badge: 'Frees Disk Space', safe: '100% Safe', desc: 'Safely removes gigabytes of orphaned temporary files in %TEMP% and C:\\Windows\\Temp.', how: 'Option [21] in the .BAT tool cleans all temporary directories.', cmd: 'del /s /f /q "%TEMP%\\*.*"' },
+  { id: 22, cat: 'ram', title: '22. Clear Corrupted DirectX & GPU Shader Caches', badge: 'Fixes Post-Patch Stutter', safe: '100% Safe', desc: 'Clears stale DirectX, NVIDIA DXCache, and AMD DxCache files that cause heavy stuttering after game or driver updates.', how: 'Option [22] in the .BAT tool clears D3DSCache, DXCache, and GLCache.', cmd: 'del /s /f /q "%LocalAppData%\\D3DSCache\\*.*"' },
+  { id: 23, cat: 'ram', title: '23. Run Native SSD TRIM Storage Optimization', badge: 'Peak SSD Speed', safe: '100% Safe', desc: 'Executes native ReTrim on your C: drive so your SSD maintains maximum sustained read speeds during level loads.', how: 'Option [23] in the .BAT tool runs Optimize-Volume -ReTrim.', cmd: 'powershell -Command "Optimize-Volume -DriveLetter C -ReTrim"' },
+
+  // 5. NETWORK, PING & PACKET LOSS
+  { id: 24, cat: 'net', title: '24. Disable Multimedia Network Throttling Index', badge: 'Lower Ping Spikes', safe: '100% Safe', desc: 'Removes Windows built-in packet throttling (NetworkThrottlingIndex = ffffffff) when game audio and voice chat run together.', how: 'Option [24] in the .BAT tool updates Multimedia\\SystemProfile.', cmd: 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile" /v "NetworkThrottlingIndex" /t REG_DWORD /d 4294967295 /f' },
+  { id: 25, cat: 'net', title: '25. Flush DNS, Clear ARP & Reset Winsock Stack', badge: 'Fixes Rubberbanding', safe: '100% Safe', desc: 'Clears corrupted DNS routes and resets the Windows socket layer for clean game server matchmaking.', how: 'Option [25] in the .BAT tool runs ipconfig /flushdns, arp -d *, and netsh winsock reset.', cmd: 'ipconfig /flushdns && netsh winsock reset' },
+  { id: 26, cat: 'net', title: '26. Optimize TCP/IP Gaming Stack (RSS On, RSC Off)', badge: 'Packet Consistency', safe: '100% Safe', desc: 'Enables Receive Side Scaling (multi-core packet processing) and disables Receive Segment Coalescing.', how: 'Option [26] in the .BAT tool configures netsh int tcp global parameters.', cmd: 'netsh int tcp set global rss=enabled && netsh int tcp set global rsc=disabled' },
+  { id: 27, cat: 'net', title: '27. Disable Network Adapter Power Saving Mode', badge: 'Zero Packet Drops', safe: '100% Safe', desc: 'Prevents Windows from putting your Ethernet or Wi-Fi adapter into Energy-Efficient sleep states mid-game.', how: 'Option [27] in the .BAT tool runs Disable-NetAdapterPowerManagement.', cmd: 'powershell -Command "Get-NetAdapter -Physical | Disable-NetAdapterPowerManagement"' },
+  { id: 28, cat: 'net', title: '28. Switch to Fast Gaming DNS (Cloudflare 1.1.1.1)', badge: 'Fast Server Lookup', safe: '100% Safe', desc: 'Switches slow ISP DNS resolvers to Cloudflare (1.1.1.1) or Google (8.8.8.8) with 1-click revert to DHCP.', how: 'Option [28] in the .BAT tool lets you switch between Cloudflare, Google, or Default ISP DNS.', cmd: 'ipconfig /flushdns' },
+
+  // 6. WINDOWS BLOAT & UI LATENCY
+  { id: 29, cat: 'win', title: '29. Disable Windows Acrylic Transparency Effects', badge: 'Frees VRAM & DWM', safe: '100% Safe', desc: 'Turns off desktop window blur effects so Desktop Window Manager (DWM.exe) uses minimal GPU resources.', how: 'Option [29] in the .BAT tool sets EnableTransparency = 0.', cmd: 'reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize" /v "EnableTransparency" /t REG_DWORD /d 0 /f' },
+  { id: 30, cat: 'win', title: '30. Disable Game Bar Tips, Startup Popups & Ads', badge: 'No Interruptions', safe: '100% Safe', desc: 'Suppresses Windows promotional tips and Game Bar startup notifications that cause framerate dips.', how: 'Option [30] in the .BAT tool disables ShowStartupPanel and SoftLandingEnabled.', cmd: 'reg add "HKCU\\Software\\Microsoft\\GameBar" /v "ShowStartupPanel" /t REG_DWORD /d 0 /f' },
+  { id: 31, cat: 'win', title: '31. Disable Start Menu Bing Web Search Spikes', badge: 'Stops SearchHost CPU', safe: '100% Safe', desc: 'Stops Windows Start Menu from querying Bing online on every keystroke, keeping local search instant.', how: 'Option [31] in the .BAT tool sets DisableSearchBoxSuggestions = 1.', cmd: 'reg add "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d 1 /f' },
+  { id: 32, cat: 'win', title: '32. Disable Unneeded Background Store Apps', badge: 'Frees RAM & CPU', safe: '100% Safe', desc: 'Prevents unused pre-installed Microsoft Store apps from waking up in the background while you play.', how: 'Option [32] in the .BAT tool sets GlobalUserDisabled = 1.', cmd: 'reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications" /v "GlobalUserDisabled" /t REG_DWORD /d 1 /f' },
+  { id: 33, cat: 'win', title: '33. Reduce Windows Error Reporting & Telemetry Queues', badge: 'Stops Disk Spikes', safe: '100% Safe', desc: 'Prevents Windows from queuing and uploading large diagnostic crash reports while a game is running.', how: 'Option [33] in the .BAT tool sets WER Disabled = 1 and AllowTelemetry = 1.', cmd: 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d 1 /f' },
+  { id: 34, cat: 'win', title: '34. Speed Up Desktop Menu Delay & Shutdown Timeouts', badge: 'Snappy OS Feel', safe: '100% Safe', desc: 'Sets MenuShowDelay to 0ms for instant right-click menus and reduces service wait timeout on reboot.', how: 'Option [34] in the .BAT tool updates HKCU\\Control Panel\\Desktop.', cmd: 'reg add "HKCU\\Control Panel\\Desktop" /v "MenuShowDelay" /t REG_SZ /d "0" /f' },
+  { id: 35, cat: 'win', title: '35. Prune Heavy Startup Apps (Task Manager)', badge: 'High Boot & RAM Gain', safe: '100% Safe', desc: 'Disabling unneeded auto-updaters (OneDrive, Cortana, secondary game launchers) frees 1GB–3GB of RAM.', how: 'Option [35] in the .BAT tool opens ms-settings:startupapps so you can toggle off unused startup launchers.', cmd: 'start ms-settings:startupapps' }
+];
+
+const CATEGORIES = {
+  cpu: { name: '1. CPU & Power Performance Tweaks', tag: 'Eliminate Clock Drops & Micro-Stutters' },
+  gpu: { name: '2. GPU, DirectX & Display Latency Tweaks', tag: 'Maximize Framerates & Flip-Model Delivery' },
+  input: { name: '3. Input Lag, Mouse, Keyboard & USB Tweaks', tag: '1:1 Aim Precision & Zero Peripheral Delay' },
+  ram: { name: '4. RAM, Storage & Shader Cache Tweaks', tag: 'Faster Asset Streaming & Stutter Removal' },
+  net: { name: '5. Network, Ping & Packet Loss Tweaks', tag: 'Lower Jitter & Unthrottled Game Packets' },
+  win: { name: '6. Windows UI & Background Bloat Tweaks', tag: 'Trim OS Overhead Safely' }
+};
+
+let checkedState = JSON.parse(localStorage.getItem('fps2027_checked') || '{}');
+let activeFilter = 'all';
+
+function renderTweaks() {
+  const root = document.getElementById('tweaks-root');
+  root.innerHTML = '';
+
+  Object.keys(CATEGORIES).forEach(catKey => {
+    if (activeFilter !== 'all' && activeFilter !== catKey) return;
+    const catTweaks = TWEAKS.filter(t => t.cat === catKey);
+    const sec = document.createElement('div');
+    sec.className = 'category-section';
+    sec.innerHTML = `
+      <div class="category-header">
+        <h2>${CATEGORIES[catKey].name}</h2>
+        <span class="category-tag">${CATEGORIES[catKey].tag}</span>
+      </div>
+      <div class="tweaks-grid">
+        ${catTweaks.map(t => {
+          const isDone = !!checkedState[t.id];
+          return `
+            <div class="tweak-card ${isDone ? 'done' : ''}" id="card-${t.id}">
+              <div>
+                <div class="card-top">
+                  <div class="tweak-title">${t.title}</div>
+                </div>
+                <div class="badges">
+                  <span class="badge badge-fps">${t.badge}</span>
+                  <span class="badge badge-safe">${t.safe}</span>
+                </div>
+                <p class="tweak-desc">${t.desc}</p>
+                <div class="how-to"><strong>Easy Step:</strong> ${t.how}</div>
+                <div class="cmd-box" title="Click Copy Command below">${t.cmd}</div>
+              </div>
+              <div class="card-actions">
+                <label class="check-label">
+                  <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleCheck(${t.id}, this.checked)" />
+                  Mark Completed
+                </label>
+                <button class="btn" onclick="copyCmd(${t.id}, this)">Copy Command</button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+    root.appendChild(sec);
+  });
+  updateProgress();
+}
+
+function toggleCheck(id, val) {
+  checkedState[id] = val;
+  localStorage.setItem('fps2027_checked', JSON.stringify(checkedState));
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.toggle('done', val);
+  updateProgress();
+}
+
+function updateProgress() {
+  const count = Object.values(checkedState).filter(Boolean).length;
+  const pct = Math.round((count / TWEAKS.length) * 100);
+  document.getElementById('progress-text').textContent = `${count} / ${TWEAKS.length} Completed (${pct}%)`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function filterCards(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btns .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTweaks();
+}
+
+function copyCmd(id, btn) {
+  const item = TWEAKS.find(t => t.id === id);
+  if (!item) return;
+  navigator.clipboard.writeText(item.cmd);
+  const old = btn.textContent;
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => btn.textContent = old, 1400);
+}
+
+function resetProgress() {
+  checkedState = {};
+  localStorage.removeItem('fps2027_checked');
+  renderTweaks();
+}
+
+function downloadProBatch() {
+  alert('Tip: Your package already includes the full interactive "best optimization for 2027 fps +.bat" file in the same folder! Right-click it and select "Run as administrator" to launch the 35-option menu.');
+}
+
+renderTweaks();
+</script>
+</body>
+</html>

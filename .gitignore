@@ -1,0 +1,9 @@
+node_modules/
+*.log
+chunk_*.txt
+part_*.b64
+b64_*.txt
+*.bin
+full_bundle.b64
+cloudflared.exe
+
