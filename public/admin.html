@@ -273,8 +273,12 @@
             <input type="text" id="set-paymentPhone" class="input-field" value="01020670418" required />
           </div>
           <div>
-            <label>💰 السعر بالجنيه المصري:</label>
-            <input type="number" id="set-priceEgp" class="input-field" value="100" required />
+            <label>💰 السعر الأساسي بالجنيه المصري:</label>
+            <input type="number" id="set-priceEgp" class="input-field" value="99" required />
+          </div>
+          <div>
+            <label>🎟️ أكواد الخصم الترويجية الفعّالة (مثال: TWEAK85:85, VIP:85):</label>
+            <input type="text" id="set-promoCodes" class="input-field" placeholder="مثال: TWEAK85:85" />
           </div>
           <div>
             <label>🔗 رابط إنستاباي المباشر (اختياري ipn.eg):</label>
@@ -420,9 +424,10 @@ function renderOrders(orders) {
             <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة:</strong> ${methodLabel} — <strong>${o.amountEgp} ج.م</strong></div>
             ${
               o.discountCode
-                ? `<div style="font-size:0.92rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px;">
-                    🎟️ <strong>كود الخصم (صانع المحتوى):</strong>
+                ? `<div style="font-size:0.92rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    🎟️ <strong>كود الخصم:</strong>
                     <span style="font-family:monospace; font-weight:800; color:#fff; font-size:1rem; letter-spacing:0.5px;">${escapeHtml(o.discountCode)}</span>
+                    ${(o.isDiscountApplied || Number(o.amountEgp) === 85) ? '<span style="background:#f59e0b; color:#181100; font-weight:800; font-size:0.75rem; padding:2px 7px; border-radius:4px;">🔥 خصم 85 ج.م مُطبّق</span>' : '<span style="background:rgba(0,240,255,0.15); color:var(--cyan); font-weight:700; font-size:0.74rem; padding:2px 7px; border-radius:4px;">صانع محتوى (99 ج.م)</span>'}
                    </div>`
                 : ''
             }
@@ -465,7 +470,13 @@ function populateSettings(s) {
   document.getElementById('set-videoUrl').value = s.videoUrl || '';
   document.getElementById('set-videoNotes').value = s.videoNotes || '';
   document.getElementById('set-paymentPhone').value = s.paymentPhone || '01020670418';
-  document.getElementById('set-priceEgp').value = s.priceEgp || 100;
+  document.getElementById('set-priceEgp').value = s.priceEgp || 99;
+  if (s.activePromoCodes && typeof s.activePromoCodes === 'object') {
+    const pairs = Object.entries(s.activePromoCodes).map(([k, v]) => `${k}:${v}`);
+    document.getElementById('set-promoCodes').value = pairs.join(', ');
+  } else {
+    document.getElementById('set-promoCodes').value = 'TWEAK85:85';
+  }
   document.getElementById('set-instapayLink').value = s.instapayLink || '';
   document.getElementById('set-adminPin').value = s.adminPin || '2027';
   document.getElementById('set-telegramBotToken').value = s.telegramBotToken || '';
@@ -475,12 +486,26 @@ function populateSettings(s) {
 async function saveStoreSettings(e) {
   e.preventDefault();
   const newPin = document.getElementById('set-adminPin').value.trim();
+  const promoStr = (document.getElementById('set-promoCodes').value || '').trim();
+  const activePromoCodes = {};
+  if (promoStr) {
+    promoStr.split(',').forEach((p) => {
+      const parts = p.split(':');
+      if (parts[0] && parts[0].trim()) {
+        const k = parts[0].trim().toUpperCase();
+        const v = parts[1] ? Number(parts[1].trim()) || 85 : 85;
+        activePromoCodes[k] = v;
+      }
+    });
+  }
+
   const payload = {
     videoUrl: document.getElementById('set-videoUrl').value.trim(),
     videoNotes: document.getElementById('set-videoNotes').value.trim(),
     paymentPhone: document.getElementById('set-paymentPhone').value.trim(),
     instapayAddress: document.getElementById('set-paymentPhone').value.trim(),
-    priceEgp: Number(document.getElementById('set-priceEgp').value) || 100,
+    priceEgp: Number(document.getElementById('set-priceEgp').value) || 99,
+    activePromoCodes,
     instapayLink: document.getElementById('set-instapayLink').value.trim(),
     adminPin: newPin,
     telegramBotToken: document.getElementById('set-telegramBotToken').value.trim(),

@@ -302,7 +302,8 @@ function sendWebhookNotifications(order, settings, hostUrl) {
               { name: '👤 العميل', value: order.customerName || 'غير محدد', inline: true },
               { name: '📱 رقم المحول / التواصل', value: order.senderPhone || 'غير محدد', inline: true },
               { name: '💳 طريقة الدفع', value: order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)', inline: true },
-              ...(order.discountCode ? [{ name: '🎟️ كود الخصم (صانع المحتوى)', value: order.discountCode, inline: true }] : []),
+              { name: '💰 المبلغ المطلوب', value: `${order.amountEgp} ج.م`, inline: true },
+              ...(order.discountCode ? [{ name: '🎟️ كود الخصم (صانع المحتوى)', value: `${order.discountCode}${order.isDiscountApplied ? ' (خصم 85 ج.م مُطبّق 🎉)' : ''}`, inline: true }] : []),
               { name: '⚡ رابط القبول الفوري (1-Click Accept)', value: `${hostUrl}/api/quick-action?id=${order.id}&action=approve&pin=${encodeURIComponent(settings.adminPin)}` },
               { name: '🖥️ لوحة التحكم', value: `${hostUrl}/admin` }
             ],
@@ -332,7 +333,7 @@ function sendWebhookNotifications(order, settings, hostUrl) {
         `🆔 *رقم الطلب:* \`${order.id}\`\n` +
         `👤 *الاسم:* ${order.customerName}\n` +
         `📱 *رقم الموبايل:* \`${order.senderPhone}\`\n` +
-        (order.discountCode ? `🎟️ *كود الخصم:* \`${order.discountCode}\`\n` : '') +
+        (order.discountCode ? `🎟️ *كود الخصم:* \`${order.discountCode}\`${order.isDiscountApplied ? ' (خصم 85 ج.م مفعل 🎉)' : ''}\n` : '') +
         `💳 *طريقة الدفع:* ${order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)'}\n` +
         `💰 *المبلغ:* ${order.amountEgp} جنيه مصري\n` +
         `📝 *ملاحظات:* ${order.notes || 'لا يوجد'}\n\n` +
@@ -412,7 +413,10 @@ async function handleRequest(req, res) {
       return sendJson(res, 200, {
         brandName: s.brandName,
         productTitle: s.productTitle,
-        priceEgp: s.priceEgp,
+        priceEgp: s.priceEgp || 99,
+        originalPriceEgp: s.originalPriceEgp || 350,
+        discountedPriceEgp: s.discountedPriceEgp || 85,
+        activePromoCodes: s.activePromoCodes || {},
         paymentPhone: s.paymentPhone,
         instapayAddress: s.instapayAddress,
         instapayLink: s.instapayLink,
@@ -438,14 +442,25 @@ async function handleRequest(req, res) {
       const accessToken = crypto.randomBytes(16).toString('hex');
       const settings = loadSettings();
 
+      // Check if discount code matches active authorized promo code
+      const codeKey = String(discountCode || '').trim().toUpperCase();
+      let finalAmount = Number(settings.priceEgp || 99);
+      let isDiscountApplied = false;
+
+      if (settings.activePromoCodes && typeof settings.activePromoCodes === 'object' && settings.activePromoCodes[codeKey]) {
+        finalAmount = Number(settings.activePromoCodes[codeKey]);
+        isDiscountApplied = true;
+      }
+
       const newOrder = {
         id: orderId,
         accessToken,
         customerName: String(customerName).trim().slice(0, 80),
         senderPhone: String(senderPhone).trim().slice(0, 40),
         discountCode: String(discountCode || '').trim().slice(0, 60),
+        isDiscountApplied,
         paymentMethod: paymentMethod === 'vodafone' ? 'vodafone' : 'instapay',
-        amountEgp: settings.priceEgp,
+        amountEgp: finalAmount,
         notes: String(notes || '').trim().slice(0, 300),
         screenshotUrl: screenshotDataUrl, // Stored inline as Data URL so it works 100% across serverless & local!
         status: 'pending',
@@ -477,11 +492,11 @@ async function handleRequest(req, res) {
           deliveryMinutes: settings.deliveryMinutes,
           quickApproveWhatsappText:
             `مرحباً Tweak Lab ⚡\n` +
-            `قمت بدفع ${settings.priceEgp} ج.م عبر (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
+            `قمت بدفع ${newOrder.amountEgp} ج.م عبر (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
             `رقم الطلب: ${newOrder.id}\n` +
             `الاسم: ${newOrder.customerName}\n` +
             `الرقم المحول منه: ${newOrder.senderPhone}\n` +
-            (newOrder.discountCode ? `كود الخصم: ${newOrder.discountCode}\n` : '') +
+            (newOrder.discountCode ? `كود الخصم: ${newOrder.discountCode}${newOrder.isDiscountApplied ? ' (خصم 85 ج.م مفعل 🎉)' : ''}\n` : '') +
             `برجاء قبول الطلب لتفعيل التحميل!`
         }
       });

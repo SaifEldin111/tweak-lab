@@ -193,6 +193,44 @@
       font-size: 0.95rem;
       margin-left: 8px;
     }
+    /* Shiny Luxury Gold Badge */
+    .gold-shimmer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #ffe066 0%, #f59e0b 25%, #ffd700 50%, #d97706 75%, #fff3a8 100%);
+      background-size: 250% 100%;
+      animation: goldShimmerSweep 3s infinite linear;
+      color: #1a1200;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 4px 11px;
+      border-radius: 999px;
+      box-shadow: 0 0 14px rgba(255, 200, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 235, 130, 0.85);
+      letter-spacing: 0.2px;
+      vertical-align: middle;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    @keyframes goldShimmerSweep {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .gold-sparkle {
+      display: inline-block;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.9), 0 0 10px #f59e0b;
+      animation: goldPulse 1.5s infinite alternate ease-in-out;
+    }
+    @keyframes goldPulse {
+      0% { transform: scale(0.9) rotate(0deg); opacity: 0.85; }
+      100% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+    }
+    .promo-glow-active {
+      border-color: var(--green) !important;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.35) !important;
+    }
     .delivery-guarantee {
       background: rgba(255, 184, 0, 0.12);
       border: 1px solid rgba(255, 184, 0, 0.45);
@@ -959,9 +997,12 @@
         <div class="price-banner">
           <div>
             <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">السعر الحصري للحزمة الكاملة</div>
-            <div>
-              <span class="price-num" id="display-price">100 ج.م</span>
-              <span class="price-old">350 ج.م</span>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:4px;">
+              <span class="price-num" id="display-price">99 ج.م</span>
+              <span class="price-old" id="display-price-old">350 ج.م</span>
+              <span class="gold-shimmer-badge" id="gold-shimmer-badge">
+                <span class="gold-sparkle">✦</span> وفر 251 ج.م (خصم 72%) <span class="gold-sparkle">✦</span>
+              </span>
             </div>
           </div>
           <div style="text-align:left;">
@@ -973,7 +1014,7 @@
           <span style="font-size:1.5rem;">⏱️</span>
           <div>
             <strong>ضمان الاستلام خلال 5 دقائق بالضبط!</strong><br />
-            بمجرد تحويل <strong>100 جنيه</strong> إلى الرقم <strong>01020670418</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!
+            بمجرد تحويل <strong id="guarantee-price-text">99 جنيه</strong> إلى الرقم <strong>01020670418</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!
           </div>
         </div>
 
@@ -1024,10 +1065,10 @@
         <div id="checkout-view">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
             <h2 style="font-size:1.35rem; color:#fff;">💳 خطوات الدفع والاستلام الفوري</h2>
-            <span class="badge badge-fps">100 EGP</span>
+            <span class="badge badge-fps" id="checkout-badge-price">99 EGP</span>
           </div>
           <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">
-            اختر وسيلة الدفع المناسبة لك في مصر، حوّل <strong>100 جنيه مصري</strong> للرقم الموضح، ثم ارفع سكرين شوت الإيصال بالأسفل:
+            اختر وسيلة الدفع المناسبة لك في مصر، حوّل <strong id="checkout-text-price">99 جنيه مصري</strong> للرقم الموضح، ثم ارفع سكرين شوت الإيصال بالأسفل:
           </p>
 
           <!-- PAYMENT TABS -->
@@ -1048,7 +1089,7 @@
           <div id="box-instapay" class="pay-box">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <strong style="color:#d8b4fe;">🟣 التحويل عبر تطبيق InstaPay (إنستاباي)</strong>
-              <span class="badge badge-safe">100 جنيه مصري</span>
+              <span class="badge badge-safe" id="instapay-amount-badge">99 جنيه مصري</span>
             </div>
             <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;">
               1. افتح تطبيق <strong>InstaPay</strong> واختر <strong>إرسال نقود (Send Money)</strong>.<br />
@@ -1059,7 +1100,7 @@
               <button type="button" class="btn" onclick="copyText('01020670418', this)">📋 نسخ الرقم</button>
             </div>
             <p style="font-size:0.85rem; color:var(--text-muted);">
-              3. اكتب المبلغ <strong>100 ج.م</strong> وأكمل التحويل ثم خذ <strong>Screenshot (لقطة شاشة)</strong> لإيصال التحويل.
+              3. اكتب المبلغ <strong id="instapay-amount-step">99 ج.م</strong> وأكمل التحويل ثم خذ <strong>Screenshot (لقطة شاشة)</strong> لإيصال التحويل.
             </p>
             <a id="instapay-direct-btn" href="https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW" target="_blank" class="btn btn-instapay">
               ⚡ اضغط هنا لفتح رابط الدفع المباشر على InstaPay (saifelmasry2729)
@@ -1070,10 +1111,10 @@
           <div id="box-vodafone" class="pay-box" style="display:none;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <strong style="color:#ff6b6b;">🔴 التحويل عبر Vodafone Cash (فودافون كاش)</strong>
-              <span class="badge badge-safe">100 جنيه مصري</span>
+              <span class="badge badge-safe" id="vodafone-amount-badge">99 جنيه مصري</span>
             </div>
             <p style="font-size:0.87rem; color:var(--text-muted); margin-top:6px;">
-              حوّل <strong>100 جنيه مصري</strong> إلى رقم محفظة فودافون كاش التالي:
+              حوّل <strong id="vodafone-amount-text">99 جنيه مصري</strong> إلى رقم محفظة فودافون كاش التالي:
             </p>
             <div class="number-display">
               <span class="phone-digits" id="vodafone-num">01020670418</span>
@@ -1081,11 +1122,11 @@
             </div>
             <div style="background:rgba(230,0,0,0.1); border:1px solid rgba(230,0,0,0.35); border-radius:9px; padding:10px 12px; font-size:0.84rem; margin-bottom:8px;">
               💡 <strong>كود التحويل السريع من موبايلك:</strong>
-              <code style="direction:ltr; display:inline-block; color:#fff; font-weight:bold; margin:0 6px;">*9*7*01020670418*100#</code>
-              <button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="copyText('*9*7*01020670418*100#', this)">نسخ الكود</button>
+              <code id="vodafone-ussd-code" style="direction:ltr; display:inline-block; color:#fff; font-weight:bold; margin:0 6px;">*9*7*01020670418*99#</code>
+              <button type="button" id="vodafone-ussd-copy-btn" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="copyVodafoneCode(this)">نسخ الكود</button>
             </div>
-            <a href="tel:*9*7*01020670418*100%23" class="btn btn-vodafone">
-              📞 اضغط هنا للتحويل المباشر من الموبايل (*9*7*01020670418*100#)
+            <a id="vodafone-direct-dial" href="tel:*9*7*01020670418*99%23" class="btn btn-vodafone">
+              📞 اضغط هنا للتحويل المباشر من الموبايل (*9*7*01020670418*99#)
             </a>
           </div>
 
@@ -1104,12 +1145,13 @@
             <div class="form-group">
               <label style="display:flex; justify-content:space-between; align-items:center;">
                 <span>🎟️ كود الخصم (لو معاك كود من صانع محتوى):</span>
-                <span style="font-size:0.75rem; color:var(--green); font-weight:700; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); padding:2px 8px; border-radius:6px;">اختياري ✨</span>
+                <span id="discount-badge-status" style="font-size:0.75rem; color:var(--green); font-weight:700; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); padding:2px 8px; border-radius:6px;">اختياري ✨</span>
               </label>
               <div style="position:relative;">
-                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="مثال: CREATOR10 أو كود التخفيض..." autocomplete="off" />
+                <input type="text" id="cust-discount" class="input-field input-discount" placeholder="اكتب كود الخصم هنا (مثال: TWEAK85)..." autocomplete="off" oninput="handleDiscountCodeInput(this.value)" />
                 <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:1.15rem; pointer-events:none; opacity:0.85;">🏷️</span>
               </div>
+              <div id="promo-feedback-box" style="display:none; margin-top:8px; border-radius:8px; padding:10px 12px; font-size:0.84rem; line-height:1.45;"></div>
             </div>
 
             <div class="form-group">
@@ -1129,7 +1171,7 @@
             </div>
 
             <button type="submit" id="submit-btn" class="btn btn-primary">
-              🚀 تأكيد الدفع وإرسال الـ Screenshot للاستلام خلال 5 دقائق
+              🚀 تأكيد دفع <span id="submit-btn-price">99</span> ج.م وإرسال الـ Screenshot للاستلام خلال 5 دقائق
             </button>
           </form>
         </div>
@@ -1266,24 +1308,166 @@ let screenshotDataUrl = '';
 let currentOrder = null;
 let pollTimer = null;
 let countdownInterval = null;
+let activeChargedPrice = 99;
 let storeConfig = {
   paymentPhone: '01020670418',
-  priceEgp: 100,
+  priceEgp: 99,
+  originalPriceEgp: 350,
+  discountedPriceEgp: 85,
+  activePromoCodes: {
+    "TWEAK85": 85
+  },
   deliveryMinutes: 5
 };
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function updatePriceUi(price, isDiscount, code) {
+  activeChargedPrice = Number(price) || 99;
+  const phone = storeConfig.paymentPhone || '01020670418';
+
+  // 1. Header price banner
+  const displayPriceEl = document.getElementById('display-price');
+  if (displayPriceEl) displayPriceEl.textContent = activeChargedPrice + ' ج.م';
+
+  // 2. Checkout view badges & text
+  const checkoutBadge = document.getElementById('checkout-badge-price');
+  if (checkoutBadge) checkoutBadge.textContent = activeChargedPrice + ' EGP';
+
+  const checkoutText = document.getElementById('checkout-text-price');
+  if (checkoutText) checkoutText.textContent = activeChargedPrice + ' جنيه مصري';
+
+  // 3. InstaPay
+  const instaBadge = document.getElementById('instapay-amount-badge');
+  if (instaBadge) instaBadge.textContent = activeChargedPrice + ' جنيه مصري';
+  const instaStep = document.getElementById('instapay-amount-step');
+  if (instaStep) instaStep.textContent = activeChargedPrice + ' ج.م';
+
+  // 4. Vodafone Cash
+  const vodaBadge = document.getElementById('vodafone-amount-badge');
+  if (vodaBadge) vodaBadge.textContent = activeChargedPrice + ' جنيه مصري';
+  const vodaText = document.getElementById('vodafone-amount-text');
+  if (vodaText) vodaText.textContent = activeChargedPrice + ' جنيه مصري';
+
+  // 5. Vodafone USSD
+  const ussdCode = `*9*7*${phone}*${activeChargedPrice}#`;
+  const ussdEl = document.getElementById('vodafone-ussd-code');
+  if (ussdEl) ussdEl.textContent = ussdCode;
+
+  const dialBtn = document.getElementById('vodafone-direct-dial');
+  if (dialBtn) {
+    dialBtn.href = `tel:*9*7*${phone}*${activeChargedPrice}%23`;
+    dialBtn.textContent = `📞 اضغط هنا للتحويل المباشر من الموبايل (${ussdCode})`;
+  }
+
+  // 6. Guarantee text
+  const guaranteeEl = document.getElementById('guarantee-price-text');
+  if (guaranteeEl) guaranteeEl.textContent = activeChargedPrice + ' جنيه';
+
+  // 7. Submit button
+  const submitPriceEl = document.getElementById('submit-btn-price');
+  if (submitPriceEl) submitPriceEl.textContent = activeChargedPrice;
+}
+
+function copyVodafoneCode(btn) {
+  const phone = storeConfig.paymentPhone || '01020670418';
+  const code = `*9*7*${phone}*${activeChargedPrice}#`;
+  copyText(code, btn);
+}
+
+function handleDiscountCodeInput(rawVal) {
+  const val = (rawVal || '').trim();
+  const upper = val.toUpperCase();
+  const inputEl = document.getElementById('cust-discount');
+  const badgeStatus = document.getElementById('discount-badge-status');
+  const feedbackBox = document.getElementById('promo-feedback-box');
+  const activePromoCodes = storeConfig.activePromoCodes || { "TWEAK85": 85 };
+  const basePrice = Number(storeConfig.priceEgp || 99);
+
+  if (!val) {
+    if (inputEl) inputEl.classList.remove('promo-glow-active');
+    if (badgeStatus) {
+      badgeStatus.textContent = 'اختياري ✨';
+      badgeStatus.style.background = 'rgba(0,255,136,0.12)';
+      badgeStatus.style.borderColor = 'rgba(0,255,136,0.35)';
+      badgeStatus.style.color = 'var(--green)';
+    }
+    if (feedbackBox) {
+      feedbackBox.style.display = 'none';
+      feedbackBox.innerHTML = '';
+    }
+    updatePriceUi(basePrice, false, '');
+    return;
+  }
+
+  // Check if promo code is in activePromoCodes
+  if (activePromoCodes && activePromoCodes[upper]) {
+    const discountedPrice = Number(activePromoCodes[upper]);
+    const saving = basePrice - discountedPrice;
+    if (inputEl) inputEl.classList.add('promo-glow-active');
+    if (badgeStatus) {
+      badgeStatus.textContent = 'خصم مفعل 🔥';
+      badgeStatus.style.background = 'rgba(255,184,0,0.2)';
+      badgeStatus.style.borderColor = 'var(--amber)';
+      badgeStatus.style.color = '#ffe066';
+    }
+    if (feedbackBox) {
+      feedbackBox.style.display = 'block';
+      feedbackBox.innerHTML = `
+        <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
+          <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
+            <span>🎉 تم تطبيق كود الخصم (${escapeHtml(upper)}) بنجاح!</span>
+          </div>
+          <div style="margin-top:4px; font-size:0.87rem;">
+            السعر أصبح الآن <strong>${discountedPrice} ج.م فقط</strong> بدلاً من <del style="opacity:0.75;">${basePrice} ج.م</del> (وفرت <strong>${saving} ج.م</strong> إضافية!)
+          </div>
+        </div>
+      `;
+    }
+    updatePriceUi(discountedPrice, true, upper);
+  } else {
+    // Affiliate / Creator tracking code
+    if (inputEl) inputEl.classList.remove('promo-glow-active');
+    if (badgeStatus) {
+      badgeStatus.textContent = 'كود صانع محتوى 👤';
+      badgeStatus.style.background = 'rgba(0,240,255,0.12)';
+      badgeStatus.style.borderColor = 'rgba(0,240,255,0.35)';
+      badgeStatus.style.color = 'var(--cyan)';
+    }
+    if (feedbackBox) {
+      feedbackBox.style.display = 'block';
+      feedbackBox.innerHTML = `
+        <div style="background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); border-radius:8px; padding:8px 12px; color:#cbebf5; font-size:0.83rem;">
+          🏷️ <strong>كود (${escapeHtml(upper)}) مسجل:</strong> سيتم احتساب طلبك لصالح صانع المحتوى. (السعر الحالي: <strong>${basePrice} ج.م</strong>).
+        </div>
+      `;
+    }
+    updatePriceUi(basePrice, false, upper);
+  }
+}
 
 async function initStore() {
   try {
     const res = await fetch('/api/config');
     if (res.ok) {
       storeConfig = await res.json();
-      document.getElementById('display-price').textContent = storeConfig.priceEgp + ' ج.م';
+      updatePriceUi(storeConfig.priceEgp || 99, false, '');
       document.getElementById('instapay-num').textContent = storeConfig.instapayAddress || storeConfig.paymentPhone;
       document.getElementById('vodafone-num').textContent = storeConfig.paymentPhone;
       if (storeConfig.instapayLink) {
         const btn = document.getElementById('instapay-direct-btn');
         btn.href = storeConfig.instapayLink;
         btn.style.display = 'inline-flex';
+      }
+      const discInput = document.getElementById('cust-discount');
+      if (discInput && discInput.value) {
+        handleDiscountCodeInput(discInput.value);
       }
     }
   } catch (e) {}
@@ -1440,7 +1624,7 @@ function showWaitingRoom() {
   const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
   const waMsg = encodeURIComponent(
     currentOrder.whatsappText ||
-      `مرحباً Tweak Lab، قمت بتحويل 100 ج.م ورفع السكرين شوت على الموقع. رقم طلبي: ${currentOrder.id}`
+      `مرحباً Tweak Lab، قمت بتحويل ${activeChargedPrice || 99} ج.م ورفع السكرين شوت على الموقع. رقم طلبي: ${currentOrder.id}`
   );
   document.getElementById('whatsapp-ping-btn').href = `https://wa.me/${waPhone}?text=${waMsg}`;
 
@@ -1571,7 +1755,7 @@ function handleQuickQuestion(type) {
       appendChatMessage('bot', `
         <strong>خطوات الدفع والاستلام الفوري:</strong><br><br>
         1️⃣ اختر وسيلة الدفع من صفحة الموقع (<strong>InstaPay</strong> أو <strong>Vodafone Cash</strong>).<br>
-        2️⃣ حوّل <strong>100 جنيه</strong> إلى الرقم: <code style="color:var(--green); font-weight:bold;">01020670418</code> أو عبر رابط إنستاباي المباشر.<br>
+        2️⃣ حوّل <strong>99 جنيه فقط</strong> (أو <strong>85 جنيه</strong> بكود الخصم) إلى الرقم: <code style="color:var(--green); font-weight:bold;">01020670418</code> أو عبر رابط إنستاباي المباشر.<br>
         3️⃣ ارفع صورة إيصال التحويل (Screenshot) واضغط <strong>تأكيد الدفع</strong>.<br>
         4️⃣ بمجرد مراجعة التحويل (خلال 5 دقائق)، يفتح لك التحميل الفوري للملفات وفيديو الشرح في نفس الصفحة! 🚀
       `);
