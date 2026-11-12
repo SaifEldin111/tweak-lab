@@ -59,7 +59,12 @@ const SEED_ORDERS_FILE = path.join(ROOT_DIR, 'seed_orders.json');
 const DEFAULT_SETTINGS = {
   brandName: 'TWEAK LAB',
   productTitle: 'BEST OPTIMIZATION FOR 2027 FPS+',
-  priceEgp: 100,
+  priceEgp: 99,
+  originalPriceEgp: 350,
+  discountedPriceEgp: 85,
+  activePromoCodes: {
+    'TWEAK85': 85
+  },
   paymentPhone: '01020670418',
   instapayAddress: '01020670418',
   instapayLink: 'https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW',

@@ -370,7 +370,7 @@ async function fetchAdminData() {
 function renderOrders(orders) {
   const pending = orders.filter((o) => o.status === 'pending');
   const approved = orders.filter((o) => o.status === 'approved');
-  const revenue = approved.reduce((sum, o) => sum + (Number(o.amountEgp) || 100), 0);
+  const revenue = approved.reduce((sum, o) => sum + (Number(o.amountEgp) || 99), 0);
 
   document.getElementById('stat-pending').textContent = pending.length;
   document.getElementById('stat-approved').textContent = approved.length;
@@ -392,7 +392,7 @@ function renderOrders(orders) {
     playAlertChime();
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('🚨 طلب دفع جديد في TWEAK LAB!', {
-        body: 'قام عميل برفع سكرين شوت تحويل 100 ج.م وينتظر ضغطك على Accept.'
+        body: 'قام عميل برفع سكرين شوت تحويل وينتظر ضغطك على Accept.'
       });
     }
   }

@@ -193,43 +193,121 @@
       font-size: 0.95rem;
       margin-left: 8px;
     }
-    /* Shiny Luxury Gold Badge */
-    .gold-shimmer-badge {
+    /* Classy Metallic Gold Box with Light Sheen (Shiny) Sweep */
+    .gold-shiny-box {
+      position: relative;
+      overflow: hidden;
       display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, #ffe066 0%, #f59e0b 25%, #ffd700 50%, #d97706 75%, #fff3a8 100%);
-      background-size: 250% 100%;
-      animation: goldShimmerSweep 3s infinite linear;
-      color: #1a1200;
-      font-weight: 800;
-      font-size: 0.82rem;
+      justify-content: center;
       padding: 4px 11px;
-      border-radius: 999px;
-      box-shadow: 0 0 14px rgba(255, 200, 0, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 235, 130, 0.85);
-      letter-spacing: 0.2px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #ffd700 0%, #e6a817 50%, #c68c0a 100%);
+      border: 1px solid #ffe885;
+      box-shadow: 0 3px 12px rgba(230, 168, 23, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.85);
+      line-height: 1.18;
       vertical-align: middle;
+      cursor: default;
+      user-select: none;
+      min-width: 78px;
+    }
+    .gold-box-top {
+      font-size: 0.80rem;
+      font-weight: 900;
+      color: #1a1000;
+      letter-spacing: -0.2px;
       text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+      white-space: nowrap;
     }
-    @keyframes goldShimmerSweep {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .gold-box-sub {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #382100;
+      opacity: 0.92;
+      white-space: nowrap;
     }
-    .gold-sparkle {
-      display: inline-block;
-      color: #fff;
-      text-shadow: 0 0 6px rgba(255, 255, 255, 0.9), 0 0 10px #f59e0b;
-      animation: goldPulse 1.5s infinite alternate ease-in-out;
+    /* The realistic "Shiny" Light Beam Glare Sweep */
+    .gold-shiny-box::after {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -80%;
+      width: 45%;
+      height: 220%;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.85) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(25deg);
+      animation: goldShinySweep 3.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
     }
-    @keyframes goldPulse {
-      0% { transform: scale(0.9) rotate(0deg); opacity: 0.85; }
-      100% { transform: scale(1.25) rotate(15deg); opacity: 1; }
+    @keyframes goldShinySweep {
+      0% { left: -80%; }
+      30%, 100% { left: 160%; }
     }
     .promo-glow-active {
       border-color: var(--green) !important;
       box-shadow: 0 0 16px rgba(0, 255, 136, 0.35) !important;
+    }
+    /* Sleek, Compact & Beautiful Submit Order Button */
+    .btn-submit-order {
+      width: 100%;
+      padding: 11px 16px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 3px !important;
+      border-radius: 10px !important;
+      background: linear-gradient(90deg, var(--cyan), var(--green)) !important;
+      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.22) !important;
+      border: none !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-submit-order:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.35) !important;
+    }
+    .btn-submit-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.98rem;
+      font-weight: 900;
+      color: #031014;
+      line-height: 1.25;
+      flex-wrap: nowrap;
+    }
+    .btn-submit-price {
+      background: rgba(3, 16, 20, 0.12);
+      padding: 1px 7px;
+      border-radius: 6px;
+      font-weight: 900;
+    }
+    .btn-submit-sub {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: rgba(3, 16, 20, 0.85);
+      line-height: 1.2;
+    }
+    @media (max-width: 480px) {
+      .btn-submit-order {
+        padding: 10px 14px !important;
+      }
+      .btn-submit-main {
+        font-size: 0.91rem;
+        gap: 4px;
+      }
+      .btn-submit-sub {
+        font-size: 0.70rem;
+      }
     }
     .delivery-guarantee {
       background: rgba(255, 184, 0, 0.12);
@@ -997,12 +1075,13 @@
         <div class="price-banner">
           <div>
             <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">السعر الحصري للحزمة الكاملة</div>
-            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:4px;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:6px;">
               <span class="price-num" id="display-price">99 ج.م</span>
               <span class="price-old" id="display-price-old">350 ج.م</span>
-              <span class="gold-shimmer-badge" id="gold-shimmer-badge">
-                <span class="gold-sparkle">✦</span> وفر 251 ج.م (خصم 72%) <span class="gold-sparkle">✦</span>
-              </span>
+              <div class="gold-shiny-box" id="gold-shimmer-badge">
+                <span class="gold-box-top">وفر 251 ج.م</span>
+                <span class="gold-box-sub">خصم 72% 🔥</span>
+              </div>
             </div>
           </div>
           <div style="text-align:left;">
@@ -1170,8 +1249,13 @@
               <input type="text" id="cust-notes" class="input-field" placeholder="أي ملاحظة تحب تضيفها مع الطلب..." />
             </div>
 
-            <button type="submit" id="submit-btn" class="btn btn-primary">
-              🚀 تأكيد دفع <span id="submit-btn-price">99</span> ج.م وإرسال الـ Screenshot للاستلام خلال 5 دقائق
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order">
+              <span class="btn-submit-main">
+                <span>🚀 تأكيد الدفع</span>
+                <span class="btn-submit-price">(<span id="submit-btn-price">99</span> ج.م)</span>
+                <span>• إرسال الإيصال</span>
+              </span>
+              <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
             </button>
           </form>
         </div>
@@ -1259,7 +1343,7 @@
           </div>
           <h3 style="color:#fff; margin-bottom:10px;">عذراً، تم رفض إيصال الدفع لهذا الطلب</h3>
           <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:18px;">
-            يرجى التأكد من تحويل 100 ج.م إلى الرقم <strong>01020670418</strong> ورفع صورة إيصال واضحة، أو التواصل معنا عبر واتساب.
+            يرجى التأكد من تحويل المبلغ المطلوب إلى الرقم <strong>01020670418</strong> ورفع صورة إيصال واضحة، أو التواصل معنا عبر واتساب.
           </p>
           <button class="btn btn-primary" onclick="resetToNewOrder()">🔄 رفع صورة إيصال جديدة</button>
         </div>
@@ -1328,6 +1412,20 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function renderSubmitButtonText() {
+  const btn = document.getElementById('submit-btn');
+  if (btn) {
+    btn.innerHTML = `
+      <span class="btn-submit-main">
+        <span>🚀 تأكيد الدفع</span>
+        <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> ج.م)</span>
+        <span>• إرسال الإيصال</span>
+      </span>
+      <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
+    `;
+  }
+}
+
 function updatePriceUi(price, isDiscount, code) {
   activeChargedPrice = Number(price) || 99;
   const phone = storeConfig.paymentPhone || '01020670418';
@@ -1372,7 +1470,24 @@ function updatePriceUi(price, isDiscount, code) {
 
   // 7. Submit button
   const submitPriceEl = document.getElementById('submit-btn-price');
-  if (submitPriceEl) submitPriceEl.textContent = activeChargedPrice;
+  if (submitPriceEl) {
+    submitPriceEl.textContent = activeChargedPrice;
+  } else {
+    renderSubmitButtonText();
+  }
+
+  // 8. Gold Shiny Box (Stacked Compact Design)
+  const goldTop = document.querySelector('.gold-box-top');
+  const goldSub = document.querySelector('.gold-box-sub');
+  if (goldTop && goldSub) {
+    if (isDiscount) {
+      goldTop.textContent = 'وفر 265 ج.م';
+      goldSub.textContent = 'خصم 76% كود 🔥';
+    } else {
+      goldTop.textContent = 'وفر 251 ج.م';
+      goldSub.textContent = 'خصم 72% 🔥';
+    }
+  }
 }
 
 function copyVodafoneCode(btn) {
@@ -1567,7 +1682,7 @@ async function submitOrder(e) {
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.textContent = '⏳ جاري رفع السكرين شوت وإرسال الطلب...';
+  btn.innerHTML = '<span class="btn-submit-main">⏳ جاري رفع السكرين شوت وإرسال الطلب...</span>';
 
   try {
     const payload = {
@@ -1588,7 +1703,7 @@ async function submitOrder(e) {
     if (!res.ok) {
       alert(data.error || 'حدث خطأ أثناء إرسال الطلب');
       btn.disabled = false;
-      btn.textContent = '🚀 تأكيد الدفع وإرسال الـ Screenshot للاستلام خلال 5 دقائق';
+      renderSubmitButtonText();
       return;
     }
 
@@ -1607,7 +1722,7 @@ async function submitOrder(e) {
   } catch (err) {
     alert('تعذر الاتصال بالخادم، حاول مرة أخرى.');
     btn.disabled = false;
-    btn.textContent = '🚀 تأكيد الدفع وإرسال الـ Screenshot للاستلام خلال 5 دقائق';
+    renderSubmitButtonText();
   }
 }
 
