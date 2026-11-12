@@ -1303,9 +1303,26 @@
             ✅ تم تأكيد الدفع وقبول طلبك بنجاح!
           </div>
           <h2 style="font-size:1.55rem; color:var(--green); margin-bottom:6px;">مبروك! حزمة 2027 FPS+ جاهزة للتحميل الآن 🚀</h2>
-          <p style="color:var(--text-muted); font-size:0.92rem;">
+          <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;">
             رقم الطلب المعتمد: <strong id="approved-order-id" style="color:#fff;">#TL-000000</strong>
           </p>
+
+          <!-- TIME-BOMB SELF DESTRUCT BANNER -->
+          <div id="timebomb-banner" style="background:linear-gradient(135deg, rgba(255, 71, 87, 0.16), rgba(255, 184, 0, 0.12)); border:2px solid var(--red); border-radius:14px; padding:16px 18px; margin-bottom:20px; box-shadow:0 0 25px rgba(255, 71, 87, 0.28); text-align:right;">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:1.6rem; filter:drop-shadow(0 0 8px rgba(255,71,87,0.8));">💣</span>
+                <span style="color:var(--red); font-weight:900; font-size:1.05rem; letter-spacing:0.5px;">نظام الحماية: رابط التدمير الذاتي (Time-Bomb Link)</span>
+              </div>
+              <div style="background:rgba(7,10,16,0.92); border:1px solid var(--red); border-radius:999px; padding:6px 16px; display:inline-flex; align-items:center; gap:8px;">
+                <span style="color:#fff; font-size:0.82rem; font-weight:700;">متبقي على إتلاف الرابط:</span>
+                <span id="timebomb-timer" style="color:var(--red); font-size:1.3rem; font-weight:900; font-family:monospace; text-shadow:0 0 10px rgba(255,71,87,0.8);">20:00</span>
+              </div>
+            </div>
+            <div style="background:rgba(255,71,87,0.08); border-right:3px solid var(--red); padding:10px 14px; border-radius:6px; font-size:0.86rem; color:#f0f6fc; line-height:1.65;">
+              <strong style="color:var(--amber);">⚠️ تنبيه أمني مشدد:</strong> هذا الرابط مخصص لك وحدك ويبدأ عد تنازلي مدته <strong>20 دقيقة فقط</strong> من لحظة فتحه لأول مرة. بمجرد انتهاء الـ 20 دقيقة، يتم <strong>حرق وإتلاف هذا الرابط تماماً (Burned Token)</strong> ولن يعمل مجدداً على هذا الجهاز أو أي جهاز آخر، لحماية الملفات ومنع مشاركة الرابط. يُرجى تحميل ملفاتك وحفظها على جهازك فوراً.
+            </div>
+          </div>
 
           <div class="vault-box">
             <h3 style="color:var(--cyan); margin-bottom:8px;">🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)</h3>
@@ -1387,6 +1404,34 @@
           <button class="btn btn-primary" onclick="resetToNewOrder()">🔄 رفع صورة إيصال جديدة</button>
         </div>
 
+        <!-- VIEW 5: EXPIRED & BURNED TIME-BOMB VIEW -->
+        <div id="expired-view" class="status-panel" style="text-align:center;">
+          <div style="font-size:3.8rem; margin-bottom:12px; filter:drop-shadow(0 0 16px rgba(255,71,87,0.8));">💣</div>
+          <div class="badge-top" style="background:rgba(255,71,87,0.18); border-color:var(--red); color:var(--red);">
+            ⛔ انتهت صلاحية الرابط وتم إتلافه (Link Expired & Burned)
+          </div>
+          <h2 style="font-size:1.6rem; color:var(--red); margin-bottom:10px;">عفواً، انتهت مهلة الـ 20 دقيقة لهذا الرابط!</h2>
+          <div style="max-width:540px; margin:0 auto 20px; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); border-radius:12px; padding:18px; color:var(--text-main); font-size:0.92rem; line-height:1.7; text-align:right;">
+            <p style="margin-bottom:10px;">
+              تم إتلاف هذا الرابط نهائياً بنظام <strong>Time-Bomb</strong> بعد مرور 20 دقيقة من أول فتح له، وذلك لحماية ملفات حزمة <strong>Tweak Lab 2027 FPS+</strong> من النسخ أو المشاركة غير المصرح بها.
+            </p>
+            <p style="color:var(--text-muted); font-size:0.86rem; margin-bottom:0;">
+              إذا واجهت مشكلة أثناء التحميل أو انقطع اتصال الإنترنت لديك، يمكنك التواصل مباشرة مع الإدارة لتجديد مهلة الرابط بعد التحقق من طلبك:
+            </p>
+          </div>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+            رقم طلبك: <strong id="expired-order-id" style="color:#fff;">#TL-000000</strong>
+          </p>
+          <div style="display:flex; flex-direction:column; gap:10px; max-width:380px; margin:0 auto;">
+            <a id="expired-whatsapp-btn" href="#" target="_blank" class="btn" style="background:#25d366; color:#000; font-weight:800; border:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <span style="font-size:1.2rem;">💬</span> طلب إعادة تفعيل الرابط عبر واتساب
+            </a>
+            <button class="btn" onclick="resetToNewOrder()" style="font-size:0.85rem; padding:8px 14px;">
+              العودة للصفحة الرئيسية
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1431,6 +1476,7 @@ let screenshotDataUrl = '';
 let currentOrder = null;
 let pollTimer = null;
 let countdownInterval = null;
+let timeBombInterval = null;
 let activeChargedPrice = 99;
 let storeConfig = {
   paymentPhone: '01020670418',
@@ -1766,9 +1812,57 @@ async function submitOrder(e) {
 }
 
 function showView(viewId) {
-  ['checkout-view', 'waiting-view', 'approved-view', 'rejected-view'].forEach((id) => {
-    document.getElementById(id).style.display = id === viewId ? 'block' : 'none';
+  ['checkout-view', 'waiting-view', 'approved-view', 'rejected-view', 'expired-view'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = id === viewId ? 'block' : 'none';
   });
+}
+
+function showExpiredView(orderId) {
+  if (pollTimer) clearInterval(pollTimer);
+  if (countdownInterval) clearInterval(countdownInterval);
+  if (timeBombInterval) clearInterval(timeBombInterval);
+  showView('expired-view');
+
+  const oid = orderId || (currentOrder && currentOrder.id) || 'TL-000000';
+  const elOid = document.getElementById('expired-order-id');
+  if (elOid) elOid.textContent = '#' + oid;
+
+  const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+  const waMsg = encodeURIComponent(
+    `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة الـ 20 دقيقة المحددة لرابط التحميل، برجاء إعادة تفعيل الرابط.`
+  );
+  const waBtn = document.getElementById('expired-whatsapp-btn');
+  if (waBtn) waBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
+}
+
+function startTimeBombCountdown(expiresAtIso) {
+  if (timeBombInterval) clearInterval(timeBombInterval);
+  const targetMs = expiresAtIso ? new Date(expiresAtIso).getTime() : (Date.now() + 20 * 60 * 1000);
+
+  function tick() {
+    const diff = targetMs - Date.now();
+    if (diff <= 0) {
+      clearInterval(timeBombInterval);
+      const timerEl = document.getElementById('timebomb-timer');
+      if (timerEl) timerEl.textContent = '00:00';
+      showExpiredView();
+      return;
+    }
+    const remSec = Math.floor(diff / 1000);
+    const mins = String(Math.floor(remSec / 60)).padStart(2, '0');
+    const secs = String(remSec % 60).padStart(2, '0');
+    const timerEl = document.getElementById('timebomb-timer');
+    if (timerEl) {
+      timerEl.textContent = `${mins}:${secs}`;
+      if (remSec < 180) {
+        timerEl.style.color = '#ff4757';
+        timerEl.style.textShadow = '0 0 14px rgba(255,71,87,1)';
+      }
+    }
+  }
+  tick();
+  timeBombInterval = setInterval(tick, 1000);
 }
 
 function showWaitingRoom() {
@@ -1805,8 +1899,20 @@ async function checkOrderStatus() {
   try {
     const sigParam = currentOrder.sig ? `&sig=${encodeURIComponent(currentOrder.sig)}` : '';
     const res = await fetch(`/api/orders/${encodeURIComponent(currentOrder.id)}?token=${encodeURIComponent(currentOrder.accessToken)}${sigParam}`);
+
+    // If HTTP 410 Gone: Link is burned / expired
+    if (res.status === 410) {
+      showExpiredView(currentOrder.id);
+      return;
+    }
+
     if (!res.ok) return;
     const data = await res.json();
+
+    if (data.status === 'expired' || data.isBurned) {
+      showExpiredView(data.id || currentOrder.id);
+      return;
+    }
 
     if (data.status === 'pending') {
       currentOrder.createdAt = data.createdAt;
@@ -1816,6 +1922,14 @@ async function checkOrderStatus() {
       if (pollTimer) clearInterval(pollTimer);
       showView('approved-view');
       document.getElementById('approved-order-id').textContent = '#' + data.id;
+
+      // Start 20-minute Time-Bomb countdown timer
+      if (data.delivery.timeBomb && data.delivery.timeBomb.expiresAt) {
+        startTimeBombCountdown(data.delivery.timeBomb.expiresAt);
+      } else if (data.timeBomb && data.timeBomb.expiresAt) {
+        startTimeBombCountdown(data.timeBomb.expiresAt);
+      }
+
       document.getElementById('vault-video-notes').textContent = data.delivery.videoNotes || '';
       const vUrl = data.delivery.videoUrl || 'https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt';
       document.getElementById('vault-video-btn').href = vUrl;
@@ -1832,6 +1946,7 @@ async function checkOrderStatus() {
       document.getElementById('open-guide-btn').href = data.delivery.downloads.liveGuide;
     } else if (data.status === 'rejected') {
       if (countdownInterval) clearInterval(countdownInterval);
+      if (timeBombInterval) clearInterval(timeBombInterval);
       showView('rejected-view');
     }
   } catch (e) {}
@@ -1840,6 +1955,7 @@ async function checkOrderStatus() {
 function resetToNewOrder() {
   if (pollTimer) clearInterval(pollTimer);
   if (countdownInterval) clearInterval(countdownInterval);
+  if (timeBombInterval) clearInterval(timeBombInterval);
   localStorage.removeItem('tweaklab_active_order');
   currentOrder = null;
   screenshotDataUrl = '';

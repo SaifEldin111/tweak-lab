@@ -410,12 +410,13 @@ function computeOrderSignature(orderId, pin) {
     .slice(0, 12);
 }
 
-function buildDeliveryPayload(orderId, accessToken, settings) {
+function buildDeliveryPayload(orderId, accessToken, settings, timeBombInfo = null) {
   const sig = computeOrderSignature(orderId, settings.adminPin);
   return {
     videoUrl: settings.videoUrl,
     videoTitle: settings.videoTitle,
     videoNotes: settings.videoNotes,
+    timeBomb: timeBombInfo,
     downloads: {
       zip: `/api/download/${orderId}/zip?token=${accessToken}&sig=${sig}`,
       bat: `/api/download/${orderId}/bat?token=${accessToken}&sig=${sig}`,
@@ -695,15 +696,102 @@ async function handleRequest(req, res) {
 
       // Also allow stateless unlock via signature if approved via direct link
       if (sig && sig === expectedSig) {
+        let directTimeBomb = null;
+        if (order) {
+          const now = Date.now();
+          const isExpired = order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime());
+          if (isExpired) {
+            if (!order.isBurned || order.status !== 'expired') {
+              order.isBurned = true;
+              order.status = 'expired';
+              order.updatedAt = new Date().toISOString();
+              await saveOrders(orders);
+            }
+            return sendJson(res, 410, {
+              id: orderId,
+              status: 'expired',
+              isBurned: true,
+              error: 'Link Expired',
+              message: 'انتهت صلاحية هذا الرابط وتم إتلافه لحماية الملفات.'
+            });
+          }
+          if (!order.firstAccessedAt) {
+            order.firstAccessedAt = new Date(now).toISOString();
+            order.accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
+            order.isBurned = false;
+            order.updatedAt = new Date().toISOString();
+            await saveOrders(orders);
+          }
+          directTimeBomb = {
+            firstAccessedAt: order.firstAccessedAt,
+            expiresAt: order.accessExpiresAt,
+            remainingSeconds: Math.max(0, Math.floor((new Date(order.accessExpiresAt).getTime() - now) / 1000)),
+            isBurned: false
+          };
+        }
         return sendJson(res, 200, {
           id: orderId,
           status: 'approved',
-          delivery: buildDeliveryPayload(orderId, token || 'direct', settings)
+          timeBomb: directTimeBomb,
+          delivery: buildDeliveryPayload(orderId, token || 'direct', settings, directTimeBomb)
         });
       }
 
       if (!order) {
         return sendJson(res, 404, { error: 'لم يتم العثور على الطلب.' });
+      }
+
+      // Check Time-Bomb Status for approved or expired orders
+      if (order.status === 'approved' || order.status === 'expired') {
+        const now = Date.now();
+        const isExpired = order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime());
+
+        if (isExpired) {
+          if (!order.isBurned || order.status !== 'expired') {
+            order.isBurned = true;
+            order.status = 'expired';
+            order.updatedAt = new Date().toISOString();
+            await saveOrders(orders);
+          }
+          return sendJson(res, 410, {
+            id: order.id,
+            status: 'expired',
+            isBurned: true,
+            error: 'Link Expired',
+            message: 'انتهت صلاحية هذا الرابط وتم إتلافه لحماية الملفات من التسريب.'
+          });
+        }
+
+        // First time customer accesses the approved order: start the 20-minute countdown!
+        if (!order.firstAccessedAt) {
+          order.firstAccessedAt = new Date(now).toISOString();
+          order.accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
+          order.isBurned = false;
+          order.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+        }
+
+        const remainingSeconds = Math.max(0, Math.floor((new Date(order.accessExpiresAt).getTime() - now) / 1000));
+        const timeBombInfo = {
+          firstAccessedAt: order.firstAccessedAt,
+          expiresAt: order.accessExpiresAt,
+          remainingSeconds,
+          isBurned: false
+        };
+
+        const responseData = {
+          id: order.id,
+          customerName: order.customerName,
+          discountCode: order.discountCode || '',
+          paymentMethod: order.paymentMethod,
+          amountEgp: order.amountEgp,
+          status: order.status,
+          createdAt: order.createdAt,
+          updatedAt: order.updatedAt,
+          timeBomb: timeBombInfo,
+          delivery: buildDeliveryPayload(order.id, order.accessToken, settings, timeBombInfo)
+        };
+        return sendJson(res, 200, responseData);
       }
 
       const responseData = {
@@ -716,10 +804,6 @@ async function handleRequest(req, res) {
         createdAt: order.createdAt,
         updatedAt: order.updatedAt
       };
-
-      if (order.status === 'approved') {
-        responseData.delivery = buildDeliveryPayload(order.id, order.accessToken, settings);
-      }
 
       return sendJson(res, 200, responseData);
     }
@@ -740,6 +824,32 @@ async function handleRequest(req, res) {
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         return res.end('⛔ غير مسموح بالتحميل قبل تأكيد وقبول عملية الدفع من الإدارة.');
+      }
+
+      // Time-Bomb Expiration Check for Downloads
+      const now = Date.now();
+      const isBurnedOrExpired = order && (order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime()));
+      if (isBurnedOrExpired) {
+        if (!order.isBurned || order.status !== 'expired') {
+          order.isBurned = true;
+          order.status = 'expired';
+          order.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+        }
+        res.writeHead(410, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end(`
+          <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>Link Expired | TWEAK LAB</title>
+          <style>body{background:#070a10;color:#fff;font-family:system-ui,sans-serif;text-align:center;padding:50px 20px;}
+          .box{max-width:540px;margin:0 auto;background:#0e1420;border:1px solid #ff4757;border-radius:16px;padding:32px;box-shadow:0 0 30px rgba(255,71,87,0.3);}
+          h1{color:#ff4757;font-size:1.8rem;margin:12px 0;}p{color:#8b9bb4;line-height:1.7;font-size:1rem;margin-bottom:20px;}
+          .btn-wa{display:inline-block;padding:12px 24px;background:#25d366;color:#000;text-decoration:none;font-weight:800;border-radius:8px;}
+          </style></head><body><div class="box"><div style="font-size:3.5rem;">💣</div>
+          <h1>انتهت صلاحية الرابط (Link Expired)</h1>
+          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور 20 دقيقة لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
+          <p style="color:#fff;">رقم طلبك: <strong style="color:#00f0ff;">#${orderId}</strong></p>
+          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الـ 20 دقيقة، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
+          </div></body></html>
+        `);
       }
 
       const fileInfo = PROTECTED_FILES[fileKey];
@@ -777,6 +887,32 @@ async function handleRequest(req, res) {
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         return res.end('⛔ غير مسموح بفتح الدليل قبل قبول الطلب.');
+      }
+
+      // Time-Bomb Expiration Check for Interactive Guide
+      const now = Date.now();
+      const isBurnedOrExpired = order && (order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime()));
+      if (isBurnedOrExpired) {
+        if (!order.isBurned || order.status !== 'expired') {
+          order.isBurned = true;
+          order.status = 'expired';
+          order.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+        }
+        res.writeHead(410, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end(`
+          <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>Link Expired | TWEAK LAB</title>
+          <style>body{background:#070a10;color:#fff;font-family:system-ui,sans-serif;text-align:center;padding:50px 20px;}
+          .box{max-width:540px;margin:0 auto;background:#0e1420;border:1px solid #ff4757;border-radius:16px;padding:32px;box-shadow:0 0 30px rgba(255,71,87,0.3);}
+          h1{color:#ff4757;font-size:1.8rem;margin:12px 0;}p{color:#8b9bb4;line-height:1.7;font-size:1rem;margin-bottom:20px;}
+          .btn-wa{display:inline-block;padding:12px 24px;background:#25d366;color:#000;text-decoration:none;font-weight:800;border-radius:8px;}
+          </style></head><body><div class="box"><div style="font-size:3.5rem;">💣</div>
+          <h1>انتهت صلاحية الرابط (Link Expired)</h1>
+          <p>تم إتلاف هذا الرابط تلقائياً بنظام Time-Bomb بعد مرور 20 دقيقة لحماية ملفات Tweak Lab من النسخ والتداول غير المصرح به.</p>
+          <p style="color:#fff;">رقم طلبك: <strong style="color:#00f0ff;">#${orderId}</strong></p>
+          <a class="btn-wa" href="https://wa.me/201021464317?text=${encodeURIComponent('مرحباً Tweak Lab، رقم طلبي هو ' + orderId + ' وانتهت مهلة الـ 20 دقيقة، برجاء إعادة تفعيل الرابط.')}" target="_blank">تواصل مع الدعم الفني عبر واتساب</a>
+          </div></body></html>
+        `);
       }
 
       const htmlBuf = getProtectedFileBuffer('best optimization for 2027 fps +.html');
@@ -848,6 +984,13 @@ async function handleRequest(req, res) {
         await saveDeletedOrderIds(deletedIds);
         orders.splice(idx, 1);
         global.__TWEAKLAB_ORDERS__ = orders;
+      } else if (action === 'reset-timer') {
+        const now = Date.now();
+        orders[idx].firstAccessedAt = new Date(now).toISOString();
+        orders[idx].accessExpiresAt = new Date(now + 20 * 60 * 1000).toISOString();
+        orders[idx].isBurned = false;
+        orders[idx].status = 'approved';
+        orders[idx].updatedAt = new Date().toISOString();
       } else if (action === 'approve' || action === 'reject' || action === 'pending') {
         orders[idx].status = action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'pending';
         orders[idx].updatedAt = new Date().toISOString();

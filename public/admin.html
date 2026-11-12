@@ -432,6 +432,22 @@ function renderOrders(orders) {
       const methodLabel = o.paymentMethod === 'instapay' ? '🟣 InstaPay (إنستاباي)' : '🔴 Vodafone Cash (فودافون كاش)';
       const timeStr = new Date(o.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
+      let timeBombBadge = '';
+      if (o.status === 'approved' || o.status === 'expired' || o.isBurned) {
+        if (!o.firstAccessedAt) {
+          timeBombBadge = `<div style="font-size:0.83rem; color:var(--cyan); background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:6px; margin-top:6px;">⏳ <strong>Time-Bomb:</strong> لم يُفتح بعد (مهلة 20 دقيقة جاهزة تبدأ عند أول فتح)</div>`;
+        } else {
+          const now = Date.now();
+          const expMs = o.accessExpiresAt ? new Date(o.accessExpiresAt).getTime() : 0;
+          if (o.isBurned || (expMs && now > expMs)) {
+            timeBombBadge = `<div style="font-size:0.83rem; color:var(--red); background:rgba(255,71,87,0.12); border:1px solid rgba(255,71,87,0.4); padding:4px 8px; border-radius:6px; margin-top:6px;">💣 <strong>Time-Bomb:</strong> محروق / منتهي الصلاحية (مرت 20 دقيقة)</div>`;
+          } else {
+            const remMin = Math.max(1, Math.ceil((expMs - now) / 60000));
+            timeBombBadge = `<div style="font-size:0.83rem; color:var(--amber); background:rgba(255,184,0,0.1); border:1px solid rgba(255,184,0,0.4); padding:4px 8px; border-radius:6px; margin-top:6px;">🔥 <strong>Time-Bomb:</strong> نشط (متبقي قرابة ${remMin} دقيقة)</div>`;
+          }
+        }
+      }
+
       return `
         <div class="order-card ${o.status}">
           <div>
@@ -452,6 +468,7 @@ function renderOrders(orders) {
                 : ''
             }
             <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">🕒 وقت الطلب: ${timeStr}</div>
+            ${timeBombBadge}
             ${o.notes ? `<div style="font-size:0.84rem; color:#ffe082; margin-top:4px;">📝 ملاحظة: ${escapeHtml(o.notes)}</div>` : ''}
             <a href="${o.screenshotUrl}" target="_blank" title="اضغط لتكبير صورة الإيصال">
               <img src="${o.screenshotUrl}" class="screenshot-thumb" alt="Payment Screenshot" />
@@ -462,6 +479,11 @@ function renderOrders(orders) {
               o.status !== 'approved'
                 ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve')">✅ Accept (قبول وتفعيل التحميل فوراً)</button>`
                 : `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending')">↩ إعادة لقيد المراجعة</button>`
+            }
+            ${
+              (o.status === 'approved' || o.status === 'expired' || o.isBurned)
+                ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer')" title="تجديد مهلة الـ 20 دقيقة للعميل وإعادة تفعيل الرابط له">🔄 تجديد 20 دقيقة</button>`
+                : ''
             }
             ${
               o.status !== 'rejected'
