@@ -744,6 +744,111 @@
     .badge-safe { background: rgba(0, 255, 136, 0.14); color: var(--green); border: 1px solid rgba(0, 255, 136, 0.35); }
 
     /* ==========================================================================
+       FREE LITE TRIAL SECTION (BLACK & NEON GREEN)
+       ========================================================================== */
+    .free-lite-card {
+      background: radial-gradient(circle at top right, rgba(0, 255, 136, 0.11), transparent 55%), #090e17;
+      border: 1px solid rgba(0, 255, 136, 0.45);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 36px;
+      box-shadow: 0 12px 36px rgba(0, 255, 136, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .free-lite-info {
+      flex: 1 1 420px;
+      min-width: 0;
+    }
+    .free-lite-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: rgba(0, 255, 136, 0.14);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      margin-bottom: 10px;
+    }
+    .free-lite-title {
+      font-size: 1.38rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+    .free-lite-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .free-lite-points {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px 18px;
+    }
+    .free-lite-points li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e6fff2;
+    }
+    .free-lite-points li::before {
+      content: '✔';
+      color: var(--green);
+      font-weight: 900;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .free-lite-cta {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 255px;
+    }
+    .free-lite-btn {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: 1px solid #4dffa6;
+      background: linear-gradient(90deg, #00e676, #00ff88);
+      color: #03140b;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .free-lite-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+      color: #020c07;
+    }
+    .free-lite-note {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    @media (max-width: 940px) {
+      .free-lite-card {
+        padding: 20px 16px;
+        gap: 18px;
+      }
+      .free-lite-cta {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    /* ==========================================================================
        CHATBOT WIDGET STYLES (BLACK & NEON GREEN)
        ========================================================================== */
     #tweak-chat-widget {
@@ -1449,6 +1554,26 @@
       </div>
     </div>
 
+    <!-- FREE LITE TRIAL SECTION -->
+    <section class="free-lite-card" aria-labelledby="free-lite-heading">
+      <div class="free-lite-info">
+        <span class="free-lite-badge" data-i18n="freeLiteBadge">🆓 تجربة مجانية • بدون تسجيل أو دفع</span>
+        <h2 id="free-lite-heading" class="free-lite-title" data-i18n="freeLiteTitle">⚡ جرب النسخة المجانية (Free Lite)</h2>
+        <p class="free-lite-sub" data-i18n="freeLiteSub">حمّل النسخة الخفيفة مجاناً بضغطة واحدة بدون ملء أي فورم وجرّب فرق السلاسة بنفسك:</p>
+        <ul class="free-lite-points">
+          <li data-i18n="freeLitePt1">تنضيف الكاش والملفات المؤقتة</li>
+          <li data-i18n="freeLitePt2">تظبيط البينج (DNS Flush)</li>
+          <li data-i18n="freeLitePt3">تفعيل أقصى طاقة للبروسيسور</li>
+        </ul>
+      </div>
+      <div class="free-lite-cta">
+        <a id="free-lite-dl-btn" href="/TweakLab_Free_Lite.bat" download="TweakLab_Free_Lite.bat" class="btn free-lite-btn" data-i18n="freeLiteBtn">
+          ⬇ حمل النسخة المجانية دلوقتي
+        </a>
+        <div class="free-lite-note" data-i18n="freeLiteNote">ملف مباشر TweakLab_Free_Lite.bat • كليك يمين ← Run as Administrator</div>
+      </div>
+    </section>
+
     <!-- PREVIEW OF THE 35+ TWEAKS INSIDE THE GUIDE (SAME DESIGN AS THE HTML GUIDE) -->
     <div class="preview-section">
       <div class="category-header">
@@ -1573,6 +1698,14 @@ const I18N = {
     expiredOrderLabel: 'رقم طلبك:',
     expiredWaBtn: '<span style="font-size:1.2rem;">💬</span> طلب إعادة تفعيل الرابط عبر واتساب',
     expiredHomeBtn: 'العودة للصفحة الرئيسية',
+    freeLiteBadge: '🆓 تجربة مجانية • بدون تسجيل أو دفع',
+    freeLiteTitle: '⚡ جرب النسخة المجانية (Free Lite)',
+    freeLiteSub: 'حمّل النسخة الخفيفة مجاناً بضغطة واحدة بدون ملء أي فورم وجرّب فرق السلاسة بنفسك:',
+    freeLitePt1: 'تنضيف الكاش والملفات المؤقتة',
+    freeLitePt2: 'تظبيط البينج (DNS Flush)',
+    freeLitePt3: 'تفعيل أقصى طاقة للبروسيسور',
+    freeLiteBtn: '⬇ حمل النسخة المجانية دلوقتي',
+    freeLiteNote: 'ملف مباشر TweakLab_Free_Lite.bat • كليك يمين ← Run as Administrator',
     previewHeading: '🔥 لمحة من الـ 35+ تويك الموجودة داخل الملف والدليل التفاعلي',
     previewSub: 'تُفتح بالكامل فور قبول طلبك',
     prevCard1Title: '1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking',
@@ -1658,6 +1791,14 @@ const I18N = {
     expiredOrderLabel: 'Your Order ID:',
     expiredWaBtn: '<span style="font-size:1.2rem;">💬</span> Request Link Reactivation on WhatsApp',
     expiredHomeBtn: 'Back to Storefront Home',
+    freeLiteBadge: '🆓 FREE TRIAL • NO FORM OR PAYMENT REQUIRED',
+    freeLiteTitle: '⚡ Try the Free Version (Free Lite)',
+    freeLiteSub: 'Download our free Lite optimizer in one click with zero forms and feel the smoothness yourself:',
+    freeLitePt1: 'Clean System Temp & Cache files',
+    freeLitePt2: 'Optimize Ping via DNS Flush',
+    freeLitePt3: 'Enable Maximum CPU Power Plan',
+    freeLiteBtn: '⬇ Download Free Version Now',
+    freeLiteNote: 'Direct file: TweakLab_Free_Lite.bat • Right-click → Run as Administrator',
     previewHeading: '🔥 Preview of the 35+ Tweaks Inside the Tool & Interactive Guide',
     previewSub: 'All unlocked immediately upon approval',
     prevCard1Title: '1. Ultimate Performance Power Plan + Disable Core Parking',

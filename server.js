@@ -952,7 +952,11 @@ async function handleRequest(req, res) {
     let filePath = path.join(PUBLIC_DIR, safePath);
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       const ext = path.extname(filePath).toLowerCase();
-      res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
+      const headers = { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' };
+      if (ext === '.bat' || ext === '.zip') {
+        headers['Content-Disposition'] = `attachment; filename="${path.basename(filePath)}"`;
+      }
+      res.writeHead(200, headers);
       return fs.createReadStream(filePath).pipe(res);
     }
 
