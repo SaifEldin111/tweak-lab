@@ -2898,7 +2898,12 @@ if (document.readyState === 'loading') {
       <span class="robot-pointer-title" data-i18n="freeLiteRobotTitle">في نسخة مجانية تحت!</span>
       <span class="robot-pointer-sub" data-i18n="freeLiteRobotSub">اضغط هنا للنزول للتحميل</span>
     </div>
-    <span class="robot-pointer-arrow" aria-hidden="true">👇</span>
+    <span class="robot-pointer-arrow" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#00ff88" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;">
+        <path d="M6 7l6 6 6-6"/>
+        <path d="M6 13l6 6 6-6"/>
+      </svg>
+    </span>
     <button type="button" class="robot-pointer-close" aria-label="Close" onclick="dismissFreeLiteRobot(event)">✕</button>
   </div>
   <!-- FEATURE_FREE_LITE_ROBOT_END -->
