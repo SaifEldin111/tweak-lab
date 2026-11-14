@@ -1855,71 +1855,73 @@
       z-index: 99990;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 14px 8px 10px;
-      background: linear-gradient(135deg, #070b12 0%, #0d1a26 100%);
-      border: 1.5px solid var(--green);
+      gap: 9px;
+      padding: 7px 10px 7px 9px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 136, 0.4);
       border-radius: 999px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(0, 255, 136, 0.34);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 255, 136, 0.16);
       cursor: pointer;
       user-select: none;
-      max-width: calc(100vw - 104px);
-      transition: opacity 0.28s ease, transform 0.28s ease, box-shadow 0.25s ease;
+      max-width: calc(100vw - 102px);
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1), transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
     }
     #free-lite-robot-pointer:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75), 0 0 28px rgba(0, 255, 136, 0.58);
+      transform: translateY(-2px) scale(1.01);
+      border-color: rgba(0, 255, 136, 0.78);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.72), 0 0 22px rgba(0, 255, 136, 0.32);
     }
     #free-lite-robot-pointer.is-hidden-pointer {
       opacity: 0;
       pointer-events: none;
-      transform: translateY(16px) scale(0.95);
+      transform: translateY(18px) scale(0.94);
     }
     .robot-pointer-avatar {
-      width: 38px;
-      height: 38px;
+      width: 31px;
+      height: 31px;
+      border-radius: 50%;
+      background: rgba(0, 255, 136, 0.14);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: freeLiteRobotBob 2.2s ease-in-out infinite;
     }
     .robot-pointer-text {
       display: flex;
       flex-direction: column;
-      line-height: 1.25;
+      line-height: 1.28;
       min-width: 0;
     }
     .robot-pointer-title {
-      font-size: 0.84rem;
-      font-weight: 900;
-      color: var(--green);
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #ffffff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .robot-pointer-sub {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #d7f7e7;
+      font-size: 0.69rem;
+      font-weight: 600;
+      color: #b8c4d4;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    .robot-pointer-arrow {
-      font-size: 1.15rem;
-      line-height: 1;
-      flex-shrink: 0;
-      animation: freeLiteArrowBounce 1.1s ease-in-out infinite;
     }
     .robot-pointer-close {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: #9bb3c7;
-      width: 20px;
-      height: 20px;
+      width: 19px;
+      height: 19px;
       border-radius: 50%;
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       line-height: 1;
       display: inline-flex;
       align-items: center;
@@ -1935,18 +1937,18 @@
     }
     @media (max-width: 600px) {
       #free-lite-robot-pointer {
-        bottom: 18px;
-        left: 14px;
-        padding: 7px 11px 7px 8px;
+        bottom: 16px;
+        left: 12px;
+        padding: 6px 9px 6px 8px;
         gap: 7px;
-        max-width: calc(100vw - 98px);
+        max-width: calc(100vw - 92px);
       }
       .robot-pointer-avatar {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
       }
-      .robot-pointer-title { font-size: 0.76rem; }
-      .robot-pointer-sub { font-size: 0.66rem; }
+      .robot-pointer-title { font-size: 0.74rem; }
+      .robot-pointer-sub { font-size: 0.64rem; }
     }
     /* FEATURE_FREE_LITE_ROBOT_END */
 
@@ -4436,8 +4438,8 @@ const I18N = {
     freeLitePt3: 'تفعيل أقصى طاقة للبروسيسور',
     freeLiteBtn: '⬇ حمل النسخة المجانية دلوقتي',
     freeLiteNote: 'ملف مباشر TweakLab_Free_Lite.bat • كليك يمين ← Run as Administrator',
-    freeLiteRobotTitle: 'في نسخة مجانية تحت!',
-    freeLiteRobotSub: 'اضغط هنا للنزول للتحميل',
+    freeLiteRobotTitle: 'جرّب Free Lite مجاناً ⚡',
+    freeLiteRobotSub: 'اختبر فرق الفريمات على جهازك الآن',
     previewHeading: '🔥 لمحة من الـ 35+ تويك الموجودة داخل الملف والدليل التفاعلي',
     previewSub: 'تُفتح بالكامل فور قبول طلبك',
     prevCard1Title: '1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking',
@@ -4537,8 +4539,8 @@ const I18N = {
     freeLitePt3: 'Enable Maximum CPU Power Plan',
     freeLiteBtn: '⬇ Download Free Version Now',
     freeLiteNote: 'Direct file: TweakLab_Free_Lite.bat • Right-click → Run as Administrator',
-    freeLiteRobotTitle: 'Free Lite Version Below!',
-    freeLiteRobotSub: 'Tap to jump down',
+    freeLiteRobotTitle: 'Try Free Lite for Free ⚡',
+    freeLiteRobotSub: 'Test the FPS gain on your PC now',
     previewHeading: '🔥 Preview of the 35+ Tweaks Inside the Tool & Interactive Guide',
     previewSub: 'All unlocked immediately upon approval',
     prevCard1Title: '1. Ultimate Performance Power Plan + Disable Core Parking',
@@ -6535,23 +6537,47 @@ function dismissFreeLiteRobot(e) {
 
 function initFreeLiteRobotPointer() {
   const pointer = document.getElementById('free-lite-robot-pointer');
-  const section = document.getElementById('free-lite-section');
+  const heroSection = document.getElementById('hero-section');
+  const freeSection = document.getElementById('free-lite-section');
   if (!ENABLE_FREE_LITE_ROBOT_POINTER) {
     if (pointer) pointer.style.display = 'none';
     return;
   }
-  if (!pointer || !section || typeof IntersectionObserver === 'undefined') return;
-  const obs = new IntersectionObserver((entries) => {
-    if (freeLiteRobotDismissed) return;
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        pointer.classList.add('is-hidden-pointer');
-      } else {
-        pointer.classList.remove('is-hidden-pointer');
-      }
-    });
-  }, { threshold: 0.25 });
-  obs.observe(section);
+  if (!pointer || !freeSection) return;
+
+  let isFreeSectionInView = false;
+
+  const updatePointerVisibility = () => {
+    if (freeLiteRobotDismissed) {
+      pointer.classList.add('is-hidden-pointer');
+      return;
+    }
+    const heroRect = heroSection ? heroSection.getBoundingClientRect() : null;
+    const heroVisible = Boolean(heroSection && window.getComputedStyle(heroSection).display !== 'none');
+    const isPastHero = Boolean(heroVisible && heroRect && heroRect.bottom <= Math.min(window.innerHeight * 0.45, 260));
+
+    if (isPastHero && !isFreeSectionInView) {
+      pointer.classList.remove('is-hidden-pointer');
+    } else {
+      pointer.classList.add('is-hidden-pointer');
+    }
+  };
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    const freeObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === freeSection) {
+          isFreeSectionInView = entry.isIntersecting;
+        }
+      });
+      updatePointerVisibility();
+    }, { threshold: 0.15 });
+    freeObs.observe(freeSection);
+  }
+
+  window.addEventListener('scroll', updatePointerVisibility, { passive: true });
+  window.addEventListener('resize', updatePointerVisibility, { passive: true });
+  updatePointerVisibility();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
@@ -6566,31 +6592,16 @@ if (document.readyState === 'loading') {
 </script>
 
   <!-- FEATURE_FREE_LITE_ROBOT_START (Easy to remove anytime) -->
-  <div id="free-lite-robot-pointer" role="button" tabindex="0" onclick="sweepToFreeLite()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sweepToFreeLite();}">
+  <div id="free-lite-robot-pointer" class="is-hidden-pointer" role="button" tabindex="0" onclick="sweepToFreeLite()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sweepToFreeLite();}">
     <div class="robot-pointer-avatar" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 38" width="36" height="38">
-        <line x1="18" y1="2" x2="18" y2="6.5" stroke="#00f0ff" stroke-width="2.2" stroke-linecap="round"/>
-        <circle cx="18" cy="2.5" r="2.3" fill="#00ff88"/>
-        <rect x="4" y="6.5" width="28" height="19" rx="6" fill="#0b1320" stroke="#00ff88" stroke-width="1.8"/>
-        <rect x="7.5" y="10" width="21" height="9" rx="3.5" fill="#041216" stroke="#16323a" stroke-width="1"/>
-        <ellipse cx="13" cy="14.2" rx="2.4" ry="2.8" fill="#00ff88"/>
-        <ellipse cx="23" cy="14.2" rx="2.4" ry="2.8" fill="#00ff88"/>
-        <circle cx="13.8" cy="13.2" r="0.8" fill="#ffffff"/>
-        <circle cx="23.8" cy="13.2" r="0.8" fill="#ffffff"/>
-        <!-- Pointing down hand / arrow indicator -->
-        <path d="M18 27 L18 35 M13.5 31.5 L18 36 L22.5 31.5" fill="none" stroke="#00ff88" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#00ff88" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:block;">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
     </div>
     <div class="robot-pointer-text">
-      <span class="robot-pointer-title" data-i18n="freeLiteRobotTitle">في نسخة مجانية تحت!</span>
-      <span class="robot-pointer-sub" data-i18n="freeLiteRobotSub">اضغط هنا للنزول للتحميل</span>
+      <span class="robot-pointer-title" data-i18n="freeLiteRobotTitle">جرّب Free Lite مجاناً ⚡</span>
+      <span class="robot-pointer-sub" data-i18n="freeLiteRobotSub">اختبر فرق الفريمات على جهازك الآن</span>
     </div>
-    <span class="robot-pointer-arrow" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#00ff88" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="display:block;">
-        <path d="M6 7l6 6 6-6"/>
-        <path d="M6 13l6 6 6-6"/>
-      </svg>
-    </span>
     <button type="button" class="robot-pointer-close" aria-label="Close" onclick="dismissFreeLiteRobot(event)">✕</button>
   </div>
   <!-- FEATURE_FREE_LITE_ROBOT_END -->
