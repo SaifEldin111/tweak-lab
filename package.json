@@ -4,7 +4,8 @@
   "description": "Tweak Lab - Best Optimization for 2027 FPS+ Store with InstaPay & Vodafone Cash (01020670418) + Screenshot Approval & Instant Delivery",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "node scripts/verify-build.js"
   },
   "engines": {
     "node": ">=18.0.0"
