@@ -2589,6 +2589,176 @@
       line-height: 1.6;
       margin: 0;
     }
+
+    /* Real FPS Results (Before vs After Showcase Above Reviews) */
+    .real-fps-section {
+      margin-top: 38px;
+      margin-bottom: 12px;
+    }
+    .real-fps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .real-fps-card {
+      background: linear-gradient(160deg, rgba(12, 18, 30, 0.97) 0%, rgba(6, 10, 17, 0.99) 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.24);
+      border-radius: 16px;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
+    }
+    .real-fps-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--green);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 22px rgba(0, 255, 136, 0.2);
+    }
+    .real-fps-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 240, 255, 0.11);
+      border: 1px solid rgba(0, 240, 255, 0.38);
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 11px;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+    .real-fps-specs {
+      background: rgba(5, 8, 14, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #d6e4f7;
+      direction: ltr;
+      text-align: center;
+    }
+    .real-fps-compare {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .real-fps-row {
+      border-radius: 11px;
+      padding: 11px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .real-fps-row.before {
+      background: rgba(255, 71, 87, 0.07);
+      border: 1px solid rgba(255, 71, 87, 0.24);
+    }
+    .real-fps-row.after {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.14), rgba(0, 240, 255, 0.07));
+      border: 1.5px solid rgba(0, 255, 136, 0.55);
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.14);
+    }
+    .real-fps-row-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .real-fps-label-before {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #e28691;
+    }
+    .real-fps-label-after {
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .real-fps-num-before {
+      font-family: Consolas, monospace;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #f08a96;
+      direction: ltr;
+    }
+    .real-fps-num-after {
+      font-family: Consolas, monospace;
+      font-size: 1.42rem;
+      font-weight: 900;
+      color: var(--green);
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.45);
+      direction: ltr;
+    }
+    .real-fps-note-before {
+      font-size: 0.78rem;
+      color: #c8838c;
+      font-weight: 700;
+    }
+    .real-fps-note-after {
+      font-size: 0.81rem;
+      color: #d8ffea;
+      font-weight: 800;
+    }
+    .real-fps-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .real-fps-bar-fill-before {
+      height: 100%;
+      background: rgba(255, 92, 110, 0.55);
+      border-radius: 999px;
+    }
+    .real-fps-bar-fill-after {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
+      border-radius: 999px;
+    }
+    .real-fps-discord-line {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #cbd8ea;
+      background: rgba(14, 20, 32, 0.72);
+      border: 1px solid rgba(0, 255, 136, 0.24);
+      border-radius: 12px;
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .real-fps-discord-link {
+      color: var(--green);
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px dashed rgba(0, 255, 136, 0.55);
+      padding-bottom: 1px;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
+    }
+    .real-fps-discord-link:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
+    }
+    @media (max-width: 900px) {
+      .real-fps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     @media (max-width: 600px) {
       .footer-social-links {
         flex-direction: column;
@@ -2906,6 +3076,99 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 1.5: نتائج حقيقية قبل وبعد (REAL FPS RESULTS)
+         ========================================================================== -->
+    <section id="real-fps-results-section" class="funnel-section real-fps-section" aria-labelledby="real-fps-results-heading">
+      <div class="funnel-section-header">
+        <span class="funnel-section-eyebrow">📊 BENCHMARK PROOF • BEFORE &amp; AFTER</span>
+        <h2 id="real-fps-results-heading" class="funnel-section-title">نتائج حقيقية قبل وبعد (Real FPS Results)</h2>
+        <p class="funnel-section-sub">مقارنة فعلية لفرق الفريمات وثبات الـ Input Delay على 3 فئات أجهزة مختلفة بعد تطبيق حزمة Tweak Lab</p>
+      </div>
+
+      <div class="real-fps-grid">
+        <!-- Card 1: Budget PC - Valorant -->
+        <article class="real-fps-card">
+          <span class="real-fps-badge">🎮 جهاز اقتصادي — Valorant</span>
+          <div class="real-fps-specs">Core i5-9400F | GTX 1650 | 8GB RAM</div>
+          <div class="real-fps-compare">
+            <div class="real-fps-row before">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-before">قبل التظبيط</span>
+                <span class="real-fps-num-before">115 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-before" style="width:52%;"></div></div>
+              <div class="real-fps-note-before">تقطيع وقت الفايتات</div>
+            </div>
+            <div class="real-fps-row after">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-after">بعد Tweak Lab</span>
+                <span class="real-fps-num-after">195 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-after" style="width:94%;"></div></div>
+              <div class="real-fps-note-after">⚡ +69% زيادة وثبات</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Mid-Range PC - Fortnite Performance Mode -->
+        <article class="real-fps-card">
+          <span class="real-fps-badge">🚀 جهاز متوسط — Fortnite Performance Mode</span>
+          <div class="real-fps-specs">Ryzen 5 3600 | RTX 3060 | 16GB RAM</div>
+          <div class="real-fps-compare">
+            <div class="real-fps-row before">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-before">قبل التظبيط</span>
+                <span class="real-fps-num-before">160 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-before" style="width:56%;"></div></div>
+              <div class="real-fps-note-before">دروبات في الزون</div>
+            </div>
+            <div class="real-fps-row after">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-after">بعد Tweak Lab</span>
+                <span class="real-fps-num-after">260 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-after" style="width:96%;"></div></div>
+              <div class="real-fps-note-after">⚡ استجابة ماوس فورية</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Gaming Laptop - Warzone / Apex -->
+        <article class="real-fps-card">
+          <span class="real-fps-badge">💻 لابتوب جيمنج — Warzone / Apex</span>
+          <div class="real-fps-specs">Core i7-11800H | RTX 3050 Ti | 16GB RAM</div>
+          <div class="real-fps-compare">
+            <div class="real-fps-row before">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-before">قبل التظبيط</span>
+                <span class="real-fps-num-before">85 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-before" style="width:50%;"></div></div>
+              <div class="real-fps-note-before">حرارة وتأخير استجابة</div>
+            </div>
+            <div class="real-fps-row after">
+              <div class="real-fps-row-top">
+                <span class="real-fps-label-after">بعد Tweak Lab</span>
+                <span class="real-fps-num-after">135 FPS</span>
+              </div>
+              <div class="real-fps-bar-track"><div class="real-fps-bar-fill-after" style="width:92%;"></div></div>
+              <div class="real-fps-note-after">⚡ نعومة وثبات</div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="real-fps-discord-line">
+        <span>عايز تشوف سكرين شوتات أكتر من أجهزة اللاعبين؟</span>
+        <a href="https://discord.gg/ZsdFqXtEMc" target="_blank" rel="noopener noreferrer" class="real-fps-discord-link" id="real-fps-discord-room-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.07 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          <span>ادخل روم <span dir="ltr">#before-after</span> على Discord</span>
+        </a>
       </div>
     </section>
 
