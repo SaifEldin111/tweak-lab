@@ -231,7 +231,7 @@
       object-fit: cover;
       opacity: 0;
       transform: scale(1.035);
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 5s cubic-bezier(0.22, 1, 0.36, 1);
       image-rendering: -webkit-optimize-contrast;
       filter: contrast(1.04) saturate(1.06);
       pointer-events: none;
@@ -321,7 +321,7 @@
       width: 0%;
       background: linear-gradient(90deg, var(--cyan), var(--green));
       box-shadow: 0 0 10px var(--green);
-      animation: promoSlideProgress 3s linear infinite;
+      animation: promoSlideProgress 5s linear infinite;
     }
     @keyframes promoSlideProgress {
       0% { width: 0%; }
@@ -4515,12 +4515,12 @@ function setPromoSlide(index) {
     hudTextEl.textContent = activeSlide.getAttribute('data-slide-badge') || `TWEAK LAB • ${currentPromoSlideIdx + 1}/${slides.length}`;
   }
 
-  // Restart 3-second progress bar animation smoothly
+  // Restart 5-second progress bar animation smoothly
   const progressBar = document.getElementById('promo-progress-bar');
   if (progressBar && progressBar.style) {
     progressBar.style.animation = 'none';
     void progressBar.offsetWidth;
-    progressBar.style.animation = 'promoSlideProgress 3s linear infinite';
+    progressBar.style.animation = 'promoSlideProgress 5s linear infinite';
   }
 }
 
@@ -4533,7 +4533,7 @@ function startPromoShowcaseTimer() {
   if (promoShowcaseTimer) clearInterval(promoShowcaseTimer);
   promoShowcaseTimer = setInterval(() => {
     setPromoSlide(currentPromoSlideIdx + 1);
-  }, 3000);
+  }, 5000);
 }
 
 startPromoShowcaseTimer();
