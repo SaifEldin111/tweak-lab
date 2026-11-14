@@ -457,15 +457,18 @@ function renderOrders(orders) {
             </div>
             <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
             <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${escapeHtml(o.senderPhone)}</span></div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة:</strong> ${methodLabel} — <strong>${o.amountEgp} ج.م</strong></div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>الباقة:</strong> ${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة والمبلغ المدفوع:</strong> ${methodLabel} — <strong style="color:var(--green); font-size:1rem;">${o.amountEgp} ج.م</strong></div>
             ${
               o.discountCode
-                ? `<div style="font-size:0.92rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                    🎟️ <strong>كود الخصم:</strong>
-                    <span style="font-family:monospace; font-weight:800; color:#fff; font-size:1rem; letter-spacing:0.5px;">${escapeHtml(o.discountCode)}</span>
-                    ${(o.isDiscountApplied || Number(o.amountEgp) === 85) ? '<span style="background:#f59e0b; color:#181100; font-weight:800; font-size:0.75rem; padding:2px 7px; border-radius:4px;">🔥 خصم 85 ج.م مُطبّق</span>' : '<span style="background:rgba(0,240,255,0.15); color:var(--cyan); font-weight:700; font-size:0.74rem; padding:2px 7px; border-radius:4px;">صانع محتوى (99 ج.م)</span>'}
+                ? `<div style="font-size:0.9rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    🎟️ <strong>كود صانع المحتوى / الخصم:</strong>
+                    <span style="font-family:monospace; font-weight:800; color:#fff; font-size:1rem; letter-spacing:0.5px;">${escapeHtml(o.discountCode.toUpperCase())}</span>
+                    ${o.isDiscountApplied ? `<span style="background:#f59e0b; color:#181100; font-weight:800; font-size:0.75rem; padding:2px 7px; border-radius:4px;">🔥 خصم مُطبّق (دفع ${o.amountEgp} ج.م)</span>` : `<span style="background:rgba(0,240,255,0.15); color:var(--cyan); font-weight:700; font-size:0.74rem; padding:2px 7px; border-radius:4px;">👤 كود صانع محتوى (دفع ${o.amountEgp} ج.م)</span>`}
                    </div>`
-                : ''
+                : `<div style="font-size:0.84rem; margin-bottom:6px; color:var(--text-muted); background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:4px 9px; border-radius:7px; display:inline-block;">
+                    🎟️ <strong>كود الخصم / صانع المحتوى:</strong> ❌ لا يوجد
+                   </div>`
             }
             <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">🕒 وقت الطلب: ${timeStr}</div>
             ${timeBombBadge}

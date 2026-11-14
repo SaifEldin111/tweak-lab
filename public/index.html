@@ -2384,6 +2384,8 @@ async function submitOrder(e) {
       senderPhone: document.getElementById('cust-phone').value,
       discountCode: (document.getElementById('cust-discount').value || '').trim(),
       paymentMethod: selectedPaymentMethod,
+      paidAmountEgp: activeChargedPrice,
+      packageName: 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)',
       notes: document.getElementById('cust-notes').value,
       screenshotDataUrl
     };

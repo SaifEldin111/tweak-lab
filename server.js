@@ -265,10 +265,6 @@ async function syncFromCloudDb(force = false) {
         const raw = await r.json();
         const merged = { ...DEFAULT_SETTINGS, ...raw };
         let needSave = false;
-        if (merged.priceEgp === 100) {
-          merged.priceEgp = 99;
-          needSave = true;
-        }
         if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
           merged.activePromoCodes = {};
           needSave = true;
@@ -292,7 +288,6 @@ async function syncFromCloudDb(force = false) {
 
 function loadSettings() {
   if (global.__TWEAKLAB_SETTINGS__) {
-    if (global.__TWEAKLAB_SETTINGS__.priceEgp === 100) global.__TWEAKLAB_SETTINGS__.priceEgp = 99;
     if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || typeof global.__TWEAKLAB_SETTINGS__.activePromoCodes !== 'object') {
       global.__TWEAKLAB_SETTINGS__.activePromoCodes = {};
     }
@@ -305,7 +300,6 @@ function loadSettings() {
     if (fs.existsSync(SETTINGS_FILE)) {
       const raw = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
       const merged = { ...DEFAULT_SETTINGS, ...raw };
-      if (merged.priceEgp === 100) merged.priceEgp = 99;
       if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
         merged.activePromoCodes = {};
       }
@@ -456,77 +450,131 @@ function sendJson(res, statusCode, payload) {
   res.end(data);
 }
 
-function sendWebhookNotifications(order, settings, hostUrl) {
+function escapeTelegramHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function postHttpsJson(hostname, pathUrl, payloadObj, timeoutMs = 4500) {
+  return new Promise((resolve) => {
+    try {
+      const payload = JSON.stringify(payloadObj);
+      const req = https.request(
+        {
+          hostname,
+          path: pathUrl,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(payload)
+          },
+          timeout: timeoutMs
+        },
+        (res) => {
+          let body = '';
+          res.on('data', (c) => (body += c));
+          res.on('end', () => resolve({ ok: res.statusCode >= 200 && res.statusCode < 300, status: res.statusCode, body }));
+        }
+      );
+      req.on('timeout', () => {
+        req.destroy();
+        resolve({ ok: false, error: 'timeout' });
+      });
+      req.on('error', (err) => resolve({ ok: false, error: err.message }));
+      req.write(payload);
+      req.end();
+    } catch (e) {
+      resolve({ ok: false, error: e.message });
+    }
+  });
+}
+
+async function sendWebhookNotifications(order, settings, hostUrl) {
+  const basePrice = Number(order.basePriceEgp || settings.priceEgp || 99);
+  const paidAmount = Number(order.amountEgp || basePrice);
+  const pkgName = order.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)';
+  const payMethodLabel = order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)';
+  const rawCode = String(order.discountCode || '').trim();
+
+  let codeStatusPlain = '❌ لا يوجد (لم يُدخل كود خصم أو كود صانع محتوى)';
+  let codeStatusHtml = '❌ <b>لا يوجد</b> (لم يُدخل كود خصم أو كود صانع محتوى)';
+  if (rawCode) {
+    if (order.isDiscountApplied) {
+      const saved = Math.max(0, basePrice - paidAmount);
+      codeStatusPlain = `🔥 نعم — كود خصم مفعّل (${rawCode.toUpperCase()}) • تم تطبيق الخصم ودفع ${paidAmount} ج.م بدلاً من ${basePrice} ج.م`;
+      codeStatusHtml = `🔥 <b>نعم — كود خصم مفعّل:</b> <code>${escapeTelegramHtml(rawCode.toUpperCase())}</code> (خصم ${saved} ج.م مطبّق • دفع <b>${paidAmount} ج.م</b> بدلاً من ${basePrice} ج.م)`;
+    } else {
+      codeStatusPlain = `👤 نعم — كود صانع محتوى (${rawCode.toUpperCase()}) • تتبع لصانع المحتوى بدون خصم (دفع ${paidAmount} ج.م)`;
+      codeStatusHtml = `👤 <b>نعم — كود صانع محتوى:</b> <code>${escapeTelegramHtml(rawCode.toUpperCase())}</code> (تتبع لصانع المحتوى فقط • بدون خصم، دفع <b>${paidAmount} ج.م</b>)`;
+    }
+  }
+
+  let paidAmountDetailHtml = `<b>${paidAmount} ج.م</b>`;
+  if (order.isDiscountApplied && paidAmount < basePrice) {
+    paidAmountDetailHtml = `<b>${paidAmount} ج.م</b> (بسعر الخصم بدلاً من ${basePrice} ج.م 🎉)`;
+  } else {
+    paidAmountDetailHtml = `<b>${paidAmount} ج.م</b> (السعر الأساسي المعتمد)`;
+  }
+
+  const tasks = [];
+
   if (settings.discordWebhookUrl && settings.discordWebhookUrl.startsWith('https://')) {
     try {
       const urlObj = new URL(settings.discordWebhookUrl);
-      const payload = JSON.stringify({
-        username: 'Tweak Lab Order Bot',
-        embeds: [
-          {
-            title: `🚨 طلب شراء جديد #${order.id} (${order.amountEgp} ج.م)`,
-            color: 65416,
-            fields: [
-              { name: '👤 العميل', value: order.customerName || 'غير محدد', inline: true },
-              { name: '📱 رقم المحول / التواصل', value: order.senderPhone || 'غير محدد', inline: true },
-              { name: '💳 طريقة الدفع', value: order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)', inline: true },
-              { name: '💰 المبلغ المطلوب', value: `${order.amountEgp} ج.م`, inline: true },
-              ...(order.discountCode ? [{ name: '🎟️ كود الخصم (صانع المحتوى)', value: `${order.discountCode}${order.isDiscountApplied ? ' (خصم 85 ج.م مُطبّق 🎉)' : ''}`, inline: true }] : []),
-              { name: '🖥️ لوحة التحكم (القبول/الرفض اليدوي)', value: `${hostUrl}/admin` }
-            ],
-            timestamp: new Date().toISOString()
-          }
-        ]
-      });
-      const req = https.request(
-        {
-          hostname: urlObj.hostname,
-          path: urlObj.pathname + urlObj.search,
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
-        },
-        () => {}
+      tasks.push(
+        postHttpsJson(urlObj.hostname, urlObj.pathname + urlObj.search, {
+          username: 'Tweak Lab Order Bot',
+          embeds: [
+            {
+              title: `🚨 طلب شراء جديد #${order.id} — دفع ${paidAmount} ج.م`,
+              color: 65416,
+              fields: [
+                { name: '👤 اسم العميل', value: order.customerName || 'غير محدد', inline: true },
+                { name: '📱 رقم الموبايل المحول منه', value: order.senderPhone || 'غير محدد', inline: true },
+                { name: '📦 الباقة المختارة', value: pkgName, inline: false },
+                { name: '💳 طريقة الدفع', value: payMethodLabel, inline: true },
+                { name: '💰 المبلغ المدفوع بالضبط', value: `${paidAmount} ج.م`, inline: true },
+                { name: '🎟️ كود الخصم / صانع المحتوى', value: codeStatusPlain, inline: false },
+                { name: '🖥️ لوحة التحكم (القبول/الرفض اليدوي)', value: `${hostUrl}/admin` }
+              ],
+              timestamp: new Date().toISOString()
+            }
+          ]
+        })
       );
-      req.on('error', () => {});
-      req.write(payload);
-      req.end();
     } catch (e) {}
   }
 
   if (settings.telegramBotToken && settings.telegramChatId) {
-    try {
-      const text =
-        `🚨 *طلب جديد في TWEAK LAB (2027 FPS+)*\n\n` +
-        `🆔 *رقم الطلب:* \`${order.id}\`\n` +
-        `👤 *الاسم:* ${order.customerName}\n` +
-        `📱 *رقم الموبايل:* \`${order.senderPhone}\`\n` +
-        (order.discountCode ? `🎟️ *كود الخصم:* \`${order.discountCode}\`${order.isDiscountApplied ? ' (خصم 85 ج.م مفعل 🎉)' : ''}\n` : '') +
-        `💳 *طريقة الدفع:* ${order.paymentMethod === 'instapay' ? 'InstaPay (إنستاباي)' : 'Vodafone Cash (فودافون كاش)'}\n` +
-        `💰 *المبلغ:* ${order.amountEgp} جنيه مصري\n` +
-        `📝 *ملاحظات:* ${order.notes || 'لا يوجد'}\n\n` +
-        `⚠️ *الطلب الآن بانتظار مراجعتك اليدوية في لوحة التحكم (Pending):*\n` +
-        `🖥️ [فتح لوحة تحكم الأدمن لمراجعة السكرين شوت والقبول](${hostUrl}/admin)`;
+    const htmlText =
+      `🚨 <b>طلب شراء جديد في TWEAK LAB ⚡</b>\n` +
+      `━━━━━━━━━━━━━━━━━━\n` +
+      `🆔 <b>رقم الطلب:</b> <code>#${escapeTelegramHtml(order.id)}</code>\n` +
+      `👤 <b>اسم العميل:</b> ${escapeTelegramHtml(order.customerName)}\n` +
+      `📱 <b>رقم التليفون المحول منه:</b> <code>${escapeTelegramHtml(order.senderPhone)}</code>\n` +
+      `📦 <b>الباقة المختارة:</b> ${escapeTelegramHtml(pkgName)}\n` +
+      `💳 <b>طريقة الدفع:</b> ${escapeTelegramHtml(payMethodLabel)}\n` +
+      `💰 <b>المبلغ المدفوع بالضبط:</b> ${paidAmountDetailHtml}\n` +
+      `🎟️ <b>كود صانع المحتوى / الخصم:</b> ${codeStatusHtml}\n` +
+      `📝 <b>ملاحظات العميل:</b> ${escapeTelegramHtml(order.notes || 'لا يوجد')}\n` +
+      `⏱️ <b>حماية الرابط (Time-Bomb):</b> ساعة كاملة (60 دقيقة) من أول فتح\n` +
+      `━━━━━━━━━━━━━━━━━━\n` +
+      `⚠️ <b>الطلب الآن قيد المراجعة (Pending) بانتظار قبولك اليدوي:</b>\n` +
+      `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">فتح لوحة تحكم الأدمن لمراجعة الإيصال والقبول (/admin)</a>`;
 
-      const payload = JSON.stringify({
+    tasks.push(
+      postHttpsJson('api.telegram.org', `/bot${settings.telegramBotToken}/sendMessage`, {
         chat_id: settings.telegramChatId,
-        text,
-        parse_mode: 'Markdown'
-      });
-
-      const req = https.request(
-        {
-          hostname: 'api.telegram.org',
-          path: `/bot${settings.telegramBotToken}/sendMessage`,
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
-        },
-        () => {}
-      );
-      req.on('error', () => {});
-      req.write(payload);
-      req.end();
-    } catch (e) {}
+        text: htmlText,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      })
+    );
   }
+
+  await Promise.allSettled(tasks);
 }
 
 const MIME_TYPES = {
@@ -581,7 +629,7 @@ async function handleRequest(req, res) {
       return sendJson(res, 200, {
         brandName: s.brandName,
         productTitle: s.productTitle,
-        priceEgp: s.priceEgp === 100 ? 99 : (s.priceEgp || 99),
+        priceEgp: Number(s.priceEgp) || 99,
         originalPriceEgp: s.originalPriceEgp || 350,
         discountedPriceEgp: s.discountedPriceEgp || 85,
         activePromoCodes: (s.activePromoCodes && typeof s.activePromoCodes === 'object') ? s.activePromoCodes : {},
@@ -595,7 +643,7 @@ async function handleRequest(req, res) {
     // 2. Create New Order + Screenshot Upload
     if (req.method === 'POST' && pathname === '/api/orders') {
       const body = await readJsonBody(req);
-      const { customerName, senderPhone, discountCode, paymentMethod, notes, screenshotDataUrl } = body;
+      const { customerName, senderPhone, discountCode, paymentMethod, notes, screenshotDataUrl, paidAmountEgp, packageName } = body;
 
       if (!customerName || !senderPhone || !screenshotDataUrl) {
         return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
@@ -610,14 +658,17 @@ async function handleRequest(req, res) {
       const accessToken = crypto.randomBytes(16).toString('hex');
       const settings = loadSettings();
 
-      // Check if discount code matches active authorized promo code
+      // Determine exact charged/paid amount based on active promo code or configured price
       const codeKey = String(discountCode || '').trim().toUpperCase();
-      let finalAmount = Number(settings.priceEgp || 99);
+      const basePrice = Number(settings.priceEgp) || 99;
+      let finalAmount = basePrice;
       let isDiscountApplied = false;
 
-      if (settings.activePromoCodes && typeof settings.activePromoCodes === 'object' && settings.activePromoCodes[codeKey]) {
+      if (codeKey && settings.activePromoCodes && typeof settings.activePromoCodes === 'object' && settings.activePromoCodes[codeKey]) {
         finalAmount = Number(settings.activePromoCodes[codeKey]);
         isDiscountApplied = true;
+      } else if (paidAmountEgp !== undefined && Number(paidAmountEgp) > 0 && Number(paidAmountEgp) === basePrice) {
+        finalAmount = Number(paidAmountEgp);
       }
 
       const newOrder = {
@@ -625,9 +676,12 @@ async function handleRequest(req, res) {
         accessToken,
         customerName: String(customerName).trim().slice(0, 80),
         senderPhone: String(senderPhone).trim().slice(0, 40),
+        packageName: String(packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)').trim().slice(0, 120),
         discountCode: String(discountCode || '').trim().slice(0, 60),
         isDiscountApplied,
+        isCreatorCode: Boolean(codeKey && !isDiscountApplied),
         paymentMethod: paymentMethod === 'vodafone' ? 'vodafone' : 'instapay',
+        basePriceEgp: basePrice,
         amountEgp: finalAmount,
         notes: String(notes || '').trim().slice(0, 300),
         screenshotUrl: screenshotDataUrl, // Stored inline as Data URL so it works 100% across serverless & local!
@@ -648,7 +702,7 @@ async function handleRequest(req, res) {
         const host = req.headers.host;
         hostUrl = (!host.includes('localhost') && !host.includes('127.0.0.1')) ? `${proto}://${host}` : defaultAppUrl;
       }
-      sendWebhookNotifications(newOrder, settings, hostUrl);
+      await sendWebhookNotifications(newOrder, settings, hostUrl);
 
       return sendJson(res, 201, {
         ok: true,
@@ -661,10 +715,13 @@ async function handleRequest(req, res) {
           quickApproveWhatsappText:
             `مرحباً Tweak Lab ⚡\n` +
             `قمت بدفع ${newOrder.amountEgp} ج.م عبر (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
+            `الباقة: ${newOrder.packageName}\n` +
             `رقم الطلب: ${newOrder.id}\n` +
             `الاسم: ${newOrder.customerName}\n` +
             `الرقم المحول منه: ${newOrder.senderPhone}\n` +
-            (newOrder.discountCode ? `كود الخصم: ${newOrder.discountCode}${newOrder.isDiscountApplied ? ' (خصم 85 ج.م مفعل 🎉)' : ''}\n` : '') +
+            (newOrder.discountCode
+              ? `كود صانع المحتوى / الخصم: ${newOrder.discountCode}${newOrder.isDiscountApplied ? ` (خصم مفعل • دفع ${newOrder.amountEgp} ج.م 🎉)` : ' (كود صانع محتوى 👤)'}\n`
+              : '') +
             `برجاء قبول الطلب لتفعيل التحميل!`
         }
       });
@@ -938,6 +995,26 @@ async function handleRequest(req, res) {
       }
       const body = await readJsonBody(req);
       const updated = await saveSettings(body);
+      if (updated.telegramBotToken && updated.telegramChatId) {
+        const promoEntries = updated.activePromoCodes && typeof updated.activePromoCodes === 'object' ? Object.entries(updated.activePromoCodes) : [];
+        const promoSummary = promoEntries.length > 0
+          ? promoEntries.map(([k, v]) => `<code>${escapeTelegramHtml(k)}</code> ← <b>${v} ج.م</b>`).join(' ، ')
+          : 'لا يوجد أي كود خصم مفعّل حالياً (جميع الأكواد تُسجل كأكواد صانع محتوى بالسعر الكامل)';
+        const hostUrl = updated.appUrl || 'https://tweak-lab-a177.vercel.app';
+        await postHttpsJson('api.telegram.org', `/bot${updated.telegramBotToken}/sendMessage`, {
+          chat_id: updated.telegramChatId,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+          text:
+            `⚙️ <b>تم تحديث إعدادات متجر TWEAK LAB بنجاح</b>\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `💰 <b>السعر الأساسي المعتمد:</b> <b>${Number(updated.priceEgp) || 99} ج.م</b>\n` +
+            `🎟️ <b>أكواد الخصم الفعّالة:</b> ${promoSummary}\n` +
+            `📱 <b>رقم التحويل (InstaPay / Vodafone):</b> <code>${escapeTelegramHtml(updated.paymentPhone)}</code>\n` +
+            `⏱️ <b>مهلة حماية الروابط (Time-Bomb):</b> ساعة كاملة (60 دقيقة)\n` +
+            `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">فتح لوحة التحكم (/admin)</a>`
+        });
+      }
       return sendJson(res, 200, { ok: true, settings: updated });
     }
 
