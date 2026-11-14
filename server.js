@@ -85,6 +85,172 @@ global.__TWEAKLAB_SETTINGS__ = global.__TWEAKLAB_SETTINGS__ || null;
 global.__TWEAKLAB_ORDERS__ = global.__TWEAKLAB_ORDERS__ || null;
 global.__TWEAKLAB_DELETED_ORDERS__ = global.__TWEAKLAB_DELETED_ORDERS__ || null;
 global.__TWEAKLAB_LAST_SYNC__ = global.__TWEAKLAB_LAST_SYNC__ || 0;
+global.__TWEAKLAB_LAST_CLOUD_KEY__ = global.__TWEAKLAB_LAST_CLOUD_KEY__ || '';
+
+// --- Indestructible Telegram Cloud DB Engine (Zero-Notification Multi-Instance Persistence) ---
+const PNG_CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+
+function pngCrc32(buf) {
+  let c = -1;
+  for (let i = 0; i < buf.length; i++) {
+    c = (c >>> 8) ^ PNG_CRC_TABLE[(c ^ buf[i]) & 0xff];
+  }
+  return (c ^ -1) >>> 0;
+}
+
+function makePngChunk(type, data) {
+  const len = Buffer.alloc(4);
+  len.writeUInt32BE(data.length, 0);
+  const typeBuf = Buffer.from(type, 'ascii');
+  const crc = Buffer.alloc(4);
+  crc.writeUInt32BE(pngCrc32(Buffer.concat([typeBuf, data])), 0);
+  return Buffer.concat([len, typeBuf, data, crc]);
+}
+
+let CACHED_EMPTY_IDAT = null;
+function getEmpty512Idat() {
+  if (CACHED_EMPTY_IDAT) return CACHED_EMPTY_IDAT;
+  const rawScanlines = Buffer.alloc(512 * (1 + 512), 0);
+  CACHED_EMPTY_IDAT = makePngChunk('IDAT', zlib.deflateSync(rawScanlines, { level: 9 }));
+  return CACHED_EMPTY_IDAT;
+}
+
+function packChunkIntoPng(b64String) {
+  const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(512, 0);
+  ihdr.writeUInt32BE(512, 4);
+  ihdr[8] = 8;
+  ihdr[9] = 0;
+  const textData = Buffer.concat([Buffer.from('db\0', 'ascii'), Buffer.from(b64String, 'ascii')]);
+  return Buffer.concat([
+    sig,
+    makePngChunk('IHDR', ihdr),
+    getEmpty512Idat(),
+    makePngChunk('tEXt', textData),
+    makePngChunk('IEND', Buffer.alloc(0))
+  ]);
+}
+
+function unpackChunkFromPng(pngBuf) {
+  let offset = 8;
+  while (offset + 8 <= pngBuf.length) {
+    const len = pngBuf.readUInt32BE(offset);
+    const type = pngBuf.slice(offset + 4, offset + 8).toString('ascii');
+    const data = pngBuf.slice(offset + 8, offset + 8 + len);
+    if (type === 'tEXt' && data.slice(0, 3).toString('ascii') === 'db\0') {
+      return data.slice(3).toString('ascii');
+    }
+    offset += 12 + len;
+  }
+  return null;
+}
+
+function getTelegramCloudCreds() {
+  const s = global.__TWEAKLAB_SETTINGS__ || DEFAULT_SETTINGS;
+  return {
+    botToken: (s && s.telegramBotToken) || DEFAULT_SETTINGS.telegramBotToken,
+    chatId: (s && s.telegramChatId) || DEFAULT_SETTINGS.telegramChatId
+  };
+}
+
+async function uploadBufferToTelegramCloud(rawBuffer) {
+  const { botToken, chatId } = getTelegramCloudCreds();
+  if (!botToken || !chatId) return null;
+  const compressedB64 = zlib.deflateRawSync(rawBuffer, { level: 9 }).toString('base64');
+  const CHUNK_LEN = 360 * 1024; // Safe under 512KB static sticker PNG limit
+  const fileIds = [];
+  for (let i = 0; i < compressedB64.length || i === 0; i += CHUNK_LEN) {
+    const slice = compressedB64.slice(i, i + CHUNK_LEN);
+    const pngBuf = packChunkIntoPng(slice);
+    const form = new FormData();
+    form.append('user_id', String(chatId));
+    form.append('sticker_format', 'static');
+    form.append('sticker', new Blob([pngBuf], { type: 'image/png' }), 'db.png');
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/uploadStickerFile`, {
+      method: 'POST',
+      body: form
+    });
+    const j = await res.json();
+    if (!j || !j.ok || !j.result || !j.result.file_id) {
+      throw new Error('Telegram uploadStickerFile failed: ' + (j && j.description ? j.description : 'unknown'));
+    }
+    fileIds.push(j.result.file_id);
+  }
+  return fileIds;
+}
+
+async function downloadBufferFromTelegramCloud(fileIds) {
+  const { botToken } = getTelegramCloudCreds();
+  if (!botToken || !Array.isArray(fileIds) || fileIds.length === 0) return null;
+  const b64Parts = [];
+  for (const fid of fileIds) {
+    const gfRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${encodeURIComponent(fid)}`, {
+      cache: 'no-store'
+    });
+    const gf = await gfRes.json();
+    if (!gf || !gf.ok || !gf.result || !gf.result.file_path) {
+      throw new Error('Telegram getFile failed for ' + fid);
+    }
+    const dlRes = await fetch(`https://api.telegram.org/file/bot${botToken}/${gf.result.file_path}`, {
+      cache: 'no-store'
+    });
+    if (!dlRes.ok) throw new Error('Telegram file download HTTP ' + dlRes.status);
+    const pngBuf = Buffer.from(await dlRes.arrayBuffer());
+    const part = unpackChunkFromPng(pngBuf);
+    if (part === null) throw new Error('Invalid PNG DB container chunk');
+    b64Parts.push(part);
+  }
+  return zlib.inflateRawSync(Buffer.from(b64Parts.join(''), 'base64'));
+}
+
+async function pushStateToTelegramCloud() {
+  try {
+    const { botToken } = getTelegramCloudCreds();
+    if (!botToken) return false;
+    const deletedArr = Array.from(loadDeletedOrderIds());
+    const currentOrders = loadOrders();
+    const compactOrders = currentOrders.map((o) => {
+      const copy = { ...o };
+      if (copy.screenshotUrl && copy.screenshotUrl.startsWith('data:') && copy.screenshotUrl.length > 20000) {
+        copy.screenshotUrl = '/api/screenshot/' + copy.id;
+      }
+      return copy;
+    });
+    const payload = {
+      v: 2,
+      ts: Date.now(),
+      orders: compactOrders,
+      deletedOrderIds: deletedArr,
+      settings: loadSettings()
+    };
+    const dbFileIds = await uploadBufferToTelegramCloud(Buffer.from(JSON.stringify(payload), 'utf8'));
+    if (!dbFileIds || dbFileIds.length === 0) return false;
+    const pointerStr = JSON.stringify({ v: 2, dbFileIds, ts: payload.ts });
+    const descRes = await fetch(`https://api.telegram.org/bot${botToken}/setMyDescription`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description: pointerStr, language_code: 'eo' })
+    });
+    const descJson = await descRes.json();
+    if (descJson && descJson.ok) {
+      global.__TWEAKLAB_LAST_CLOUD_KEY__ = dbFileIds.join(',');
+      global.__TWEAKLAB_LAST_SYNC__ = Date.now();
+      return true;
+    }
+  } catch (e) {
+    console.error('Telegram Cloud DB push warning:', e.message);
+  }
+  return false;
+}
 
 function loadDeletedOrderIds() {
   if (global.__TWEAKLAB_DELETED_ORDERS__ instanceof Set) {
@@ -107,7 +273,7 @@ function loadDeletedOrderIds() {
   return set;
 }
 
-async function saveDeletedOrderIds(setOrArray) {
+async function saveDeletedOrderIds(setOrArray, skipCloudPush = false) {
   const arr = Array.from(setOrArray || []).map((id) => String(id).trim().toUpperCase());
   const set = new Set(arr);
   global.__TWEAKLAB_DELETED_ORDERS__ = set;
@@ -117,6 +283,9 @@ async function saveDeletedOrderIds(setOrArray) {
   try {
     fs.writeFileSync(SEED_DELETED_ORDERS_FILE, JSON.stringify(arr, null, 2), 'utf8');
   } catch (e) {}
+  if (!skipCloudPush) {
+    await pushStateToTelegramCloud();
+  }
   const blobSdk = getBlobSdk();
   if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
     try {
@@ -150,11 +319,17 @@ function mergeOrderLists(...lists) {
         const existing = map.get(id);
         const tExisting = new Date(existing.updatedAt || existing.createdAt || 0).getTime();
         const tItem = new Date(item.updatedAt || item.createdAt || 0).getTime();
-        const preferredStatus = tItem >= tExisting ? (item.status || existing.status) : existing.status;
+        const newer = tItem >= tExisting ? item : existing;
+        const older = tItem >= tExisting ? existing : item;
+        const bestToken = (newer.accessToken && newer.accessToken !== 'RESTORED_FROM_TELEGRAM')
+          ? newer.accessToken
+          : ((older.accessToken && older.accessToken !== 'RESTORED_FROM_TELEGRAM') ? older.accessToken : newer.accessToken);
         map.set(id, {
-          ...existing,
-          ...item,
-          status: preferredStatus,
+          ...older,
+          ...newer,
+          accessToken: bestToken,
+          screenshotFileIds: newer.screenshotFileIds || older.screenshotFileIds,
+          screenshotMime: newer.screenshotMime || older.screenshotMime,
           updatedAt: Math.max(tExisting, tItem) ? new Date(Math.max(tExisting, tItem)).toISOString() : new Date().toISOString()
         });
       }
@@ -198,13 +373,84 @@ function getBlobSdk() {
 }
 
 async function syncFromCloudDb(force = false) {
+  const now = Date.now();
+  if (!force && global.__TWEAKLAB_ORDERS__ && now - global.__TWEAKLAB_LAST_SYNC__ < 1200) {
+    return;
+  }
+
+  // 1. Primary Cloud DB Sync via Telegram Cloud DB (works on all Vercel deployments without extra env vars)
+  try {
+    const { botToken } = getTelegramCloudCreds();
+    if (botToken) {
+      const descRes = await fetch(`https://api.telegram.org/bot${botToken}/getMyDescription?language_code=eo`, {
+        cache: 'no-store'
+      });
+      const descJson = await descRes.json();
+      const rawDesc = descJson && descJson.ok && descJson.result ? (descJson.result.description || '').trim() : '';
+      if (rawDesc.startsWith('{')) {
+        const pointer = JSON.parse(rawDesc);
+        const fileIds = Array.isArray(pointer.dbFileIds)
+          ? pointer.dbFileIds
+          : (pointer.dbFileId ? [pointer.dbFileId] : []);
+        const cloudKey = fileIds.join(',');
+        if (fileIds.length > 0 && (force || cloudKey !== global.__TWEAKLAB_LAST_CLOUD_KEY__ || !global.__TWEAKLAB_ORDERS__)) {
+          const stateBuf = await downloadBufferFromTelegramCloud(fileIds);
+          if (stateBuf) {
+            const cloudState = JSON.parse(stateBuf.toString('utf8'));
+            if (cloudState && Array.isArray(cloudState.deletedOrderIds)) {
+              const delSet = loadDeletedOrderIds();
+              cloudState.deletedOrderIds.forEach((id) => delSet.add(String(id).trim().toUpperCase()));
+              await saveDeletedOrderIds(delSet, true);
+            }
+            const cloudOrders = (cloudState && Array.isArray(cloudState.orders)) ? cloudState.orders : [];
+            const localMaster = loadLocalDiskOrders();
+            const mergedOrders = mergeOrderLists(localMaster, global.__TWEAKLAB_ORDERS__ || [], cloudOrders);
+            global.__TWEAKLAB_ORDERS__ = mergedOrders;
+            try {
+              fs.writeFileSync(ORDERS_FILE, JSON.stringify(mergedOrders, null, 2), 'utf8');
+            } catch (e) {}
+
+            if (cloudState && cloudState.settings && typeof cloudState.settings === 'object') {
+              const mergedSettings = { ...DEFAULT_SETTINGS, ...cloudState.settings };
+              if (!mergedSettings.activePromoCodes || typeof mergedSettings.activePromoCodes !== 'object') {
+                mergedSettings.activePromoCodes = {};
+              }
+              if (mergedSettings.activePromoCodes && mergedSettings.activePromoCodes['TWEAK85']) {
+                delete mergedSettings.activePromoCodes['TWEAK85'];
+              }
+              global.__TWEAKLAB_SETTINGS__ = mergedSettings;
+              try {
+                fs.writeFileSync(SETTINGS_FILE, JSON.stringify(mergedSettings, null, 2), 'utf8');
+              } catch (e) {}
+            }
+
+            global.__TWEAKLAB_LAST_CLOUD_KEY__ = cloudKey;
+            global.__TWEAKLAB_LAST_SYNC__ = Date.now();
+
+            // If local seed/disk had orders not yet in cloudState, push merged list back to cloud
+            if (mergedOrders.length > cloudOrders.length) {
+              await pushStateToTelegramCloud();
+            }
+          }
+        } else {
+          global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
+          global.__TWEAKLAB_LAST_SYNC__ = Date.now();
+        }
+      } else {
+        // No valid v2 pointer in Telegram Cloud yet -> initialize cloud with local orders
+        global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
+        await pushStateToTelegramCloud();
+      }
+    }
+  } catch (e) {
+    console.error('Telegram Cloud DB sync warning:', e.message);
+    global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
+  }
+
+  // 2. Secondary Cloud DB Sync via @vercel/blob if BLOB_READ_WRITE_TOKEN is configured
   const blobSdk = getBlobSdk();
   if (!blobSdk || !process.env.BLOB_READ_WRITE_TOKEN) {
     global.__TWEAKLAB_ORDERS__ = mergeOrderLists(loadLocalDiskOrders(), global.__TWEAKLAB_ORDERS__ || []);
-    return;
-  }
-  const now = Date.now();
-  if (!force && global.__TWEAKLAB_ORDERS__ && now - global.__TWEAKLAB_LAST_SYNC__ < 1500) {
     return;
   }
   try {
@@ -226,7 +472,7 @@ async function syncFromCloudDb(force = false) {
           if (Array.isArray(arr)) {
             const currentDeleted = loadDeletedOrderIds();
             arr.forEach((id) => currentDeleted.add(String(id).trim().toUpperCase()));
-            await saveDeletedOrderIds(currentDeleted);
+            await saveDeletedOrderIds(currentDeleted, true);
           }
         }
       }
@@ -323,6 +569,7 @@ async function saveSettings(newSettings) {
   try {
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8');
   } catch (e) {}
+  await pushStateToTelegramCloud();
   const blobSdk = getBlobSdk();
   if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
     try {
@@ -362,6 +609,7 @@ async function saveOrders(orders) {
   try {
     fs.writeFileSync(SEED_ORDERS_FILE, JSON.stringify(cleanIncoming, null, 2), 'utf8');
   } catch (e) {}
+  await pushStateToTelegramCloud();
   const blobSdk = getBlobSdk();
   if (blobSdk && process.env.BLOB_READ_WRITE_TOKEN) {
     try {
@@ -642,6 +890,7 @@ async function handleRequest(req, res) {
 
     // 2. Create New Order + Screenshot Upload
     if (req.method === 'POST' && pathname === '/api/orders') {
+      await syncFromCloudDb(true);
       const body = await readJsonBody(req);
       const { customerName, senderPhone, discountCode, paymentMethod, notes, screenshotDataUrl, paidAmountEgp, packageName } = body;
 
@@ -654,9 +903,24 @@ async function handleRequest(req, res) {
         return sendJson(res, 400, { error: 'صيغة صورة السكرين شوت غير صحيحة. يرجى رفع صورة PNG أو JPG.' });
       }
 
+      const extRaw = match[1].toLowerCase();
+      const screenshotMime = 'image/' + (extRaw === 'jpg' ? 'jpeg' : extRaw);
+      const imgBuffer = Buffer.from(match[2], 'base64');
+
       const orderId = 'TL-' + Math.floor(100000 + Math.random() * 900000);
       const accessToken = crypto.randomBytes(16).toString('hex');
       const settings = loadSettings();
+
+      try {
+        fs.writeFileSync(path.join(UPLOADS_DIR, orderId + '.bin'), imgBuffer);
+      } catch (e) {}
+
+      let screenshotFileIds = null;
+      try {
+        screenshotFileIds = await uploadBufferToTelegramCloud(imgBuffer);
+      } catch (e) {
+        console.error('Screenshot cloud upload warning:', e.message);
+      }
 
       // Determine exact charged/paid amount based on active promo code or configured price
       const codeKey = String(discountCode || '').trim().toUpperCase();
@@ -684,7 +948,9 @@ async function handleRequest(req, res) {
         basePriceEgp: basePrice,
         amountEgp: finalAmount,
         notes: String(notes || '').trim().slice(0, 300),
-        screenshotUrl: screenshotDataUrl, // Stored inline as Data URL so it works 100% across serverless & local!
+        screenshotMime,
+        screenshotFileIds: screenshotFileIds || undefined,
+        screenshotUrl: (screenshotFileIds && screenshotFileIds.length > 0) ? ('/api/screenshot/' + orderId) : screenshotDataUrl,
         status: 'pending',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -727,6 +993,80 @@ async function handleRequest(req, res) {
       });
     }
 
+    // 2b. Serve Order Screenshot (from Local Cache, Telegram Cloud DB, or Restored Receipt SVG)
+    if (req.method === 'GET' && pathname.startsWith('/api/screenshot/')) {
+      const orderId = pathname.replace('/api/screenshot/', '').trim().toUpperCase();
+      const orders = loadOrders();
+      const order = orders.find((o) => String(o.id).toUpperCase() === orderId);
+      const localBinPath = path.join(UPLOADS_DIR, orderId + '.bin');
+
+      if (fs.existsSync(localBinPath)) {
+        try {
+          const buf = fs.readFileSync(localBinPath);
+          res.writeHead(200, {
+            'Content-Type': (order && order.screenshotMime) || 'image/jpeg',
+            'Content-Length': buf.length,
+            'Cache-Control': 'public, max-age=31536000, immutable'
+          });
+          return res.end(buf);
+        } catch (e) {}
+      }
+
+      if (order && Array.isArray(order.screenshotFileIds) && order.screenshotFileIds.length > 0) {
+        try {
+          const buf = await downloadBufferFromTelegramCloud(order.screenshotFileIds);
+          if (buf) {
+            try {
+              fs.writeFileSync(localBinPath, buf);
+            } catch (e) {}
+            res.writeHead(200, {
+              'Content-Type': order.screenshotMime || 'image/jpeg',
+              'Content-Length': buf.length,
+              'Cache-Control': 'public, max-age=31536000, immutable'
+            });
+            return res.end(buf);
+          }
+        } catch (e) {
+          console.error('Screenshot cloud fetch error:', e.message);
+        }
+      }
+
+      if (order && order.screenshotUrl && order.screenshotUrl.startsWith('data:image/')) {
+        const m = /^data:(image\/[a-z0-9.+-]+);base64,(.+)$/i.exec(order.screenshotUrl);
+        if (m) {
+          const buf = Buffer.from(m[2], 'base64');
+          res.writeHead(200, {
+            'Content-Type': m[1],
+            'Content-Length': buf.length,
+            'Cache-Control': 'public, max-age=31536000, immutable'
+          });
+          return res.end(buf);
+        }
+      }
+
+      const safeId = escapeTelegramHtml(order ? order.id : orderId);
+      const safeName = escapeTelegramHtml(order ? order.customerName : '');
+      const safePhone = escapeTelegramHtml(order ? order.senderPhone : '');
+      const safeAmount = escapeTelegramHtml(order ? order.amountEgp : 99);
+      const safeMethod = order && order.paymentMethod === 'vodafone' ? 'Vodafone Cash' : 'InstaPay';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320" viewBox="0 0 520 320">
+        <rect width="520" height="320" rx="16" fill="#0b111e" stroke="#00ff88" stroke-width="2"/>
+        <text x="260" y="52" text-anchor="middle" fill="#00ff88" font-family="system-ui,sans-serif" font-size="20" font-weight="800">⚡ TWEAK LAB — إيصال طلب مسجل</text>
+        <line x1="40" y1="72" x2="480" y2="72" stroke="#1e2c46" stroke-width="1.5"/>
+        <text x="260" y="112" text-anchor="middle" fill="#00f0ff" font-family="monospace" font-size="22" font-weight="800">#${safeId}</text>
+        <text x="260" y="152" text-anchor="middle" fill="#f0f6fc" font-family="system-ui,sans-serif" font-size="16" font-weight="700">العميل: ${safeName}</text>
+        <text x="260" y="186" text-anchor="middle" fill="#8b9bb4" font-family="monospace" font-size="16">رقم المحول: ${safePhone}</text>
+        <text x="260" y="222" text-anchor="middle" fill="#00ff88" font-family="system-ui,sans-serif" font-size="18" font-weight="800">${safeMethod} — ${safeAmount} EGP</text>
+        <rect x="90" y="248" width="340" height="36" rx="8" fill="rgba(0,255,136,0.12)" stroke="rgba(0,255,136,0.4)"/>
+        <text x="260" y="271" text-anchor="middle" fill="#00ff88" font-family="system-ui,sans-serif" font-size="13" font-weight="700">✅ تم استرجاع وحفظ بيانات الطلب في السحابة الدائمة</text>
+      </svg>`;
+      res.writeHead(200, {
+        'Content-Type': 'image/svg+xml; charset=utf-8',
+        'Cache-Control': 'no-cache'
+      });
+      return res.end(svg);
+    }
+
     // 3. Poll Order Status
     if (req.method === 'GET' && pathname.startsWith('/api/orders/')) {
       const orderId = pathname.replace('/api/orders/', '').trim();
@@ -734,7 +1074,17 @@ async function handleRequest(req, res) {
       const settings = loadSettings();
 
       const orders = loadOrders();
-      const order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
+        const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
+        if (restored) {
+          restored.accessToken = token;
+          delete restored.isRestoredFromTelegram;
+          restored.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+          order = restored;
+        }
+      }
 
       if (!order) {
         return sendJson(res, 404, { error: 'لم يتم العثور على الطلب.' });
@@ -815,7 +1165,17 @@ async function handleRequest(req, res) {
       const token = parsedUrl.searchParams.get('token') || '';
 
       const orders = loadOrders();
-      const order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
+        const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
+        if (restored) {
+          restored.accessToken = token;
+          delete restored.isRestoredFromTelegram;
+          restored.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+          order = restored;
+        }
+      }
       const isAuthorized = order && order.status === 'approved';
 
       if (!isAuthorized) {
@@ -875,7 +1235,17 @@ async function handleRequest(req, res) {
       const token = parsedUrl.searchParams.get('token') || '';
 
       const orders = loadOrders();
-      const order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
+        const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
+        if (restored) {
+          restored.accessToken = token;
+          delete restored.isRestoredFromTelegram;
+          restored.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+          order = restored;
+        }
+      }
       const isAuthorized = order && order.status === 'approved';
 
       if (!isAuthorized) {
@@ -948,6 +1318,7 @@ async function handleRequest(req, res) {
 
     // 8. Admin API: Approve / Reject / Delete Order
     if (req.method === 'POST' && pathname === '/api/admin/order-action') {
+      await syncFromCloudDb(true);
       const pin = req.headers['x-admin-pin'] || '';
       const settings = loadSettings();
       if (pin !== settings.adminPin) {
@@ -960,7 +1331,7 @@ async function handleRequest(req, res) {
       if (action === 'delete') {
         const deletedIds = loadDeletedOrderIds();
         deletedIds.add(String(orderId).trim().toUpperCase());
-        await saveDeletedOrderIds(deletedIds);
+        await saveDeletedOrderIds(deletedIds, true);
         if (idx !== -1) {
           orders.splice(idx, 1);
         }
@@ -988,6 +1359,7 @@ async function handleRequest(req, res) {
 
     // 9. Admin API: Update Settings
     if (req.method === 'POST' && pathname === '/api/admin/settings') {
+      await syncFromCloudDb(true);
       const pin = req.headers['x-admin-pin'] || '';
       const settings = loadSettings();
       if (pin !== settings.adminPin) {
