@@ -1,0 +1,17 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tlBg" x1="4" y1="2" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F1828" />
+      <stop offset="100%" stop-color="#06090F" />
+    </linearGradient>
+    <radialGradient id="tlGlow" cx="64%" cy="50%" r="44%">
+      <stop offset="0%" stop-color="#00FF88" stop-opacity="0.28" />
+      <stop offset="65%" stop-color="#00FF88" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#00FF88" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect x="1.5" y="1.5" width="37" height="37" rx="10" fill="url(#tlBg)" stroke="#00FF88" stroke-width="2" />
+  <rect x="2.5" y="2.5" width="35" height="35" rx="9" fill="url(#tlGlow)" />
+  <path d="M7.2 11.5H20.8L19.1 15H15.4V28.5H11.6V15H7.2V11.5Z" fill="#FFFFFF" />
+  <path d="M28.2 8.2L19.6 17.8H24.6L18.4 25H15.4V28.5H31.3L33.2 25H22.8L30 15.2H25.6L28.2 8.2Z" fill="#00FF88" />
+</svg>
