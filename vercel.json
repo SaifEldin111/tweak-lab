@@ -17,6 +17,14 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/admin/", "destination": "/admin.html" }
+    { "source": "/admin/", "destination": "/admin.html" },
+    { "source": "/guides", "destination": "/guides/index.html" },
+    { "source": "/guides/", "destination": "/guides/index.html" },
+    { "source": "/guides/fix-fortnite-fps-drops", "destination": "/guides/fix-fortnite-fps-drops/index.html" },
+    { "source": "/guides/fix-fortnite-fps-drops/", "destination": "/guides/fix-fortnite-fps-drops/index.html" },
+    { "source": "/guides/reduce-valorant-input-delay", "destination": "/guides/reduce-valorant-input-delay/index.html" },
+    { "source": "/guides/reduce-valorant-input-delay/", "destination": "/guides/reduce-valorant-input-delay/index.html" },
+    { "source": "/guides/best-windows-settings-gaming", "destination": "/guides/best-windows-settings-gaming/index.html" },
+    { "source": "/guides/best-windows-settings-gaming/", "destination": "/guides/best-windows-settings-gaming/index.html" }
   ]
 }

@@ -974,6 +974,8 @@ const MIME_TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.js': 'application/javascript; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -1997,6 +1999,14 @@ async function handleRequest(req, res) {
 
     let safePath = path.normalize(pathname === '/' ? '/index.html' : pathname).replace(/^(\.\.[\/\\])+/, '');
     let filePath = path.join(PUBLIC_DIR, safePath);
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+      const dirIndex = path.join(filePath, 'index.html');
+      if (fs.existsSync(dirIndex) && fs.statSync(dirIndex).isFile()) {
+        filePath = dirIndex;
+      }
+    } else if (!fs.existsSync(filePath) && !path.extname(filePath) && fs.existsSync(filePath + '.html')) {
+      filePath = filePath + '.html';
+    }
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
       const ext = path.extname(filePath).toLowerCase();
       const headers = { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' };
