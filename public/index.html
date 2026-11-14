@@ -204,6 +204,129 @@
       margin-bottom: 18px;
       display: block;
     }
+    /* Smart 4-Slide High-Resolution Showcase Slider (3s Auto-Cycle) */
+    .promo-showcase-wrap {
+      position: relative;
+      width: 100%;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.45), rgba(0, 255, 136, 0.45), rgba(0, 240, 255, 0.18));
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.48), 0 0 22px rgba(0, 255, 136, 0.12);
+      overflow: hidden;
+    }
+    .promo-showcase-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1376 / 768;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050a10;
+    }
+    .promo-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.035);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 3s cubic-bezier(0.22, 1, 0.36, 1);
+      image-rendering: -webkit-optimize-contrast;
+      filter: contrast(1.04) saturate(1.06);
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+    .promo-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      z-index: 2;
+    }
+    .promo-hud-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(6, 13, 22, 0.82);
+      border: 1px solid rgba(0, 255, 136, 0.45);
+      backdrop-filter: blur(8px);
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      direction: ltr;
+    }
+    .promo-hud-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: promoHudPulse 1.4s infinite ease-in-out;
+    }
+    @keyframes promoHudPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+    }
+    .promo-controls-bar {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(6, 13, 22, 0.78);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      backdrop-filter: blur(6px);
+      direction: ltr;
+    }
+    .promo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      border: none;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.32);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .promo-dot.active {
+      width: 24px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
+    }
+    .promo-progress-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 5;
+      overflow: hidden;
+    }
+    .promo-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      box-shadow: 0 0 10px var(--green);
+      animation: promoSlideProgress 3s linear infinite;
+    }
+    @keyframes promoSlideProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
     .price-banner {
       display: flex;
       align-items: center;
@@ -288,57 +411,203 @@
       border-color: var(--green) !important;
       box-shadow: 0 0 16px rgba(0, 255, 136, 0.35) !important;
     }
-    /* Sleek, Compact & Beautiful Submit Order Button */
+    /* Sleek, Compact & Beautiful Submit Order Button + Cyber Motion Zone (No Emojis) */
+    .submit-motion-zone {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
+      padding: 6px;
+      border-radius: 14px;
+      background: radial-gradient(circle at center, rgba(0, 255, 136, 0.12) 0%, rgba(0, 240, 255, 0.05) 65%, transparent 100%);
+      border: 1px solid rgba(0, 255, 136, 0.28);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.12), inset 0 0 14px rgba(0, 240, 255, 0.06);
+      animation: submitZoneAura 2.6s infinite ease-in-out;
+    }
+    @keyframes submitZoneAura {
+      0%, 100% {
+        border-color: rgba(0, 255, 136, 0.26);
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.12), inset 0 0 12px rgba(0, 240, 255, 0.05);
+      }
+      50% {
+        border-color: rgba(0, 240, 255, 0.65);
+        box-shadow: 0 0 32px rgba(0, 255, 136, 0.28), 0 0 14px rgba(0, 240, 255, 0.22), inset 0 0 18px rgba(0, 255, 136, 0.1);
+      }
+    }
+    .submit-side-motion {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      flex-shrink: 0;
+      padding: 0 2px;
+      user-select: none;
+      pointer-events: none;
+    }
+    .submit-side-motion svg {
+      width: 14px;
+      height: 22px;
+      stroke: var(--green);
+      stroke-width: 2.6;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.75));
+      opacity: 0.25;
+      animation: submitChevronFlow 1.35s infinite ease-in-out;
+    }
+    .submit-side-motion svg:nth-child(1) { animation-delay: 0s; stroke: var(--cyan); }
+    .submit-side-motion svg:nth-child(2) { animation-delay: 0.22s; stroke: #00f7be; }
+    .submit-side-motion svg:nth-child(3) { animation-delay: 0.44s; stroke: var(--green); }
+    /* Flip chevron direction gracefully for RTL vs LTR so arrows always point INWARD toward the button */
+    html[dir="rtl"] .submit-side-motion.side-start svg { transform: scaleX(-1); }
+    html[dir="ltr"] .submit-side-motion.side-end svg { transform: scaleX(-1); }
+    @keyframes submitChevronFlow {
+      0%, 100% { opacity: 0.2; filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.2)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 9px rgba(0, 255, 136, 0.95)); }
+    }
     .btn-submit-order {
+      position: relative;
+      overflow: hidden;
       width: 100%;
-      padding: 11px 16px !important;
+      padding: 12px 16px !important;
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
-      gap: 3px !important;
+      gap: 4px !important;
       border-radius: 10px !important;
-      background: linear-gradient(90deg, var(--cyan), var(--green)) !important;
-      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.22) !important;
-      border: none !important;
+      background: linear-gradient(90deg, var(--cyan) 0%, #00f7a8 50%, var(--green) 100%) !important;
+      background-size: 200% 100% !important;
+      box-shadow: 0 6px 22px rgba(0, 255, 136, 0.28) !important;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
       text-decoration: none;
+      animation: submitBtnBreathing 2.4s infinite ease-in-out;
+    }
+    .btn-submit-order::after {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -75%;
+      width: 42%;
+      height: 220%;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.65) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(24deg);
+      animation: submitBtnGlare 2.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    @keyframes submitBtnGlare {
+      0% { left: -75%; }
+      38%, 100% { left: 155%; }
+    }
+    @keyframes submitBtnBreathing {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 6px 20px rgba(0, 255, 136, 0.24), 0 0 0 0 rgba(0, 255, 136, 0.35);
+      }
+      50% {
+        transform: translateY(-1.5px) scale(1.008);
+        box-shadow: 0 10px 28px rgba(0, 255, 136, 0.42), 0 0 0 5px rgba(0, 255, 136, 0);
+      }
     }
     .btn-submit-order:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.35) !important;
+      transform: translateY(-2px) scale(1.012) !important;
+      box-shadow: 0 12px 32px rgba(0, 255, 136, 0.5) !important;
     }
     .btn-submit-main {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 7px;
       font-size: 0.98rem;
       font-weight: 900;
       color: #031014;
       line-height: 1.25;
       flex-wrap: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+    .btn-submit-vec-icon {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      stroke: #031014;
+      stroke-width: 2.3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: submitVecPulse 1.6s infinite ease-in-out;
+    }
+    @keyframes submitVecPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.16); }
     }
     .btn-submit-price {
-      background: rgba(3, 16, 20, 0.12);
-      padding: 1px 7px;
+      background: rgba(3, 16, 20, 0.14);
+      padding: 1px 8px;
       border-radius: 6px;
       font-weight: 900;
     }
     .btn-submit-sub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       font-size: 0.74rem;
-      font-weight: 700;
-      color: rgba(3, 16, 20, 0.85);
+      font-weight: 800;
+      color: rgba(3, 16, 20, 0.88);
       line-height: 1.2;
+      position: relative;
+      z-index: 2;
+    }
+    .btn-submit-live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #031014;
+      display: inline-block;
+      animation: submitDotBlink 1.1s infinite ease-in-out;
+    }
+    @keyframes submitDotBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.75); }
+    }
+    .btn-submit-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2.4px solid rgba(3, 16, 20, 0.25);
+      border-top-color: #031014;
+      border-radius: 50%;
+      display: inline-block;
+      animation: submitSpin 0.75s linear infinite;
+    }
+    @keyframes submitSpin {
+      to { transform: rotate(360deg); }
     }
     @media (max-width: 480px) {
+      .submit-motion-zone {
+        gap: 6px;
+        padding: 4px;
+      }
+      .submit-side-motion svg {
+        width: 11px;
+        height: 18px;
+      }
       .btn-submit-order {
-        padding: 10px 14px !important;
+        padding: 10px 12px !important;
       }
       .btn-submit-main {
-        font-size: 0.91rem;
-        gap: 4px;
+        font-size: 0.90rem;
+        gap: 5px;
       }
       .btn-submit-sub {
         font-size: 0.70rem;
@@ -1354,7 +1623,30 @@
 
       <!-- RIGHT COLUMN: PRODUCT DETAILS & WHAT YOU GET -->
       <div class="card">
-        <img src="/assets/promo.jpg" alt="2027 FPS+ Optimization Pack" class="promo-img" />
+        <div class="promo-showcase-wrap" id="promo-showcase-slider">
+          <div class="promo-showcase-stage">
+            <img src="/assets/promo.jpg" alt="2027 FPS+ Optimization Pack" class="promo-slide active" data-slide-badge="TWEAK LAB PRO • 1/4" loading="eager" fetchpriority="high" />
+            <img src="/assets/promo-slide-2.jpg" alt="Tweak Lab Ultimate PC Optimizer 300+ FPS" class="promo-slide" data-slide-badge="300+ FPS & 0.5ms • 2/4" loading="eager" />
+            <img src="/assets/promo-slide-3.jpg" alt="Fortnite 360+ FPS 0.5ms Input Delay" class="promo-slide" data-slide-badge="FORTNITE 360+ FPS • 3/4" loading="eager" />
+            <img src="/assets/promo-slide-4.jpg" alt="Valorant 520+ FPS 0.2ms Input Delay" class="promo-slide" data-slide-badge="VALORANT 520+ FPS • 4/4" loading="eager" />
+
+            <div class="promo-hud-badge">
+              <span class="promo-hud-dot"></span>
+              <span id="promo-hud-text">TWEAK LAB PRO • 1/4</span>
+            </div>
+
+            <div class="promo-controls-bar" role="tablist" aria-label="Promo Slides">
+              <button type="button" class="promo-dot active" onclick="selectPromoSlide(0)" aria-label="Slide 1"></button>
+              <button type="button" class="promo-dot" onclick="selectPromoSlide(1)" aria-label="Slide 2"></button>
+              <button type="button" class="promo-dot" onclick="selectPromoSlide(2)" aria-label="Slide 3"></button>
+              <button type="button" class="promo-dot" onclick="selectPromoSlide(3)" aria-label="Slide 4"></button>
+            </div>
+
+            <div class="promo-progress-track">
+              <div class="promo-progress-bar" id="promo-progress-bar"></div>
+            </div>
+          </div>
+        </div>
 
         <div class="price-banner">
           <div>
@@ -1533,14 +1825,35 @@
               <input type="text" id="cust-notes" class="input-field" data-i18n-placeholder="phNotes" placeholder="أي ملاحظة تحب تضيفها مع الطلب..." />
             </div>
 
-            <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order">
-              <span class="btn-submit-main">
-                <span>🚀 تأكيد الدفع</span>
-                <span class="btn-submit-price">(<span id="submit-btn-price">99</span> ج.م)</span>
-                <span>• إرسال الإيصال</span>
-              </span>
-              <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
-            </button>
+            <div class="submit-motion-zone">
+              <div class="submit-side-motion side-start" aria-hidden="true">
+                <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
+                <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
+                <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
+              </div>
+
+              <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order">
+                <span class="btn-submit-main">
+                  <svg class="btn-submit-vec-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2L4 5.5v6.2c0 5.1 3.4 9.8 8 11.3 4.6-1.5 8-6.2 8-11.3V5.5L12 2z"/>
+                    <polyline points="8.5 12.2 11 14.7 15.8 9.8"/>
+                  </svg>
+                  <span>تأكيد الدفع</span>
+                  <span class="btn-submit-price">(<span id="submit-btn-price">99</span> ج.م)</span>
+                  <span>• إرسال الإيصال</span>
+                </span>
+                <span class="btn-submit-sub">
+                  <span class="btn-submit-live-dot"></span>
+                  <span>استلام فوري خلال 5 دقائق</span>
+                </span>
+              </button>
+
+              <div class="submit-side-motion side-end" aria-hidden="true">
+                <svg viewBox="0 0 16 24"><polyline points="13 4 5 12 13 20"/></svg>
+                <svg viewBox="0 0 16 24"><polyline points="13 4 5 12 13 20"/></svg>
+                <svg viewBox="0 0 16 24"><polyline points="13 4 5 12 13 20"/></svg>
+              </div>
+            </div>
           </form>
         </div>
 
@@ -2078,20 +2391,34 @@ function renderSubmitButtonText() {
     if (currentLang === 'en') {
       btn.innerHTML = `
         <span class="btn-submit-main">
-          <span>🚀 Confirm Payment</span>
+          <svg class="btn-submit-vec-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2L4 5.5v6.2c0 5.1 3.4 9.8 8 11.3 4.6-1.5 8-6.2 8-11.3V5.5L12 2z"/>
+            <polyline points="8.5 12.2 11 14.7 15.8 9.8"/>
+          </svg>
+          <span>Confirm Payment</span>
           <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> EGP)</span>
           <span>• Send Receipt</span>
         </span>
-        <span class="btn-submit-sub">⚡ Instant delivery within 5 minutes</span>
+        <span class="btn-submit-sub">
+          <span class="btn-submit-live-dot"></span>
+          <span>Instant delivery within 5 minutes</span>
+        </span>
       `;
     } else {
       btn.innerHTML = `
         <span class="btn-submit-main">
-          <span>🚀 تأكيد الدفع</span>
+          <svg class="btn-submit-vec-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2L4 5.5v6.2c0 5.1 3.4 9.8 8 11.3 4.6-1.5 8-6.2 8-11.3V5.5L12 2z"/>
+            <polyline points="8.5 12.2 11 14.7 15.8 9.8"/>
+          </svg>
+          <span>تأكيد الدفع</span>
           <span class="btn-submit-price">(<span id="submit-btn-price">${activeChargedPrice}</span> ج.م)</span>
           <span>• إرسال الإيصال</span>
         </span>
-        <span class="btn-submit-sub">⚡ استلام فوري خلال 5 دقائق</span>
+        <span class="btn-submit-sub">
+          <span class="btn-submit-live-dot"></span>
+          <span>استلام فوري خلال 5 دقائق</span>
+        </span>
       `;
     }
   }
@@ -2580,8 +2907,8 @@ async function submitOrder(e) {
   btn.disabled = true;
   btn.innerHTML =
     currentLang === 'en'
-      ? '<span class="btn-submit-main">⏳ Uploading screenshot &amp; submitting order...</span>'
-      : '<span class="btn-submit-main">⏳ جاري رفع السكرين شوت وإرسال الطلب...</span>';
+      ? '<span class="btn-submit-main"><span class="btn-submit-spinner"></span><span>Uploading screenshot &amp; submitting order...</span></span>'
+      : '<span class="btn-submit-main"><span class="btn-submit-spinner"></span><span>جاري رفع السكرين شوت وإرسال الطلب...</span></span>';
 
   try {
     const payload = {
@@ -2858,6 +3185,64 @@ function promptRestoreOrder() {
 }
 
 initStore();
+
+// ==========================================
+// SMART 4-SLIDE PROMO SHOWCASE (3-SECOND CYCLE)
+// ==========================================
+let currentPromoSlideIdx = 0;
+let promoShowcaseTimer = null;
+
+function setPromoSlide(index) {
+  const container = document.getElementById('promo-showcase-slider');
+  if (!container) return;
+  const slides = container.querySelectorAll('.promo-slide');
+  const dots = container.querySelectorAll('.promo-dot');
+  if (!slides || slides.length === 0) return;
+
+  currentPromoSlideIdx = ((index % slides.length) + slides.length) % slides.length;
+  slides.forEach((slide, idx) => {
+    if (idx === currentPromoSlideIdx) {
+      slide.classList.add('active');
+    } else {
+      slide.classList.remove('active');
+    }
+  });
+  dots.forEach((dot, idx) => {
+    if (idx === currentPromoSlideIdx) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+
+  const hudTextEl = document.getElementById('promo-hud-text');
+  const activeSlide = slides[currentPromoSlideIdx];
+  if (hudTextEl && activeSlide) {
+    hudTextEl.textContent = activeSlide.getAttribute('data-slide-badge') || `TWEAK LAB • ${currentPromoSlideIdx + 1}/${slides.length}`;
+  }
+
+  // Restart 3-second progress bar animation smoothly
+  const progressBar = document.getElementById('promo-progress-bar');
+  if (progressBar && progressBar.style) {
+    progressBar.style.animation = 'none';
+    void progressBar.offsetWidth;
+    progressBar.style.animation = 'promoSlideProgress 3s linear infinite';
+  }
+}
+
+function selectPromoSlide(index) {
+  setPromoSlide(index);
+  startPromoShowcaseTimer();
+}
+
+function startPromoShowcaseTimer() {
+  if (promoShowcaseTimer) clearInterval(promoShowcaseTimer);
+  promoShowcaseTimer = setInterval(() => {
+    setPromoSlide(currentPromoSlideIdx + 1);
+  }, 3000);
+}
+
+startPromoShowcaseTimer();
 
 // ==========================================
 // TWEAK LAB CHATBOT WIDGET CONTROLLER
