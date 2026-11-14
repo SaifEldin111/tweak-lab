@@ -2374,6 +2374,10 @@
             <span data-i18n="navReturnOrder">الرجوع لطلبي الحالي</span>
             <span id="nav-return-order-timer" style="font-family:monospace; font-size:0.76rem; color:#fff; background:rgba(0,0,0,0.55); padding:1px 6px; border-radius:6px;"></span>
           </button>
+          <button id="nav-rate-now-btn" class="btn" onclick="openReviewFromNavbar()" style="display:none; font-size:0.82rem; padding:6px 14px; background:linear-gradient(90deg, rgba(0,255,136,0.25), rgba(0,240,255,0.2)); border:1.5px solid var(--green); color:var(--green); font-weight:900; box-shadow:0 0 16px rgba(0,255,136,0.38); cursor:pointer; align-items:center; gap:6px;">
+            <span>⭐</span>
+            <span data-i18n="navRateNowBtn">قيّم تجربتك الآن</span>
+          </button>
           <button class="btn" data-i18n="navRestore" onclick="promptRestoreOrder()" style="font-size:0.8rem; padding:6px 12px;">🔍 متابعة طلب سابق</button>
           <button class="btn lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()" title="Switch Language / تغيير اللغة">🌐 English</button>
           <button type="button" class="nav-cta-neon-btn" onclick="scrollToCheckoutSection()" data-i18n="navOrderNowBtn">اطلب الباقة الآن</button>
@@ -2961,37 +2965,69 @@
             </div>
           </div>
 
-          <div class="vault-box">
-            <h3 style="color:var(--cyan); margin-bottom:8px;" data-i18n="vaultVideoHeading">🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)</h3>
-            <p id="vault-video-notes" style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;"></p>
-            <div id="vault-video-embed-wrap" style="position:relative; width:100%; padding-bottom:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--cyan); margin-bottom:14px; background:#000;">
-              <iframe id="vault-video-iframe" src="" title="Tweak Lab Video Tutorial" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <!-- RESTART & RETURN FOR REVIEW NOTICE (WITH COPY ORDER ID BUTTON) -->
+          <div id="restart-review-notice-box" style="background:linear-gradient(135deg, rgba(0, 255, 136, 0.12), rgba(0, 240, 255, 0.08)); border:1.5px solid rgba(0, 255, 136, 0.48); border-radius:14px; padding:14px 16px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; text-align:start; box-shadow:0 0 20px rgba(0, 255, 136, 0.14);">
+            <div style="flex:1; min-width:230px; font-size:0.89rem; color:#e9f5ff; line-height:1.65;">
+              <strong style="color:var(--green);">💡 نصيحة مهمة قبل قفل الصفحة:</strong>
+              <span>نزل ملفاتك واعمل Restart لجهازك، ولما تجرب اللعب ارجع من زرار (متابعة طلب سابق) برقم طلبك عشان تكتب فريماتك وتاخد كود خصم 20%</span>
             </div>
-            <a id="vault-video-btn" href="https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt" target="_blank" class="btn btn-primary" style="margin-bottom:20px; background:linear-gradient(90deg, #ff4757, #ff7f50); color:#fff;" data-i18n="vaultVideoBtn">
-              ▶️ فتح ومشاهدة فيديو الشرح الكامل على يوتيوب
-            </a>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <code id="restart-notice-order-id" style="background:#060a10; border:1px solid rgba(0, 240, 255, 0.45); color:var(--cyan); padding:6px 11px; border-radius:8px; font-weight:900; font-size:0.9rem;">#TL-000000</code>
+              <button type="button" id="copy-order-id-restart-btn" class="btn" onclick="copyOrderIdForRestart(this)" style="background:var(--green); color:#031014; font-weight:900; border:none; padding:7px 14px; font-size:0.82rem;">
+                📋 نسخ رقم الطلب
+              </button>
+            </div>
+          </div>
 
-            <h3 style="color:var(--green); margin-bottom:8px;" data-i18n="vaultFilesHeading">📦 ثانياً: تحميل فولدر وملفات Best Optimization for 2027 FPS+</h3>
-            <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;" data-i18n-html="vaultFilesDesc">
-              يمكنك تحميل الفولدر بالكامل مضغوط <code>.ZIP</code> أو تحميل كل ملف منفرداً بضغطة واحدة:
-            </p>
+          <div class="vault-box">
+            <!-- ACTIVE DOWNLOADS CONTAINER (VISIBLE FOR FIRST 60 MINUTES ONLY) -->
+            <div id="approved-downloads-active-wrap">
+              <h3 style="color:var(--cyan); margin-bottom:8px;" data-i18n="vaultVideoHeading">🎬 أولاً: فيديو الشرح التفصيلي الكامل (Video Tutorial)</h3>
+              <p id="vault-video-notes" style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;"></p>
+              <div id="vault-video-embed-wrap" style="position:relative; width:100%; padding-bottom:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--cyan); margin-bottom:14px; background:#000;">
+                <iframe id="vault-video-iframe" src="" title="Tweak Lab Video Tutorial" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+              <a id="vault-video-btn" href="https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt" target="_blank" class="btn btn-primary" style="margin-bottom:20px; background:linear-gradient(90deg, #ff4757, #ff7f50); color:#fff;" data-i18n="vaultVideoBtn">
+                ▶️ فتح ومشاهدة فيديو الشرح الكامل على يوتيوب
+              </a>
 
-            <a id="dl-zip-btn" href="#" class="btn btn-primary" style="margin-bottom:12px;" data-i18n="dlZipBtn">
-              ⬇ تحميل الفولدر الكامل مضغوط (Best_Optimization_for_2027_FPS_Plus.zip)
-            </a>
+              <h3 style="color:var(--green); margin-bottom:8px;" data-i18n="vaultFilesHeading">📦 ثانياً: تحميل فولدر وملفات Best Optimization for 2027 FPS+</h3>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:12px;" data-i18n-html="vaultFilesDesc">
+                يمكنك تحميل الفولدر بالكامل مضغوط <code>.ZIP</code> أو تحميل كل ملف منفرداً بضغطة واحدة:
+              </p>
 
-            <div class="download-grid">
-              <a id="dl-bat-btn" href="#" class="btn" data-i18n="dlBatBtn">
-                ⚙️ تحميل أداة التويكر الشاملة (.BAT)
+              <a id="dl-zip-btn" href="#" class="btn btn-primary" style="margin-bottom:12px;" data-i18n="dlZipBtn">
+                ⬇ تحميل الفولدر الكامل مضغوط (Best_Optimization_for_2027_FPS_Plus.zip)
               </a>
-              <a id="dl-cleaner-btn" href="#" class="btn" style="border-color:var(--green); color:var(--green);" data-i18n="dlCleanerBtn">
-                🧹 تحميل أداة تنظيف الرام والـ Temp (.BAT)
-              </a>
-              <a id="dl-html-btn" href="#" class="btn" data-i18n="dlHtmlBtn">
-                📘 تحميل الدليل التفاعلي (.HTML)
-              </a>
-              <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);" data-i18n="openGuideBtn">
-                🌐 فتح الدليل التفاعلي في المتصفح الآن
+
+              <div class="download-grid">
+                <a id="dl-bat-btn" href="#" class="btn" data-i18n="dlBatBtn">
+                  ⚙️ تحميل أداة التويكر الشاملة (.BAT)
+                </a>
+                <a id="dl-cleaner-btn" href="#" class="btn" style="border-color:var(--green); color:var(--green);" data-i18n="dlCleanerBtn">
+                  🧹 تحميل أداة تنظيف الرام والـ Temp (.BAT)
+                </a>
+                <a id="dl-html-btn" href="#" class="btn" data-i18n="dlHtmlBtn">
+                  📘 تحميل الدليل التفاعلي (.HTML)
+                </a>
+                <a id="open-guide-btn" href="#" target="_blank" class="btn" style="border-color:var(--cyan); color:var(--cyan);" data-i18n="openGuideBtn">
+                  🌐 فتح الدليل التفاعلي في المتصفح الآن
+                </a>
+              </div>
+            </div>
+
+            <!-- LOCKED DOWNLOADS MESSAGE (SHOWN AFTER 60 MINUTES WHILE REVIEW BOX REMAINS OPEN FOR 7 DAYS) -->
+            <div id="approved-downloads-locked-wrap" style="display:none; background:linear-gradient(135deg, rgba(255, 71, 87, 0.14), rgba(14, 20, 32, 0.96)); border:1.5px solid rgba(255, 71, 87, 0.55); border-radius:14px; padding:22px 18px; margin-bottom:18px; text-align:center;">
+              <div style="font-size:2.4rem; margin-bottom:8px;">🔒</div>
+              <div style="color:var(--red); font-size:1.15rem; font-weight:900; margin-bottom:8px;" id="locked-files-msg-title">
+                انتهت مهلة تحميل الملفات (60 دقيقة) لحماية المحتوى
+              </div>
+              <p style="color:var(--text-muted); font-size:0.86rem; max-width:500px; margin:0 auto 14px; line-height:1.65;">
+                تم قفل روابط التحميل تلقائياً بعد مرور ساعة على استلام الطلب لحماية الملفات من المشاركة، بينما يظل <strong style="color:var(--green);">بوكس تقييم تجربتك واستلام كود الخصم 20%</strong> مفتوحاً لك بالأسفل لمدة 7 أيام!
+              </p>
+              <a id="locked-files-wa-btn" href="#" target="_blank" class="btn" style="background:rgba(37, 211, 102, 0.14); border:1px solid #25d366; color:#25d366; font-size:0.82rem; padding:8px 16px; display:inline-flex; align-items:center; gap:6px;">
+                <span>💬</span>
+                <span>تواصل مع الدعم عبر واتساب لو محتاج إعادة تفعيل التحميل</span>
               </a>
             </div>
 
@@ -3121,6 +3157,27 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- RESTORE PREVIOUS ORDER MODAL (BY ORDER ID OR PHONE NUMBER - WORKS DURING & AFTER 60 MINUTES FOR REVIEW) -->
+  <div id="restore-order-modal" style="display:none; position:fixed; inset:0; z-index:100000; background:rgba(4, 7, 12, 0.84); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:18px;">
+    <div style="background:var(--bg-card); border:1.5px solid var(--green); border-radius:18px; max-width:460px; width:100%; padding:24px 22px; box-shadow:0 20px 55px rgba(0,0,0,0.8), 0 0 28px rgba(0,255,136,0.22); position:relative; text-align:start;">
+      <button type="button" onclick="closeRestoreOrderModal()" style="position:absolute; top:14px; inset-inline-end:14px; background:rgba(255,255,255,0.08); border:1px solid var(--border); color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:0.9rem;">✕</button>
+      <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.4); color:var(--green); font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:10px;">
+        <span>🔍 متابعة طلب سابق أو تقييم تجربتك</span>
+      </div>
+      <h3 style="color:#fff; font-size:1.22rem; font-weight:900; margin-bottom:6px;">افتح طلبك أو اكتب تقييمك واستلم كود خصم 20%</h3>
+      <p style="color:var(--text-muted); font-size:0.86rem; line-height:1.6; margin-bottom:14px;">
+        اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل المحول منه</strong> لفتح صفحة الأوردر أو كتابة فريماتك بعد التظبيط:
+      </p>
+      <form onsubmit="submitRestoreOrderLookup(event)">
+        <input type="text" id="restore-order-query-input" class="input-field" placeholder="مثال: TL-123456 أو 01012345678" style="margin-bottom:8px; direction:ltr; text-align:center; font-weight:800; font-size:1rem;" required />
+        <div id="restore-order-error-msg" style="display:none; color:#ff4757; font-size:0.82rem; font-weight:700; margin-bottom:10px; text-align:center;"></div>
+        <button type="submit" id="restore-order-submit-btn" class="btn btn-primary" style="width:100%; font-weight:900; padding:12px 16px;">
+          🚀 فتح صفحة الطلب الآن
+        </button>
+      </form>
+    </div>
   </div>
 
 <script>
@@ -3688,6 +3745,70 @@ function extractSigFromDownloads(delivery) {
   }
 }
 
+const SIXTY_MINUTES_MS = 60 * 60 * 1000;
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
+function isOrderReviewed(orderObj) {
+  if (!orderObj || !orderObj.id) return false;
+  return Boolean(orderObj.reviewSubmitted || localStorage.getItem(`tweaklab_reviewed_${orderObj.id}`) === '1');
+}
+
+function isWithin7DayReviewWindow(orderObj) {
+  if (!orderObj || !orderObj.id) return false;
+  const isApprovedOrder = orderObj.status === 'approved' || orderObj.status === 'expired' || orderObj.paymentStatus === 'approved';
+  if (!isApprovedOrder) return false;
+  const baseMs = orderObj.firstAccessedAt
+    ? new Date(orderObj.firstAccessedAt).getTime()
+    : (orderObj.approvedAt ? new Date(orderObj.approvedAt).getTime() : (orderObj.createdAt ? new Date(orderObj.createdAt).getTime() : Date.now()));
+  const revExpMs = orderObj.reviewExpiresAt
+    ? new Date(orderObj.reviewExpiresAt).getTime()
+    : (baseMs + SEVEN_DAYS_MS);
+  return Date.now() <= revExpMs;
+}
+
+function saveReviewSession7Days(orderObj) {
+  if (!orderObj || !orderObj.id) return;
+  const isApprovedOrder = orderObj.status === 'approved' || orderObj.status === 'expired' || orderObj.paymentStatus === 'approved';
+  if (!isApprovedOrder) return;
+  const nowMs = Date.now();
+  const firstMs = orderObj.firstAccessedAt ? new Date(orderObj.firstAccessedAt).getTime() : nowMs;
+  const revExpIso = orderObj.reviewExpiresAt || new Date(firstMs + SEVEN_DAYS_MS).toISOString();
+  const expIso = orderObj.expiresAt || new Date(firstMs + SIXTY_MINUTES_MS).toISOString();
+  const reviewRef = {
+    id: orderObj.id,
+    accessToken: orderObj.accessToken || '',
+    sig: orderObj.sig || '',
+    customerName: orderObj.customerName || '',
+    status: orderObj.status || 'approved',
+    paymentStatus: 'approved',
+    firstAccessedAt: orderObj.firstAccessedAt || new Date(firstMs).toISOString(),
+    expiresAt: expIso,
+    reviewExpiresAt: revExpIso,
+    reviewSubmitted: isOrderReviewed(orderObj),
+    delivery: orderObj.delivery || { downloadsExpired: true, downloads: null }
+  };
+  try {
+    localStorage.setItem('tweaklab_review_session', JSON.stringify(reviewRef));
+  } catch (e) {}
+}
+
+function loadReviewSession7Days() {
+  try {
+    const raw = localStorage.getItem('tweaklab_review_session');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.id) return null;
+    if (!isWithin7DayReviewWindow(parsed)) {
+      localStorage.removeItem('tweaklab_review_session');
+      return null;
+    }
+    parsed.reviewSubmitted = isOrderReviewed(parsed);
+    return parsed;
+  } catch (e) {
+    return null;
+  }
+}
+
 function loadSavedOrderSession() {
   let savedOrder = null;
   const raw = localStorage.getItem('tweaklab_active_order');
@@ -3719,6 +3840,13 @@ function loadSavedOrderSession() {
     localStorage.setItem('tweaklab_active_order', JSON.stringify(savedOrder));
   }
 
+  if (!savedOrder) {
+    const revRef = loadReviewSession7Days();
+    if (revRef && !isOrderReviewed(revRef)) {
+      savedOrder = revRef;
+    }
+  }
+
   currentOrder = savedOrder;
   return currentOrder;
 }
@@ -3727,15 +3855,16 @@ function saveOrderSession(orderObj) {
   if (!orderObj || !orderObj.id) return;
   currentOrder = orderObj;
   localStorage.setItem('tweaklab_active_order', JSON.stringify(currentOrder));
+  saveReviewSession7Days(currentOrder);
   updateNavbarReturnBtn();
 }
 
 function hasActiveUnexpiredOrderSession() {
   if (!currentOrder || !currentOrder.id || !currentOrder.accessToken) return false;
-  if (currentOrder.status === 'rejected' || currentOrder.status === 'expired') return false;
+  if (currentOrder.status === 'rejected') return false;
   if (currentOrder.expiresAt) {
     const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
-    return remMs > 0;
+    return remMs > 0 && !currentOrder.downloadsExpired;
   }
   if (currentOrder.status === 'pending') {
     return true;
@@ -3743,13 +3872,27 @@ function hasActiveUnexpiredOrderSession() {
   return false;
 }
 
+function getActiveReviewCandidateAfterHour() {
+  const candidate = (currentOrder && currentOrder.id) ? currentOrder : loadReviewSession7Days();
+  if (!candidate || !candidate.id) return null;
+  if (!isWithin7DayReviewWindow(candidate)) return null;
+  if (isOrderReviewed(candidate)) return null;
+  const isDownloadsDone = Boolean(
+    candidate.downloadsExpired ||
+    candidate.status === 'expired' ||
+    (candidate.expiresAt && new Date(candidate.expiresAt).getTime() <= Date.now())
+  );
+  return isDownloadsDone ? candidate : null;
+}
+
 function updateNavbarReturnBtn() {
   const btn = document.getElementById('nav-return-order-btn');
   const timerBadge = document.getElementById('nav-return-order-timer');
-  if (!btn) return;
+  const rateNowBtn = document.getElementById('nav-rate-now-btn');
 
   if (hasActiveUnexpiredOrderSession()) {
-    btn.style.display = 'inline-flex';
+    if (btn) btn.style.display = 'inline-flex';
+    if (rateNowBtn) rateNowBtn.style.display = 'none';
     if (timerBadge) {
       if (currentOrder.expiresAt) {
         const remSec = Math.max(0, Math.floor((new Date(currentOrder.expiresAt).getTime() - Date.now()) / 1000));
@@ -3760,78 +3903,189 @@ function updateNavbarReturnBtn() {
         timerBadge.textContent = '';
       }
     }
-  } else {
-    btn.style.display = 'none';
-    if (timerBadge) timerBadge.textContent = '';
+    return;
+  }
+
+  if (btn) btn.style.display = 'none';
+  if (timerBadge) timerBadge.textContent = '';
+
+  const reviewCandidate = getActiveReviewCandidateAfterHour();
+  if (rateNowBtn) {
+    rateNowBtn.style.display = reviewCandidate ? 'inline-flex' : 'none';
   }
 }
 
-function renderApprovedDelivery(orderObj) {
-  if (!orderObj || !orderObj.delivery) return;
+function copyOrderIdForRestart(btn) {
+  const oid = (currentOrder && currentOrder.id) ? currentOrder.id : 'TL-000000';
+  copyText(oid, btn);
+}
+
+function lockOrderDownloadsInApprovedView(orderObj) {
+  if (timeBombInterval) clearInterval(timeBombInterval);
+  const oid = (orderObj && orderObj.id) || (currentOrder && currentOrder.id) || 'TL-000000';
+
+  const tbBanner = document.getElementById('timebomb-banner');
+  if (tbBanner) tbBanner.style.display = 'none';
+
+  const restartNotice = document.getElementById('restart-review-notice-box');
+  if (restartNotice) restartNotice.style.display = 'none';
+
+  const activeWrap = document.getElementById('approved-downloads-active-wrap');
+  if (activeWrap) activeWrap.style.display = 'none';
+
+  ['dl-zip-btn', 'dl-bat-btn', 'dl-cleaner-btn', 'dl-html-btn', 'open-guide-btn'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.href = '#';
+      el.removeAttribute('download');
+      el.onclick = (e) => e.preventDefault();
+    }
+  });
+
+  const lockedWrap = document.getElementById('approved-downloads-locked-wrap');
+  if (lockedWrap) lockedWrap.style.display = 'block';
+
+  const waPhone = '2' + (storeConfig.paymentPhone || '01020670418');
+  const waMsg = encodeURIComponent(
+    `مرحباً Tweak Lab، رقم طلبي هو ${oid} وانتهت مهلة تحميل الملفات (60 دقيقة)، برجاء المساعدة في إعادة تفعيل الرابط.`
+  );
+  const waBtn = document.getElementById('locked-files-wa-btn');
+  if (waBtn) waBtn.href = `https://wa.me/${waPhone}?text=${waMsg}`;
+
+  if (orderObj) {
+    orderObj.downloadsExpired = true;
+    orderObj.status = 'expired';
+    orderObj.paymentStatus = 'approved';
+    saveOrderSession(orderObj);
+  }
+}
+
+function renderApprovedDelivery(orderObj, options = {}) {
+  if (!orderObj || !orderObj.id) return;
   if (countdownInterval) clearInterval(countdownInterval);
   if (pollTimer) {
     clearInterval(pollTimer);
     pollTimer = null;
   }
 
-  // First time opening approved delivery page: calculate expiration (current time + 60 minutes) and save to localStorage
-  if (!orderObj.expiresAt) {
-    const nowMs = Date.now();
+  const nowMs = Date.now();
+  // First time opening approved delivery page: calculate 60-min download expiration + 7-day review expiration
+  if (!orderObj.firstAccessedAt) {
     orderObj.firstAccessedAt = new Date(nowMs).toISOString();
-    orderObj.expiresAt = new Date(nowMs + 60 * 60 * 1000).toISOString();
   }
-  orderObj.status = 'approved';
+  if (!orderObj.expiresAt) {
+    orderObj.expiresAt = new Date(new Date(orderObj.firstAccessedAt).getTime() + SIXTY_MINUTES_MS).toISOString();
+  }
+  if (!orderObj.reviewExpiresAt) {
+    orderObj.reviewExpiresAt = new Date(new Date(orderObj.firstAccessedAt).getTime() + SEVEN_DAYS_MS).toISOString();
+  }
+
+  const remDownloadMs = new Date(orderObj.expiresAt).getTime() - nowMs;
+  const isDownloadsExpired = Boolean(orderObj.downloadsExpired || remDownloadMs <= 0 || !(orderObj.delivery && orderObj.delivery.downloads));
+
   orderObj.paymentStatus = 'approved';
-  if (!orderObj.sig) {
+  orderObj.status = isDownloadsExpired ? 'expired' : 'approved';
+  orderObj.downloadsExpired = isDownloadsExpired;
+  if (!orderObj.sig && orderObj.delivery) {
     orderObj.sig = extractSigFromDownloads(orderObj.delivery);
+  }
+  if (!orderObj.delivery) {
+    orderObj.delivery = { downloadsExpired: true, downloads: null };
   }
   saveOrderSession(orderObj);
 
   const sigQuery = orderObj.sig ? `&sig=${encodeURIComponent(orderObj.sig)}` : '';
-  window.history.replaceState({}, '', `/?order=${encodeURIComponent(orderObj.id)}&token=${encodeURIComponent(orderObj.accessToken)}${sigQuery}`);
+  if (orderObj.accessToken) {
+    window.history.replaceState({}, '', `/?order=${encodeURIComponent(orderObj.id)}&token=${encodeURIComponent(orderObj.accessToken)}${sigQuery}`);
+  }
 
   showView('approved-view');
   const oidEl = document.getElementById('approved-order-id');
   if (oidEl) oidEl.textContent = '#' + orderObj.id;
+  const restartOidEl = document.getElementById('restart-notice-order-id');
+  if (restartOidEl) restartOidEl.textContent = '#' + orderObj.id;
 
-  startTimeBombCountdown(orderObj.expiresAt);
+  const reviewBoxEl = document.getElementById('customer-review-box');
+  if (reviewBoxEl) {
+    reviewBoxEl.style.display = isWithin7DayReviewWindow(orderObj) ? 'block' : 'none';
+  }
 
-  const delivery = orderObj.delivery;
-  const notesEl = document.getElementById('vault-video-notes');
-  if (notesEl) notesEl.textContent = delivery.videoNotes || '';
-  const vUrl = delivery.videoUrl || 'https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt';
-  const vBtn = document.getElementById('vault-video-btn');
-  if (vBtn) vBtn.href = vUrl;
-  const ytMatch = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/.exec(vUrl);
-  const iframeEl = document.getElementById('vault-video-iframe');
-  if (ytMatch && iframeEl) {
-    const targetEmbed = 'https://www.youtube.com/embed/' + ytMatch[1];
-    if (iframeEl.src !== targetEmbed) iframeEl.src = targetEmbed;
-    document.getElementById('vault-video-embed-wrap').style.display = 'block';
+  if (isDownloadsExpired) {
+    lockOrderDownloadsInApprovedView(orderObj);
+  } else {
+    const tbBanner = document.getElementById('timebomb-banner');
+    if (tbBanner) tbBanner.style.display = 'block';
+    const restartNotice = document.getElementById('restart-review-notice-box');
+    if (restartNotice) restartNotice.style.display = 'flex';
+    const activeWrap = document.getElementById('approved-downloads-active-wrap');
+    if (activeWrap) activeWrap.style.display = 'block';
+    const lockedWrap = document.getElementById('approved-downloads-locked-wrap');
+    if (lockedWrap) lockedWrap.style.display = 'none';
+
+    startTimeBombCountdown(orderObj.expiresAt);
+
+    const delivery = orderObj.delivery;
+    const notesEl = document.getElementById('vault-video-notes');
+    if (notesEl) notesEl.textContent = delivery.videoNotes || '';
+    const vUrl = delivery.videoUrl || 'https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt';
+    const vBtn = document.getElementById('vault-video-btn');
+    if (vBtn) vBtn.href = vUrl;
+    const ytMatch = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/.exec(vUrl);
+    const iframeEl = document.getElementById('vault-video-iframe');
+    if (ytMatch && iframeEl) {
+      const targetEmbed = 'https://www.youtube.com/embed/' + ytMatch[1];
+      if (iframeEl.src !== targetEmbed) iframeEl.src = targetEmbed;
+      document.getElementById('vault-video-embed-wrap').style.display = 'block';
+    }
+    if (delivery.downloads) {
+      ['dl-zip-btn', 'dl-bat-btn', 'dl-cleaner-btn', 'dl-html-btn', 'open-guide-btn'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.onclick = null;
+      });
+      if (delivery.downloads.zip) document.getElementById('dl-zip-btn').href = delivery.downloads.zip;
+      if (delivery.downloads.bat) document.getElementById('dl-bat-btn').href = delivery.downloads.bat;
+      if (delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = delivery.downloads.cleaner;
+      if (delivery.downloads.html) document.getElementById('dl-html-btn').href = delivery.downloads.html;
+      if (delivery.downloads.liveGuide) document.getElementById('open-guide-btn').href = delivery.downloads.liveGuide;
+    }
   }
-  if (delivery.downloads) {
-    if (delivery.downloads.zip) document.getElementById('dl-zip-btn').href = delivery.downloads.zip;
-    if (delivery.downloads.bat) document.getElementById('dl-bat-btn').href = delivery.downloads.bat;
-    if (delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = delivery.downloads.cleaner;
-    if (delivery.downloads.html) document.getElementById('dl-html-btn').href = delivery.downloads.html;
-    if (delivery.downloads.liveGuide) document.getElementById('open-guide-btn').href = delivery.downloads.liveGuide;
-  }
+
   if (typeof initCustomerReviewBox === 'function') {
     initCustomerReviewBox(orderObj);
   }
   updateNavbarReturnBtn();
+
+  if (options.scrollToReview) {
+    setTimeout(() => {
+      const revBox = document.getElementById('customer-review-box');
+      if (revBox) revBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 120);
+  }
+}
+
+function openReviewFromNavbar() {
+  const candidate = getActiveReviewCandidateAfterHour() || currentOrder || loadReviewSession7Days();
+  if (!candidate || !candidate.id) {
+    promptRestoreOrder();
+    return;
+  }
+  currentOrder = candidate;
+  renderApprovedDelivery(currentOrder, { scrollToReview: true });
 }
 
 function returnToCurrentOrder() {
   loadSavedOrderSession();
   if (!currentOrder || !currentOrder.id) return;
 
-  if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+  if ((currentOrder.status === 'approved' || currentOrder.status === 'expired' || currentOrder.paymentStatus === 'approved') && currentOrder.expiresAt) {
     const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
-    if (remMs > 0) {
+    if (remMs > 0 && !currentOrder.downloadsExpired) {
       renderApprovedDelivery(currentOrder);
       const cardEl = document.getElementById('approved-view');
       if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    } else if (isWithin7DayReviewWindow(currentOrder)) {
+      renderApprovedDelivery(currentOrder, { scrollToReview: true });
       return;
     } else {
       showExpiredView(currentOrder.id);
@@ -3864,11 +4118,20 @@ async function initStore() {
   loadSavedOrderSession();
   updateNavbarReturnBtn();
 
-  if (currentOrder && currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasOrderInUrl = Boolean(urlParams.get('order'));
+
+  if (currentOrder && (currentOrder.status === 'approved' || currentOrder.status === 'expired' || currentOrder.paymentStatus === 'approved') && currentOrder.expiresAt) {
     const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
-    if (remMs > 0) {
+    if (remMs > 0 && !currentOrder.downloadsExpired && currentOrder.delivery && currentOrder.delivery.downloads) {
       renderApprovedDelivery(currentOrder);
-    } else {
+    } else if (isWithin7DayReviewWindow(currentOrder) && (hasOrderInUrl || !isOrderReviewed(currentOrder))) {
+      // If user refreshed the order page or opened order URL after 60 mins, show order page with locked files + active review box
+      if (hasOrderInUrl) {
+        renderApprovedDelivery(currentOrder);
+      }
+      updateNavbarReturnBtn();
+    } else if (hasOrderInUrl) {
       showExpiredView(currentOrder.id);
     }
   } else if (currentOrder && currentOrder.status === 'pending' && currentOrder.id && currentOrder.accessToken) {
@@ -3903,12 +4166,14 @@ async function initStore() {
 
   // 3. Verify/poll order status if needed
   if (currentOrder && currentOrder.id && currentOrder.accessToken) {
-    if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+    if ((currentOrder.status === 'approved' || currentOrder.status === 'expired' || currentOrder.paymentStatus === 'approved') && currentOrder.expiresAt) {
       const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
-      if (remMs > 0) {
+      if (remMs > 0 && !currentOrder.downloadsExpired) {
         // Already restored from localStorage; sync quietly in background without locking until 60 mins finish
         checkOrderStatus();
-      } else {
+      } else if (isWithin7DayReviewWindow(currentOrder)) {
+        updateNavbarReturnBtn();
+      } else if (hasOrderInUrl) {
         showExpiredView(currentOrder.id);
       }
     } else {
@@ -4298,7 +4563,12 @@ function startTimeBombCountdown(expiresAtIso) {
       clearInterval(timeBombInterval);
       const timerEl = document.getElementById('timebomb-timer');
       if (timerEl) timerEl.textContent = '00:00';
-      showExpiredView(currentOrder && currentOrder.id);
+      if (currentOrder && isWithin7DayReviewWindow(currentOrder)) {
+        lockOrderDownloadsInApprovedView(currentOrder);
+        updateNavbarReturnBtn();
+      } else {
+        showExpiredView(currentOrder && currentOrder.id);
+      }
       return;
     }
     const remSec = Math.floor(diff / 1000);
@@ -4368,7 +4638,11 @@ async function checkOrderStatus() {
   if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
     const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
     if (remMs <= 0) {
-      showExpiredView(currentOrder.id);
+      if (isWithin7DayReviewWindow(currentOrder)) {
+        renderApprovedDelivery(currentOrder);
+      } else {
+        showExpiredView(currentOrder.id);
+      }
       return;
     }
   }
@@ -4382,18 +4656,44 @@ async function checkOrderStatus() {
       if (currentOrder.expiresAt && new Date(currentOrder.expiresAt).getTime() > Date.now()) {
         return;
       }
-      showExpiredView(currentOrder.id);
+      if (isWithin7DayReviewWindow(currentOrder)) {
+        renderApprovedDelivery(currentOrder);
+      } else {
+        showExpiredView(currentOrder.id);
+      }
       return;
     }
 
     if (!res.ok) return;
     const data = await res.json();
 
-    if (data.status === 'expired' || data.isBurned) {
+    if (data.status === 'expired' || data.isBurned || data.downloadsExpired) {
       if (currentOrder.expiresAt && new Date(currentOrder.expiresAt).getTime() > Date.now()) {
         return;
       }
-      showExpiredView(data.id || currentOrder.id);
+      const nowMs = Date.now();
+      const firstIso = data.firstAccessedAt || currentOrder.firstAccessedAt || new Date(nowMs - SIXTY_MINUTES_MS - 1000).toISOString();
+      const revExpIso = data.reviewExpiresAt || currentOrder.reviewExpiresAt || new Date(new Date(firstIso).getTime() + SEVEN_DAYS_MS).toISOString();
+      currentOrder = {
+        ...currentOrder,
+        id: data.id || currentOrder.id,
+        status: 'expired',
+        paymentStatus: 'approved',
+        downloadsExpired: true,
+        customerName: data.customerName || currentOrder.customerName || '',
+        firstAccessedAt: firstIso,
+        expiresAt: data.expiresAt || currentOrder.expiresAt || new Date(nowMs - 1000).toISOString(),
+        reviewExpiresAt: revExpIso,
+        reviewSubmitted: Boolean(data.reviewSubmitted || isOrderReviewed(currentOrder)),
+        sig: data.sig || currentOrder.sig || '',
+        delivery: data.delivery || { downloadsExpired: true, downloads: null }
+      };
+      saveOrderSession(currentOrder);
+      if (isWithin7DayReviewWindow(currentOrder)) {
+        renderApprovedDelivery(currentOrder);
+      } else {
+        showExpiredView(currentOrder.id);
+      }
       return;
     }
 
@@ -4404,26 +4704,31 @@ async function checkOrderStatus() {
       saveOrderSession(currentOrder);
       showWaitingRoom();
     } else if (data.status === 'approved' && data.delivery) {
-      // First time order delivery opens: calculate expiration = Date.now() + 60 minutes and persist to localStorage
+      // First time order delivery opens: calculate 60-min download expiration + 7-day review expiration and persist to localStorage
       const isFirstApprovalOpen = !currentOrder.expiresAt || currentOrder.id !== data.id;
       const nowMs = Date.now();
+      const firstIso = currentOrder.firstAccessedAt || data.firstAccessedAt || new Date(nowMs).toISOString();
       const calculatedExpiresAt = isFirstApprovalOpen
-        ? new Date(nowMs + 60 * 60 * 1000).toISOString()
+        ? new Date(nowMs + SIXTY_MINUTES_MS).toISOString()
         : currentOrder.expiresAt;
+      const calculatedReviewExpiresAt = currentOrder.reviewExpiresAt || data.reviewExpiresAt || new Date(new Date(firstIso).getTime() + SEVEN_DAYS_MS).toISOString();
 
       currentOrder = {
         ...currentOrder,
         id: data.id,
         status: 'approved',
         paymentStatus: 'approved',
+        downloadsExpired: false,
         customerName: data.customerName || currentOrder.customerName || '',
         amountEgp: data.amountEgp || currentOrder.amountEgp || 99,
         paymentMethod: data.paymentMethod || currentOrder.paymentMethod || 'instapay',
         discountCode: data.discountCode || currentOrder.discountCode || '',
         approvedAt: data.approvedAt || currentOrder.approvedAt || new Date(nowMs).toISOString(),
-        firstAccessedAt: currentOrder.firstAccessedAt || new Date(nowMs).toISOString(),
+        firstAccessedAt: firstIso,
         expiresAt: calculatedExpiresAt,
-        sig: currentOrder.sig || extractSigFromDownloads(data.delivery),
+        reviewExpiresAt: calculatedReviewExpiresAt,
+        reviewSubmitted: Boolean(data.reviewSubmitted || isOrderReviewed(currentOrder)),
+        sig: data.sig || currentOrder.sig || extractSigFromDownloads(data.delivery),
         delivery: data.delivery
       };
       saveOrderSession(currentOrder);
@@ -4465,17 +4770,145 @@ function resetToNewOrder() {
   showView('checkout-view');
 }
 
+function closeRestoreOrderModal() {
+  const modal = document.getElementById('restore-order-modal');
+  if (modal) modal.style.display = 'none';
+}
+
 function promptRestoreOrder() {
   loadSavedOrderSession();
-  if (currentOrder && currentOrder.id) {
-    returnToCurrentOrder();
-    return;
+  const modal = document.getElementById('restore-order-modal');
+  const input = document.getElementById('restore-order-query-input');
+  const errEl = document.getElementById('restore-order-error-msg');
+  if (errEl) {
+    errEl.style.display = 'none';
+    errEl.textContent = '';
   }
-  alert(
-    currentLang === 'en'
-      ? 'If you ordered from this browser, your order will reopen automatically — or open the order link shown right after you submitted.'
-      : 'إذا قمت بالطلب من هذا المتصفح فسيتم فتح طلبك تلقائياً، أو افتح الرابط الذي ظهر لك بعد إرسال الطلب.'
-  );
+  if (modal) {
+    modal.style.display = 'flex';
+    const revRef = loadReviewSession7Days();
+    const defaultId = (currentOrder && currentOrder.id) || (revRef && revRef.id) || '';
+    if (input) {
+      input.value = defaultId;
+      setTimeout(() => input.focus(), 60);
+    }
+  }
+}
+
+async function submitRestoreOrderLookup(e) {
+  if (e) e.preventDefault();
+  const input = document.getElementById('restore-order-query-input');
+  const errEl = document.getElementById('restore-order-error-msg');
+  const btn = document.getElementById('restore-order-submit-btn');
+  const rawQuery = (input ? input.value : '').trim();
+  if (!rawQuery) return;
+
+  if (errEl) {
+    errEl.style.display = 'none';
+    errEl.textContent = '';
+  }
+
+  // Check if matches local saved order first for instant restore when within 60 minutes
+  const cleanUpper = rawQuery.replace(/^#/, '').trim().toUpperCase();
+  if (currentOrder && currentOrder.id && String(currentOrder.id).toUpperCase() === cleanUpper) {
+    if (currentOrder.expiresAt && new Date(currentOrder.expiresAt).getTime() > Date.now() && !currentOrder.downloadsExpired && currentOrder.delivery) {
+      closeRestoreOrderModal();
+      renderApprovedDelivery(currentOrder);
+      return;
+    }
+  }
+
+  const origText = btn ? btn.textContent : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'جاري البحث عن طلبك...';
+  }
+
+  try {
+    const res = await fetch(`/api/orders-lookup?q=${encodeURIComponent(rawQuery)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      if (errEl) {
+        errEl.textContent = data.error || 'لم يتم العثور على طلب بهذا الرقم.';
+        errEl.style.display = 'block';
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+      return;
+    }
+
+    closeRestoreOrderModal();
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = origText;
+    }
+
+    if (data.status === 'pending') {
+      currentOrder = {
+        id: data.id,
+        accessToken: data.accessToken,
+        status: 'pending',
+        paymentStatus: 'pending',
+        customerName: data.customerName || '',
+        amountEgp: data.amountEgp || 99,
+        paymentMethod: data.paymentMethod || 'instapay',
+        createdAt: data.createdAt
+      };
+      saveOrderSession(currentOrder);
+      showWaitingRoom();
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(checkOrderStatus, 2500);
+      return;
+    }
+
+    if (data.status === 'rejected') {
+      currentOrder = {
+        id: data.id,
+        accessToken: data.accessToken,
+        status: 'rejected',
+        paymentStatus: 'rejected'
+      };
+      saveOrderSession(currentOrder);
+      showView('rejected-view');
+      return;
+    }
+
+    // Approved or Expired (after 60 minutes): open the order page (with locked files if >60m) so customer can submit review!
+    const nowMs = Date.now();
+    const firstIso = data.firstAccessedAt || new Date(nowMs).toISOString();
+    const expIso = data.expiresAt || new Date(new Date(firstIso).getTime() + SIXTY_MINUTES_MS).toISOString();
+    const revExpIso = data.reviewExpiresAt || new Date(new Date(firstIso).getTime() + SEVEN_DAYS_MS).toISOString();
+
+    currentOrder = {
+      id: data.id,
+      accessToken: data.accessToken,
+      sig: data.sig || '',
+      customerName: data.customerName || '',
+      amountEgp: data.amountEgp || 99,
+      paymentMethod: data.paymentMethod || 'instapay',
+      status: data.downloadsExpired ? 'expired' : 'approved',
+      paymentStatus: 'approved',
+      downloadsExpired: Boolean(data.downloadsExpired),
+      firstAccessedAt: firstIso,
+      expiresAt: expIso,
+      reviewExpiresAt: revExpIso,
+      reviewSubmitted: Boolean(data.reviewSubmitted || localStorage.getItem(`tweaklab_reviewed_${data.id}`) === '1'),
+      delivery: data.delivery || { downloadsExpired: true, downloads: null }
+    };
+    saveOrderSession(currentOrder);
+    renderApprovedDelivery(currentOrder, { scrollToReview: Boolean(data.downloadsExpired) });
+  } catch (err) {
+    if (errEl) {
+      errEl.textContent = 'تعذر الاتصال بالخادم، حاول مرة أخرى.';
+      errEl.style.display = 'block';
+    }
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = origText;
+    }
+  }
 }
 
 initStore();
@@ -4628,10 +5061,10 @@ async function submitVerifiedReview(e) {
     if (codeTextEl) codeTextEl.textContent = rewardCode;
 
     currentOrder.reviewSubmitted = true;
-    saveOrderSession(currentOrder);
     try {
       localStorage.setItem(`tweaklab_reviewed_${currentOrder.id}`, '1');
     } catch (err) {}
+    saveOrderSession(currentOrder);
 
     const formEl = document.getElementById('verified-review-form');
     const rewardBoxEl = document.getElementById('review-reward-box');

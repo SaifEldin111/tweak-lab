@@ -41,6 +41,8 @@ function getProtectedFileBuffer(filename) {
 const PORT = process.env.PORT || 3027;
 const TIME_BOMB_MINUTES = 60;
 const TIME_BOMB_MS = TIME_BOMB_MINUTES * 60 * 1000;
+const REVIEW_WINDOW_DAYS = 7;
+const REVIEW_WINDOW_MS = REVIEW_WINDOW_DAYS * 24 * 60 * 60 * 1000;
 const IS_VERCEL = !!process.env.VERCEL;
 const ROOT_DIR = __dirname;
 const PUBLIC_DIR = path.join(ROOT_DIR, 'public');
@@ -1053,6 +1055,27 @@ async function handleRequest(req, res) {
         return sendJson(res, 403, { error: 'إضافة التقييم متاحة فقط للمشترين المؤكدين بعد الموافقة على الطلب.' });
       }
 
+      // Check 7-day review expiration window
+      const nowMs = Date.now();
+      if (order) {
+        const baseMs = order.firstAccessedAt
+          ? new Date(order.firstAccessedAt).getTime()
+          : (order.updatedAt ? new Date(order.updatedAt).getTime() : new Date(order.createdAt).getTime());
+        const revExpMs = order.reviewExpiresAt ? new Date(order.reviewExpiresAt).getTime() : (baseMs + REVIEW_WINDOW_MS);
+        if (nowMs > revExpMs) {
+          return sendJson(res, 410, { error: 'انتهت مهلة إرسال التقييم لهذا الطلب (7 أيام).' });
+        }
+      }
+
+      const existingReviews = loadReviews();
+      if ((order && order.reviewSubmitted) || existingReviews.some((r) => String(r.orderId || '').toUpperCase() === cleanOrderId)) {
+        return sendJson(res, 200, {
+          ok: true,
+          alreadyReviewed: true,
+          rewardCode: 'FRIEND20'
+        });
+      }
+
       if (!comment || !String(comment).trim()) {
         return sendJson(res, 400, { error: 'يرجى كتابة تعليق قصير عن تجربتك.' });
       }
@@ -1079,10 +1102,16 @@ async function handleRequest(req, res) {
         updatedAt: new Date().toISOString()
       };
 
-      const reviews = loadReviews();
+      const reviews = existingReviews;
       reviews.unshift(newReview);
       if (reviews.length > 2000) reviews.length = 2000;
       await saveReviews(reviews);
+
+      if (order) {
+        order.reviewSubmitted = true;
+        order.updatedAt = new Date().toISOString();
+        await saveOrders(orders);
+      }
 
       // Notify Admin on Telegram (non-blocking)
       if (process.env.DISABLE_TELEGRAM_FOR_TEST !== '1' && settings.telegramBotToken && settings.telegramChatId) {
@@ -1307,14 +1336,137 @@ async function handleRequest(req, res) {
       return res.end(svg);
     }
 
-    // 3. Poll Order Status
+    // 3. Lookup Order by Order ID or Phone Number (for "متابعة طلب سابق" & 7-day Review Return)
+    if (req.method === 'GET' && pathname === '/api/orders-lookup') {
+      const rawQuery = (parsedUrl.searchParams.get('q') || '').trim();
+      const normalizedDigits = rawQuery.replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+      const cleanQuery = normalizedDigits.replace(/^#/, '').trim();
+      if (!cleanQuery) {
+        return sendJson(res, 400, { error: 'يرجى إدخال رقم الطلب أو رقم الموبايل.' });
+      }
+
+      const upperQuery = cleanQuery.toUpperCase();
+      const digitsOnly = cleanQuery.replace(/[^0-9]/g, '');
+      const orders = loadOrders();
+      const settings = loadSettings();
+
+      const matchedOrder = orders.find((o) => {
+        const oid = String(o.id || '').trim().toUpperCase();
+        if (oid === upperQuery || oid === 'TL-' + upperQuery) return true;
+        const oPhone = String(o.senderPhone || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660)).replace(/[^0-9]/g, '');
+        if (digitsOnly.length >= 10 && oPhone && oPhone === digitsOnly) return true;
+        return false;
+      });
+
+      if (!matchedOrder) {
+        return sendJson(res, 404, { error: 'لم يتم العثور على طلب بهذا الرقم. تأكد من رقم الطلب (مثال: TL-123456) أو رقم التليفون المحول منه.' });
+      }
+
+      const now = Date.now();
+      const allReviews = loadReviews();
+      const hasSubmittedReview = Boolean(
+        matchedOrder.reviewSubmitted ||
+        allReviews.some((r) => String(r.orderId || '').toUpperCase() === String(matchedOrder.id).toUpperCase())
+      );
+
+      if (matchedOrder.status === 'approved' || matchedOrder.status === 'expired') {
+        if (!matchedOrder.firstAccessedAt) {
+          matchedOrder.firstAccessedAt = new Date(now).toISOString();
+          matchedOrder.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
+          matchedOrder.reviewExpiresAt = new Date(now + REVIEW_WINDOW_MS).toISOString();
+          matchedOrder.isBurned = false;
+          matchedOrder.updatedAt = new Date(now).toISOString();
+          await saveOrders(orders);
+        } else if (!matchedOrder.reviewExpiresAt) {
+          const baseMs = new Date(matchedOrder.firstAccessedAt).getTime();
+          matchedOrder.reviewExpiresAt = new Date(baseMs + REVIEW_WINDOW_MS).toISOString();
+          await saveOrders(orders);
+        }
+
+        const expMs = matchedOrder.accessExpiresAt ? new Date(matchedOrder.accessExpiresAt).getTime() : (now - 1000);
+        const revExpMs = matchedOrder.reviewExpiresAt ? new Date(matchedOrder.reviewExpiresAt).getTime() : (expMs + REVIEW_WINDOW_MS);
+        const isDownloadExpired = Boolean(matchedOrder.isBurned || now > expMs);
+        const isReviewWindowOpen = now <= revExpMs;
+
+        if (isDownloadExpired && (!matchedOrder.isBurned || matchedOrder.status !== 'expired')) {
+          matchedOrder.isBurned = true;
+          matchedOrder.status = 'expired';
+          matchedOrder.updatedAt = new Date(now).toISOString();
+          await saveOrders(orders);
+        }
+
+        const remainingSeconds = isDownloadExpired ? 0 : Math.max(0, Math.floor((expMs - now) / 1000));
+        const timeBombInfo = {
+          firstAccessedAt: matchedOrder.firstAccessedAt,
+          expiresAt: matchedOrder.accessExpiresAt,
+          reviewExpiresAt: matchedOrder.reviewExpiresAt,
+          remainingSeconds,
+          isBurned: isDownloadExpired
+        };
+
+        const sig = computeOrderSignature(matchedOrder.id, settings.adminPin);
+        const deliveryPayload = isDownloadExpired
+          ? {
+              videoTitle: settings.videoTitle,
+              videoUrl: settings.videoUrl,
+              videoNotes: settings.videoNotes,
+              timeBomb: timeBombInfo,
+              downloadsExpired: true,
+              downloads: null
+            }
+          : buildDeliveryPayload(matchedOrder.id, matchedOrder.accessToken, settings, timeBombInfo);
+
+        return sendJson(res, 200, {
+          ok: true,
+          id: matchedOrder.id,
+          accessToken: matchedOrder.accessToken,
+          sig,
+          customerName: matchedOrder.customerName,
+          discountCode: matchedOrder.discountCode || '',
+          paymentMethod: matchedOrder.paymentMethod,
+          amountEgp: matchedOrder.amountEgp,
+          status: isDownloadExpired ? 'expired' : 'approved',
+          paymentStatus: 'approved',
+          downloadsExpired: isDownloadExpired,
+          isBurned: isDownloadExpired,
+          reviewWindowOpen: isReviewWindowOpen,
+          reviewExpiresAt: matchedOrder.reviewExpiresAt,
+          reviewSubmitted: hasSubmittedReview,
+          firstAccessedAt: matchedOrder.firstAccessedAt,
+          expiresAt: matchedOrder.accessExpiresAt,
+          createdAt: matchedOrder.createdAt,
+          updatedAt: matchedOrder.updatedAt,
+          timeBomb: timeBombInfo,
+          delivery: deliveryPayload
+        });
+      }
+
+      return sendJson(res, 200, {
+        ok: true,
+        id: matchedOrder.id,
+        accessToken: matchedOrder.accessToken,
+        customerName: matchedOrder.customerName,
+        discountCode: matchedOrder.discountCode || '',
+        paymentMethod: matchedOrder.paymentMethod,
+        amountEgp: matchedOrder.amountEgp,
+        status: matchedOrder.status,
+        paymentStatus: matchedOrder.status,
+        createdAt: matchedOrder.createdAt,
+        updatedAt: matchedOrder.updatedAt
+      });
+    }
+
+    // 3b. Poll Order Status
     if (req.method === 'GET' && pathname.startsWith('/api/orders/')) {
       const orderId = pathname.replace('/api/orders/', '').trim();
       const token = parsedUrl.searchParams.get('token') || '';
+      const sigParam = parsedUrl.searchParams.get('sig') || '';
       const settings = loadSettings();
+      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
+      const hasValidSig = Boolean(sigParam && sigParam === expectedSig);
 
       const orders = loadOrders();
-      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && (o.accessToken === token || hasValidSig));
       if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
         const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
         if (restored) {
@@ -1330,10 +1482,34 @@ async function handleRequest(req, res) {
         return sendJson(res, 404, { error: 'لم يتم العثور على الطلب.' });
       }
 
-      // ONLY if admin manually clicked Accept in /admin will order.status be 'approved'
+      const allReviews = loadReviews();
+      const hasSubmittedReview = Boolean(
+        order.reviewSubmitted ||
+        allReviews.some((r) => String(r.orderId || '').toUpperCase() === String(order.id).toUpperCase())
+      );
+
+      // ONLY if admin manually clicked Accept in /admin will order.status be 'approved' (or 'expired' after 60m)
       if (order.status === 'approved' || order.status === 'expired') {
         const now = Date.now();
-        const isExpired = order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime());
+
+        // First time customer accesses the approved order: start the 60-minute download timer AND 7-day review timer!
+        if (!order.firstAccessedAt) {
+          order.firstAccessedAt = new Date(now).toISOString();
+          order.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
+          order.reviewExpiresAt = new Date(now + REVIEW_WINDOW_MS).toISOString();
+          order.isBurned = false;
+          order.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+        } else if (!order.reviewExpiresAt) {
+          const baseMs = new Date(order.firstAccessedAt).getTime();
+          order.reviewExpiresAt = new Date(baseMs + REVIEW_WINDOW_MS).toISOString();
+          await saveOrders(orders);
+        }
+
+        const expMs = order.accessExpiresAt ? new Date(order.accessExpiresAt).getTime() : (now - 1000);
+        const revExpMs = order.reviewExpiresAt ? new Date(order.reviewExpiresAt).getTime() : (expMs + REVIEW_WINDOW_MS);
+        const isExpired = Boolean(order.isBurned || now > expMs);
+        const isReviewWindowOpen = now <= revExpMs;
 
         if (isExpired) {
           if (!order.isBurned || order.status !== 'expired') {
@@ -1342,28 +1518,47 @@ async function handleRequest(req, res) {
             order.updatedAt = new Date().toISOString();
             await saveOrders(orders);
           }
-          return sendJson(res, 410, {
+          const timeBombExpiredInfo = {
+            firstAccessedAt: order.firstAccessedAt,
+            expiresAt: order.accessExpiresAt,
+            reviewExpiresAt: order.reviewExpiresAt,
+            remainingSeconds: 0,
+            isBurned: true
+          };
+          return sendJson(res, 200, {
             id: order.id,
+            customerName: order.customerName,
+            discountCode: order.discountCode || '',
+            paymentMethod: order.paymentMethod,
+            amountEgp: order.amountEgp,
             status: 'expired',
+            paymentStatus: 'approved',
+            downloadsExpired: true,
             isBurned: true,
-            error: 'Link Expired',
-            message: 'انتهت صلاحية هذا الرابط وتم إتلافه لحماية الملفات من التسريب.'
+            reviewWindowOpen: isReviewWindowOpen,
+            reviewExpiresAt: order.reviewExpiresAt,
+            reviewSubmitted: hasSubmittedReview,
+            firstAccessedAt: order.firstAccessedAt,
+            expiresAt: order.accessExpiresAt,
+            sig: expectedSig,
+            timeBomb: timeBombExpiredInfo,
+            delivery: {
+              videoTitle: settings.videoTitle,
+              videoUrl: settings.videoUrl,
+              videoNotes: settings.videoNotes,
+              timeBomb: timeBombExpiredInfo,
+              downloadsExpired: true,
+              downloads: null
+            },
+            message: 'انتهت مهلة تحميل الملفات (60 دقيقة) لحماية المحتوى'
           });
         }
 
-        // First time customer accesses the approved order: start the 1-hour (60-minute) countdown!
-        if (!order.firstAccessedAt) {
-          order.firstAccessedAt = new Date(now).toISOString();
-          order.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
-          order.isBurned = false;
-          order.updatedAt = new Date().toISOString();
-          await saveOrders(orders);
-        }
-
-        const remainingSeconds = Math.max(0, Math.floor((new Date(order.accessExpiresAt).getTime() - now) / 1000));
+        const remainingSeconds = Math.max(0, Math.floor((expMs - now) / 1000));
         const timeBombInfo = {
           firstAccessedAt: order.firstAccessedAt,
           expiresAt: order.accessExpiresAt,
+          reviewExpiresAt: order.reviewExpiresAt,
           remainingSeconds,
           isBurned: false
         };
@@ -1374,7 +1569,16 @@ async function handleRequest(req, res) {
           discountCode: order.discountCode || '',
           paymentMethod: order.paymentMethod,
           amountEgp: order.amountEgp,
-          status: order.status,
+          status: 'approved',
+          paymentStatus: 'approved',
+          downloadsExpired: false,
+          isBurned: false,
+          reviewWindowOpen: isReviewWindowOpen,
+          reviewExpiresAt: order.reviewExpiresAt,
+          reviewSubmitted: hasSubmittedReview,
+          firstAccessedAt: order.firstAccessedAt,
+          expiresAt: order.accessExpiresAt,
+          sig: expectedSig,
           createdAt: order.createdAt,
           updatedAt: order.updatedAt,
           timeBomb: timeBombInfo,
