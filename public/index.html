@@ -78,21 +78,65 @@
       flex-wrap: wrap;
     }
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 11px;
       text-decoration: none;
-      color: #fff;
-      font-weight: 900;
-      font-size: 1.25rem;
-      letter-spacing: 0.5px;
+      color: #ffffff;
+      direction: ltr;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: transform 0.2s ease;
     }
-    .brand img {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 2px solid var(--cyan);
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+    .brand-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #0e1624 0%, #070a10 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .brand-icon-box svg {
+      width: 40px;
+      height: 40px;
+      display: block;
+      filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.22));
+      transition: filter 0.22s ease;
+    }
+    .brand:hover .brand-icon-box {
+      border-color: rgba(0, 255, 136, 0.85);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.48), 0 0 10px rgba(0, 255, 136, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      transform: translateY(-1px);
+    }
+    .brand:hover .brand-icon-box svg {
+      filter: drop-shadow(0 0 9px rgba(0, 255, 136, 0.52));
+    }
+    .brand-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 900;
+      font-size: 1.38rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+    .brand-tweak {
+      color: #ffffff;
+    }
+    .brand-lab {
+      color: #00ff88;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.55), 0 0 24px rgba(0, 255, 136, 0.22);
+      transition: text-shadow 0.22s ease;
+    }
+    .brand:hover .brand-lab {
+      text-shadow: 0 0 16px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.36);
     }
     .nav-badges {
       display: flex;
@@ -1990,6 +2034,9 @@
       }
     }
     @media (max-width: 640px) {
+      .brand-wordmark {
+        font-size: 1.25rem;
+      }
       .funnel-nav-links {
         display: none;
       }
@@ -2776,9 +2823,15 @@
   <!-- 1. STICKY TOP NAVBAR -->
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="/" class="brand">
-        <img src="/assets/logo.png" alt="Tweak Lab Logo" />
-        <span>TWEAK LAB <span style="color:var(--cyan); font-weight:400; font-size:0.9rem;">| 2027 FPS+</span></span>
+      <a href="/" class="brand" dir="ltr" aria-label="TweakLab Home">
+        <span class="brand-icon-box" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="26" cy="20" r="13" fill="rgba(0, 255, 136, 0.08)" />
+            <path d="M6.5 11H20.8L19 14.5H15.2V29H11.4V14.5H6.5V11Z" fill="#FFFFFF" />
+            <path d="M28.5 7.5L19.6 17.6H24.6L18.4 25.5H15.2V29H31.6L33.5 25.5H22.8L30.2 15H25.8L28.5 7.5Z" fill="#00FF88" />
+          </svg>
+        </span>
+        <span class="brand-wordmark"><span class="brand-tweak">Tweak</span><span class="brand-lab">Lab</span></span>
       </a>
 
       <div class="funnel-nav-links" aria-label="أقسام الصفحة">

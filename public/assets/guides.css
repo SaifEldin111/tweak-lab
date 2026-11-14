@@ -58,22 +58,73 @@ body {
 }
 
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   text-decoration: none;
-  color: #fff;
-  font-weight: 900;
-  font-size: 1.18rem;
-  letter-spacing: 0.4px;
+  color: #ffffff;
+  direction: ltr;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
 }
 
-.brand img {
+.brand-icon-box {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--cyan);
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+  border-radius: 12px;
+  background: linear-gradient(145deg, #0e1624 0%, #070a10 100%);
+  border: 1.5px solid rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.brand-icon-box svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.22));
+  transition: filter 0.22s ease;
+}
+
+.brand:hover .brand-icon-box {
+  border-color: rgba(0, 255, 136, 0.85);
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.48), 0 0 10px rgba(0, 255, 136, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.brand:hover .brand-icon-box svg {
+  filter: drop-shadow(0 0 9px rgba(0, 255, 136, 0.52));
+}
+
+.brand-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 900;
+  font-size: 1.35rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.brand-tweak {
+  color: #ffffff;
+}
+
+.brand-lab {
+  color: #00ff88;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.55), 0 0 24px rgba(0, 255, 136, 0.22);
+  transition: text-shadow 0.22s ease;
+}
+
+.brand:hover .brand-lab {
+  text-shadow: 0 0 16px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.36);
 }
 
 .nav-links-group {
