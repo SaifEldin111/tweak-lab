@@ -1122,6 +1122,22 @@ async function handleRequest(req, res) {
         return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
       }
 
+      const trimmedName = String(customerName).trim();
+      if (!trimmedName || !/^[a-zA-Z\u0600-\u06FF\s]+$/.test(trimmedName)) {
+        return sendJson(res, 400, { error: 'الاسم لازم يكون حروف بس من غير أرقام' });
+      }
+
+      const normalizedPhone = String(senderPhone).trim().replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+      if (/[^0-9]/.test(normalizedPhone)) {
+        return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+      }
+      if (normalizedPhone.length < 11) {
+        return sendJson(res, 400, { error: 'رقم التليفون لازم يكون 11 رقم' });
+      }
+      if (!/^01[0-9]{9}$/.test(normalizedPhone)) {
+        return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+      }
+
       const match = /^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i.exec(screenshotDataUrl);
       if (!match) {
         return sendJson(res, 400, { error: 'صيغة صورة السكرين شوت غير صحيحة. يرجى رفع صورة PNG أو JPG.' });

@@ -1049,6 +1049,32 @@
     .input-field:focus {
       border-color: var(--cyan);
     }
+    .input-field.input-error {
+      border-color: var(--red) !important;
+      background: rgba(255, 71, 87, 0.07) !important;
+      box-shadow: 0 0 14px rgba(255, 71, 87, 0.35) !important;
+    }
+    .input-field.input-valid {
+      border-color: rgba(0, 255, 136, 0.65) !important;
+    }
+    .field-error-msg {
+      display: none;
+      margin-top: 6px;
+      padding: 7px 11px;
+      border-radius: 8px;
+      background: rgba(255, 71, 87, 0.14);
+      border: 1px solid rgba(255, 71, 87, 0.55);
+      color: #ff4757;
+      font-size: 0.84rem;
+      font-weight: 800;
+      line-height: 1.4;
+      animation: fieldErrorShake 0.26s ease-in-out;
+    }
+    @keyframes fieldErrorShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
     .input-discount {
       padding-inline-end: 42px;
       letter-spacing: 0.5px;
@@ -2040,15 +2066,17 @@
           </div>
 
           <!-- UPLOAD SCREENSHOT FORM -->
-          <form id="order-form" onsubmit="submitOrder(event)">
+          <form id="order-form" onsubmit="submitOrder(event)" novalidate>
             <div class="form-group">
               <label data-i18n="labelName">👤 اسمك (أو الـ Gaming Nickname):</label>
-              <input type="text" id="cust-name" class="input-field" data-i18n-placeholder="phName" placeholder="مثال: Ahmed / Marwan" required />
+              <input type="text" id="cust-name" class="input-field" data-i18n-placeholder="phName" placeholder="مثال: Ahmed / Marwan" autocomplete="name" oninput="handleCustomerNameInput(this)" onblur="validateCustomerName(true)" required />
+              <div id="cust-name-error" class="field-error-msg" role="alert">الاسم لازم يكون حروف بس من غير أرقام</div>
             </div>
 
             <div class="form-group">
               <label data-i18n="labelPhone">📱 رقم الموبايل المحول منه (أو حساب إنستاباي):</label>
-              <input type="text" id="cust-phone" class="input-field" data-i18n-placeholder="phPhone" placeholder="مثال: 010xxxxxxxx" required />
+              <input type="tel" id="cust-phone" class="input-field" inputmode="numeric" maxlength="11" data-i18n-placeholder="phPhone" placeholder="مثال: 010xxxxxxxx" autocomplete="tel" oninput="handleCustomerPhoneInput(this)" onblur="validateCustomerPhone(true)" required />
+              <div id="cust-phone-error" class="field-error-msg" role="alert">لازم تكتب أرقام فقط، رقم تليفون صحيح</div>
             </div>
 
             <div class="form-group">
@@ -3244,8 +3272,169 @@ function handleScreenshotFile(input) {
   reader.readAsDataURL(file);
 }
 
+function setFieldError(inputId, errorId, message) {
+  const inputEl = document.getElementById(inputId);
+  const errEl = document.getElementById(errorId);
+  if (inputEl) {
+    inputEl.classList.remove('input-valid');
+    inputEl.classList.add('input-error');
+  }
+  if (errEl) {
+    errEl.textContent = message;
+    errEl.style.display = 'block';
+  }
+}
+
+function clearFieldError(inputId, errorId, markValid = false) {
+  const inputEl = document.getElementById(inputId);
+  const errEl = document.getElementById(errorId);
+  if (inputEl) {
+    inputEl.classList.remove('input-error');
+    if (markValid) inputEl.classList.add('input-valid');
+    else inputEl.classList.remove('input-valid');
+  }
+  if (errEl) {
+    errEl.style.display = 'none';
+  }
+}
+
+// Strict Name Validation: Arabic or English letters + spaces only
+function handleCustomerNameInput(inputEl) {
+  if (!inputEl) return;
+  const raw = inputEl.value || '';
+  const hasInvalidChars = /[^a-zA-Z\u0600-\u06FF\s]/.test(raw);
+  if (hasInvalidChars) {
+    const cleaned = raw.replace(/[^a-zA-Z\u0600-\u06FF\s]/g, '');
+    inputEl.value = cleaned;
+    setFieldError('cust-name', 'cust-name-error', 'الاسم لازم يكون حروف بس من غير أرقام');
+    return;
+  }
+  const trimmed = raw.trim();
+  if (trimmed.length >= 2 && /^[a-zA-Z\u0600-\u06FF\s]+$/.test(trimmed)) {
+    clearFieldError('cust-name', 'cust-name-error', true);
+  } else if (trimmed.length === 0) {
+    clearFieldError('cust-name', 'cust-name-error', false);
+  }
+}
+
+function validateCustomerName(showErrorIfEmpty = true) {
+  const inputEl = document.getElementById('cust-name');
+  if (!inputEl) return false;
+  const raw = inputEl.value || '';
+  if (/[^a-zA-Z\u0600-\u06FF\s]/.test(raw)) {
+    inputEl.value = raw.replace(/[^a-zA-Z\u0600-\u06FF\s]/g, '');
+    setFieldError('cust-name', 'cust-name-error', 'الاسم لازم يكون حروف بس من غير أرقام');
+    return false;
+  }
+  const trimmed = raw.trim();
+  if (!trimmed || !/^[a-zA-Z\u0600-\u06FF\s]+$/.test(trimmed)) {
+    if (showErrorIfEmpty) {
+      setFieldError('cust-name', 'cust-name-error', 'الاسم لازم يكون حروف بس من غير أرقام');
+    }
+    return false;
+  }
+  clearFieldError('cust-name', 'cust-name-error', true);
+  return true;
+}
+
+// Strict Egyptian Phone Validation: Digits 0-9 only, 11 digits starting with 01
+function normalizeArabicDigits(str) {
+  return String(str || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+}
+
+function handleCustomerPhoneInput(inputEl) {
+  if (!inputEl) return;
+  const raw = normalizeArabicDigits(inputEl.value || '');
+  const hasNonDigits = /[^0-9]/.test(raw);
+  const cleaned = raw.replace(/[^0-9]/g, '').slice(0, 11);
+  if (inputEl.value !== cleaned) {
+    inputEl.value = cleaned;
+  }
+
+  if (hasNonDigits) {
+    setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
+    return;
+  }
+
+  if (cleaned.length === 0) {
+    clearFieldError('cust-phone', 'cust-phone-error', false);
+    return;
+  }
+
+  if ((cleaned.length >= 1 && cleaned[0] !== '0') || (cleaned.length >= 2 && !cleaned.startsWith('01'))) {
+    setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
+    return;
+  }
+
+  if (cleaned.length < 11) {
+    setFieldError('cust-phone', 'cust-phone-error', 'رقم التليفون لازم يكون 11 رقم');
+    return;
+  }
+
+  clearFieldError('cust-phone', 'cust-phone-error', true);
+}
+
+function validateCustomerPhone(showError = true) {
+  const inputEl = document.getElementById('cust-phone');
+  if (!inputEl) return false;
+  const raw = normalizeArabicDigits(inputEl.value || '');
+  const hasNonDigits = /[^0-9]/.test(raw);
+  const cleaned = raw.replace(/[^0-9]/g, '').slice(0, 11);
+  inputEl.value = cleaned;
+
+  if (hasNonDigits || !cleaned) {
+    if (showError) {
+      setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
+    }
+    return false;
+  }
+
+  if (cleaned.length < 11) {
+    if (showError) {
+      setFieldError('cust-phone', 'cust-phone-error', 'رقم التليفون لازم يكون 11 رقم');
+    }
+    return false;
+  }
+
+  if (!/^01[0-9]{9}$/.test(cleaned)) {
+    if (showError) {
+      setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
+    }
+    return false;
+  }
+
+  clearFieldError('cust-phone', 'cust-phone-error', true);
+  return true;
+}
+
 async function submitOrder(e) {
   e.preventDefault();
+
+  const isNameValid = validateCustomerName(true);
+  const isPhoneValid = validateCustomerPhone(true);
+
+  if (!isNameValid) {
+    const nameEl = document.getElementById('cust-name');
+    if (nameEl) {
+      nameEl.focus();
+      if (typeof nameEl.scrollIntoView === 'function') {
+        nameEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    return;
+  }
+
+  if (!isPhoneValid) {
+    const phoneEl = document.getElementById('cust-phone');
+    if (phoneEl) {
+      phoneEl.focus();
+      if (typeof phoneEl.scrollIntoView === 'function') {
+        phoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    return;
+  }
+
   if (!screenshotDataUrl) {
     alert(
       currentLang === 'en'
@@ -3520,6 +3709,8 @@ function resetToNewOrder() {
     document.getElementById('cust-discount').value = '';
     handleDiscountCodeInput('');
   }
+  clearFieldError('cust-name', 'cust-name-error', false);
+  clearFieldError('cust-phone', 'cust-phone-error', false);
   showView('checkout-view');
 }
 
