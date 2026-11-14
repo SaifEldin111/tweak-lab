@@ -2349,6 +2349,78 @@
         height: 480px;
       }
     }
+
+    /* Official Discord Neon Green & Black Components */
+    .discord-neon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(6, 11, 19, 0.96), rgba(0, 255, 136, 0.14));
+      border: 1.5px solid var(--green);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.96rem;
+      padding: 13px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 255, 136, 0.18);
+      transition: all 0.22s ease;
+      cursor: pointer;
+    }
+    .discord-neon-btn:hover {
+      background: linear-gradient(135deg, var(--green), #00d673);
+      color: #03120a;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 255, 136, 0.38), 0 0 24px rgba(0, 255, 136, 0.45);
+    }
+    .discord-neon-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--green);
+      flex-shrink: 0;
+      transition: fill 0.22s ease, transform 0.22s ease;
+      filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.45));
+    }
+    .discord-neon-btn:hover svg {
+      fill: #03120a;
+      transform: scale(1.08);
+      filter: none;
+    }
+    .discord-reviews-cta-wrap {
+      margin: -8px auto 34px;
+      text-align: center;
+      padding: 0 12px;
+    }
+    .discord-vault-box {
+      background: linear-gradient(135deg, rgba(6, 10, 18, 0.96), rgba(0, 255, 136, 0.09));
+      border: 1.5px solid rgba(0, 255, 136, 0.45);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin: 16px 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      text-align: start;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 18px rgba(0, 255, 136, 0.12);
+    }
+    .tweak-site-footer {
+      margin-top: 44px;
+      padding: 28px 18px 34px;
+      background: linear-gradient(180deg, rgba(6, 10, 16, 0.4), rgba(4, 7, 12, 0.96));
+      border-top: 1px solid rgba(0, 255, 136, 0.22);
+      text-align: center;
+    }
+    .tweak-site-footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
   </style>
 </head>
 <body>
@@ -2638,6 +2710,14 @@
         <div class="reviews-marquee-track" id="verified-reviews-marquee-track"></div>
       </div>
     </section>
+
+    <!-- DISCORD PROOFS & FPS RESULTS CTA (UNDER VERIFIED REVIEWS) -->
+    <div id="discord-reviews-cta-section" class="discord-reviews-cta-wrap">
+      <a href="https://discord.gg/ZsdFqXtEMc" target="_blank" rel="noopener noreferrer" class="discord-neon-btn" id="discord-reviews-proof-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.07 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        <span>شوف تجارب وصور الفريمات على Discord</span>
+      </a>
+    </div>
 
     <!-- ==========================================================================
          SECTION 3: اختر الباقة المناسبة ليك (FREE LITE VS PRO PACK COMPARISON)
@@ -3031,6 +3111,18 @@
               </a>
             </div>
 
+            <!-- OFFICIAL DISCORD SUPPORT & FPS SHARING BOX (UNDER DOWNLOAD BUTTONS) -->
+            <div class="discord-vault-box" id="order-discord-help-box">
+              <div style="flex:1; min-width:220px; font-size:0.9rem; color:#e9f5ff; line-height:1.65; font-weight:700;">
+                <span style="color:var(--green); font-weight:900;">💬 مجتمع ودعم Tweak Lab:</span>
+                <span>محتاج مساعدة في التشغيل أو عايز تشارك فريماتك بعد التظبيط؟ انضم لسيرفر Discord الرسمي</span>
+              </div>
+              <a href="https://discord.gg/ZsdFqXtEMc" target="_blank" rel="noopener noreferrer" class="discord-neon-btn" id="order-discord-join-btn" style="padding:10px 18px; font-size:0.88rem;">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.07 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                <span>انضم لسيرفر Discord الرسمي</span>
+              </a>
+            </div>
+
             <!-- VERIFIED BUYER REVIEW BOX (ONLY INSIDE ORDER DELIVERY DASHBOARD) -->
             <div class="verified-review-box" id="customer-review-box">
               <div class="verified-review-header">
@@ -3158,6 +3250,19 @@
       </div>
     </section>
   </div>
+
+  <!-- SITE FOOTER WITH OFFICIAL DISCORD COMMUNITY CTA -->
+  <footer class="tweak-site-footer">
+    <div class="tweak-site-footer-inner">
+      <a href="https://discord.gg/ZsdFqXtEMc" target="_blank" rel="noopener noreferrer" class="discord-neon-btn" id="footer-discord-community-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.07 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        <span>انضم لمجتمع Tweak Lab على Discord</span>
+      </a>
+      <div style="color:var(--text-muted); font-size:0.82rem;">
+        © 2027 <strong style="color:var(--green);">TWEAK LAB</strong> — جميع الحقوق محفوظة • أقصى أداء وفريمات بأمان 100%
+      </div>
+    </div>
+  </footer>
 
   <!-- RESTORE PREVIOUS ORDER MODAL (BY ORDER ID OR PHONE NUMBER - WORKS DURING & AFTER 60 MINUTES FOR REVIEW) -->
   <div id="restore-order-modal" style="display:none; position:fixed; inset:0; z-index:100000; background:rgba(4, 7, 12, 0.84); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:18px;">
