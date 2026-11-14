@@ -327,6 +327,260 @@
       0% { width: 0%; }
       100% { width: 100%; }
     }
+    /* Verified Reviews Form (Inside #approved-view only) */
+    .verified-review-box {
+      margin-top: 22px;
+      background: linear-gradient(145deg, rgba(10, 18, 30, 0.96), rgba(6, 12, 20, 0.98));
+      border: 1.5px solid rgba(0, 255, 136, 0.45);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 22px rgba(0, 255, 136, 0.1);
+      text-align: start;
+    }
+    .verified-review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+    }
+    .verified-review-title {
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .review-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 540px) {
+      .review-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .star-rating-picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #050911;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 12px;
+      direction: ltr;
+    }
+    .star-pick-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.45rem;
+      line-height: 1;
+      color: #2c3b52;
+      cursor: pointer;
+      transition: transform 0.15s ease, color 0.15s ease;
+      padding: 0 2px;
+    }
+    .star-pick-btn.active {
+      color: #ffb800;
+      text-shadow: 0 0 10px rgba(255, 184, 0, 0.55);
+    }
+    .star-pick-btn:hover {
+      transform: scale(1.18);
+    }
+    .review-reward-box {
+      display: none;
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.14), rgba(0, 240, 255, 0.1));
+      border: 1.5px solid var(--green);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.18);
+    }
+    .reward-code-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #04080e;
+      border: 1.5px dashed var(--green);
+      border-radius: 10px;
+      padding: 10px 18px;
+      margin: 12px 0 6px;
+      direction: ltr;
+    }
+    .reward-code-text {
+      font-family: monospace;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: 2px;
+    }
+
+    /* Smart Infinite Marquee for Verified Buyer Reviews (Homepage) */
+    .reviews-marquee-section {
+      display: none; /* Hidden strictly while approved reviews < 3 */
+      margin: 10px 0 32px;
+      background: linear-gradient(180deg, rgba(11, 18, 30, 0.92), rgba(7, 11, 18, 0.96));
+      border: 1px solid rgba(0, 255, 136, 0.35);
+      border-radius: 16px;
+      padding: 20px 0 22px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(0, 255, 136, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+    .reviews-marquee-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 24px 14px;
+      border-bottom: 1px solid rgba(30, 44, 70, 0.7);
+      margin-bottom: 16px;
+    }
+    .reviews-marquee-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .reviews-marquee-viewport {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      direction: ltr; /* Ensures seamless -50% loop regardless of page RTL/LTR */
+    }
+    .reviews-marquee-viewport::before,
+    .reviews-marquee-viewport::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 54px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .reviews-marquee-viewport::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(8, 13, 21, 0.98), transparent);
+    }
+    .reviews-marquee-viewport::after {
+      right: 0;
+      background: linear-gradient(270deg, rgba(8, 13, 21, 0.98), transparent);
+    }
+    .reviews-marquee-track {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      width: max-content;
+      animation: reviewsInfiniteScroll 28s linear infinite;
+      will-change: transform;
+    }
+    .reviews-marquee-viewport:hover .reviews-marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes reviewsInfiniteScroll {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .review-marquee-card {
+      width: 330px;
+      flex-shrink: 0;
+      background: #0a101b;
+      border: 1px solid rgba(0, 255, 136, 0.32);
+      border-radius: 13px;
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      direction: rtl;
+      text-align: right;
+    }
+    html[dir="ltr"] .review-marquee-card {
+      direction: ltr;
+      text-align: left;
+    }
+    .review-marquee-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--green);
+      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.18);
+    }
+    .rev-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rev-buyer-name {
+      font-weight: 900;
+      color: #fff;
+      font-size: 0.96rem;
+    }
+    .rev-verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid rgba(0, 255, 136, 0.5);
+      color: var(--green);
+      font-size: 0.71rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      direction: ltr;
+    }
+    .rev-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .rev-game-tag {
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--cyan);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      direction: ltr;
+    }
+    .rev-fps-badge {
+      background: rgba(0, 255, 136, 0.16);
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-family: monospace;
+      font-size: 0.80rem;
+      font-weight: 900;
+      padding: 2px 9px;
+      border-radius: 6px;
+      direction: ltr;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.18);
+    }
+    .rev-stars-row {
+      color: #ffb800;
+      font-size: 0.92rem;
+      letter-spacing: 1px;
+      direction: ltr;
+    }
+    .rev-comment-text {
+      color: #d8e4f5;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
     .price-banner {
       display: flex;
       align-items: center;
@@ -1947,6 +2201,82 @@
                 🌐 فتح الدليل التفاعلي في المتصفح الآن
               </a>
             </div>
+
+            <!-- VERIFIED BUYER REVIEW BOX (ONLY INSIDE ORDER DELIVERY DASHBOARD) -->
+            <div class="verified-review-box" id="customer-review-box">
+              <div class="verified-review-header">
+                <div class="verified-review-title">
+                  <span>⚡ شارك تجربتك وفريماتك بعد التظبيط</span>
+                </div>
+                <span class="rev-verified-badge">Verified Buyer ✓</span>
+              </div>
+
+              <form id="verified-review-form" onsubmit="submitVerifiedReview(event)">
+                <div class="review-form-grid">
+                  <div>
+                    <label style="font-size:0.82rem; color:var(--text-muted); font-weight:700; display:block; margin-bottom:5px;">👤 اسم العميل (أو الجيمر تاج):</label>
+                    <input type="text" id="rev-customer-name" class="input-field" placeholder="مثال: Seif_FPS / Ahmed" required />
+                  </div>
+                  <div>
+                    <label style="font-size:0.82rem; color:var(--text-muted); font-weight:700; display:block; margin-bottom:5px;">🎮 اللعبة:</label>
+                    <select id="rev-game" class="input-field" style="cursor:pointer;">
+                      <option value="Fortnite">Fortnite</option>
+                      <option value="Valorant">Valorant</option>
+                      <option value="Warzone">Warzone</option>
+                      <option value="CS2">CS2</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="review-form-grid">
+                  <div>
+                    <label style="font-size:0.82rem; color:var(--text-muted); font-weight:700; display:block; margin-bottom:5px;">📉 الفريمات قبل (Before FPS):</label>
+                    <input type="number" id="rev-before-fps" class="input-field" placeholder="مثال: 90" min="1" max="1500" required />
+                  </div>
+                  <div>
+                    <label style="font-size:0.82rem; color:var(--green); font-weight:800; display:block; margin-bottom:5px;">🚀 الفريمات بعد (After FPS):</label>
+                    <input type="number" id="rev-after-fps" class="input-field" style="border-color:rgba(0,255,136,0.5);" placeholder="مثال: 210" min="1" max="2500" required />
+                  </div>
+                </div>
+
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:0.82rem; color:var(--text-muted); font-weight:700; display:block; margin-bottom:6px;">⭐ تقييمك (من 1 لـ 5 نجوم):</label>
+                  <div class="star-rating-picker" id="rev-star-picker">
+                    <button type="button" class="star-pick-btn active" onclick="setReviewStarRating(1)" aria-label="1 Star">★</button>
+                    <button type="button" class="star-pick-btn active" onclick="setReviewStarRating(2)" aria-label="2 Stars">★</button>
+                    <button type="button" class="star-pick-btn active" onclick="setReviewStarRating(3)" aria-label="3 Stars">★</button>
+                    <button type="button" class="star-pick-btn active" onclick="setReviewStarRating(4)" aria-label="4 Stars">★</button>
+                    <button type="button" class="star-pick-btn active" onclick="setReviewStarRating(5)" aria-label="5 Stars">★</button>
+                  </div>
+                </div>
+
+                <div style="margin-bottom:14px;">
+                  <label style="font-size:0.82rem; color:var(--text-muted); font-weight:700; display:block; margin-bottom:5px;">💬 تعليق قصير عن فرق الأداء والسلاسة:</label>
+                  <input type="text" id="rev-comment" class="input-field" placeholder="مثال: الفريمات ثبتت والـ Input Delay اختفى تماماً!" maxlength="300" required />
+                </div>
+
+                <button type="submit" id="rev-submit-btn" class="btn btn-primary" style="width:100%; font-weight:900; padding:11px 16px;">
+                  إرسال التقييم واستلام كود خصم لصاحبك 🎁
+                </button>
+              </form>
+
+              <div class="review-reward-box" id="review-reward-box">
+                <div style="font-size:1.15rem; font-weight:900; color:var(--green); margin-bottom:4px;">
+                  شكراً لمشاركتك تجربتك وفرق الفريمات مع Tweak Lab!
+                </div>
+                <p style="font-size:0.86rem; color:#d8e4f5; margin-bottom:6px;">
+                  هديتك جاهزة: كود خصم خاص تقدر تبعته لصاحبك يستخدمه عند الشراء:
+                </p>
+                <div class="reward-code-pill">
+                  <span class="reward-code-text" id="reward-promo-code-text">FRIEND20</span>
+                  <button type="button" class="btn" style="padding:5px 12px; font-size:0.78rem; background:var(--green); color:#031014; font-weight:900; border:none;" onclick="copyText('FRIEND20', this)">نسخ الكود</button>
+                </div>
+                <div style="font-size:0.76rem; color:var(--text-muted);">
+                  تم إرسال تقييمك للإدارة للمراجعة والظهور في شريط المشترين الموثقين
+                </div>
+              </div>
+            </div>
           </div>
           <div style="margin-top:16px; text-align:center;">
             <button type="button" class="btn" onclick="browseStorefrontKeepSession()" data-i18n="browseHomeKeepOrderBtn" style="font-size:0.82rem; padding:8px 16px; color:var(--text-muted); border-color:var(--border);">
@@ -1997,6 +2327,20 @@
 
       </div>
     </div>
+
+    <!-- SMART INFINITE MARQUEE FOR VERIFIED BUYER REVIEWS (AUTO-SHOWS ONLY WHEN APPROVED REVIEWS >= 3) -->
+    <section id="verified-reviews-marquee-section" class="reviews-marquee-section" aria-label="Verified Buyer Reviews">
+      <div class="reviews-marquee-header">
+        <div class="reviews-marquee-title">
+          <span style="color:var(--green);">★</span>
+          <span>تجارب وفريمات المشترين الفعليين (Verified Buyers)</span>
+        </div>
+        <span class="rev-verified-badge" style="font-size:0.78rem; padding:4px 11px;">100% Verified Buyer Reviews ✓</span>
+      </div>
+      <div class="reviews-marquee-viewport">
+        <div class="reviews-marquee-track" id="verified-reviews-marquee-track"></div>
+      </div>
+    </section>
 
     <!-- FREE LITE TRIAL SECTION -->
     <section id="free-lite-section" class="free-lite-card" aria-labelledby="free-lite-heading">
@@ -2730,6 +3074,9 @@ function renderApprovedDelivery(orderObj) {
     if (delivery.downloads.html) document.getElementById('dl-html-btn').href = delivery.downloads.html;
     if (delivery.downloads.liveGuide) document.getElementById('open-guide-btn').href = delivery.downloads.liveGuide;
   }
+  if (typeof initCustomerReviewBox === 'function') {
+    initCustomerReviewBox(orderObj);
+  }
   updateNavbarReturnBtn();
 }
 
@@ -2804,8 +3151,13 @@ async function initStore() {
       if (discInput && discInput.value) {
         handleDiscountCodeInput(discInput.value);
       }
+      if (Array.isArray(storeConfig.approvedReviews)) {
+        renderVerifiedReviewsMarquee(storeConfig.approvedReviews);
+      }
     }
   } catch (e) {}
+
+  fetchVerifiedReviews();
 
   // 3. Verify/poll order status if needed
   if (currentOrder && currentOrder.id && currentOrder.accessToken) {
@@ -3243,6 +3595,170 @@ function startPromoShowcaseTimer() {
 }
 
 startPromoShowcaseTimer();
+
+// ==========================================
+// VERIFIED REVIEWS SYSTEM (DASHBOARD FORM + INFINITE MARQUEE)
+// ==========================================
+let selectedReviewStars = 5;
+
+function setReviewStarRating(stars) {
+  selectedReviewStars = Math.max(1, Math.min(5, Number(stars) || 5));
+  const picker = document.getElementById('rev-star-picker');
+  if (!picker) return;
+  const btns = picker.querySelectorAll('.star-pick-btn');
+  btns.forEach((btn, idx) => {
+    if (idx < selectedReviewStars) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function initCustomerReviewBox(orderObj) {
+  const formEl = document.getElementById('verified-review-form');
+  const rewardBoxEl = document.getElementById('review-reward-box');
+  const nameInput = document.getElementById('rev-customer-name');
+  if (!formEl || !rewardBoxEl) return;
+
+  if (nameInput && !nameInput.value && orderObj && orderObj.customerName) {
+    nameInput.value = orderObj.customerName;
+  }
+
+  const submittedKey = orderObj && orderObj.id ? `tweaklab_reviewed_${orderObj.id}` : '';
+  const alreadySubmitted = (orderObj && orderObj.reviewSubmitted) || (submittedKey && localStorage.getItem(submittedKey) === '1');
+  if (alreadySubmitted) {
+    formEl.style.display = 'none';
+    rewardBoxEl.style.display = 'block';
+  } else {
+    formEl.style.display = 'block';
+    rewardBoxEl.style.display = 'none';
+  }
+}
+
+async function submitVerifiedReview(e) {
+  e.preventDefault();
+  if (!currentOrder || !currentOrder.id) return;
+
+  const customerName = (document.getElementById('rev-customer-name').value || '').trim();
+  const game = document.getElementById('rev-game').value || 'Fortnite';
+  const beforeFps = Number(document.getElementById('rev-before-fps').value) || 90;
+  const afterFps = Number(document.getElementById('rev-after-fps').value) || 210;
+  const comment = (document.getElementById('rev-comment').value || '').trim();
+  const submitBtn = document.getElementById('rev-submit-btn');
+
+  if (!customerName || !comment) return;
+
+  const origBtnText = submitBtn ? submitBtn.textContent : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = currentLang === 'en' ? 'Submitting your review...' : 'جاري إرسال تقييمك...';
+  }
+
+  try {
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId: currentOrder.id,
+        token: currentOrder.accessToken,
+        sig: currentOrder.sig || '',
+        customerName,
+        game,
+        beforeFps,
+        afterFps,
+        rating: selectedReviewStars,
+        comment
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || 'حدث خطأ أثناء إرسال التقييم.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = origBtnText;
+      }
+      return;
+    }
+
+    const rewardCode = data.rewardCode || 'FRIEND20';
+    const codeTextEl = document.getElementById('reward-promo-code-text');
+    if (codeTextEl) codeTextEl.textContent = rewardCode;
+
+    currentOrder.reviewSubmitted = true;
+    saveOrderSession(currentOrder);
+    try {
+      localStorage.setItem(`tweaklab_reviewed_${currentOrder.id}`, '1');
+    } catch (err) {}
+
+    const formEl = document.getElementById('verified-review-form');
+    const rewardBoxEl = document.getElementById('review-reward-box');
+    if (formEl) formEl.style.display = 'none';
+    if (rewardBoxEl) rewardBoxEl.style.display = 'block';
+  } catch (err) {
+    alert(currentLang === 'en' ? 'Connection error, please try again.' : 'تعذر الاتصال بالخادم، حاول مرة أخرى.');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = origBtnText;
+    }
+  }
+}
+
+function buildReviewCardHtml(r) {
+  const starsCount = Math.max(1, Math.min(5, Number(r.rating) || 5));
+  const starsStr = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+  const bFps = Number(r.beforeFps) || 90;
+  const aFps = Number(r.afterFps) || 210;
+  return `
+    <div class="review-marquee-card">
+      <div>
+        <div class="rev-card-top">
+          <span class="rev-buyer-name">${escapeHtml(r.customerName)}</span>
+          <span class="rev-verified-badge">Verified Buyer ✓</span>
+        </div>
+        <div class="rev-meta-row" style="margin-top:8px;">
+          <span class="rev-game-tag">${escapeHtml(r.game || 'Fortnite')}</span>
+          <span class="rev-fps-badge">${bFps} FPS -> ${aFps} FPS</span>
+        </div>
+        <div class="rev-stars-row" style="margin-top:7px;">${starsStr}</div>
+        <p class="rev-comment-text" style="margin-top:6px;">"${escapeHtml(r.comment)}"</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderVerifiedReviewsMarquee(reviews) {
+  const sectionEl = document.getElementById('verified-reviews-marquee-section');
+  const trackEl = document.getElementById('verified-reviews-marquee-track');
+  if (!sectionEl || !trackEl) return;
+
+  const approved = Array.isArray(reviews) ? reviews.filter((r) => !r.status || r.status === 'approved') : [];
+
+  // Strict condition: stay completely hidden while approved reviews < 3; auto-show when >= 3
+  if (approved.length < 3) {
+    sectionEl.style.display = 'none';
+    trackEl.innerHTML = '';
+    return;
+  }
+
+  sectionEl.style.display = 'block';
+  // Repeat list enough times so the seamless -50% infinite loop fills wide screens smoothly
+  const baseBatch = approved.length < 5 ? [...approved, ...approved] : approved;
+  const doubledBatch = [...baseBatch, ...baseBatch];
+  trackEl.innerHTML = doubledBatch.map(buildReviewCardHtml).join('');
+}
+
+async function fetchVerifiedReviews() {
+  try {
+    const res = await fetch('/api/reviews');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.reviews)) {
+        renderVerifiedReviewsMarquee(data.reviews);
+      }
+    }
+  } catch (e) {}
+}
 
 // ==========================================
 // TWEAK LAB CHATBOT WIDGET CONTROLLER

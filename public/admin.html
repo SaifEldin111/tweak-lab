@@ -271,6 +271,22 @@
     <h2 style="margin-bottom:16px; color:#fff;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
     <div id="orders-container" class="orders-grid"></div>
 
+    <!-- VERIFIED REVIEWS MANAGEMENT SECTION -->
+    <div class="settings-card" style="margin-top:34px; border-color:rgba(0,255,136,0.4);">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+        <div>
+          <h2 style="color:var(--green); margin-bottom:4px;">⭐ إدارة تقييمات المشترين (Verified Reviews)</h2>
+          <p style="color:var(--text-muted); font-size:0.88rem;">
+            التقييمات المرسلة من داخل صفحة استلام الأوردر. يظهر الشريط المتحرك (Infinite Marquee) في الصفحة الرئيسية تلقائياً عندما يصل عدد التقييمات الموافق عليها إلى <strong>3 تقييمات أو أكثر</strong>.
+          </p>
+        </div>
+        <div id="reviews-marquee-status-badge" style="background:rgba(0,240,255,0.1); border:1px solid var(--cyan); color:var(--cyan); padding:8px 14px; border-radius:10px; font-weight:800; font-size:0.85rem;">
+          المعتمد حالياً: 0 / 3 (الشريط مخفي)
+        </div>
+      </div>
+      <div id="reviews-container" class="orders-grid"></div>
+    </div>
+
     <!-- STORE & VIDEO SETTINGS -->
     <div class="settings-card">
       <h2 style="color:var(--cyan); margin-bottom:6px;">⚙️ إعدادات المتجر، رابط الفيديو، وإشعارات الموبايل (Telegram)</h2>
@@ -380,6 +396,7 @@ async function fetchAdminData() {
     }
     const data = await res.json();
     renderOrders(data.orders || []);
+    renderReviews(data.reviews || []);
     if (!settingsLoaded && data.settings) {
       populateSettings(data.settings);
       settingsLoaded = true;
@@ -556,6 +573,124 @@ async function updateOrder(orderId, action, btnEl = null) {
       btnEl.disabled = false;
       btnEl.style.opacity = '1';
       btnEl.innerHTML = originalBtnHtml;
+    }
+  }
+}
+
+function renderReviews(reviews) {
+  const container = document.getElementById('reviews-container');
+  const statusBadge = document.getElementById('reviews-marquee-status-badge');
+  if (!container) return;
+
+  const approvedCount = (reviews || []).filter((r) => r.status === 'approved').length;
+  if (statusBadge) {
+    if (approvedCount >= 3) {
+      statusBadge.style.background = 'rgba(0, 255, 136, 0.16)';
+      statusBadge.style.borderColor = 'var(--green)';
+      statusBadge.style.color = 'var(--green)';
+      statusBadge.textContent = `✅ المعتمد حالياً: ${approvedCount} تقييمات (الشريط المتحرك ظاهر في الرئيسية)`;
+    } else {
+      statusBadge.style.background = 'rgba(255, 184, 0, 0.14)';
+      statusBadge.style.borderColor = 'var(--amber)';
+      statusBadge.style.color = 'var(--amber)';
+      statusBadge.textContent = `⏳ المعتمد حالياً: ${approvedCount} / 3 (الشريط مخفي حتى تكتمل 3 تقييمات معتمدة)`;
+    }
+  }
+
+  if (!reviews || reviews.length === 0) {
+    container.innerHTML = `<div style="grid-column:1/-1; background:#090d16; border:1px dashed var(--border); padding:28px; border-radius:12px; text-align:center; color:var(--text-muted);">لا توجد تقييمات مرسلة حتى الآن. عندما يقوم أي عميل بإرسال تقييمه من داخل صفحة استلام الأوردر سيظهر هنا للموافقة عليه (Approve) أو حذفه (Delete).</div>`;
+    return;
+  }
+
+  container.innerHTML = reviews
+    .map((r) => {
+      const isApproved = r.status === 'approved';
+      const badgeClass = isApproved ? 'badge-approved' : 'badge-pending';
+      const badgeText = isApproved ? '✅ معتمد (ظاهر في الموقع)' : '⏳ بانتظار الموافقة (Pending)';
+      const starsCount = Math.max(1, Math.min(5, Number(r.rating) || 5));
+      const starsHtml = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+      const timeStr = r.createdAt
+        ? new Date(r.createdAt).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '';
+
+      return `
+        <div class="order-card ${isApproved ? 'approved' : 'pending'}" style="padding:18px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <strong style="color:#fff; font-size:1.02rem;">${escapeHtml(r.customerName)}</strong>
+                <span style="background:rgba(0,255,136,0.15); border:1px solid rgba(0,255,136,0.45); color:var(--green); font-size:0.72rem; font-weight:800; padding:2px 7px; border-radius:999px;">Verified Buyer ✓</span>
+              </div>
+              <span class="badge ${badgeClass}">${badgeText}</span>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+              <span style="background:rgba(0,240,255,0.12); border:1px solid rgba(0,240,255,0.35); color:var(--cyan); font-weight:800; font-size:0.78rem; padding:3px 9px; border-radius:6px;">🎮 ${escapeHtml(r.game)}</span>
+              <span style="background:rgba(0,255,136,0.14); border:1px solid var(--green); color:var(--green); font-weight:900; font-size:0.82rem; padding:3px 10px; border-radius:6px; direction:ltr; font-family:monospace;">${Number(r.beforeFps) || 90} FPS -> ${Number(r.afterFps) || 210} FPS</span>
+              <span style="color:#ffb800; font-size:0.95rem; letter-spacing:1px;" title="${starsCount}/5">${starsHtml}</span>
+            </div>
+
+            <div style="background:#06090f; border:1px solid var(--border); border-radius:10px; padding:12px; color:#e6edf3; font-size:0.9rem; line-height:1.55; margin-bottom:10px;">
+              "${escapeHtml(r.comment)}"
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; color:var(--text-muted); margin-bottom:10px;">
+              <span>طلب رقم: <code style="color:var(--cyan);">#${escapeHtml(r.orderId || 'VERIFIED')}</code></span>
+              <span>${escapeHtml(timeStr)}</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            ${
+              !isApproved
+                ? `<button class="btn btn-accept" style="flex:1; justify-content:center; padding:9px 14px;" onclick="updateReview('${r.id}', 'approve', this)">✅ Approve (موافقة وإظهار)</button>`
+                : `<button class="btn" style="flex:1; justify-content:center; padding:9px 14px;" onclick="updateReview('${r.id}', 'pending', this)">↩ إخفاء مؤقت (Pending)</button>`
+            }
+            <button class="btn btn-delete" onclick="updateReview('${r.id}', 'delete', this)" title="حذف هذا التقييم نهائياً">🗑️ Delete (حذف)</button>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+async function updateReview(reviewId, action, btnEl = null) {
+  if (action === 'delete') {
+    if (!confirm('⚠️ هل أنت متأكد من حذف هذا التقييم نهائياً؟')) return;
+  }
+  let originalHtml = '';
+  if (btnEl) {
+    originalHtml = btnEl.innerHTML;
+    btnEl.disabled = true;
+    btnEl.style.opacity = '0.6';
+    btnEl.innerHTML = '⏳ جاري التنفيذ...';
+  }
+  try {
+    const res = await fetch('/api/admin/review-action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+      body: JSON.stringify({ reviewId, action })
+    });
+    const result = await res.json();
+    if (result.ok && Array.isArray(result.reviews)) {
+      renderReviews(result.reviews);
+      showAdminToast(
+        action === 'approve'
+          ? '✅ تمت الموافقة على التقييم (Approve) بنجاح!'
+          : action === 'delete'
+          ? '🗑️ تم حذف التقييم نهائياً'
+          : '↩ تم نقل التقييم لقيد المراجعة'
+      );
+    } else {
+      fetchAdminData();
+    }
+  } catch (e) {
+    fetchAdminData();
+  } finally {
+    if (btnEl && originalHtml) {
+      btnEl.disabled = false;
+      btnEl.style.opacity = '1';
+      btnEl.innerHTML = originalHtml;
     }
   }
 }

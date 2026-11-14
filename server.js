@@ -52,6 +52,10 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 const SEED_ORDERS_FILE = path.join(ROOT_DIR, 'seed_orders.json');
 const DELETED_ORDERS_FILE = path.join(DATA_DIR, 'deleted_orders.json');
 const SEED_DELETED_ORDERS_FILE = path.join(ROOT_DIR, 'seed_deleted_orders.json');
+const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
+const SEED_REVIEWS_FILE = path.join(ROOT_DIR, 'seed_reviews.json');
+const DELETED_REVIEWS_FILE = path.join(DATA_DIR, 'deleted_reviews.json');
+const SEED_DELETED_REVIEWS_FILE = path.join(ROOT_DIR, 'seed_deleted_reviews.json');
 
 // Ensure writable directories exist
 [DATA_DIR, UPLOADS_DIR].forEach((dir) => {
@@ -84,6 +88,8 @@ const DEFAULT_SETTINGS = {
 global.__TWEAKLAB_SETTINGS__ = global.__TWEAKLAB_SETTINGS__ || null;
 global.__TWEAKLAB_ORDERS__ = global.__TWEAKLAB_ORDERS__ || null;
 global.__TWEAKLAB_DELETED_ORDERS__ = global.__TWEAKLAB_DELETED_ORDERS__ || null;
+global.__TWEAKLAB_REVIEWS__ = global.__TWEAKLAB_REVIEWS__ || null;
+global.__TWEAKLAB_DELETED_REVIEWS__ = global.__TWEAKLAB_DELETED_REVIEWS__ || null;
 global.__TWEAKLAB_LAST_SYNC__ = global.__TWEAKLAB_LAST_SYNC__ || 0;
 global.__TWEAKLAB_LAST_CLOUD_KEY__ = global.__TWEAKLAB_LAST_CLOUD_KEY__ || '';
 
@@ -155,6 +161,9 @@ function unpackChunkFromPng(pngBuf) {
 }
 
 function getTelegramCloudCreds() {
+  if (process.env.DISABLE_TELEGRAM_FOR_TEST === '1') {
+    return { botToken: '', chatId: '' };
+  }
   const s = global.__TWEAKLAB_SETTINGS__ || DEFAULT_SETTINGS;
   return {
     botToken: (s && s.telegramBotToken) || DEFAULT_SETTINGS.telegramBotToken,
@@ -230,6 +239,8 @@ async function pushStateToTelegramCloud() {
       ts: Date.now(),
       orders: compactOrders,
       deletedOrderIds: deletedArr,
+      reviews: loadReviews(),
+      deletedReviewIds: Array.from(loadDeletedReviewIds()),
       settings: loadSettings()
     };
     const dbFileIds = await uploadBufferToTelegramCloud(Buffer.from(JSON.stringify(payload), 'utf8'));
@@ -408,6 +419,19 @@ async function syncFromCloudDb(force = false) {
             global.__TWEAKLAB_ORDERS__ = mergedOrders;
             try {
               fs.writeFileSync(ORDERS_FILE, JSON.stringify(mergedOrders, null, 2), 'utf8');
+            } catch (e) {}
+
+            if (cloudState && Array.isArray(cloudState.deletedReviewIds)) {
+              const delRevSet = loadDeletedReviewIds();
+              cloudState.deletedReviewIds.forEach((id) => delRevSet.add(String(id).trim().toUpperCase()));
+              await saveDeletedReviewIds(delRevSet, true);
+            }
+            const cloudReviews = (cloudState && Array.isArray(cloudState.reviews)) ? cloudState.reviews : [];
+            const localReviews = loadLocalDiskReviews();
+            const mergedReviews = mergeReviewLists(localReviews, global.__TWEAKLAB_REVIEWS__ || [], cloudReviews);
+            global.__TWEAKLAB_REVIEWS__ = mergedReviews;
+            try {
+              fs.writeFileSync(REVIEWS_FILE, JSON.stringify(mergedReviews, null, 2), 'utf8');
             } catch (e) {}
 
             if (cloudState && cloudState.settings && typeof cloudState.settings === 'object') {
@@ -628,6 +652,114 @@ async function saveOrders(orders) {
     } catch (e) {
       console.error('Cloud orders save error:', e.message);
     }
+  }
+  return cleanIncoming;
+}
+
+function loadDeletedReviewIds() {
+  if (global.__TWEAKLAB_DELETED_REVIEWS__ instanceof Set) {
+    return global.__TWEAKLAB_DELETED_REVIEWS__;
+  }
+  const set = new Set();
+  try {
+    if (fs.existsSync(DELETED_REVIEWS_FILE)) {
+      const arr = JSON.parse(fs.readFileSync(DELETED_REVIEWS_FILE, 'utf8'));
+      if (Array.isArray(arr)) arr.forEach((id) => set.add(String(id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  try {
+    if (fs.existsSync(SEED_DELETED_REVIEWS_FILE)) {
+      const arr = JSON.parse(fs.readFileSync(SEED_DELETED_REVIEWS_FILE, 'utf8'));
+      if (Array.isArray(arr)) arr.forEach((id) => set.add(String(id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  global.__TWEAKLAB_DELETED_REVIEWS__ = set;
+  return set;
+}
+
+async function saveDeletedReviewIds(setOrArray, skipCloudPush = false) {
+  const arr = Array.from(setOrArray || []).map((id) => String(id).trim().toUpperCase());
+  const set = new Set(arr);
+  global.__TWEAKLAB_DELETED_REVIEWS__ = set;
+  try {
+    fs.writeFileSync(DELETED_REVIEWS_FILE, JSON.stringify(arr, null, 2), 'utf8');
+  } catch (e) {}
+  try {
+    fs.writeFileSync(SEED_DELETED_REVIEWS_FILE, JSON.stringify(arr, null, 2), 'utf8');
+  } catch (e) {}
+  if (!skipCloudPush) {
+    await pushStateToTelegramCloud();
+  }
+  return set;
+}
+
+function mergeReviewLists(...lists) {
+  const deletedIds = loadDeletedReviewIds();
+  const map = new Map();
+  for (const list of lists) {
+    if (!Array.isArray(list)) continue;
+    for (const raw of list) {
+      if (!raw || !raw.id) continue;
+      const id = String(raw.id).trim().toUpperCase();
+      if (deletedIds.has(id)) continue;
+      const item = { ...raw, id };
+      if (!map.has(id)) {
+        map.set(id, item);
+      } else {
+        const existing = map.get(id);
+        const tExisting = new Date(existing.updatedAt || existing.createdAt || 0).getTime();
+        const tItem = new Date(item.updatedAt || item.createdAt || 0).getTime();
+        const newer = tItem >= tExisting ? item : existing;
+        const older = tItem >= tExisting ? existing : item;
+        map.set(id, { ...older, ...newer });
+      }
+    }
+  }
+  return Array.from(map.values()).sort((a, b) => {
+    const tA = new Date(a.createdAt || 0).getTime();
+    const tB = new Date(b.createdAt || 0).getTime();
+    return tB - tA;
+  });
+}
+
+function loadLocalDiskReviews() {
+  const deletedIds = loadDeletedReviewIds();
+  let diskReviews = [];
+  let seedReviews = [];
+  try {
+    if (fs.existsSync(REVIEWS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(REVIEWS_FILE, 'utf8'));
+      if (Array.isArray(parsed)) diskReviews = parsed.filter((r) => !deletedIds.has(String(r.id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  try {
+    if (fs.existsSync(SEED_REVIEWS_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(SEED_REVIEWS_FILE, 'utf8'));
+      if (Array.isArray(parsed)) seedReviews = parsed.filter((r) => !deletedIds.has(String(r.id).trim().toUpperCase()));
+    }
+  } catch (e) {}
+  return mergeReviewLists(seedReviews, diskReviews);
+}
+
+function loadReviews() {
+  const local = loadLocalDiskReviews();
+  const merged = mergeReviewLists(local, global.__TWEAKLAB_REVIEWS__ || []);
+  global.__TWEAKLAB_REVIEWS__ = merged;
+  return merged;
+}
+
+async function saveReviews(reviews, skipCloudPush = false) {
+  const deletedIds = loadDeletedReviewIds();
+  const cleanIncoming = (reviews || []).filter((r) => !deletedIds.has(String(r.id).trim().toUpperCase()));
+  global.__TWEAKLAB_REVIEWS__ = cleanIncoming;
+  try {
+    fs.writeFileSync(REVIEWS_FILE, JSON.stringify(cleanIncoming, null, 2), 'utf8');
+  } catch (e) {}
+  try {
+    fs.writeFileSync(SEED_REVIEWS_FILE, JSON.stringify(cleanIncoming, null, 2), 'utf8');
+  } catch (e) {}
+  if (!skipCloudPush) {
+    await pushStateToTelegramCloud();
   }
   return cleanIncoming;
 }
@@ -874,6 +1006,7 @@ async function handleRequest(req, res) {
     // 1. Public Config API
     if (req.method === 'GET' && pathname === '/api/config') {
       const s = loadSettings();
+      const approvedReviews = loadReviews().filter((r) => r.status === 'approved');
       return sendJson(res, 200, {
         brandName: s.brandName,
         productTitle: s.productTitle,
@@ -884,7 +1017,98 @@ async function handleRequest(req, res) {
         paymentPhone: s.paymentPhone,
         instapayAddress: s.instapayAddress,
         instapayLink: s.instapayLink,
-        deliveryMinutes: s.deliveryMinutes
+        deliveryMinutes: s.deliveryMinutes,
+        approvedReviews
+      });
+    }
+
+    // 1b. Public Verified Reviews API (GET approved reviews / POST new verified buyer review)
+    if (req.method === 'GET' && pathname === '/api/reviews') {
+      const approvedReviews = loadReviews().filter((r) => r.status === 'approved');
+      return sendJson(res, 200, {
+        ok: true,
+        count: approvedReviews.length,
+        showMarquee: approvedReviews.length >= 3,
+        reviews: approvedReviews
+      });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/reviews') {
+      await syncFromCloudDb(true);
+      const body = await readJsonBody(req);
+      const { orderId, token, sig, customerName, game, beforeFps, afterFps, rating, comment } = body || {};
+
+      const cleanOrderId = String(orderId || '').trim().toUpperCase();
+      const cleanToken = String(token || '').trim();
+      const cleanSig = String(sig || '').trim();
+      const settings = loadSettings();
+      const expectedSig = cleanOrderId ? computeOrderSignature(cleanOrderId, settings.adminPin) : '';
+      const hasValidSig = Boolean(cleanOrderId && cleanSig && cleanSig === expectedSig);
+
+      const orders = loadOrders();
+      const order = orders.find((o) => String(o.id).toUpperCase() === cleanOrderId && (o.accessToken === cleanToken || hasValidSig || o.accessToken === 'RESTORED_FROM_TELEGRAM'));
+      const isVerifiedOrder = (order && (order.status === 'approved' || order.status === 'expired')) || hasValidSig;
+
+      if (!isVerifiedOrder) {
+        return sendJson(res, 403, { error: 'إضافة التقييم متاحة فقط للمشترين المؤكدين بعد الموافقة على الطلب.' });
+      }
+
+      if (!comment || !String(comment).trim()) {
+        return sendJson(res, 400, { error: 'يرجى كتابة تعليق قصير عن تجربتك.' });
+      }
+
+      const allowedGames = ['Fortnite', 'Valorant', 'Warzone', 'CS2', 'Other'];
+      const chosenGame = allowedGames.includes(game) ? game : 'Other';
+      const bFps = Math.max(1, Math.min(2000, Math.round(Number(beforeFps) || 90)));
+      const aFps = Math.max(1, Math.min(3000, Math.round(Number(afterFps) || 210)));
+      const stars = Math.max(1, Math.min(5, Math.round(Number(rating) || 5)));
+
+      const newReview = {
+        id: 'RV-' + Math.floor(100000 + Math.random() * 900000),
+        orderId: cleanOrderId || 'VERIFIED',
+        customerName: String(customerName || (order && order.customerName) || 'Gamer').trim().slice(0, 60),
+        game: chosenGame,
+        beforeFps: bFps,
+        afterFps: aFps,
+        rating: stars,
+        comment: String(comment).trim().slice(0, 400),
+        verifiedBuyer: true,
+        status: 'pending',
+        rewardCode: 'FRIEND20',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      const reviews = loadReviews();
+      reviews.unshift(newReview);
+      if (reviews.length > 2000) reviews.length = 2000;
+      await saveReviews(reviews);
+
+      // Notify Admin on Telegram (non-blocking)
+      if (process.env.DISABLE_TELEGRAM_FOR_TEST !== '1' && settings.telegramBotToken && settings.telegramChatId) {
+        const hostUrl = settings.appUrl || 'https://tweak-lab-a177.vercel.app';
+        const starStr = '⭐'.repeat(newReview.rating);
+        postHttpsJson('api.telegram.org', `/bot${settings.telegramBotToken}/sendMessage`, {
+          chat_id: settings.telegramChatId,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+          text:
+            `🌟 <b>تقييم جديد (Verified Review) بانتظار موافقتك!</b>\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `👤 <b>العميل:</b> ${escapeTelegramHtml(newReview.customerName)} (<code>#${escapeTelegramHtml(newReview.orderId)}</code>)\n` +
+            `🎮 <b>اللعبة:</b> <b>${escapeTelegramHtml(newReview.game)}</b>\n` +
+            `🚀 <b>الفريمات:</b> <code>${newReview.beforeFps} FPS ➔ ${newReview.afterFps} FPS</code>\n` +
+            `⭐ <b>التقييم:</b> ${starStr} (${newReview.rating}/5)\n` +
+            `💬 <b>التعليق:</b> ${escapeTelegramHtml(newReview.comment)}\n` +
+            `━━━━━━━━━━━━━━━━━━\n` +
+            `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">افتح لوحة الأدمن (/admin) للضغط على Approve أو Delete</a>`
+        }).catch(() => {});
+      }
+
+      return sendJson(res, 201, {
+        ok: true,
+        review: newReview,
+        rewardCode: 'FRIEND20'
       });
     }
 
@@ -1325,7 +1549,7 @@ async function handleRequest(req, res) {
       `);
     }
 
-    // 7. Admin API: List Orders & Settings
+    // 7. Admin API: List Orders, Reviews & Settings
     if (req.method === 'GET' && pathname === '/api/admin/data') {
       const pin = req.headers['x-admin-pin'] || parsedUrl.searchParams.get('pin') || '';
       const settings = loadSettings();
@@ -1334,8 +1558,44 @@ async function handleRequest(req, res) {
       }
       return sendJson(res, 200, {
         orders: loadOrders(),
+        reviews: loadReviews(),
         settings
       });
+    }
+
+    // 7b. Admin API: Approve / Delete Review
+    if (req.method === 'POST' && pathname === '/api/admin/review-action') {
+      await syncFromCloudDb(true);
+      const pin = req.headers['x-admin-pin'] || '';
+      const settings = loadSettings();
+      if (pin !== settings.adminPin) {
+        return sendJson(res, 401, { error: 'غير مصرح' });
+      }
+      const { reviewId, action } = await readJsonBody(req);
+      const reviews = loadReviews();
+      const cleanId = String(reviewId || '').trim().toUpperCase();
+      const idx = reviews.findIndex((r) => String(r.id).trim().toUpperCase() === cleanId);
+
+      if (action === 'delete') {
+        const deletedRevIds = loadDeletedReviewIds();
+        deletedRevIds.add(cleanId);
+        await saveDeletedReviewIds(deletedRevIds, true);
+        if (idx !== -1) {
+          reviews.splice(idx, 1);
+        }
+        const remaining = reviews.filter((r) => !deletedRevIds.has(String(r.id).trim().toUpperCase()));
+        const updatedReviews = await saveReviews(remaining);
+        return sendJson(res, 200, { ok: true, reviews: updatedReviews });
+      }
+
+      if (idx === -1) return sendJson(res, 404, { error: 'التقييم غير موجود' });
+
+      if (action === 'approve' || action === 'pending') {
+        reviews[idx].status = action === 'approve' ? 'approved' : 'pending';
+        reviews[idx].updatedAt = new Date().toISOString();
+      }
+      const updatedReviews = await saveReviews(reviews);
+      return sendJson(res, 200, { ok: true, reviews: updatedReviews });
     }
 
     // 8. Admin API: Approve / Reject / Delete Order
