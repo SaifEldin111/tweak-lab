@@ -1163,9 +1163,13 @@ async function handleRequest(req, res) {
       const parts = pathname.replace('/api/download/', '').split('/');
       const [orderId, fileKey] = parts;
       const token = parsedUrl.searchParams.get('token') || '';
+      const sig = parsedUrl.searchParams.get('sig') || '';
+      const settings = loadSettings();
+      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
+      const hasValidSig = Boolean(sig && sig === expectedSig);
 
       const orders = loadOrders();
-      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && (o.accessToken === token || hasValidSig));
       if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
         const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
         if (restored) {
@@ -1176,16 +1180,23 @@ async function handleRequest(req, res) {
           order = restored;
         }
       }
-      const isAuthorized = order && order.status === 'approved';
+      const isAuthorized = (order && (order.status === 'approved' || (order.status === 'expired' && hasValidSig))) || (!order && hasValidSig);
 
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
         return res.end('⛔ غير مسموح بالتحميل قبل تأكيد وقبول عملية الدفع يدوياً من الإدارة.');
       }
 
-      // Time-Bomb Expiration Check for Downloads
+      // Time-Bomb Expiration Check for Downloads (only after full 60 minutes from firstAccessedAt)
       const now = Date.now();
-      const isBurnedOrExpired = order && (order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime()));
+      if (order && !order.firstAccessedAt && order.status === 'approved') {
+        order.firstAccessedAt = new Date(now).toISOString();
+        order.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
+        order.isBurned = false;
+        order.updatedAt = new Date(now).toISOString();
+        await saveOrders(orders);
+      }
+      const isBurnedOrExpired = order && (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime() + 60000);
       if (isBurnedOrExpired) {
         if (!order.isBurned || order.status !== 'expired') {
           order.isBurned = true;
@@ -1233,9 +1244,13 @@ async function handleRequest(req, res) {
     if (req.method === 'GET' && pathname.startsWith('/api/guide/')) {
       const orderId = pathname.replace('/api/guide/', '').trim();
       const token = parsedUrl.searchParams.get('token') || '';
+      const sig = parsedUrl.searchParams.get('sig') || '';
+      const settings = loadSettings();
+      const expectedSig = computeOrderSignature(orderId, settings.adminPin);
+      const hasValidSig = Boolean(sig && sig === expectedSig);
 
       const orders = loadOrders();
-      let order = orders.find((o) => o.id === orderId && o.accessToken === token);
+      let order = orders.find((o) => o.id === orderId && (o.accessToken === token || hasValidSig));
       if (!order && token && /^[a-f0-9]{16,64}$/i.test(token)) {
         const restored = orders.find((o) => o.id === orderId && o.accessToken === 'RESTORED_FROM_TELEGRAM');
         if (restored) {
@@ -1246,7 +1261,7 @@ async function handleRequest(req, res) {
           order = restored;
         }
       }
-      const isAuthorized = order && order.status === 'approved';
+      const isAuthorized = (order && (order.status === 'approved' || (order.status === 'expired' && hasValidSig))) || (!order && hasValidSig);
 
       if (!isAuthorized) {
         res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -1255,7 +1270,14 @@ async function handleRequest(req, res) {
 
       // Time-Bomb Expiration Check for Interactive Guide
       const now = Date.now();
-      const isBurnedOrExpired = order && (order.isBurned || (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime()));
+      if (order && !order.firstAccessedAt && order.status === 'approved') {
+        order.firstAccessedAt = new Date(now).toISOString();
+        order.accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
+        order.isBurned = false;
+        order.updatedAt = new Date(now).toISOString();
+        await saveOrders(orders);
+      }
+      const isBurnedOrExpired = order && (order.accessExpiresAt && now > new Date(order.accessExpiresAt).getTime() + 60000);
       if (isBurnedOrExpired) {
         if (!order.isBurned || order.status !== 'expired') {
           order.isBurned = true;

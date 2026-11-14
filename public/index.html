@@ -1327,6 +1327,11 @@
       <div class="nav-badges">
         <span class="pill-5min" data-i18n="navPill">⚡ تسليم أوتوماتيكي خلال 5 دقائق بعد قبول الدفع</span>
         <div class="nav-actions-row">
+          <button id="nav-return-order-btn" class="btn" onclick="returnToCurrentOrder()" style="display:none; font-size:0.82rem; padding:6px 14px; background:linear-gradient(90deg, rgba(0,255,136,0.22), rgba(0,240,255,0.18)); border:1.5px solid var(--green); color:var(--green); font-weight:800; box-shadow:0 0 15px rgba(0,255,136,0.3); cursor:pointer; align-items:center; gap:6px;">
+            <span>📦</span>
+            <span data-i18n="navReturnOrder">الرجوع لطلبي الحالي</span>
+            <span id="nav-return-order-timer" style="font-family:monospace; font-size:0.76rem; color:#fff; background:rgba(0,0,0,0.55); padding:1px 6px; border-radius:6px;"></span>
+          </button>
           <button class="btn" data-i18n="navRestore" onclick="promptRestoreOrder()" style="font-size:0.8rem; padding:6px 12px;">🔍 متابعة طلب سابق</button>
           <button class="btn lang-switch-btn" id="lang-toggle-btn" onclick="toggleLanguage()" title="Switch Language / تغيير اللغة">🌐 English</button>
         </div>
@@ -1630,6 +1635,11 @@
               </a>
             </div>
           </div>
+          <div style="margin-top:16px; text-align:center;">
+            <button type="button" class="btn" onclick="browseStorefrontKeepSession()" data-i18n="browseHomeKeepOrderBtn" style="font-size:0.82rem; padding:8px 16px; color:var(--text-muted); border-color:var(--border);">
+              🏠 تصفح الصفحة الرئيسية (مع الاحتفاظ بطلبي الحالي نشطاً)
+            </button>
+          </div>
         </div>
 
         <!-- VIEW 4: REJECTED VIEW -->
@@ -1755,7 +1765,9 @@ const I18N = {
     pageTitle: 'Tweak Lab | Best Optimization for 2027 FPS+ (الدفع والاستلام الفوري)',
     toggleBtn: '🌐 English',
     navPill: '⚡ تسليم أوتوماتيكي خلال 5 دقائق بعد قبول الدفع',
+    navReturnOrder: 'الرجوع لطلبي الحالي',
     navRestore: '🔍 متابعة طلب سابق',
+    browseHomeKeepOrderBtn: '🏠 تصفح الصفحة الرئيسية (مع الاحتفاظ بطلبي الحالي نشطاً)',
     heroSubtitle: 'الحزمة الأقوى في مصر لرفع الفريمات (FPS)، تثبيت الـ 1% Low، وإلغاء الـ Input Lag والـ Stutter بأمان 100%. ادفع بسهولة عبر <strong>InstaPay</strong> أو <strong>Vodafone Cash</strong> واستلم الفولدر الكامل + فيديو الشرح خلال <strong>5 دقائق بالضبط!</strong>',
     priceExclusiveLabel: 'السعر الحصري للحزمة الكاملة',
     priceLifetimeBadge: 'دفع لمرة واحدة • شامل التحديثات',
@@ -1850,7 +1862,9 @@ const I18N = {
     pageTitle: 'Tweak Lab | Best Optimization for 2027 FPS+ (Instant Storefront)',
     toggleBtn: '🌐 العربية',
     navPill: '⚡ Automatic delivery within 5 mins after payment approval',
+    navReturnOrder: 'Return to My Current Order',
     navRestore: '🔍 Track Previous Order',
+    browseHomeKeepOrderBtn: '🏠 Browse Storefront Home (Keep Current Order Active)',
     heroSubtitle: 'Egypt\'s #1 PC optimization pack to boost FPS, stabilize 1% Lows, and eliminate Input Lag &amp; Stutters 100% safely. Pay easily via <strong>InstaPay</strong> or <strong>Vodafone Cash</strong> and unlock the full pack + video guide in <strong>5 minutes!</strong>',
     priceExclusiveLabel: 'Exclusive Full Pack Price',
     priceLifetimeBadge: 'One-Time Payment • Free Updates',
@@ -2250,8 +2264,202 @@ function handleDiscountCodeInput(rawVal) {
   }
 }
 
+function extractSigFromDownloads(delivery) {
+  try {
+    const zipUrl = delivery && delivery.downloads && delivery.downloads.zip;
+    if (!zipUrl) return '';
+    const u = new URL(zipUrl, window.location.origin);
+    return u.searchParams.get('sig') || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function loadSavedOrderSession() {
+  let savedOrder = null;
+  const raw = localStorage.getItem('tweaklab_active_order');
+  if (raw) {
+    try {
+      savedOrder = JSON.parse(raw);
+    } catch (e) {
+      savedOrder = null;
+    }
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const urlOrder = params.get('order');
+  const urlToken = params.get('token');
+  const urlSig = params.get('sig') || '';
+
+  if (urlOrder && urlToken) {
+    if (savedOrder && savedOrder.id === urlOrder) {
+      // Merge URL params without wiping out saved status, expiresAt, or delivery files!
+      savedOrder.accessToken = urlToken || savedOrder.accessToken;
+      if (urlSig) savedOrder.sig = urlSig;
+    } else {
+      savedOrder = {
+        id: urlOrder,
+        accessToken: urlToken,
+        sig: urlSig
+      };
+    }
+    localStorage.setItem('tweaklab_active_order', JSON.stringify(savedOrder));
+  }
+
+  currentOrder = savedOrder;
+  return currentOrder;
+}
+
+function saveOrderSession(orderObj) {
+  if (!orderObj || !orderObj.id) return;
+  currentOrder = orderObj;
+  localStorage.setItem('tweaklab_active_order', JSON.stringify(currentOrder));
+  updateNavbarReturnBtn();
+}
+
+function hasActiveUnexpiredOrderSession() {
+  if (!currentOrder || !currentOrder.id || !currentOrder.accessToken) return false;
+  if (currentOrder.status === 'rejected' || currentOrder.status === 'expired') return false;
+  if (currentOrder.expiresAt) {
+    const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
+    return remMs > 0;
+  }
+  if (currentOrder.status === 'pending') {
+    return true;
+  }
+  return false;
+}
+
+function updateNavbarReturnBtn() {
+  const btn = document.getElementById('nav-return-order-btn');
+  const timerBadge = document.getElementById('nav-return-order-timer');
+  if (!btn) return;
+
+  if (hasActiveUnexpiredOrderSession()) {
+    btn.style.display = 'inline-flex';
+    if (timerBadge) {
+      if (currentOrder.expiresAt) {
+        const remSec = Math.max(0, Math.floor((new Date(currentOrder.expiresAt).getTime() - Date.now()) / 1000));
+        const mins = String(Math.floor(remSec / 60)).padStart(2, '0');
+        const secs = String(remSec % 60).padStart(2, '0');
+        timerBadge.textContent = `(${mins}:${secs})`;
+      } else {
+        timerBadge.textContent = '';
+      }
+    }
+  } else {
+    btn.style.display = 'none';
+    if (timerBadge) timerBadge.textContent = '';
+  }
+}
+
+function renderApprovedDelivery(orderObj) {
+  if (!orderObj || !orderObj.delivery) return;
+  if (countdownInterval) clearInterval(countdownInterval);
+  if (pollTimer) {
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+
+  // First time opening approved delivery page: calculate expiration (current time + 60 minutes) and save to localStorage
+  if (!orderObj.expiresAt) {
+    const nowMs = Date.now();
+    orderObj.firstAccessedAt = new Date(nowMs).toISOString();
+    orderObj.expiresAt = new Date(nowMs + 60 * 60 * 1000).toISOString();
+  }
+  orderObj.status = 'approved';
+  orderObj.paymentStatus = 'approved';
+  if (!orderObj.sig) {
+    orderObj.sig = extractSigFromDownloads(orderObj.delivery);
+  }
+  saveOrderSession(orderObj);
+
+  const sigQuery = orderObj.sig ? `&sig=${encodeURIComponent(orderObj.sig)}` : '';
+  window.history.replaceState({}, '', `/?order=${encodeURIComponent(orderObj.id)}&token=${encodeURIComponent(orderObj.accessToken)}${sigQuery}`);
+
+  showView('approved-view');
+  const oidEl = document.getElementById('approved-order-id');
+  if (oidEl) oidEl.textContent = '#' + orderObj.id;
+
+  startTimeBombCountdown(orderObj.expiresAt);
+
+  const delivery = orderObj.delivery;
+  const notesEl = document.getElementById('vault-video-notes');
+  if (notesEl) notesEl.textContent = delivery.videoNotes || '';
+  const vUrl = delivery.videoUrl || 'https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt';
+  const vBtn = document.getElementById('vault-video-btn');
+  if (vBtn) vBtn.href = vUrl;
+  const ytMatch = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/.exec(vUrl);
+  const iframeEl = document.getElementById('vault-video-iframe');
+  if (ytMatch && iframeEl) {
+    const targetEmbed = 'https://www.youtube.com/embed/' + ytMatch[1];
+    if (iframeEl.src !== targetEmbed) iframeEl.src = targetEmbed;
+    document.getElementById('vault-video-embed-wrap').style.display = 'block';
+  }
+  if (delivery.downloads) {
+    if (delivery.downloads.zip) document.getElementById('dl-zip-btn').href = delivery.downloads.zip;
+    if (delivery.downloads.bat) document.getElementById('dl-bat-btn').href = delivery.downloads.bat;
+    if (delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = delivery.downloads.cleaner;
+    if (delivery.downloads.html) document.getElementById('dl-html-btn').href = delivery.downloads.html;
+    if (delivery.downloads.liveGuide) document.getElementById('open-guide-btn').href = delivery.downloads.liveGuide;
+  }
+  updateNavbarReturnBtn();
+}
+
+function returnToCurrentOrder() {
+  loadSavedOrderSession();
+  if (!currentOrder || !currentOrder.id) return;
+
+  if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+    const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
+    if (remMs > 0) {
+      renderApprovedDelivery(currentOrder);
+      const cardEl = document.getElementById('approved-view');
+      if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    } else {
+      showExpiredView(currentOrder.id);
+      return;
+    }
+  }
+
+  if (currentOrder.status === 'pending') {
+    showWaitingRoom();
+    checkOrderStatus();
+    if (!pollTimer) pollTimer = setInterval(checkOrderStatus, 2500);
+    const cardEl = document.getElementById('waiting-view');
+    if (cardEl) cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  checkOrderStatus();
+}
+
+function browseStorefrontKeepSession() {
+  showView('checkout-view');
+  updateNavbarReturnBtn();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 async function initStore() {
   applyLanguage(currentLang);
+
+  // 1. Check localStorage FIRST before any network fetch so Refresh / Reopen is instantaneous
+  loadSavedOrderSession();
+  updateNavbarReturnBtn();
+
+  if (currentOrder && currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+    const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
+    if (remMs > 0) {
+      renderApprovedDelivery(currentOrder);
+    } else {
+      showExpiredView(currentOrder.id);
+    }
+  } else if (currentOrder && currentOrder.status === 'pending' && currentOrder.id && currentOrder.accessToken) {
+    showWaitingRoom();
+  }
+
+  // 2. Load storefront config in background
   try {
     const res = await fetch('/api/config');
     if (res.ok) {
@@ -2272,24 +2480,21 @@ async function initStore() {
     }
   } catch (e) {}
 
-  // Check if customer already has an active order in URL or localStorage
-  const params = new URLSearchParams(window.location.search);
-  const urlOrder = params.get('order');
-  const urlToken = params.get('token');
-  const urlSig = params.get('sig') || '';
-  if (urlOrder && urlToken) {
-    currentOrder = { id: urlOrder, accessToken: urlToken, sig: urlSig };
-    localStorage.setItem('tweaklab_active_order', JSON.stringify(currentOrder));
-  } else {
-    const saved = localStorage.getItem('tweaklab_active_order');
-    if (saved) {
-      try { currentOrder = JSON.parse(saved); } catch (e) {}
-    }
-  }
-
+  // 3. Verify/poll order status if needed
   if (currentOrder && currentOrder.id && currentOrder.accessToken) {
-    checkOrderStatus();
-    pollTimer = setInterval(checkOrderStatus, 2500);
+    if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+      const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
+      if (remMs > 0) {
+        // Already restored from localStorage; sync quietly in background without locking until 60 mins finish
+        checkOrderStatus();
+      } else {
+        showExpiredView(currentOrder.id);
+      }
+    } else {
+      checkOrderStatus();
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(checkOrderStatus, 2500);
+    }
   }
 }
 
@@ -2406,10 +2611,16 @@ async function submitOrder(e) {
     currentOrder = {
       id: data.order.id,
       accessToken: data.order.accessToken,
+      status: 'pending',
+      paymentStatus: 'pending',
+      customerName: payload.customerName,
+      amountEgp: data.order.amountEgp || activeChargedPrice,
+      paymentMethod: payload.paymentMethod,
+      discountCode: payload.discountCode,
       createdAt: data.order.createdAt,
       whatsappText: data.order.quickApproveWhatsappText
     };
-    localStorage.setItem('tweaklab_active_order', JSON.stringify(currentOrder));
+    saveOrderSession(currentOrder);
     window.history.replaceState({}, '', `/?order=${currentOrder.id}&token=${currentOrder.accessToken}`);
 
     showWaitingRoom();
@@ -2437,6 +2648,11 @@ function showExpiredView(orderId) {
   if (pollTimer) clearInterval(pollTimer);
   if (countdownInterval) clearInterval(countdownInterval);
   if (timeBombInterval) clearInterval(timeBombInterval);
+  if (currentOrder) {
+    currentOrder.status = 'expired';
+    localStorage.setItem('tweaklab_active_order', JSON.stringify(currentOrder));
+  }
+  updateNavbarReturnBtn();
   showView('expired-view');
 
   const oid = orderId || (currentOrder && currentOrder.id) || 'TL-000000';
@@ -2463,7 +2679,7 @@ function startTimeBombCountdown(expiresAtIso) {
       clearInterval(timeBombInterval);
       const timerEl = document.getElementById('timebomb-timer');
       if (timerEl) timerEl.textContent = '00:00';
-      showExpiredView();
+      showExpiredView(currentOrder && currentOrder.id);
       return;
     }
     const remSec = Math.floor(diff / 1000);
@@ -2475,8 +2691,12 @@ function startTimeBombCountdown(expiresAtIso) {
       if (remSec < 180) {
         timerEl.style.color = '#ff4757';
         timerEl.style.textShadow = '0 0 14px rgba(255,71,87,1)';
+      } else {
+        timerEl.style.color = '';
+        timerEl.style.textShadow = '';
       }
     }
+    updateNavbarReturnBtn();
   }
   tick();
   timeBombInterval = setInterval(tick, 1000);
@@ -2485,6 +2705,7 @@ function startTimeBombCountdown(expiresAtIso) {
 function showWaitingRoom() {
   showView('waiting-view');
   document.getElementById('wait-order-id').textContent = '#' + currentOrder.id;
+  updateNavbarReturnBtn();
 
   const rawPhone = storeConfig.paymentPhone || '01020670418';
   const waPhone = '2' + rawPhone;
@@ -2522,12 +2743,26 @@ function startFiveMinuteCountdown(createdAtIso) {
 
 async function checkOrderStatus() {
   if (!currentOrder || !currentOrder.id) return;
+
+  // If the order is already approved in localStorage and its 60-minute window has NOT expired yet,
+  // keep the delivery page open and only lock when the 60 minutes actually finish!
+  if (currentOrder.status === 'approved' && currentOrder.delivery && currentOrder.expiresAt) {
+    const remMs = new Date(currentOrder.expiresAt).getTime() - Date.now();
+    if (remMs <= 0) {
+      showExpiredView(currentOrder.id);
+      return;
+    }
+  }
+
   try {
     const sigParam = currentOrder.sig ? `&sig=${encodeURIComponent(currentOrder.sig)}` : '';
     const res = await fetch(`/api/orders/${encodeURIComponent(currentOrder.id)}?token=${encodeURIComponent(currentOrder.accessToken)}${sigParam}`);
 
-    // If HTTP 410 Gone: Link is burned / expired
+    // If HTTP 410 Gone: only expire if local 60-minute timer has also finished (or was never set)
     if (res.status === 410) {
+      if (currentOrder.expiresAt && new Date(currentOrder.expiresAt).getTime() > Date.now()) {
+        return;
+      }
       showExpiredView(currentOrder.id);
       return;
     }
@@ -2536,43 +2771,50 @@ async function checkOrderStatus() {
     const data = await res.json();
 
     if (data.status === 'expired' || data.isBurned) {
+      if (currentOrder.expiresAt && new Date(currentOrder.expiresAt).getTime() > Date.now()) {
+        return;
+      }
       showExpiredView(data.id || currentOrder.id);
       return;
     }
 
     if (data.status === 'pending') {
+      currentOrder.status = 'pending';
+      currentOrder.paymentStatus = 'pending';
       currentOrder.createdAt = data.createdAt;
+      saveOrderSession(currentOrder);
       showWaitingRoom();
     } else if (data.status === 'approved' && data.delivery) {
-      if (countdownInterval) clearInterval(countdownInterval);
-      if (pollTimer) clearInterval(pollTimer);
-      showView('approved-view');
-      document.getElementById('approved-order-id').textContent = '#' + data.id;
+      // First time order delivery opens: calculate expiration = Date.now() + 60 minutes and persist to localStorage
+      const isFirstApprovalOpen = !currentOrder.expiresAt || currentOrder.id !== data.id;
+      const nowMs = Date.now();
+      const calculatedExpiresAt = isFirstApprovalOpen
+        ? new Date(nowMs + 60 * 60 * 1000).toISOString()
+        : currentOrder.expiresAt;
 
-      // Start 20-minute Time-Bomb countdown timer
-      if (data.delivery.timeBomb && data.delivery.timeBomb.expiresAt) {
-        startTimeBombCountdown(data.delivery.timeBomb.expiresAt);
-      } else if (data.timeBomb && data.timeBomb.expiresAt) {
-        startTimeBombCountdown(data.timeBomb.expiresAt);
-      }
-
-      document.getElementById('vault-video-notes').textContent = data.delivery.videoNotes || '';
-      const vUrl = data.delivery.videoUrl || 'https://youtu.be/siLX2H0Un6M?si=LnILe9bundoA2Pxt';
-      document.getElementById('vault-video-btn').href = vUrl;
-      const ytMatch = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/.exec(vUrl);
-      const iframeEl = document.getElementById('vault-video-iframe');
-      if (ytMatch && iframeEl) {
-        iframeEl.src = 'https://www.youtube.com/embed/' + ytMatch[1];
-        document.getElementById('vault-video-embed-wrap').style.display = 'block';
-      }
-      document.getElementById('dl-zip-btn').href = data.delivery.downloads.zip;
-      document.getElementById('dl-bat-btn').href = data.delivery.downloads.bat;
-      if (data.delivery.downloads.cleaner) document.getElementById('dl-cleaner-btn').href = data.delivery.downloads.cleaner;
-      document.getElementById('dl-html-btn').href = data.delivery.downloads.html;
-      document.getElementById('open-guide-btn').href = data.delivery.downloads.liveGuide;
+      currentOrder = {
+        ...currentOrder,
+        id: data.id,
+        status: 'approved',
+        paymentStatus: 'approved',
+        customerName: data.customerName || currentOrder.customerName || '',
+        amountEgp: data.amountEgp || currentOrder.amountEgp || 99,
+        paymentMethod: data.paymentMethod || currentOrder.paymentMethod || 'instapay',
+        discountCode: data.discountCode || currentOrder.discountCode || '',
+        approvedAt: data.approvedAt || currentOrder.approvedAt || new Date(nowMs).toISOString(),
+        firstAccessedAt: currentOrder.firstAccessedAt || new Date(nowMs).toISOString(),
+        expiresAt: calculatedExpiresAt,
+        sig: currentOrder.sig || extractSigFromDownloads(data.delivery),
+        delivery: data.delivery
+      };
+      saveOrderSession(currentOrder);
+      renderApprovedDelivery(currentOrder);
     } else if (data.status === 'rejected') {
       if (countdownInterval) clearInterval(countdownInterval);
       if (timeBombInterval) clearInterval(timeBombInterval);
+      currentOrder.status = 'rejected';
+      currentOrder.paymentStatus = 'rejected';
+      saveOrderSession(currentOrder);
       showView('rejected-view');
     }
   } catch (e) {}
@@ -2584,6 +2826,7 @@ function resetToNewOrder() {
   if (timeBombInterval) clearInterval(timeBombInterval);
   localStorage.removeItem('tweaklab_active_order');
   currentOrder = null;
+  updateNavbarReturnBtn();
   screenshotDataUrl = '';
   uploadedScreenshotName = '';
   window.history.replaceState({}, '', '/');
@@ -2602,13 +2845,9 @@ function resetToNewOrder() {
 }
 
 function promptRestoreOrder() {
+  loadSavedOrderSession();
   if (currentOrder && currentOrder.id) {
-    checkOrderStatus();
-    alert(
-      (currentLang === 'en'
-        ? 'An active order is saved on this browser with ID: '
-        : 'يوجد طلب مسجل على متصفحك برقم: ') + currentOrder.id
-    );
+    returnToCurrentOrder();
     return;
   }
   alert(
