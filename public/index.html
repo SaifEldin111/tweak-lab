@@ -2973,13 +2973,13 @@
         </div>
       </div>
 
-      <!-- Left Column in RTL (Bottom on Mobile): 3-Slide FPS Gameplay Showcase & Price Banner -->
+      <!-- Left Column in RTL (Bottom on Mobile): 5-Slide FPS Gameplay Showcase & Price Banner -->
       <div class="hero-visual-col">
         <div class="hero-visual-card">
           <div class="promo-showcase-wrap" id="promo-showcase-slider">
             <div class="promo-showcase-stage">
               <!-- Slide 1: Valorant Gameplay + Top-Left FPS Counter -->
-              <div class="promo-slide active" data-slide-counter="1 / 3">
+              <div class="promo-slide active" data-slide-counter="1 / 5">
                 <img src="/assets/gameplay-valorant.jpg" alt="Valorant 298 FPS TweakLab Gameplay Benchmark" loading="eager" fetchpriority="high" />
                 <div class="fps-glass-bar">
                   <span class="promo-hud-dot" aria-hidden="true"></span>
@@ -2988,7 +2988,7 @@
               </div>
 
               <!-- Slide 2: Fortnite Gameplay + Top-Left FPS Counter -->
-              <div class="promo-slide" data-slide-counter="2 / 3">
+              <div class="promo-slide" data-slide-counter="2 / 5">
                 <img src="/assets/gameplay-fortnite.jpg" alt="Fortnite 240 FPS Locked TweakLab Gameplay Benchmark" loading="eager" />
                 <div class="fps-glass-bar">
                   <span class="promo-hud-dot" aria-hidden="true"></span>
@@ -2997,7 +2997,7 @@
               </div>
 
               <!-- Slide 3: Warzone Gameplay + Top-Left FPS Counter -->
-              <div class="promo-slide" data-slide-counter="3 / 3">
+              <div class="promo-slide" data-slide-counter="3 / 5">
                 <img src="/assets/gameplay-warzone.jpg" alt="Warzone 195 FPS TweakLab Gameplay Benchmark" loading="eager" />
                 <div class="fps-glass-bar">
                   <span class="promo-hud-dot" aria-hidden="true"></span>
@@ -3005,7 +3005,25 @@
                 </div>
               </div>
 
-              <div class="promo-hud-counter" id="promo-hud-counter">1 / 3</div>
+              <!-- Slide 4: GTA 5 Gameplay + Top-Left FPS Counter -->
+              <div class="promo-slide" data-slide-counter="4 / 5">
+                <img src="/assets/gameplay-gta5.jpg" alt="GTA 5 165 FPS TweakLab Gameplay Benchmark" loading="eager" />
+                <div class="fps-glass-bar">
+                  <span class="promo-hud-dot" aria-hidden="true"></span>
+                  <span>GTA 5 • <span class="fps-before">Before: 74 FPS</span> <span class="fps-after">➔ After: 165 FPS</span></span>
+                </div>
+              </div>
+
+              <!-- Slide 5: PUBG Mobile Emulator Gameplay + Top-Left FPS Counter -->
+              <div class="promo-slide" data-slide-counter="5 / 5">
+                <img src="/assets/gameplay-pubgm.jpg" alt="PUBG Mobile Emulator 120 FPS Locked TweakLab Gameplay Benchmark" loading="eager" />
+                <div class="fps-glass-bar">
+                  <span class="promo-hud-dot" aria-hidden="true"></span>
+                  <span>PUBG EMULATOR • <span class="fps-before">Before: 58 FPS</span> <span class="fps-after">➔ After: 120 FPS Locked</span></span>
+                </div>
+              </div>
+
+              <div class="promo-hud-counter" id="promo-hud-counter">1 / 5</div>
 
               <div class="promo-progress-track">
                 <div class="promo-progress-bar" id="promo-progress-bar"></div>
@@ -3018,6 +3036,8 @@
                 <button type="button" class="promo-dot active" onclick="selectPromoSlide(0)" aria-label="Valorant Slide 1"></button>
                 <button type="button" class="promo-dot" onclick="selectPromoSlide(1)" aria-label="Fortnite Slide 2"></button>
                 <button type="button" class="promo-dot" onclick="selectPromoSlide(2)" aria-label="Warzone Slide 3"></button>
+                <button type="button" class="promo-dot" onclick="selectPromoSlide(3)" aria-label="GTA 5 Slide 4"></button>
+                <button type="button" class="promo-dot" onclick="selectPromoSlide(4)" aria-label="PUBG Mobile Emulator Slide 5"></button>
               </div>
               <button type="button" class="promo-nav-arrow" onclick="selectPromoSlide(currentPromoSlideIdx + 1)" aria-label="Next slide">›</button>
             </div>
