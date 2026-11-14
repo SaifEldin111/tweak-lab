@@ -72,7 +72,9 @@ const DEFAULT_SETTINGS = {
   priceEgp: 99,
   originalPriceEgp: 350,
   discountedPriceEgp: 85,
-  activePromoCodes: {},
+  activePromoCodes: {
+    FRIEND20: 79
+  },
   paymentPhone: '01020670418',
   instapayAddress: '01020670418',
   instapayLink: 'https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW',
@@ -86,6 +88,26 @@ const DEFAULT_SETTINGS = {
   telegramChatId: process.env.TELEGRAM_CHAT_ID || '6161881104',
   discordWebhookUrl: ''
 };
+
+function ensureDefaultPromoCodes(settingsObj) {
+  if (!settingsObj || typeof settingsObj !== 'object') return settingsObj;
+  const basePrice = Number(settingsObj.priceEgp) || 99;
+  const friend20Price = Math.round(basePrice * 0.8);
+  if (!settingsObj.activePromoCodes || typeof settingsObj.activePromoCodes !== 'object') {
+    settingsObj.activePromoCodes = {};
+  }
+  if (settingsObj.activePromoCodes['TWEAK85']) {
+    delete settingsObj.activePromoCodes['TWEAK85'];
+  }
+  if (
+    !settingsObj.activePromoCodes['FRIEND20'] ||
+    Number(settingsObj.activePromoCodes['FRIEND20']) <= 0 ||
+    Number(settingsObj.activePromoCodes['FRIEND20']) >= basePrice
+  ) {
+    settingsObj.activePromoCodes['FRIEND20'] = friend20Price;
+  }
+  return settingsObj;
+}
 
 global.__TWEAKLAB_SETTINGS__ = global.__TWEAKLAB_SETTINGS__ || null;
 global.__TWEAKLAB_ORDERS__ = global.__TWEAKLAB_ORDERS__ || null;
@@ -441,9 +463,7 @@ async function syncFromCloudDb(force = false) {
               if (!mergedSettings.activePromoCodes || typeof mergedSettings.activePromoCodes !== 'object') {
                 mergedSettings.activePromoCodes = {};
               }
-              if (mergedSettings.activePromoCodes && mergedSettings.activePromoCodes['TWEAK85']) {
-                delete mergedSettings.activePromoCodes['TWEAK85'];
-              }
+              ensureDefaultPromoCodes(mergedSettings);
               global.__TWEAKLAB_SETTINGS__ = mergedSettings;
               try {
                 fs.writeFileSync(SETTINGS_FILE, JSON.stringify(mergedSettings, null, 2), 'utf8');
@@ -545,6 +565,7 @@ async function syncFromCloudDb(force = false) {
           delete merged.activePromoCodes['TWEAK85'];
           needSave = true;
         }
+        ensureDefaultPromoCodes(merged);
         global.__TWEAKLAB_SETTINGS__ = merged;
         if (needSave) {
           saveSettings(merged).catch(() => {});
@@ -560,29 +581,18 @@ async function syncFromCloudDb(force = false) {
 
 function loadSettings() {
   if (global.__TWEAKLAB_SETTINGS__) {
-    if (!global.__TWEAKLAB_SETTINGS__.activePromoCodes || typeof global.__TWEAKLAB_SETTINGS__.activePromoCodes !== 'object') {
-      global.__TWEAKLAB_SETTINGS__.activePromoCodes = {};
-    }
-    if (global.__TWEAKLAB_SETTINGS__.activePromoCodes && global.__TWEAKLAB_SETTINGS__.activePromoCodes['TWEAK85']) {
-      delete global.__TWEAKLAB_SETTINGS__.activePromoCodes['TWEAK85'];
-    }
+    ensureDefaultPromoCodes(global.__TWEAKLAB_SETTINGS__);
     return global.__TWEAKLAB_SETTINGS__;
   }
   try {
     if (fs.existsSync(SETTINGS_FILE)) {
       const raw = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
-      const merged = { ...DEFAULT_SETTINGS, ...raw };
-      if (!merged.activePromoCodes || typeof merged.activePromoCodes !== 'object') {
-        merged.activePromoCodes = {};
-      }
-      if (merged.activePromoCodes && merged.activePromoCodes['TWEAK85']) {
-        delete merged.activePromoCodes['TWEAK85'];
-      }
+      const merged = ensureDefaultPromoCodes({ ...DEFAULT_SETTINGS, ...raw });
       global.__TWEAKLAB_SETTINGS__ = merged;
       return global.__TWEAKLAB_SETTINGS__;
     }
   } catch (e) {}
-  global.__TWEAKLAB_SETTINGS__ = { ...DEFAULT_SETTINGS };
+  global.__TWEAKLAB_SETTINGS__ = ensureDefaultPromoCodes({ ...DEFAULT_SETTINGS });
   try {
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(global.__TWEAKLAB_SETTINGS__, null, 2), 'utf8');
   } catch (e) {}
@@ -590,7 +600,7 @@ function loadSettings() {
 }
 
 async function saveSettings(newSettings) {
-  const merged = { ...loadSettings(), ...newSettings };
+  const merged = ensureDefaultPromoCodes({ ...loadSettings(), ...newSettings });
   global.__TWEAKLAB_SETTINGS__ = merged;
   try {
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(merged, null, 2), 'utf8');
@@ -1194,12 +1204,22 @@ async function handleRequest(req, res) {
       // Determine exact charged/paid amount based on active promo code or configured price
       const codeKey = String(discountCode || '').trim().toUpperCase();
       const basePrice = Number(settings.priceEgp) || 99;
+      const activePromoCodes = ensureDefaultPromoCodes(settings).activePromoCodes || {};
       let finalAmount = basePrice;
       let isDiscountApplied = false;
+      let discountPercent = 0;
 
-      if (codeKey && settings.activePromoCodes && typeof settings.activePromoCodes === 'object' && settings.activePromoCodes[codeKey]) {
-        finalAmount = Number(settings.activePromoCodes[codeKey]);
-        isDiscountApplied = true;
+      if (codeKey === 'FRIEND20' && (!activePromoCodes[codeKey] || Number(activePromoCodes[codeKey]) >= basePrice)) {
+        activePromoCodes[codeKey] = Math.round(basePrice * 0.8);
+      }
+
+      if (codeKey && activePromoCodes[codeKey]) {
+        const promoVal = Number(activePromoCodes[codeKey]);
+        if (!isNaN(promoVal) && promoVal > 0 && promoVal < basePrice) {
+          finalAmount = promoVal;
+          isDiscountApplied = true;
+          discountPercent = Math.round(((basePrice - finalAmount) / basePrice) * 100);
+        }
       } else if (paidAmountEgp !== undefined && Number(paidAmountEgp) > 0 && Number(paidAmountEgp) === basePrice) {
         finalAmount = Number(paidAmountEgp);
       }
@@ -1212,6 +1232,7 @@ async function handleRequest(req, res) {
         packageName: String(packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)').trim().slice(0, 120),
         discountCode: String(discountCode || '').trim().slice(0, 60),
         isDiscountApplied,
+        discountPercent,
         isCreatorCode: Boolean(codeKey && !isDiscountApplied),
         paymentMethod: paymentMethod === 'vodafone' ? 'vodafone' : 'instapay',
         basePriceEgp: basePrice,
@@ -1772,14 +1793,89 @@ async function handleRequest(req, res) {
     // 7. Admin API: List Orders, Reviews & Settings
     if (req.method === 'GET' && pathname === '/api/admin/data') {
       const pin = req.headers['x-admin-pin'] || parsedUrl.searchParams.get('pin') || '';
-      const settings = loadSettings();
+      const settings = ensureDefaultPromoCodes(loadSettings());
       if (pin !== settings.adminPin) {
         return sendJson(res, 401, { error: 'كلمة مرور لوحة التحكم غير صحيحة' });
       }
+      const orders = loadOrders();
+      const basePrice = Number(settings.priceEgp) || 99;
+      const activePromoCodes = settings.activePromoCodes || {};
+      const statsMap = {};
+
+      Object.keys(activePromoCodes).forEach((rawCode) => {
+        const code = String(rawCode || '').trim().toUpperCase();
+        if (!code) return;
+        const priceAfter = Number(activePromoCodes[rawCode]) || basePrice;
+        const discountPct = priceAfter < basePrice ? Math.round(((basePrice - priceAfter) / basePrice) * 100) : 0;
+        statsMap[code] = {
+          code,
+          isPromoDiscount: priceAfter < basePrice,
+          isRewardCode: code === 'FRIEND20',
+          priceAfterDiscountEgp: priceAfter,
+          basePriceEgp: basePrice,
+          discountPercent: discountPct,
+          totalUses: 0,
+          approvedUses: 0,
+          pendingUses: 0,
+          rejectedUses: 0,
+          totalRevenueEgp: 0,
+          confirmedRevenueEgp: 0,
+          lastUsedAt: null
+        };
+      });
+
+      (Array.isArray(orders) ? orders : []).forEach((order) => {
+        const rawCode = String(order.discountCode || order.creatorCode || '').trim().toUpperCase();
+        if (!rawCode) return;
+        const orderAmount = Number(order.amountEgp) || basePrice;
+        const orderBase = Number(order.basePriceEgp) || basePrice;
+        if (!statsMap[rawCode]) {
+          const isDisc = Boolean(order.isDiscountApplied) || orderAmount < orderBase;
+          const pct = isDisc && orderBase > 0 ? Math.round(((orderBase - orderAmount) / orderBase) * 100) : 0;
+          statsMap[rawCode] = {
+            code: rawCode,
+            isPromoDiscount: isDisc,
+            isRewardCode: rawCode === 'FRIEND20',
+            priceAfterDiscountEgp: orderAmount,
+            basePriceEgp: orderBase,
+            discountPercent: pct,
+            totalUses: 0,
+            approvedUses: 0,
+            pendingUses: 0,
+            rejectedUses: 0,
+            totalRevenueEgp: 0,
+            confirmedRevenueEgp: 0,
+            lastUsedAt: null
+          };
+        }
+        const entry = statsMap[rawCode];
+        entry.totalUses += 1;
+        entry.totalRevenueEgp += orderAmount;
+        if (order.status === 'approved') {
+          entry.approvedUses += 1;
+          entry.confirmedRevenueEgp += orderAmount;
+        } else if (order.status === 'rejected') {
+          entry.rejectedUses += 1;
+        } else {
+          entry.pendingUses += 1;
+        }
+        if (order.createdAt && (!entry.lastUsedAt || new Date(order.createdAt) > new Date(entry.lastUsedAt))) {
+          entry.lastUsedAt = order.createdAt;
+        }
+      });
+
+      const promoCodeStats = Object.values(statsMap).sort((a, b) => {
+        if (a.code === 'FRIEND20') return -1;
+        if (b.code === 'FRIEND20') return 1;
+        if (b.totalUses !== a.totalUses) return b.totalUses - a.totalUses;
+        return a.code.localeCompare(b.code);
+      });
+
       return sendJson(res, 200, {
-        orders: loadOrders(),
+        orders,
         reviews: loadReviews(),
-        settings
+        settings,
+        promoCodeStats
       });
     }
 

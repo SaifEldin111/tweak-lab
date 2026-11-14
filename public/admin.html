@@ -268,6 +268,39 @@
       </div>
     </div>
 
+    <!-- PROMO & CREATOR CODES USAGE COUNTER SECTION -->
+    <div class="settings-card" id="promo-codes-management-card" style="margin-top:0; margin-bottom:28px; border-color:rgba(0,255,136,0.45);">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+        <div>
+          <h2 style="color:var(--green); margin-bottom:4px;">🎟️ إدارة أكواد الخصم وصناع المحتوى (عدّاد الاستخدامات والمبيعات)</h2>
+          <p style="color:var(--text-muted); font-size:0.88rem;">
+            يتحدث <strong>عدد مرات الاستخدام</strong> أوتوماتيكياً مع كل أوردر جديد لتتبع مبيعات صناع المحتوى وحساب عمولاتهم بدقة، مع تفعيل كود مكافأة التقييم <strong dir="ltr" style="color:var(--green);">FRIEND20</strong> بنسبة خصم <strong>20%</strong> تلقائياً.
+          </p>
+        </div>
+        <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); color:var(--green); padding:8px 14px; border-radius:10px; font-weight:800; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+          <span>🎁 كود مكافأة التقييم المفعّل تلقائياً:</span>
+          <span dir="ltr" style="font-family:monospace; font-size:0.95rem; background:#06090f; padding:3px 10px; border-radius:6px; border:1px solid var(--green); color:#fff;">FRIEND20 (-20%)</span>
+        </div>
+      </div>
+
+      <!-- Quick Add/Update Promo Code Form -->
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; background:#06090f; border:1px solid var(--border); padding:14px; border-radius:12px; margin-bottom:16px;">
+        <div style="flex:1; min-width:180px;">
+          <label style="margin-bottom:5px; font-size:0.8rem;">🏷️ إضافة / تعديل كود خصم (اسم الكود):</label>
+          <input type="text" id="quick-promo-code" class="input-field" dir="ltr" placeholder="مثال: FRIEND20 أو CREATOR1" style="text-transform:uppercase; font-weight:800;" />
+        </div>
+        <div style="flex:1; min-width:180px;">
+          <label style="margin-bottom:5px; font-size:0.8rem;">💰 السعر المطلوب بعد الخصم (ج.م):</label>
+          <input type="number" id="quick-promo-price" class="input-field" dir="ltr" placeholder="79 (خصم 20% من 99 ج.م)" min="1" style="font-weight:800; color:var(--green);" />
+        </div>
+        <button type="button" class="btn btn-accept" onclick="quickAddPromoCode()" style="height:42px;">➕ تفعيل / تحديث الكود</button>
+      </div>
+
+      <div id="promo-codes-usage-container" style="overflow-x:auto;">
+        <div style="padding:18px; text-align:center; color:var(--text-muted);">جاري تحميل عدّاد استخدامات الأكواد...</div>
+      </div>
+    </div>
+
     <h2 style="margin-bottom:16px; color:#fff;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
     <div id="orders-container" class="orders-grid"></div>
 
@@ -313,8 +346,8 @@
             <input type="number" id="set-priceEgp" class="input-field" value="99" required />
           </div>
           <div>
-            <label>🎟️ أكواد الخصم الترويجية الفعّالة (اتركه فارغاً لتعطيل أي أكواد خصم):</label>
-            <input type="text" id="set-promoCodes" class="input-field" placeholder="لا يوجد أي كود مفعّل حالياً (فارغ)" />
+            <label>🎟️ أكواد الخصم الترويجية الفعّالة (كود FRIEND20 مفعّل تلقائياً بخصم 20%):</label>
+            <input type="text" id="set-promoCodes" class="input-field" dir="ltr" placeholder="FRIEND20:79" />
           </div>
           <div>
             <label>🔗 رابط إنستاباي المباشر (اختياري ipn.eg):</label>
@@ -395,6 +428,9 @@ async function fetchAdminData() {
       return;
     }
     const data = await res.json();
+    window.__latestAdminSettings = data.settings || {};
+    window.__latestAdminOrders = data.orders || [];
+    renderPromoCodeStats(data.promoCodeStats || [], data.orders || [], data.settings || {});
     renderOrders(data.orders || []);
     renderReviews(data.reviews || []);
     if (!settingsLoaded && data.settings) {
@@ -402,6 +438,190 @@ async function fetchAdminData() {
       settingsLoaded = true;
     }
   } catch (e) {}
+}
+
+function renderPromoCodeStats(promoCodeStats, orders, settings) {
+  const container = document.getElementById('promo-codes-usage-container');
+  if (!container) return;
+
+  const basePrice = Number((settings && settings.priceEgp) || 99);
+  const friend20Price = Math.round(basePrice * 0.8);
+  const activePromos = Object.assign({ FRIEND20: friend20Price }, (settings && settings.activePromoCodes) || {});
+  if (!activePromos.FRIEND20 || Number(activePromos.FRIEND20) >= basePrice) {
+    activePromos.FRIEND20 = friend20Price;
+  }
+
+  // Always compute live from orders + activePromos so usage counts update immediately on every poll
+  const statsMap = {};
+  Object.keys(activePromos).forEach((rawCode) => {
+    const code = String(rawCode || '').trim().toUpperCase();
+    if (!code) return;
+    const priceAfter = Number(activePromos[rawCode]) || basePrice;
+    const discountPct = priceAfter < basePrice ? Math.round(((basePrice - priceAfter) / basePrice) * 100) : 0;
+    statsMap[code] = {
+      code,
+      isPromoDiscount: priceAfter < basePrice,
+      isRewardCode: code === 'FRIEND20',
+      priceAfterDiscountEgp: priceAfter,
+      basePriceEgp: basePrice,
+      discountPercent: discountPct,
+      totalUses: 0,
+      approvedUses: 0,
+      pendingUses: 0,
+      rejectedUses: 0,
+      totalRevenueEgp: 0,
+      confirmedRevenueEgp: 0
+    };
+  });
+
+  (Array.isArray(orders) ? orders : []).forEach((o) => {
+    const code = String(o.discountCode || o.creatorCode || '').trim().toUpperCase();
+    if (!code) return;
+    const amt = Number(o.amountEgp) || basePrice;
+    const oBase = Number(o.basePriceEgp) || basePrice;
+    if (!statsMap[code]) {
+      const isDisc = Boolean(o.isDiscountApplied) || amt < oBase;
+      const pct = isDisc && oBase > 0 ? Math.round(((oBase - amt) / oBase) * 100) : 0;
+      statsMap[code] = {
+        code,
+        isPromoDiscount: isDisc,
+        isRewardCode: code === 'FRIEND20',
+        priceAfterDiscountEgp: amt,
+        basePriceEgp: oBase,
+        discountPercent: pct,
+        totalUses: 0,
+        approvedUses: 0,
+        pendingUses: 0,
+        rejectedUses: 0,
+        totalRevenueEgp: 0,
+        confirmedRevenueEgp: 0
+      };
+    }
+    statsMap[code].totalUses += 1;
+    statsMap[code].totalRevenueEgp += amt;
+    if (o.status === 'approved') {
+      statsMap[code].approvedUses += 1;
+      statsMap[code].confirmedRevenueEgp += amt;
+    } else if (o.status === 'rejected') {
+      statsMap[code].rejectedUses += 1;
+    } else {
+      statsMap[code].pendingUses += 1;
+    }
+  });
+
+  const list = Object.values(statsMap).sort((a, b) => {
+    if (a.code === 'FRIEND20') return -1;
+    if (b.code === 'FRIEND20') return 1;
+    if (b.totalUses !== a.totalUses) return b.totalUses - a.totalUses;
+    return a.code.localeCompare(b.code);
+  });
+
+  if (list.length === 0) {
+    container.innerHTML = '<div style="padding:16px; text-align:center; color:var(--text-muted);">لا توجد أكواد مسجلة حالياً.</div>';
+    return;
+  }
+
+  const rowsHtml = list
+    .map((item) => {
+      const badgeHtml = item.isRewardCode
+        ? '<span style="background:rgba(0,255,136,0.15); border:1px solid rgba(0,255,136,0.45); color:var(--green); font-size:0.74rem; font-weight:800; padding:2px 8px; border-radius:999px;">🎁 كود مكافأة التقييم (20% تلقائي)</span>'
+        : item.isPromoDiscount
+        ? `<span style="background:rgba(255,184,0,0.16); border:1px solid rgba(255,184,0,0.45); color:var(--amber); font-size:0.74rem; font-weight:800; padding:2px 8px; border-radius:999px;">🔥 كود خصم (-${item.discountPercent}%)</span>`
+        : '<span style="background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.4); color:var(--cyan); font-size:0.74rem; font-weight:800; padding:2px 8px; border-radius:999px;">👤 كود صانع محتوى</span>';
+
+      const priceDisplay = item.isPromoDiscount
+        ? `<strong style="color:var(--green); font-size:0.98rem;">${item.priceAfterDiscountEgp} ج.م</strong> <span style="color:var(--text-muted); font-size:0.78rem;">(خصم ${item.discountPercent}% من <del>${item.basePriceEgp} ج.م</del>)</span>`
+        : `<strong style="color:#fff; font-size:0.95rem;">${item.basePriceEgp} ج.م</strong> <span style="color:var(--text-muted); font-size:0.76rem;">(السعر الأساسي بدون خصم)</span>`;
+
+      return `
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:12px 10px;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span dir="ltr" style="font-family:monospace; font-weight:900; font-size:1rem; color:#fff; background:#06090f; border:1px solid var(--green); padding:3px 10px; border-radius:7px;">${escapeHtml(item.code)}</span>
+              ${badgeHtml}
+            </div>
+          </td>
+          <td style="padding:12px 10px;">${priceDisplay}</td>
+          <td style="padding:12px 10px; text-align:center;">
+            <span style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,136,0.14); border:1px solid var(--green); color:var(--green); padding:4px 14px; border-radius:999px; font-weight:900; font-size:0.92rem;">
+              🔢 ${item.totalUses} مرة استخدام
+            </span>
+          </td>
+          <td style="padding:12px 10px; font-size:0.82rem;">
+            <span style="color:var(--green); font-weight:800;">✅ مقبول: ${item.approvedUses}</span>
+            <span style="color:var(--text-muted); margin:0 5px;">|</span>
+            <span style="color:var(--amber); font-weight:800;">⏳ قيد المراجعة: ${item.pendingUses}</span>
+          </td>
+          <td style="padding:12px 10px;">
+            <strong style="color:var(--green); font-size:0.96rem;">${item.confirmedRevenueEgp} ج.م</strong>
+            <div style="font-size:0.74rem; color:var(--text-muted);">إجمالي الطلبات بالكود: ${item.totalRevenueEgp} ج.م</div>
+          </td>
+        </tr>
+      `;
+    })
+    .join('');
+
+  container.innerHTML = `
+    <table style="width:100%; border-collapse:collapse; text-align:right; font-size:0.88rem; background:#06090f; border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+      <thead>
+        <tr style="background:rgba(0,255,136,0.08); border-bottom:1px solid var(--border); color:#d4ffea; font-size:0.82rem;">
+          <th style="padding:11px 10px;">اسم الكود ونوعه</th>
+          <th style="padding:11px 10px;">المبلغ المطلوب بعد الخصم</th>
+          <th style="padding:11px 10px; text-align:center;">عدد مرات الاستخدام</th>
+          <th style="padding:11px 10px;">حالة طلبات الكود</th>
+          <th style="padding:11px 10px;">مبيعات الكود المؤكدة</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rowsHtml}
+      </tbody>
+    </table>
+  `;
+}
+
+async function quickAddPromoCode() {
+  const codeEl = document.getElementById('quick-promo-code');
+  const priceEl = document.getElementById('quick-promo-price');
+  const rawCode = (codeEl ? codeEl.value : '').trim().toUpperCase();
+  const rawPrice = Number(priceEl ? priceEl.value : 0);
+
+  if (!rawCode) {
+    showAdminToast('⚠️ يرجى كتابة اسم الكود أولاً');
+    return;
+  }
+  if (!rawPrice || isNaN(rawPrice) || rawPrice <= 0) {
+    showAdminToast('⚠️ يرجى كتابة السعر المطلوب بعد الخصم بالجنيه');
+    return;
+  }
+
+  const s = window.__latestAdminSettings || {};
+  const baseP = Number(s.priceEgp) || 99;
+  const activePromoCodes = Object.assign({ FRIEND20: Math.round(baseP * 0.8) }, s.activePromoCodes || {});
+  activePromoCodes[rawCode] = Math.round(rawPrice);
+
+  const pairs = Object.entries(activePromoCodes).map(([k, v]) => `${k}:${v}`);
+  const setPromoEl = document.getElementById('set-promoCodes');
+  if (setPromoEl) setPromoEl.value = pairs.join(', ');
+
+  try {
+    const res = await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+      body: JSON.stringify({
+        ...s,
+        activePromoCodes
+      })
+    });
+    if (res.ok) {
+      if (codeEl) codeEl.value = '';
+      if (priceEl) priceEl.value = '';
+      showAdminToast(`✅ تم تفعيل الكود ${rawCode} بسعر ${Math.round(rawPrice)} ج.م بنجاح!`);
+      settingsLoaded = false;
+      fetchAdminData();
+    }
+  } catch (e) {
+    showAdminToast('❌ تعذر حفظ الكود، حاول مرة أخرى');
+  }
 }
 
 function renderOrders(orders) {
@@ -475,18 +695,47 @@ function renderOrders(orders) {
             <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
             <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${escapeHtml(o.senderPhone)}</span></div>
             <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>الباقة:</strong> ${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">💳 <strong>الطريقة والمبلغ المدفوع:</strong> ${methodLabel} — <strong style="color:var(--green); font-size:1rem;">${o.amountEgp} ج.م</strong></div>
-            ${
-              o.discountCode
-                ? `<div style="font-size:0.9rem; margin-bottom:6px; color:var(--green); background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                    🎟️ <strong>كود صانع المحتوى / الخصم:</strong>
-                    <span style="font-family:monospace; font-weight:800; color:#fff; font-size:1rem; letter-spacing:0.5px;">${escapeHtml(o.discountCode.toUpperCase())}</span>
-                    ${o.isDiscountApplied ? `<span style="background:#f59e0b; color:#181100; font-weight:800; font-size:0.75rem; padding:2px 7px; border-radius:4px;">🔥 خصم مُطبّق (دفع ${o.amountEgp} ج.م)</span>` : `<span style="background:rgba(0,240,255,0.15); color:var(--cyan); font-weight:700; font-size:0.74rem; padding:2px 7px; border-radius:4px;">👤 كود صانع محتوى (دفع ${o.amountEgp} ج.م)</span>`}
-                   </div>`
-                : `<div style="font-size:0.84rem; margin-bottom:6px; color:var(--text-muted); background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:4px 9px; border-radius:7px; display:inline-block;">
-                    🎟️ <strong>كود الخصم / صانع المحتوى:</strong> ❌ لا يوجد
-                   </div>`
-            }
+            <div style="font-size:0.92rem; margin-bottom:6px;">💳 <strong>وسيلة الدفع:</strong> ${methodLabel}</div>
+            ${(() => {
+              const basePrice = Number(o.basePriceEgp) || 99;
+              const reqAmount = Number(o.amountEgp) || basePrice;
+              const codeStr = String(o.discountCode || o.creatorCode || '').trim().toUpperCase();
+              const isDiscounted = Boolean(o.isDiscountApplied) || reqAmount < basePrice;
+              const discPct = isDiscounted && basePrice > 0
+                ? (Number(o.discountPercent) || Math.round(((basePrice - reqAmount) / basePrice) * 100))
+                : 0;
+
+              return `
+                <div style="background:rgba(0,255,136,0.07); border:1px solid rgba(0,255,136,0.35); border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; flex-direction:column; gap:6px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                    <span style="font-size:0.86rem; color:#d4ffea;">🎟️ <strong>الكود المستخدم:</strong></span>
+                    ${
+                      codeStr
+                        ? `<span style="display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                            <span dir="ltr" style="font-family:monospace; font-weight:900; color:#fff; background:#06090f; border:1px solid var(--green); padding:2px 9px; border-radius:6px; font-size:0.95rem;">${escapeHtml(codeStr)}</span>
+                            ${
+                              isDiscounted
+                                ? `<span style="background:#f59e0b; color:#181100; font-weight:900; font-size:0.74rem; padding:2px 7px; border-radius:5px;">🔥 خصم ${discPct}% مفعّل</span>`
+                                : `<span style="background:rgba(0,240,255,0.16); color:var(--cyan); border:1px solid rgba(0,240,255,0.35); font-weight:800; font-size:0.74rem; padding:2px 7px; border-radius:5px;">👤 كود صانع محتوى</span>`
+                            }
+                          </span>`
+                        : `<span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">بدون كود</span>`
+                    }
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px;">
+                    <span style="font-size:0.86rem; color:#d4ffea;">💰 <strong>المبلغ المطلوب بعد الخصم:</strong></span>
+                    <span>
+                      <strong style="color:var(--green); font-size:1.08rem; font-weight:900;">${reqAmount} ج.م</strong>
+                      ${
+                        isDiscounted
+                          ? `<del style="color:var(--text-muted); font-size:0.8rem; margin-right:5px;">${basePrice} ج.م</del>`
+                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">(السعر الأساسي)</span>`
+                      }
+                    </span>
+                  </div>
+                </div>
+              `;
+            })()}
             <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">🕒 وقت الطلب: ${timeStr}</div>
             ${timeBombBadge}
             ${o.notes ? `<div style="font-size:0.84rem; color:#ffe082; margin-top:4px;">📝 ملاحظة: ${escapeHtml(o.notes)}</div>` : ''}
@@ -700,12 +949,10 @@ function populateSettings(s) {
   document.getElementById('set-videoNotes').value = s.videoNotes || '';
   document.getElementById('set-paymentPhone').value = s.paymentPhone || '01020670418';
   document.getElementById('set-priceEgp').value = s.priceEgp || 99;
-  if (s.activePromoCodes && typeof s.activePromoCodes === 'object' && Object.keys(s.activePromoCodes).length > 0) {
-    const pairs = Object.entries(s.activePromoCodes).map(([k, v]) => `${k}:${v}`);
-    document.getElementById('set-promoCodes').value = pairs.join(', ');
-  } else {
-    document.getElementById('set-promoCodes').value = '';
-  }
+  const baseP = Number(s.priceEgp) || 99;
+  const mergedPromos = Object.assign({ FRIEND20: Math.round(baseP * 0.8) }, s.activePromoCodes || {});
+  const pairs = Object.entries(mergedPromos).map(([k, v]) => `${k}:${v}`);
+  document.getElementById('set-promoCodes').value = pairs.join(', ');
   document.getElementById('set-instapayLink').value = s.instapayLink || '';
   document.getElementById('set-adminPin').value = s.adminPin || '2027';
   document.getElementById('set-telegramBotToken').value = s.telegramBotToken || '';
@@ -715,14 +962,16 @@ function populateSettings(s) {
 async function saveStoreSettings(e) {
   e.preventDefault();
   const newPin = document.getElementById('set-adminPin').value.trim();
+  const baseP = Number(document.getElementById('set-priceEgp').value) || 99;
   const promoStr = (document.getElementById('set-promoCodes').value || '').trim();
-  const activePromoCodes = {};
+  const activePromoCodes = { FRIEND20: Math.round(baseP * 0.8) };
   if (promoStr) {
     promoStr.split(',').forEach((p) => {
       const parts = p.split(':');
       if (parts[0] && parts[0].trim()) {
         const k = parts[0].trim().toUpperCase();
-        const v = parts[1] ? Number(parts[1].trim()) || 85 : 85;
+        const defaultVal = k === 'FRIEND20' ? Math.round(baseP * 0.8) : 85;
+        const v = parts[1] ? Number(parts[1].trim()) || defaultVal : defaultVal;
         activePromoCodes[k] = v;
       }
     });

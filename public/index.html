@@ -3652,8 +3652,12 @@ function handleDiscountCodeInput(rawVal) {
   const inputEl = document.getElementById('cust-discount');
   const badgeStatus = document.getElementById('discount-badge-status');
   const feedbackBox = document.getElementById('promo-feedback-box');
-  const activePromoCodes = storeConfig.activePromoCodes || {};
   const basePrice = Number(storeConfig.priceEgp || 99);
+  const friend20Default = Math.round(basePrice * 0.8);
+  const activePromoCodes = Object.assign({ FRIEND20: friend20Default }, storeConfig.activePromoCodes || {});
+  if (!activePromoCodes.FRIEND20 || Number(activePromoCodes.FRIEND20) >= basePrice) {
+    activePromoCodes.FRIEND20 = friend20Default;
+  }
 
   if (!val) {
     if (inputEl) inputEl.classList.remove('promo-glow-active');
@@ -3671,13 +3675,14 @@ function handleDiscountCodeInput(rawVal) {
     return;
   }
 
-  // Check if promo code is in activePromoCodes
-  if (activePromoCodes && activePromoCodes[upper]) {
+  // Check if promo code is in activePromoCodes (including FRIEND20 20% off)
+  if (activePromoCodes && activePromoCodes[upper] && Number(activePromoCodes[upper]) < basePrice) {
     const discountedPrice = Number(activePromoCodes[upper]);
     const saving = basePrice - discountedPrice;
+    const discountPct = Math.round((saving / basePrice) * 100);
     if (inputEl) inputEl.classList.add('promo-glow-active');
     if (badgeStatus) {
-      badgeStatus.textContent = currentLang === 'en' ? 'Discount Active 🔥' : 'خصم مفعل 🔥';
+      badgeStatus.textContent = currentLang === 'en' ? `${discountPct}% OFF Active 🔥` : `خصم ${discountPct}% مفعل 🔥`;
       badgeStatus.style.background = 'rgba(255,184,0,0.2)';
       badgeStatus.style.borderColor = 'var(--amber)';
       badgeStatus.style.color = '#ffe066';
@@ -3688,7 +3693,7 @@ function handleDiscountCodeInput(rawVal) {
         ? `
           <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
             <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
-              <span>🎉 Promo code (${escapeHtml(upper)}) applied successfully!</span>
+              <span>🎉 Promo code (${escapeHtml(upper)} — ${discountPct}% OFF) applied successfully!</span>
             </div>
             <div style="margin-top:4px; font-size:0.87rem;">
               Your price is now <strong>${discountedPrice} EGP only</strong> instead of <del style="opacity:0.75;">${basePrice} EGP</del> (extra <strong>${saving} EGP</strong> saved!)
@@ -3698,10 +3703,10 @@ function handleDiscountCodeInput(rawVal) {
         : `
           <div style="background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.45); border-radius:8px; padding:10px 12px; color:#d4ffea;">
             <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:var(--green); font-size:0.92rem;">
-              <span>🎉 تم تطبيق كود الخصم (${escapeHtml(upper)}) بنجاح!</span>
+              <span>🎉 تم تطبيق كود الخصم (${escapeHtml(upper)} — خصم ${discountPct}%) بنجاح!</span>
             </div>
             <div style="margin-top:4px; font-size:0.87rem;">
-              السعر أصبح الآن <strong>${discountedPrice} ج.م فقط</strong> بدلاً من <del style="opacity:0.75;">${basePrice} ج.م</del> (وفرت <strong>${saving} ج.م</strong> إضافية!)
+              المبلغ المطلوب الآن <strong>${discountedPrice} ج.م فقط</strong> بدلاً من <del style="opacity:0.75;">${basePrice} ج.م</del> (وفرت <strong>${saving} ج.م</strong> إضافية!)
             </div>
           </div>
         `;

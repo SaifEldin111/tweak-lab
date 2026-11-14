@@ -4,7 +4,9 @@
   "priceEgp": 99,
   "originalPriceEgp": 350,
   "discountedPriceEgp": 85,
-  "activePromoCodes": {},
+  "activePromoCodes": {
+    "FRIEND20": 79
+  },
   "paymentPhone": "01020670418",
   "instapayAddress": "01020670418",
   "instapayLink": "https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW",
