@@ -253,37 +253,21 @@
       margin-bottom: 18px;
       display: block;
     }
-    /* Smart 4-Slide UI Mockup Showcase Slider (5s Auto-Cycle) */
+    /* Smart 3-Slide FPS Gameplay Showcase Slider (5s Auto-Cycle) */
     .promo-showcase-wrap {
       position: relative;
       width: 100%;
-      margin-bottom: 18px;
-      border-radius: 14px;
-      padding: 2px;
-      background: linear-gradient(135deg, rgba(0, 255, 136, 0.42), rgba(0, 240, 255, 0.3), rgba(0, 255, 136, 0.16));
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 26px rgba(0, 255, 136, 0.16);
+      margin-bottom: 0;
+      background: #060a12;
+      border-bottom: 1px solid rgba(0, 255, 136, 0.22);
       overflow: hidden;
     }
     .promo-showcase-stage {
       position: relative;
       width: 100%;
-      aspect-ratio: 1376 / 768;
-      min-height: 286px;
-      border-radius: 12px;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 50% 25%, rgba(0, 255, 136, 0.11), transparent 62%),
-        linear-gradient(160deg, #070c14 0%, #05080e 100%);
-    }
-    .promo-showcase-stage::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, rgba(0, 255, 136, 0.035) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 255, 136, 0.035) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
+      background: #050a10;
     }
     .promo-slide {
       position: absolute;
@@ -291,365 +275,66 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
       pointer-events: none;
-      will-change: opacity, transform;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 42px 16px 44px;
-      box-sizing: border-box;
-      direction: ltr;
+      will-change: opacity;
     }
     .promo-slide.active {
       opacity: 1;
-      transform: translateY(0);
       pointer-events: auto;
       z-index: 2;
     }
-    .mockup-panel {
+    .promo-slide img {
       width: 100%;
       height: 100%;
-      background: linear-gradient(155deg, rgba(11, 18, 30, 0.96) 0%, rgba(6, 10, 17, 0.98) 100%);
-      border: 1px solid rgba(0, 255, 136, 0.32);
-      border-radius: 12px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.58), 0 0 18px rgba(0, 255, 136, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      text-align: left;
-    }
-    /* Slide 1: Dark Terminal Window */
-    .mockup-term-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 7px 12px;
-      background: rgba(15, 23, 38, 0.95);
-      border-bottom: 1px solid rgba(0, 255, 136, 0.18);
-    }
-    .mockup-term-dots {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .mockup-term-dots span {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .mockup-term-dots span:nth-child(1) { background: #ff5f56; }
-    .mockup-term-dots span:nth-child(2) { background: #ffbd2e; }
-    .mockup-term-dots span:nth-child(3) { background: #27c93f; }
-    .mockup-term-title {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.7rem;
-      color: #8ea4c4;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-    .mockup-term-body {
-      flex: 1;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.78rem;
-      line-height: 1.4;
-    }
-    .term-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      color: #dbe8f8;
-    }
-    .term-line-left {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      min-width: 0;
-    }
-    .term-ok {
-      color: #00ff88;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-    .term-done {
-      color: #00ff88;
-      font-weight: 900;
-      font-size: 0.72rem;
-      background: rgba(0, 255, 136, 0.12);
-      border: 1px solid rgba(0, 255, 136, 0.32);
-      padding: 1px 7px;
-      border-radius: 5px;
-      flex-shrink: 0;
-    }
-    .term-status-banner {
-      margin-top: 2px;
-      padding: 7px 10px;
-      border-radius: 8px;
-      background: rgba(0, 255, 136, 0.12);
-      border: 1px solid rgba(0, 255, 136, 0.45);
-      color: #00ff88;
-      font-weight: 900;
-      font-size: 0.79rem;
-      box-shadow: 0 0 14px rgba(0, 255, 136, 0.14);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .term-cursor {
-      display: inline-block;
-      width: 7px;
-      height: 13px;
-      background: #00ff88;
-      animation: promoHudPulse 1s infinite;
-    }
-    /* Slide 2: 1% Low Stability Chart */
-    .mockup-chart-body {
-      flex: 1;
-      padding: 10px 14px 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .mockup-chart-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .chart-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 0.74rem;
-      font-weight: 800;
-      line-height: 1.3;
-    }
-    .chart-legend-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .chart-legend-item.after { color: #00ff88; }
-    .chart-legend-item.after .chart-legend-dot { background: #00ff88; box-shadow: 0 0 8px #00ff88; }
-    .chart-legend-item.before { color: #ff6b7a; }
-    .chart-legend-item.before .chart-legend-dot { background: #ff4757; }
-    .mockup-svg-box {
-      flex: 1;
-      min-height: 96px;
-      background: rgba(5, 9, 15, 0.75);
-      border: 1px solid rgba(30, 44, 70, 0.9);
-      border-radius: 8px;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
-    }
-    .mockup-svg-box svg {
-      width: 100%;
-      height: 100%;
+      object-fit: cover;
+      object-position: left top;
       display: block;
     }
-    /* Slide 3: Interactive HTML Guide Control Panel */
-    .mockup-toggles-body {
-      flex: 1;
-      padding: 9px 14px 11px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 6px;
-    }
-    .mockup-toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      background: rgba(14, 23, 38, 0.9);
-      border: 1px solid rgba(0, 255, 136, 0.24);
-      border-radius: 8px;
-      padding: 6px 11px;
-    }
-    .mockup-toggle-name {
-      color: #f0f6fc;
-      font-size: 0.79rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .mockup-toggle-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.68rem;
-      font-weight: 900;
-      color: #00ff88;
-    }
-    .mockup-switch {
-      width: 34px;
-      height: 18px;
-      border-radius: 999px;
-      background: rgba(0, 255, 136, 0.25);
-      border: 1px solid #00ff88;
-      position: relative;
-      box-shadow: 0 0 10px rgba(0, 255, 136, 0.35);
-      flex-shrink: 0;
-    }
-    .mockup-switch::after {
-      content: '';
+    .fps-glass-bar {
       position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #00ff88;
-      box-shadow: 0 0 6px #00ff88;
-    }
-    .mockup-guide-progress {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .mockup-guide-prog-head {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.71rem;
-      font-weight: 800;
-      color: #93a4bd;
-    }
-    .mockup-guide-prog-head strong { color: #00ff88; }
-    .mockup-guide-prog-track {
-      width: 100%;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      overflow: hidden;
-    }
-    .mockup-guide-prog-fill {
-      width: 100%;
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #00f0ff, #00ff88);
-      box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
-    }
-    /* Slide 4: Input Delay & Ping Stability Split Cards */
-    .mockup-latency-grid {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .mockup-stat-card {
-      background: linear-gradient(155deg, rgba(11, 18, 30, 0.96) 0%, rgba(6, 10, 17, 0.98) 100%);
-      border: 1px solid rgba(0, 255, 136, 0.34);
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.52), 0 0 16px rgba(0, 255, 136, 0.08);
-    }
-    .mockup-stat-title {
-      font-size: 0.78rem;
-      font-weight: 900;
-      color: #9fb3ce;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .mockup-latency-compare {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin: 6px 0;
-    }
-    .latency-val-bad {
-      background: rgba(255, 71, 87, 0.14);
-      border: 1px solid rgba(255, 71, 87, 0.42);
-      color: #ff6b7a;
-      font-weight: 900;
-      font-size: 1.05rem;
-      padding: 6px 10px;
-      border-radius: 8px;
-      text-decoration: line-through;
-    }
-    .latency-arrow {
-      color: #00ff88;
-      font-weight: 900;
-      font-size: 1.15rem;
-    }
-    .latency-val-good {
-      background: rgba(0, 255, 136, 0.16);
-      border: 1.5px solid #00ff88;
-      color: #00ff88;
-      font-weight: 900;
-      font-size: 1.25rem;
-      padding: 6px 11px;
-      border-radius: 8px;
-      box-shadow: 0 0 16px rgba(0, 255, 136, 0.3);
-    }
-    .mockup-stat-foot {
-      font-size: 0.73rem;
-      font-weight: 700;
-      color: #cfe0f5;
-      line-height: 1.45;
-    }
-    .ping-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 5px;
-      height: 36px;
-      margin: 4px 0;
-    }
-    .ping-bars span {
-      flex: 1;
-      border-radius: 3px;
-      background: #00ff88;
-      box-shadow: 0 0 8px rgba(0, 255, 136, 0.45);
-    }
-    .promo-hud-badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
+      bottom: 12px;
+      left: 12px;
       z-index: 4;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(6, 13, 22, 0.88);
-      border: 1px solid rgba(0, 255, 136, 0.45);
-      backdrop-filter: blur(8px);
-      color: var(--green);
-      font-size: 0.69rem;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: rgba(5, 10, 18, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 136, 0.38);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 255, 136, 0.14);
+      color: #f0f6fc;
+      font-size: 0.76rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      letter-spacing: 0.25px;
+      line-height: 1.3;
       direction: ltr;
+      max-width: calc(100% - 24px);
+    }
+    .fps-glass-bar .fps-after {
+      color: #00ff88;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.38);
+    }
+    .fps-glass-bar .fps-before {
+      color: #b7c6db;
+      font-weight: 700;
     }
     .promo-hud-counter {
       position: absolute;
       top: 10px;
       right: 10px;
       z-index: 4;
-      padding: 4px 9px;
+      padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(6, 13, 22, 0.85);
-      border: 1px solid rgba(0, 240, 255, 0.32);
-      color: var(--cyan);
-      font-size: 0.68rem;
+      background: rgba(5, 10, 18, 0.78);
+      border: 1px solid rgba(0, 255, 136, 0.32);
+      backdrop-filter: blur(8px);
+      color: #00ff88;
+      font-size: 0.7rem;
       font-weight: 800;
       font-family: ui-monospace, monospace;
       direction: ltr;
@@ -660,26 +345,49 @@
       border-radius: 50%;
       background: var(--green);
       box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
       animation: promoHudPulse 1.4s infinite ease-in-out;
     }
     @keyframes promoHudPulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.35); opacity: 0.55; }
     }
+    .promo-controls-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: rgba(6, 11, 19, 0.96);
+      direction: ltr;
+    }
+    .promo-nav-arrow {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      background: rgba(0, 255, 136, 0.08);
+      color: #00ff88;
+      font-size: 0.9rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .promo-nav-arrow:hover {
+      background: rgba(0, 255, 136, 0.22);
+      border-color: #00ff88;
+    }
     .promo-controls-bar {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 4;
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(6, 13, 22, 0.84);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      backdrop-filter: blur(6px);
+      background: rgba(11, 18, 30, 0.9);
+      border: 1px solid rgba(0, 255, 136, 0.24);
       direction: ltr;
     }
     .promo-dot {
@@ -688,13 +396,13 @@
       border-radius: 999px;
       border: none;
       padding: 0;
-      background: rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.3);
       cursor: pointer;
       transition: all 0.3s ease;
     }
     .promo-dot.active {
       width: 24px;
-      background: linear-gradient(90deg, var(--cyan), var(--green));
+      background: linear-gradient(90deg, var(--green), var(--cyan));
       box-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
     }
     .promo-progress-track {
@@ -710,7 +418,7 @@
     .promo-progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--cyan), var(--green));
+      background: linear-gradient(90deg, var(--green), var(--cyan));
       box-shadow: 0 0 10px var(--green);
       animation: promoSlideProgress 5s linear infinite;
     }
@@ -719,44 +427,19 @@
       100% { width: 100%; }
     }
     @media (max-width: 640px) {
-      .promo-showcase-stage {
-        aspect-ratio: auto;
-        min-height: 295px;
+      .fps-glass-bar {
+        bottom: 8px;
+        left: 8px;
+        padding: 5px 9px;
+        font-size: 0.64rem;
+        gap: 5px;
+        max-width: calc(100% - 16px);
       }
-      .promo-slide {
-        padding: 40px 10px 42px;
-      }
-      .mockup-term-body {
-        font-size: 0.69rem;
-        padding: 10px;
-        gap: 6px;
-      }
-      .term-status-banner {
-        font-size: 0.72rem;
-        padding: 6px 8px;
-      }
-      .chart-legend-item {
-        font-size: 0.68rem;
-      }
-      .mockup-toggle-name {
-        font-size: 0.72rem;
-      }
-      .mockup-latency-grid {
-        gap: 8px;
-      }
-      .mockup-stat-card {
-        padding: 10px 8px;
-      }
-      .latency-val-bad {
-        font-size: 0.84rem;
-        padding: 4px 6px;
-      }
-      .latency-val-good {
-        font-size: 0.98rem;
-        padding: 4px 7px;
-      }
-      .mockup-stat-foot {
-        font-size: 0.68rem;
+      .promo-hud-counter {
+        top: 8px;
+        right: 8px;
+        font-size: 0.62rem;
+        padding: 3px 8px;
       }
     }
     /* Verified Reviews Form (Inside #approved-view only) */
@@ -3290,144 +2973,53 @@
         </div>
       </div>
 
-      <!-- Left Column in RTL (Bottom on Mobile): 4-Slide Interactive UI Mockup Showcase & Price Banner -->
+      <!-- Left Column in RTL (Bottom on Mobile): 3-Slide FPS Gameplay Showcase & Price Banner -->
       <div class="hero-visual-col">
         <div class="hero-visual-card">
-          <div class="promo-showcase-wrap" id="promo-showcase-slider" style="margin-bottom:0; border:none; border-radius:0;">
+          <div class="promo-showcase-wrap" id="promo-showcase-slider">
             <div class="promo-showcase-stage">
-              <!-- Slide 1: Automated Optimizer Dark Terminal Window -->
-              <div class="promo-slide active" data-slide-counter="1 / 4">
-                <div class="mockup-panel">
-                  <div class="mockup-term-bar">
-                    <div class="mockup-term-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-                    <span class="mockup-term-title">TweakLab_Optimizer_Pro.bat</span>
-                  </div>
-                  <div class="mockup-term-body">
-                    <div class="term-line">
-                      <span class="term-line-left"><span class="term-ok">[✓]</span> Creating System Restore Point...</span>
-                      <span class="term-done">DONE</span>
-                    </div>
-                    <div class="term-line">
-                      <span class="term-line-left"><span class="term-ok">[✓]</span> Unlocking All CPU Cores &amp; Power Plan...</span>
-                      <span class="term-done">DONE</span>
-                    </div>
-                    <div class="term-line">
-                      <span class="term-line-left"><span class="term-ok">[✓]</span> Optimizing GPU &amp; Input Latency...</span>
-                      <span class="term-done">DONE</span>
-                    </div>
-                    <div class="term-status-banner">
-                      <span>[⚡] Status: 35+ Tweaks Applied Successfully!</span>
-                      <span class="term-cursor" aria-hidden="true"></span>
-                    </div>
-                  </div>
+              <!-- Slide 1: Valorant Gameplay + Top-Left FPS Counter -->
+              <div class="promo-slide active" data-slide-counter="1 / 3">
+                <img src="/assets/gameplay-valorant.jpg" alt="Valorant 298 FPS TweakLab Gameplay Benchmark" loading="eager" fetchpriority="high" />
+                <div class="fps-glass-bar">
+                  <span class="promo-hud-dot" aria-hidden="true"></span>
+                  <span>VALORANT • <span class="fps-before">Before: 118 FPS</span> <span class="fps-after">➔ After: 298 FPS</span></span>
                 </div>
               </div>
 
-              <!-- Slide 2: 1% Low FPS Stability SVG Comparison -->
-              <div class="promo-slide" data-slide-counter="2 / 4">
-                <div class="mockup-panel">
-                  <div class="mockup-term-bar">
-                    <div class="mockup-term-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-                    <span class="mockup-term-title">Frame-Time &amp; 1% Low Telemetry</span>
-                  </div>
-                  <div class="mockup-chart-body">
-                    <div class="mockup-chart-legend">
-                      <div class="chart-legend-item after"><span class="chart-legend-dot"></span>After TweakLab: 1% Low 165 FPS - Locked Smooth</div>
-                      <div class="chart-legend-item before"><span class="chart-legend-dot"></span>Before: 1% Low 68 FPS - Stuttering</div>
-                    </div>
-                    <div class="mockup-svg-box">
-                      <svg viewBox="0 0 360 110" preserveAspectRatio="none" aria-label="1% Low FPS stability chart">
-                        <defs>
-                          <linearGradient id="tlGreenFill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#00ff88" stop-opacity="0.28" />
-                            <stop offset="100%" stop-color="#00ff88" stop-opacity="0.01" />
-                          </linearGradient>
-                        </defs>
-                        <line x1="0" y1="22" x2="360" y2="22" stroke="rgba(255,255,255,0.07)" stroke-dasharray="4 4" />
-                        <line x1="0" y1="55" x2="360" y2="55" stroke="rgba(255,255,255,0.07)" stroke-dasharray="4 4" />
-                        <line x1="0" y1="88" x2="360" y2="88" stroke="rgba(255,255,255,0.07)" stroke-dasharray="4 4" />
-                        <path d="M0,25 L360,23 L360,110 L0,110 Z" fill="url(#tlGreenFill)" />
-                        <polyline points="0,78 24,52 46,94 72,60 98,98 126,56 154,90 182,58 210,96 238,54 268,92 296,62 328,95 360,64" fill="none" stroke="#ff4757" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
-                        <line x1="0" y1="24" x2="360" y2="22" stroke="#00ff88" stroke-width="3.2" stroke-linecap="round" />
-                      </svg>
-                    </div>
-                  </div>
+              <!-- Slide 2: Fortnite Gameplay + Top-Left FPS Counter -->
+              <div class="promo-slide" data-slide-counter="2 / 3">
+                <img src="/assets/gameplay-fortnite.jpg" alt="Fortnite 240 FPS Locked TweakLab Gameplay Benchmark" loading="eager" />
+                <div class="fps-glass-bar">
+                  <span class="promo-hud-dot" aria-hidden="true"></span>
+                  <span>FORTNITE • <span class="fps-before">Before: 135 FPS</span> <span class="fps-after">➔ After: 240 FPS Locked</span></span>
                 </div>
               </div>
 
-              <!-- Slide 3: Interactive HTML Guide Control Panel Preview -->
-              <div class="promo-slide" data-slide-counter="3 / 4">
-                <div class="mockup-panel">
-                  <div class="mockup-term-bar">
-                    <div class="mockup-term-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-                    <span class="mockup-term-title">TweakLab HTML Control Guide</span>
-                  </div>
-                  <div class="mockup-toggles-body">
-                    <div class="mockup-toggle-row">
-                      <span class="mockup-toggle-name">⚡ NVIDIA Low Latency Mode</span>
-                      <span class="mockup-toggle-pill">ON <span class="mockup-switch" aria-hidden="true"></span></span>
-                    </div>
-                    <div class="mockup-toggle-row">
-                      <span class="mockup-toggle-name">🧹 Disable Background Bloat</span>
-                      <span class="mockup-toggle-pill">ON <span class="mockup-switch" aria-hidden="true"></span></span>
-                    </div>
-                    <div class="mockup-toggle-row">
-                      <span class="mockup-toggle-name">🌐 Network &amp; DNS Boost</span>
-                      <span class="mockup-toggle-pill">ON <span class="mockup-switch" aria-hidden="true"></span></span>
-                    </div>
-                    <div class="mockup-guide-progress">
-                      <div class="mockup-guide-prog-head">
-                        <span>Optimization Checklist Complete</span>
-                        <strong>100%</strong>
-                      </div>
-                      <div class="mockup-guide-prog-track"><div class="mockup-guide-prog-fill"></div></div>
-                    </div>
-                  </div>
+              <!-- Slide 3: Warzone Gameplay + Top-Left FPS Counter -->
+              <div class="promo-slide" data-slide-counter="3 / 3">
+                <img src="/assets/gameplay-warzone.jpg" alt="Warzone 195 FPS TweakLab Gameplay Benchmark" loading="eager" />
+                <div class="fps-glass-bar">
+                  <span class="promo-hud-dot" aria-hidden="true"></span>
+                  <span>WARZONE • <span class="fps-before">Before: 92 FPS</span> <span class="fps-after">➔ After: 195 FPS</span></span>
                 </div>
               </div>
 
-              <!-- Slide 4: Input Delay & Ping Stability Split Cards -->
-              <div class="promo-slide" data-slide-counter="4 / 4">
-                <div class="mockup-latency-grid">
-                  <div class="mockup-stat-card">
-                    <div class="mockup-stat-title">⚡ Input Delay</div>
-                    <div class="mockup-latency-compare">
-                      <span class="latency-val-bad">6.8ms</span>
-                      <span class="latency-arrow">➔</span>
-                      <span class="latency-val-good">1.9ms</span>
-                    </div>
-                    <div class="mockup-stat-foot" dir="rtl" style="text-align:start;">استجابة ماوس وطلق فورية بدون تأخير فريمات (-72% Latency).</div>
-                  </div>
-                  <div class="mockup-stat-card">
-                    <div class="mockup-stat-title">📡 Ping Stability</div>
-                    <div class="ping-bars" aria-hidden="true">
-                      <span style="height:46%;"></span>
-                      <span style="height:64%;"></span>
-                      <span style="height:78%;"></span>
-                      <span style="height:90%;"></span>
-                      <span style="height:100%;"></span>
-                    </div>
-                    <div class="mockup-stat-foot" dir="rtl" style="text-align:start;">تقليل الـ Packet Loss وثبات البينج في Valorant &amp; Fortnite.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="promo-hud-badge">
-                <span class="promo-hud-dot"></span>
-                <span id="promo-hud-text">TWEAKLAB LIVE PREVIEW</span>
-              </div>
-              <div class="promo-hud-counter" id="promo-hud-counter">1 / 4</div>
-
-              <div class="promo-controls-bar" role="tablist" aria-label="Promo Slides">
-                <button type="button" class="promo-dot active" onclick="selectPromoSlide(0)" aria-label="Slide 1"></button>
-                <button type="button" class="promo-dot" onclick="selectPromoSlide(1)" aria-label="Slide 2"></button>
-                <button type="button" class="promo-dot" onclick="selectPromoSlide(2)" aria-label="Slide 3"></button>
-                <button type="button" class="promo-dot" onclick="selectPromoSlide(3)" aria-label="Slide 4"></button>
-              </div>
+              <div class="promo-hud-counter" id="promo-hud-counter">1 / 3</div>
 
               <div class="promo-progress-track">
                 <div class="promo-progress-bar" id="promo-progress-bar"></div>
               </div>
+            </div>
+
+            <div class="promo-controls-footer">
+              <button type="button" class="promo-nav-arrow" onclick="selectPromoSlide(currentPromoSlideIdx - 1)" aria-label="Previous slide">‹</button>
+              <div class="promo-controls-bar" role="tablist" aria-label="FPS Gameplay Slides">
+                <button type="button" class="promo-dot active" onclick="selectPromoSlide(0)" aria-label="Valorant Slide 1"></button>
+                <button type="button" class="promo-dot" onclick="selectPromoSlide(1)" aria-label="Fortnite Slide 2"></button>
+                <button type="button" class="promo-dot" onclick="selectPromoSlide(2)" aria-label="Warzone Slide 3"></button>
+              </div>
+              <button type="button" class="promo-nav-arrow" onclick="selectPromoSlide(currentPromoSlideIdx + 1)" aria-label="Next slide">›</button>
             </div>
           </div>
 
@@ -6110,12 +5702,8 @@ function setPromoSlide(index) {
     }
   });
 
-  const hudTextEl = document.getElementById('promo-hud-text');
   const hudCounterEl = document.getElementById('promo-hud-counter');
   const activeSlide = slides[currentPromoSlideIdx];
-  if (hudTextEl) {
-    hudTextEl.textContent = 'TWEAKLAB LIVE PREVIEW';
-  }
   if (hudCounterEl && activeSlide) {
     hudCounterEl.textContent = activeSlide.getAttribute('data-slide-counter') || `${currentPromoSlideIdx + 1} / ${slides.length}`;
   }
