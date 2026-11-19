@@ -419,24 +419,24 @@ const STORE_PRODUCTS = [
   // 6. GTA VI PS5 OFFICIAL US PSN BUNDLES (FEATURED HERO CAROUSEL BUNDLES)
   // ==========================================================================
   {
-    id: 'gta6-psn-us-70',
+    id: 'gta6-psn-us-80',
     category: 'gta6',
     region: 'US',
     regionLabel: 'أمريكي (US)',
-    flag: '🇺🇸',
-    title: 'باقة GTA VI Standard ($70 PSN US)',
-    titleEn: 'GTA VI Standard Pack ($50 + $20 = $70 PSN US)',
-    fullTitle: 'باقة GTA VI Standard (PS5) — $70 PSN US ($50 + $20 كودين رسميين)',
-    valueLabel: '$70 ($50 + $20)',
-    subtitle: 'كودين PSN أمريكي رسميين ($50 + $20 = $70) لشحن حسابك الشخصي وشراء GTA VI بتسليم سريع خلال ساعة',
-    subtitleEn: '2 Official US PSN Codes ($50 + $20 = $70) — safe on your personal PS5 account with delivery within 1 hour',
-    originalPrice: 4360,
-    priceEgp: 3850,
+    flag: 'US',
+    title: 'باقة GTA VI Standard ($80 PSN US)',
+    titleEn: 'GTA VI Standard Pack ($50 + $20 + $10 = $80 PSN US)',
+    fullTitle: 'باقة GTA VI Standard (PS5) — $80 PSN US ($50 + $20 + $10 — 3 أكواد رسمية)',
+    valueLabel: '$80 ($50 + $20 + $10)',
+    subtitle: '3 أكواد أمريكية رسمية ($50 + $20 + $10) • رصيد 80$ كامل للنسخة العادية',
+    subtitleEn: 'Delivered as three 100% official US codes ($50 + $20 + $10) • Full $80 PS5 Standard Edition balance',
+    originalPrice: 5000,
+    priceEgp: 4400,
     discountPercent: 12,
-    codeCount: 2,
-    codeLabels: ['Code 1 - $50', 'Code 2 - $20'],
+    codeCount: 3,
+    codeLabels: ['Code 1 - $50', 'Code 2 - $20', 'Code 3 - $10'],
     deliveryType: 'digital_code',
-    deliveryBadge: 'كودين رقميين ($50 + $20) • تسليم خلال ساعة',
+    deliveryBadge: '3 أكواد رقمية ($50 + $20 + $10) • تسليم خلال ساعة',
     requiresAccount: false,
     tag: '🔥 الأكثر طلباً لـ GTA VI'
   },
@@ -445,7 +445,7 @@ const STORE_PRODUCTS = [
     category: 'gta6',
     region: 'US',
     regionLabel: 'أمريكي (US)',
-    flag: '🇺🇸',
+    flag: 'US',
     title: 'باقة GTA VI Ultimate ($100 PSN US)',
     titleEn: 'GTA VI Ultimate Pack ($100 PSN US)',
     fullTitle: 'باقة GTA VI Ultimate (PS5) — $100 PSN US (كود رسمي شامل)',
@@ -466,6 +466,9 @@ const STORE_PRODUCTS = [
 
 function findProductById(id) {
   const cleanId = String(id || '').trim();
+  if (cleanId === 'gta6-psn-us-70') {
+    return STORE_PRODUCTS.find((p) => p.id === 'gta6-psn-us-80') || null;
+  }
   return STORE_PRODUCTS.find((p) => p.id === cleanId) || null;
 }
 

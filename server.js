@@ -1366,6 +1366,7 @@ async function handleRequest(req, res) {
         deliveryBadge: storeProduct ? storeProduct.deliveryBadge : '',
         deliveredCode: '',
         deliveredCode2: '',
+        deliveredCode3: '',
         deliveredAt: '',
         whatsappPhone: isGamingStoreOrder ? cleanSenderPhone : '',
         gameAccount: cleanGameAccount,
@@ -1576,10 +1577,11 @@ async function handleRequest(req, res) {
           storeRegion: matchedOrder.storeRegion || '',
           storeRegionCode: matchedOrder.storeRegionCode || '',
           storeValueLabel: matchedOrder.storeValueLabel || '',
-          codeCount: Number(matchedOrder.codeCount) || (matchedOrder.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
+          codeCount: Number(matchedOrder.codeCount) || (matchedOrder.storeProductId === 'gta6-psn-us-80' ? 3 : matchedOrder.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
           deliveryBadge: matchedOrder.deliveryBadge || '',
           deliveredCode: isApproved ? (matchedOrder.deliveredCode || '') : '',
           deliveredCode2: isApproved ? (matchedOrder.deliveredCode2 || '') : '',
+          deliveredCode3: isApproved ? (matchedOrder.deliveredCode3 || '') : '',
           deliveredAt: isApproved ? (matchedOrder.deliveredAt || '') : '',
           whatsappPhone: matchedOrder.whatsappPhone || matchedOrder.senderPhone || '',
           gameAccount: matchedOrder.gameAccount || '',
@@ -1717,10 +1719,11 @@ async function handleRequest(req, res) {
           storeRegion: order.storeRegion || '',
           storeRegionCode: order.storeRegionCode || '',
           storeValueLabel: order.storeValueLabel || '',
-          codeCount: Number(order.codeCount) || (order.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
+          codeCount: Number(order.codeCount) || (order.storeProductId === 'gta6-psn-us-80' ? 3 : order.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
           deliveryBadge: order.deliveryBadge || '',
           deliveredCode: isApproved ? (order.deliveredCode || '') : '',
           deliveredCode2: isApproved ? (order.deliveredCode2 || '') : '',
+          deliveredCode3: isApproved ? (order.deliveredCode3 || '') : '',
           deliveredAt: isApproved ? (order.deliveredAt || '') : '',
           whatsappPhone: order.whatsappPhone || order.senderPhone || '',
           gameAccount: order.gameAccount || '',
@@ -2163,7 +2166,7 @@ async function handleRequest(req, res) {
       if (pin !== settings.adminPin) {
         return sendJson(res, 401, { error: 'غير مصرح' });
       }
-      const { orderId, action, giftCode, deliveredCode, giftCode2, deliveredCode2 } = await readJsonBody(req);
+      const { orderId, action, giftCode, deliveredCode, giftCode2, deliveredCode2, giftCode3, deliveredCode3 } = await readJsonBody(req);
       const orders = loadOrders();
       const idx = orders.findIndex((o) => o.id === orderId);
 
@@ -2183,18 +2186,39 @@ async function handleRequest(req, res) {
 
       const cleanCode = String(deliveredCode !== undefined ? deliveredCode : (giftCode !== undefined ? giftCode : '')).trim().slice(0, 120);
       const cleanCode2 = String(deliveredCode2 !== undefined ? deliveredCode2 : (giftCode2 !== undefined ? giftCode2 : '')).trim().slice(0, 120);
-      const isDualCodeOrder = Number(orders[idx].codeCount) === 2 || String(orders[idx].storeProductId || '').toLowerCase() === 'gta6-psn-us-70';
+      const cleanCode3 = String(deliveredCode3 !== undefined ? deliveredCode3 : (giftCode3 !== undefined ? giftCode3 : '')).trim().slice(0, 120);
+      const pidLower = String(orders[idx].storeProductId || '').toLowerCase();
+      const isTripleCodeOrder = Number(orders[idx].codeCount) === 3 || pidLower === 'gta6-psn-us-80';
+      const isDualCodeOrder = Number(orders[idx].codeCount) === 2 || pidLower === 'gta6-psn-us-70';
 
       if (action === 'deliver-code') {
         if (!cleanCode) {
-          return sendJson(res, 400, { error: isDualCodeOrder ? 'يرجى كتابة الكود الأول (Code 1 - $50) والكود الثاني (Code 2 - $20) قبل التأكيد والإرسال.' : 'يرجى كتابة كود البطاقة الرقمي (Gift Card Code) قبل التأكيد والإرسال.' });
+          return sendJson(res, 400, {
+            error: isTripleCodeOrder
+              ? 'يرجى كتابة الـ 3 أكواد (Code 1 - $50، Code 2 - $20، Code 3 - $10) قبل التأكيد والإرسال.'
+              : isDualCodeOrder
+              ? 'يرجى كتابة الكود الأول (Code 1 - $50) والكود الثاني (Code 2 - $20) قبل التأكيد والإرسال.'
+              : 'يرجى كتابة كود البطاقة الرقمي (Gift Card Code) قبل التأكيد والإرسال.'
+          });
         }
-        if (isDualCodeOrder && !cleanCode2) {
-          return sendJson(res, 400, { error: 'هذه الباقة تتكون من كودين ($50 + $20 = $70) — يرجى كتابة الكود الثاني (Code 2 - $20) أيضاً قبل التأكيد.' });
+        if ((isTripleCodeOrder || isDualCodeOrder) && !cleanCode2) {
+          return sendJson(res, 400, {
+            error: isTripleCodeOrder
+              ? 'هذه الباقة تتكون من 3 أكواد ($50 + $20 + $10 = $80) — يرجى كتابة الكود الثاني (Code 2 - $20) أيضاً قبل التأكيد.'
+              : 'هذه الباقة تتكون من كودين ($50 + $20 = $70) — يرجى كتابة الكود الثاني (Code 2 - $20) أيضاً قبل التأكيد.'
+          });
+        }
+        if (isTripleCodeOrder && !cleanCode3) {
+          return sendJson(res, 400, {
+            error: 'هذه الباقة تتكون من 3 أكواد ($50 + $20 + $10 = $80) — يرجى كتابة الكود الثالث (Code 3 - $10) أيضاً قبل التأكيد.'
+          });
         }
         orders[idx].deliveredCode = cleanCode;
-        if (isDualCodeOrder || cleanCode2) {
+        if (isTripleCodeOrder || isDualCodeOrder || cleanCode2) {
           orders[idx].deliveredCode2 = cleanCode2;
+        }
+        if (isTripleCodeOrder || cleanCode3) {
+          orders[idx].deliveredCode3 = cleanCode3;
         }
         orders[idx].deliveredAt = new Date().toISOString();
         orders[idx].status = 'approved';
@@ -2213,6 +2237,7 @@ async function handleRequest(req, res) {
         if (action === 'approve' && cleanCode) {
           orders[idx].deliveredCode = cleanCode;
           if (cleanCode2) orders[idx].deliveredCode2 = cleanCode2;
+          if (cleanCode3) orders[idx].deliveredCode3 = cleanCode3;
           orders[idx].deliveredAt = new Date().toISOString();
         }
         orders[idx].updatedAt = new Date().toISOString();

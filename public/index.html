@@ -960,6 +960,7 @@ function showPortalPsnResult(data) {
   const isRejected = data.status === 'rejected';
   const deliveredCode = String(data.deliveredCode || '').trim();
   const deliveredCode2 = String(data.deliveredCode2 || '').trim();
+  const deliveredCode3 = String(data.deliveredCode3 || '').trim();
   const statusPill = isApproved
     ? `<span style="padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.8rem; font-weight:900;">${isAr ? '✅ تم قبول الطلب وتسليم الكود' : '✅ Approved & Code Delivered'}</span>`
     : isRejected
@@ -971,15 +972,34 @@ function showPortalPsnResult(data) {
     : (isAr ? '🎁 كود بطاقة PlayStation الرقمي الخاص بك:' : '🎁 Your PlayStation (PSN) Gift Card Code:');
 
   const codeBox = isApproved && deliveredCode
-    ? (deliveredCode2
+    ? (deliveredCode2 && deliveredCode3
         ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
-             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 1 — $50 PSN US:</div>
+             <div style="font-size:0.84rem; font-weight:900; color:#c8ffe2; margin-bottom:10px;">${isAr ? '🌴 أكواد باقة GTA VI Standard ($50 + $20 + $10 = $80 PSN US):' : '🌴 Your GTA VI Standard Pack Codes ($50 + $20 + $10 = $80 PSN US):'}</div>
+             <div style="background:rgba(5,9,18,0.88); border:1px solid rgba(0,255,136,0.38); border-radius:11px; padding:11px 12px; margin-bottom:10px;">
+               <div style="font-size:0.8rem; font-weight:800; color:#c8ffe2; margin-bottom:5px;">🎁 Code 1 - $50</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#03070e; border:1px solid rgba(0,255,136,0.45); border-radius:9px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode)}</div>
+               <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+             </div>
+             <div style="background:rgba(5,9,18,0.88); border:1px solid rgba(0,240,255,0.4); border-radius:11px; padding:11px 12px; margin-bottom:10px;">
+               <div style="font-size:0.8rem; font-weight:800; color:#a5f3fc; margin-bottom:5px;">🎁 Code 2 - $20</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00f0ff; background:#03070e; border:1px solid rgba(0,240,255,0.45); border-radius:9px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode2)}</div>
+               <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+             </div>
+             <div style="background:rgba(5,9,18,0.88); border:1px solid rgba(251,146,60,0.45); border-radius:11px; padding:11px 12px;">
+               <div style="font-size:0.8rem; font-weight:800; color:#fed7aa; margin-bottom:5px;">🎁 Code 3 - $10</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#ffb800; background:#03070e; border:1px solid rgba(251,146,60,0.5); border-radius:9px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode3)}</div>
+               <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode3)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+             </div>
+           </div>`
+        : deliveredCode2
+        ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 1 - $50:</div>
              <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.25rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode)}</div>
-             <button type="button" class="primary-btn" style="margin-bottom:14px; padding:10px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ Code 1 ($50) — Copy Code' : '📋 Copy Code 1 ($50)'}</button>
+             <button type="button" class="primary-btn" style="margin-bottom:14px; padding:10px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
 
-             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 2 — $20 PSN US:</div>
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 2 - $20:</div>
              <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.25rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode2)}</div>
-             <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ Code 2 ($20) — Copy Code' : '📋 Copy Code 2 ($20)'}</button>
+             <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
            </div>`
         : `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
              <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>

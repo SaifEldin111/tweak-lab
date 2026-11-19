@@ -769,6 +769,7 @@ async function quickAddPromoCode() {
 
 window.__giftCodeDrafts = window.__giftCodeDrafts || {};
 window.__giftCode2Drafts = window.__giftCode2Drafts || {};
+window.__giftCode3Drafts = window.__giftCode3Drafts || {};
 let activeAdminOrderFilter = 'all';
 
 function setAdminOrderFilter(filter) {
@@ -785,6 +786,10 @@ function saveGiftCodeDraft(orderId, val) {
 
 function saveGiftCode2Draft(orderId, val) {
   window.__giftCode2Drafts[orderId] = val;
+}
+
+function saveGiftCode3Draft(orderId, val) {
+  window.__giftCode3Drafts[orderId] = val;
 }
 
 function isSteamStoreOrder(o) {
@@ -805,8 +810,14 @@ function isGta6StoreOrder(o) {
   );
 }
 
+function isTripleCodeStoreOrder(o) {
+  if (!o || o.orderType !== 'gaming_store') return false;
+  return Number(o.codeCount) === 3 || String(o.storeProductId || '').toLowerCase() === 'gta6-psn-us-80';
+}
+
 function isDualCodeStoreOrder(o) {
   if (!o || o.orderType !== 'gaming_store') return false;
+  if (isTripleCodeStoreOrder(o)) return false;
   return Number(o.codeCount) === 2 || String(o.storeProductId || '').toLowerCase() === 'gta6-psn-us-70';
 }
 
@@ -814,11 +825,15 @@ function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel, isSteamFlag) {
   if (!waIntlDigits) return;
   const inp = document.getElementById('gift-code-input-' + orderId);
   const inp2 = document.getElementById('gift-code-2-input-' + orderId);
+  const inp3 = document.getElementById('gift-code-3-input-' + orderId);
   const code = (inp && inp.value ? inp.value.trim() : '') || (window.__giftCodeDrafts[orderId] || '').trim();
   const code2 = (inp2 && inp2.value ? inp2.value.trim() : '') || (window.__giftCode2Drafts[orderId] || '').trim();
+  const code3 = (inp3 && inp3.value ? inp3.value.trim() : '') || (window.__giftCode3Drafts[orderId] || '').trim();
   const cardKind = isSteamFlag === '1' ? 'بطاقة Steam Wallet' : 'بطاقة PlayStation (PSN)';
   let msg = `مرحباً من TweakLab 🎮⚡\nبخصوص طلبك #${orderId} (${pkgLabel}): `;
-  if (code && code2) {
+  if (code && code2 && code3) {
+    msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد طلب باقة GTA VI #${orderId}\nالباقة: ${pkgLabel}\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n🎁 Code 3 - $10 PSN US:\n${code3}\n\nشكراً لتعاملك مع TweakLab!`;
+  } else if (code && code2) {
     msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد طلب باقة GTA VI #${orderId}\nالباقة: ${pkgLabel}\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n\nشكراً لتعاملك مع TweakLab!`;
   } else if (code) {
     msg = `مرحباً من TweakLab 🎮⚡\nتم تأكيد طلبك #${orderId}\nالبطاقة: ${pkgLabel}\n🎁 كود ${cardKind} الرقمي:\n${code}\n\nشكراً لتعاملك مع TweakLab!`;
@@ -831,6 +846,7 @@ function formatPsnShortLabel(o) {
   const regCode = String(o.storeRegionCode || '').trim().toUpperCase();
   if (isGta6StoreOrder(o)) {
     const pid = String(o.storeProductId || '').toLowerCase();
+    if (pid === 'gta6-psn-us-80') return 'GTA VI Standard Pack — $80 PSN US ($50 + $20 + $10)';
     if (pid === 'gta6-psn-us-70') return 'GTA VI Standard Pack — $70 PSN US ($50 + $20)';
     if (pid === 'gta6-psn-us-100') return 'GTA VI Ultimate Pack — $100 PSN US';
     return o.packageName || 'GTA VI PS5 Bundle (US PSN)';
@@ -926,13 +942,14 @@ function renderOrders(orders, forceRender = false) {
       const isStoreOrder = o.orderType === 'gaming_store';
       const isSteamOrder = isSteamStoreOrder(o);
       const isGta6Order = isGta6StoreOrder(o);
+      const isTripleCodeOrder = isTripleCodeStoreOrder(o);
       const isDualCodeOrder = isDualCodeStoreOrder(o);
       const isApprovedOrExpired = o.status === 'approved' || o.status === 'expired';
       const badgeClass =
         isApprovedOrExpired ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
       const badgeText =
         o.status === 'approved'
-          ? (isStoreOrder ? (o.deliveredCode ? (isDualCodeOrder ? '✅ تم تسليم الكودين ($50 + $20)' : '✅ تم التسليم بالكود') : '✅ مقبول (تم التسليم)') : '✅ مقبول وتم التسليم')
+          ? (isStoreOrder ? (o.deliveredCode ? (isTripleCodeOrder ? '✅ تم تسليم الـ 3 أكواد ($50 + $20 + $10)' : isDualCodeOrder ? '✅ تم تسليم الكودين ($50 + $20)' : '✅ تم التسليم بالكود') : '✅ مقبول (تم التسليم)') : '✅ مقبول وتم التسليم')
           : o.status === 'expired'
           ? '✅ تم التسليم (انتهت مهلة الرابط)'
           : o.status === 'rejected'
@@ -951,6 +968,10 @@ function renderOrders(orders, forceRender = false) {
         window.__giftCode2Drafts[o.id] !== undefined
           ? window.__giftCode2Drafts[o.id]
           : (o.deliveredCode2 || '');
+      const currentDraftCode3 =
+        window.__giftCode3Drafts[o.id] !== undefined
+          ? window.__giftCode3Drafts[o.id]
+          : (o.deliveredCode3 || '');
 
       let timeBombBadge = '';
       if (!isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)) {
@@ -977,7 +998,43 @@ function renderOrders(orders, forceRender = false) {
         : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,255,136,0.14); border:1px solid rgba(0,255,136,0.45); color:var(--green);">⚡ باقة PC</span>`;
 
       const psnCodeDeliverySection = isStoreOrder
-        ? (isDualCodeOrder
+        ? (isTripleCodeOrder
+            ? `<div class="psn-code-delivery-box">
+                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+                   <label for="gift-code-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 Code 1 - $50 (كود البطاقة الأولى $50 PSN US):</label>
+                   ${
+                     o.deliveredCode
+                       ? `<button type="button" class="btn" style="padding:3px 9px; font-size:0.73rem; border-color:var(--green); color:var(--green);" data-copy="${escapeHtml(o.deliveredCode)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ Code 1 ($50)');">📋 نسخ Code 1</button>`
+                       : ''
+                   }
+                 </div>
+                 <input type="text" id="gift-code-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="Code 1 - $50: ABCD-1234-EFGH" value="${escapeHtml(currentDraftCode)}" oninput="saveGiftCodeDraft('${o.id}', this.value)" autocomplete="off" />
+
+                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-top:6px; margin-bottom:4px;">
+                   <label for="gift-code-2-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 Code 2 - $20 (كود البطاقة الثانية $20 PSN US):</label>
+                   ${
+                     o.deliveredCode2
+                       ? `<button type="button" class="btn" style="padding:3px 9px; font-size:0.73rem; border-color:var(--green); color:var(--green);" data-copy="${escapeHtml(o.deliveredCode2)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ Code 2 ($20)');">📋 نسخ Code 2</button>`
+                       : ''
+                   }
+                 </div>
+                 <input type="text" id="gift-code-2-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="Code 2 - $20: WXYZ-5678-IJKL" value="${escapeHtml(currentDraftCode2)}" oninput="saveGiftCode2Draft('${o.id}', this.value)" autocomplete="off" />
+
+                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-top:6px; margin-bottom:4px;">
+                   <label for="gift-code-3-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 Code 3 - $10 (كود البطاقة الثالثة $10 PSN US):</label>
+                   ${
+                     o.deliveredCode3
+                       ? `<button type="button" class="btn" style="padding:3px 9px; font-size:0.73rem; border-color:var(--green); color:var(--green);" data-copy="${escapeHtml(o.deliveredCode3)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ Code 3 ($10)');">📋 نسخ Code 3</button>`
+                       : ''
+                   }
+                 </div>
+                 <input type="text" id="gift-code-3-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="Code 3 - $10: MNOP-9012-QRST" value="${escapeHtml(currentDraftCode3)}" oninput="saveGiftCode3Draft('${o.id}', this.value)" autocomplete="off" />
+
+                 <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem; margin-top:6px;" onclick="deliverPsnCode('${o.id}', this)">
+                   ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الـ 3 أكواد المحفوظة ($50 + $20 + $10)' : '✅ تأكيد الطلب وإرسال الـ 3 أكواد ($50 + $20 + $10)'}
+                 </button>
+               </div>`
+            : isDualCodeOrder
             ? `<div class="psn-code-delivery-box">
                  <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
                    <label for="gift-code-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 Code 1 - $50 (كود البطاقة الأولى $50 PSN US):</label>
@@ -1145,16 +1202,23 @@ function renderOrders(orders, forceRender = false) {
 async function deliverPsnCode(orderId, btnEl = null) {
   const inp = document.getElementById('gift-code-input-' + orderId);
   const inp2 = document.getElementById('gift-code-2-input-' + orderId);
+  const inp3 = document.getElementById('gift-code-3-input-' + orderId);
   const code = inp ? inp.value.trim() : (window.__giftCodeDrafts[orderId] || '').trim();
   const code2 = inp2 ? inp2.value.trim() : (window.__giftCode2Drafts[orderId] || '').trim();
+  const code3 = inp3 ? inp3.value.trim() : (window.__giftCode3Drafts[orderId] || '').trim();
   if (!code) {
     showAdminToast(inp2 ? '⚠️ يرجى كتابة Code 1 ($50) أولاً' : '⚠️ يرجى كتابة كود البطاقة الرقمي أولاً');
     if (inp) inp.focus();
     return;
   }
   if (inp2 && !code2) {
-    showAdminToast('⚠️ يرجى كتابة Code 2 ($20) أيضاً لباقة الـ $70');
+    showAdminToast(inp3 ? '⚠️ يرجى كتابة Code 2 ($20) أيضاً لباقة الـ $80' : '⚠️ يرجى كتابة Code 2 ($20) أيضاً لباقة الـ $70');
     inp2.focus();
+    return;
+  }
+  if (inp3 && !code3) {
+    showAdminToast('⚠️ يرجى كتابة Code 3 ($10) أيضاً لباقة الـ $80');
+    inp3.focus();
     return;
   }
   let originalBtnHtml = '';
@@ -1168,15 +1232,28 @@ async function deliverPsnCode(orderId, btnEl = null) {
     const res = await fetch('/api/admin/order-action', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
-      body: JSON.stringify({ orderId, action: 'deliver-code', deliveredCode: code, deliveredCode2: code2 || undefined })
+      body: JSON.stringify({
+        orderId,
+        action: 'deliver-code',
+        deliveredCode: code,
+        deliveredCode2: code2 || undefined,
+        deliveredCode3: code3 || undefined
+      })
     });
     const result = await res.json();
     if (result.ok && Array.isArray(result.orders)) {
       delete window.__giftCodeDrafts[orderId];
       delete window.__giftCode2Drafts[orderId];
+      delete window.__giftCode3Drafts[orderId];
       window.__latestAdminOrders = result.orders;
       renderOrders(result.orders, true);
-      showAdminToast(inp2 ? `✅ تم تأكيد الطلب #${orderId} وحفظ الكودين ($50 + $20) بنجاح!` : `✅ تم تأكيد الطلب #${orderId} وحفظ الكود بنجاح!`);
+      showAdminToast(
+        inp3
+          ? `✅ تم تأكيد الطلب #${orderId} وحفظ الـ 3 أكواد ($50 + $20 + $10) بنجاح!`
+          : inp2
+          ? `✅ تم تأكيد الطلب #${orderId} وحفظ الكودين ($50 + $20) بنجاح!`
+          : `✅ تم تأكيد الطلب #${orderId} وحفظ الكود بنجاح!`
+      );
     } else {
       alert('خطأ: ' + (result.error || 'تعذر حفظ الكود'));
       fetchAdminData();
