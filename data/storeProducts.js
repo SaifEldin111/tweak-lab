@@ -1,21 +1,22 @@
 /**
  * ============================================================================
- * TWEAK LAB — GAMING STORE PRODUCTS & PRICING CATALOG (PSN GIFT CARDS)
+ * TWEAK LAB — GAMING STORE PRODUCTS & PRICING CATALOG (PSN & STEAM WALLET)
  * ============================================================================
- * عدّل أي سعر (priceEgp) أو أضف/عدّل أي فئة هنا بسهولة،
+ * عدّل أي سعر (priceEgp / originalPrice / discountPercent) أو أضف/عدّل أي فئة هنا بسهولة،
  * وسيتم تحديث صفحة المتجر (/store) والتحقق من الأسعار في السيرفر تلقائياً.
  */
 
 const STORE_CATEGORIES = [
-  { id: 'psn', label: 'بطاقات PlayStation (PSN)', icon: '🎮', status: 'active' },
-  { id: 'topup-soon', label: 'شحن الألعاب', icon: '🔒', badge: 'قريباً', status: 'coming_soon' }
+  { id: 'psn', label: 'PlayStation (PSN)', labelAr: 'بطاقات PlayStation (PSN)', icon: '🎮', status: 'active' },
+  { id: 'steam', label: 'Steam Wallet (PC)', labelAr: 'بطاقات Steam Wallet (PC)', icon: '💻', status: 'active' },
+  { id: 'topup-soon', label: 'Game Top-Ups', labelAr: 'شحن الألعاب', icon: '🔒', badge: 'Coming Soon', badgeAr: 'قريباً', status: 'coming_soon' }
 ];
 
 const PSN_REGIONS = [
-  { id: 'US', flag: '🇺🇸', nameAr: 'أمريكي', code: 'US', currency: 'USD', badge: 'حساب أمريكي (USA)' },
-  { id: 'SA', flag: '🇸🇦', nameAr: 'سعودي', code: 'SA', currency: 'USD', badge: 'حساب سعودي (KSA)' },
-  { id: 'UAE', flag: '🇦🇪', nameAr: 'إماراتي', code: 'UAE', currency: 'USD', badge: 'حساب إماراتي (UAE)' },
-  { id: 'TR', flag: '🇹🇷', nameAr: 'تركي', code: 'TR', currency: 'TRY', badge: 'حساب تركي (Turkey)' }
+  { id: 'US', flag: '🇺🇸', nameAr: 'أمريكي', nameEn: 'USA', code: 'US', currency: 'USD', badge: 'حساب أمريكي (USA)' },
+  { id: 'SA', flag: '🇸🇦', nameAr: 'سعودي', nameEn: 'Saudi', code: 'SA', currency: 'USD', badge: 'حساب سعودي (KSA)' },
+  { id: 'UAE', flag: '🇦🇪', nameAr: 'إماراتي', nameEn: 'UAE', code: 'UAE', currency: 'USD', badge: 'حساب إماراتي (UAE)' },
+  { id: 'TR', flag: '🇹🇷', nameAr: 'تركي', nameEn: 'Turkey', code: 'TR', currency: 'TRY', badge: 'حساب تركي (Turkey)' }
 ];
 
 const STORE_PRODUCTS = [
@@ -32,9 +33,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN أمريكي (US) — $10',
     valueLabel: '$10',
     subtitle: 'رصيد متجر بلايستيشن الأمريكي • كود رقمي أصلي 100%',
+    originalPrice: 640,
     priceEgp: 575,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -48,9 +51,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN أمريكي (US) — $20',
     valueLabel: '$20',
     subtitle: 'رصيد متجر بلايستيشن الأمريكي • تفعيل فوري على حسابك',
+    originalPrice: 1260,
     priceEgp: 1130,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -64,9 +69,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN أمريكي (US) — $50',
     valueLabel: '$50',
     subtitle: 'مثالية للألعاب الجديدة واشتراك PS Plus الأمريكي',
+    originalPrice: 3100,
     priceEgp: 2790,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '🔥 الأكثر طلباً'
   },
@@ -80,9 +87,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN أمريكي (US) — $100',
     valueLabel: '$100',
     subtitle: 'أفضل قيمة لشحن المحفظة وشراء ألعاب الـ AAA والاشتراكات',
+    originalPrice: 6150,
     priceEgp: 5530,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '💎 أفضل قيمة'
   },
@@ -100,9 +109,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN سعودي (SA) — $10',
     valueLabel: '$10',
     subtitle: 'رصيد الستور السعودي • كود رقمي رسمي مضمون',
+    originalPrice: 660,
     priceEgp: 595,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -116,9 +127,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN سعودي (SA) — $20',
     valueLabel: '$20',
     subtitle: 'رصيد الستور السعودي • مناسب للـ DLC والباتل باس',
+    originalPrice: 1300,
     priceEgp: 1170,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -132,9 +145,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN سعودي (SA) — $50',
     valueLabel: '$50',
     subtitle: 'مثالية لشراء الألعاب وتجديد PS Plus السعودي',
+    originalPrice: 3180,
     priceEgp: 2860,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '🔥 الأكثر طلباً'
   },
@@ -148,9 +163,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN سعودي (SA) — $100',
     valueLabel: '$100',
     subtitle: 'شحن رصيد كامل للستور السعودي بأعلى أمان وسرعة',
+    originalPrice: 6300,
     priceEgp: 5680,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '💎 أفضل قيمة'
   },
@@ -168,9 +185,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN إماراتي (UAE) — $10',
     valueLabel: '$10',
     subtitle: 'رصيد الستور الإماراتي • كود رقمي رسمي 100%',
+    originalPrice: 660,
     priceEgp: 595,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -184,9 +203,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN إماراتي (UAE) — $20',
     valueLabel: '$20',
     subtitle: 'رصيد الستور الإماراتي • تفعيل مباشر وسريع',
+    originalPrice: 1300,
     priceEgp: 1170,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -200,9 +221,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN إماراتي (UAE) — $50',
     valueLabel: '$50',
     subtitle: 'مناسبة للألعاب الحصرية واشتراكات PS Plus الإماراتي',
+    originalPrice: 3180,
     priceEgp: 2860,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '🔥 الأكثر طلباً'
   },
@@ -216,9 +239,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN إماراتي (UAE) — $100',
     valueLabel: '$100',
     subtitle: 'شحن محفظة الستور الإماراتي بأفضل سعر في مصر',
+    originalPrice: 6300,
     priceEgp: 5680,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '💎 أفضل قيمة'
   },
@@ -236,9 +261,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN تركي (TR) — 250 TL',
     valueLabel: '250 TL',
     subtitle: 'رصيد الستور التركي بالليرة • أرخص عروض ألعاب PSN',
+    originalPrice: 520,
     priceEgp: 465,
+    discountPercent: 11,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: ''
   },
@@ -252,9 +279,11 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN تركي (TR) — 500 TL',
     valueLabel: '500 TL',
     subtitle: 'الأكثر مبيعاً لشحن الستور التركي وشراء الألعاب',
+    originalPrice: 1010,
     priceEgp: 910,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '🔥 الأكثر طلباً'
   },
@@ -268,9 +297,120 @@ const STORE_PRODUCTS = [
     fullTitle: 'بطاقة PlayStation PSN تركي (TR) — 1,000 TL',
     valueLabel: '1,000 TL',
     subtitle: 'أفضل توفير للستور التركي واشتراك PS Plus السنوي',
+    originalPrice: 1980,
     priceEgp: 1780,
+    discountPercent: 10,
     deliveryType: 'digital_code',
-    deliveryBadge: 'كود رقمي • تسليم سريع',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
+    requiresAccount: false,
+    tag: '💎 أفضل قيمة'
+  },
+
+  // ==========================================================================
+  // 5. STEAM WALLET (PC) — USD (Global / Egypt & MENA)
+  // ==========================================================================
+  {
+    id: 'steam-usd-5',
+    category: 'steam',
+    region: 'USD',
+    regionLabel: 'USD (Global / Egypt & MENA)',
+    flag: '🌐',
+    title: 'بطاقة Steam Wallet $5',
+    fullTitle: 'بطاقة Steam Wallet (PC) — $5 USD (Global / Egypt & MENA)',
+    valueLabel: '$5',
+    subtitle: 'شغالة على الحساب المصري والأمريكي • كود رقمي أصلي 100% وتسليم فوري',
+    subtitleEn: 'Works on Egypt & US Steam accounts • 100% official code with instant delivery',
+    compatibilityBadgeEn: '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code',
+    compatibilityBadgeAr: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري',
+    originalPrice: 330,
+    priceEgp: 295,
+    discountPercent: 11,
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
+    requiresAccount: false,
+    tag: ''
+  },
+  {
+    id: 'steam-usd-10',
+    category: 'steam',
+    region: 'USD',
+    regionLabel: 'USD (Global / Egypt & MENA)',
+    flag: '🌐',
+    title: 'بطاقة Steam Wallet $10',
+    fullTitle: 'بطاقة Steam Wallet (PC) — $10 USD (Global / Egypt & MENA)',
+    valueLabel: '$10',
+    subtitle: 'شغالة على الحساب المصري والأمريكي • لشراء الألعاب وتخفيضات Steam',
+    subtitleEn: 'Works on Egypt & US Steam accounts • Ideal for Steam sales & DLCs',
+    compatibilityBadgeEn: '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code',
+    compatibilityBadgeAr: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري',
+    originalPrice: 640,
+    priceEgp: 575,
+    discountPercent: 10,
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
+    requiresAccount: false,
+    tag: ''
+  },
+  {
+    id: 'steam-usd-20',
+    category: 'steam',
+    region: 'USD',
+    regionLabel: 'USD (Global / Egypt & MENA)',
+    flag: '🌐',
+    title: 'بطاقة Steam Wallet $20',
+    fullTitle: 'بطاقة Steam Wallet (PC) — $20 USD (Global / Egypt & MENA)',
+    valueLabel: '$20',
+    subtitle: 'شغالة على الحساب المصري والأمريكي • مثالية لألعاب الأونلاين والـ Battle Pass',
+    subtitleEn: 'Works on Egypt & US Steam accounts • Great for competitive PC games & passes',
+    compatibilityBadgeEn: '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code',
+    compatibilityBadgeAr: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري',
+    originalPrice: 1260,
+    priceEgp: 1130,
+    discountPercent: 10,
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
+    requiresAccount: false,
+    tag: '🔥 الأكثر طلباً'
+  },
+  {
+    id: 'steam-usd-50',
+    category: 'steam',
+    region: 'USD',
+    regionLabel: 'USD (Global / Egypt & MENA)',
+    flag: '🌐',
+    title: 'بطاقة Steam Wallet $50',
+    fullTitle: 'بطاقة Steam Wallet (PC) — $50 USD (Global / Egypt & MENA)',
+    valueLabel: '$50',
+    subtitle: 'شغالة على الحساب المصري والأمريكي • مثالية لألعاب الـ AAA الجديدة',
+    subtitleEn: 'Works on Egypt & US Steam accounts • Perfect for new AAA releases on PC',
+    compatibilityBadgeEn: '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code',
+    compatibilityBadgeAr: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري',
+    originalPrice: 3100,
+    priceEgp: 2790,
+    discountPercent: 10,
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
+    requiresAccount: false,
+    tag: '🔥 الأكثر طلباً'
+  },
+  {
+    id: 'steam-usd-100',
+    category: 'steam',
+    region: 'USD',
+    regionLabel: 'USD (Global / Egypt & MENA)',
+    flag: '🌐',
+    title: 'بطاقة Steam Wallet $100',
+    fullTitle: 'بطاقة Steam Wallet (PC) — $100 USD (Global / Egypt & MENA)',
+    valueLabel: '$100',
+    subtitle: 'شغالة على الحساب المصري والأمريكي • أعلى توفير لشحن محفظة Steam بالكامل',
+    subtitleEn: 'Works on Egypt & US Steam accounts • Maximum savings for full Steam Wallet top-up',
+    compatibilityBadgeEn: '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code',
+    compatibilityBadgeAr: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري',
+    originalPrice: 6150,
+    priceEgp: 5530,
+    discountPercent: 10,
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '💎 أفضل قيمة'
   }

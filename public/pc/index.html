@@ -4180,9 +4180,9 @@ const I18N = {
     pkgProNote: 'استلام فوري في نفس الصفحة بعد تأكيد التحويل عبر InstaPay أو Vodafone Cash',
     checkoutSectionHeading: 'قسم الدفع وتأكيد الطلب',
     checkoutSectionSub: 'انسخ رقم التحويل بضغطة واحدة، ارفع سكرين شوت الإيصال، واستلم ملفات الباقة الكاملة في نفس الصفحة',
-    restoreModalBadge: '🔍 متابعة طلب سابق (باقة PC أو بطاقة PSN)',
-    restoreModalTitle: 'افتح طلبك، استلم كود الـ PSN، أو قيّم تجربتك',
-    restoreModalDesc: 'اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل / الواتساب</strong> لفتح طلبك أو عرض كود بطاقة PlayStation فوراً:',
+    restoreModalBadge: '🔍 متابعة طلب سابق (PC / PSN / Steam)',
+    restoreModalTitle: 'افتح طلبك، استلم كود البطاقة، أو قيّم تجربتك',
+    restoreModalDesc: 'اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل / الواتساب</strong> لفتح طلبك أو عرض كود PlayStation / Steam فوراً:',
     restoreModalPh: 'مثال: TL-123456 أو 01012345678',
     restoreModalBtn: '🚀 عرض حالة الطلب الآن',
     browseHomeKeepOrderBtn: '🏠 تصفح الصفحة الرئيسية (مع الاحتفاظ بطلبي الحالي نشطاً)',
@@ -4356,8 +4356,8 @@ const I18N = {
     pkgProNote: 'Instant delivery on this page after InstaPay or Vodafone Cash confirmation',
     checkoutSectionHeading: 'Checkout & Order Confirmation',
     checkoutSectionSub: 'Copy the transfer number in 1 click, upload your receipt screenshot, and unlock your full pack right here',
-    restoreModalBadge: '🔍 Track Your Order (PC Pack or PSN Card)',
-    restoreModalTitle: 'Open Your Order, Get Your PSN Code, or Leave a Review',
+    restoreModalBadge: '🔍 Track Your Order (PC / PSN / Steam)',
+    restoreModalTitle: 'Open Your Order, Claim Your Code, or Leave a Review',
     restoreModalDesc: 'Enter your <strong style="color:var(--cyan);">Order ID (e.g. TL-123456)</strong> or <strong style="color:var(--green);">Phone / WhatsApp Number</strong> to check your status or claim your code:',
     restoreModalPh: 'e.g. TL-123456 or 01012345678',
     restoreModalBtn: '🚀 Check Order Status',
@@ -5906,43 +5906,53 @@ function showPsnOrderInRestoreModal(data) {
   if (searchWrap) searchWrap.style.display = 'none';
   psnWrap.style.display = 'block';
 
+  const isAr = currentLang === 'ar';
+  const isSteam = String(data.storeCategory || '').toLowerCase() === 'steam' || String(data.storeProductId || '').toLowerCase().startsWith('steam-') || String(data.packageName || '').toLowerCase().includes('steam');
   const isApproved = data.status === 'approved';
   const isRejected = data.status === 'rejected';
   const deliveredCode = String(data.deliveredCode || '').trim();
   const statusPillHtml = isApproved
-    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.82rem; font-weight:900;">✅ تم قبول الطلب وتسليم الكود</span>`
+    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.82rem; font-weight:900;">${isAr ? '✅ تم قبول الطلب وتسليم الكود' : '✅ Approved & Code Delivered'}</span>`
     : isRejected
-    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,71,87,0.16); border:1px solid #ff4757; color:#ff6b78; font-size:0.82rem; font-weight:900;">❌ لم يتم التحقق من الإيصال</span>`
-    : `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,184,0,0.14); border:1px solid #ffb800; color:#ffb800; font-size:0.82rem; font-weight:900;">⏳ جاري مراجعة التحويل وتجهيز الكود</span>`;
+    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,71,87,0.16); border:1px solid #ff4757; color:#ff6b78; font-size:0.82rem; font-weight:900;">${isAr ? '❌ لم يتم التحقق من الإيصال' : '❌ Receipt Declined'}</span>`
+    : `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,184,0,0.14); border:1px solid #ffb800; color:#ffb800; font-size:0.82rem; font-weight:900;">${isAr ? '⏳ جاري مراجعة التحويل وتجهيز الكود' : '⏳ Reviewing Payment'}</span>`;
+
+  const codeTitle = isSteam
+    ? (isAr ? '🎁 كود بطاقة Steam الرقمي الخاص بك:' : '🎁 Your Steam Wallet (PC) Gift Card Code:')
+    : (isAr ? '🎁 كود بطاقة PlayStation الرقمي الخاص بك:' : '🎁 Your PlayStation (PSN) Gift Card Code:');
 
   const codeBoxHtml = isApproved && deliveredCode
     ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
-         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">🎁 كود بطاقة PlayStation الرقمي الخاص بك:</div>
+         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>
          <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
-         <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:11px 16px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">📋 نسخ الكود (Copy Code)</button>
+         <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:11px 16px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
        </div>`
     : isApproved
     ? `<div style="margin:14px 0; padding:14px; border-radius:12px; background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.4); color:#d8ffeb; font-size:0.86rem; font-weight:700;">
-         تم قبول طلبك بنجاح! جاري إرسال كود الـ PSN على رقم الواتساب الخاص بك خلال لحظات.
+         ${isAr ? `تم قبول طلبك بنجاح! جاري إرسال كود ${isSteam ? 'Steam Wallet' : 'الـ PSN'} على رقم الواتساب الخاص بك خلال لحظات.` : `Your order is approved! Your ${isSteam ? 'Steam Wallet' : 'PSN'} code is being sent to your WhatsApp shortly.`}
        </div>`
     : '';
 
+  const typeBadgeHtml = isSteam
+    ? `<span style="padding:4px 11px; border-radius:999px; background:rgba(139,92,246,0.18); border:1px solid rgba(167,139,250,0.65); color:#d8b4fe; font-size:0.76rem; font-weight:900;">💻 Steam Gift Card</span>`
+    : `<span style="padding:4px 11px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:#00f0ff; font-size:0.76rem; font-weight:900;">${isAr ? '🎮 بطاقة PSN' : '🎮 PSN Gift Card'}</span>`;
+
   psnWrap.innerHTML = `
     <div style="margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
-      <span style="padding:4px 11px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:#00f0ff; font-size:0.76rem; font-weight:900;">🎮 بطاقة PSN</span>
+      ${typeBadgeHtml}
       ${statusPillHtml}
     </div>
-    <h3 style="color:#fff; font-size:1.14rem; font-weight:900; margin-bottom:6px;">${escapeHtml(data.packageName || 'بطاقة PlayStation PSN')}</h3>
+    <h3 style="color:#fff; font-size:1.14rem; font-weight:900; margin-bottom:6px;">${escapeHtml(data.packageName || (isSteam ? 'Steam Wallet Gift Card' : 'PlayStation PSN Card'))}</h3>
     <div style="background:#070b14; border:1px solid var(--border); border-radius:12px; padding:12px 14px; text-align:start; font-size:0.85rem; display:flex; flex-direction:column; gap:5px; margin-top:10px;">
-      <div>🆔 <strong>رقم الطلب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(data.id)}</code></div>
-      ${data.storeRegion ? `<div>🌍 <strong>الريجين:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(data.storeRegion)}</span></div>` : ''}
-      <div>💰 <strong>السعر:</strong> <span style="color:var(--green); font-weight:900;">${Number(data.amountEgp || 0).toLocaleString('en-US')} ج.م</span></div>
-      <div>💬 <strong>الواتساب:</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(data.whatsappPhone || '')}</span></div>
+      <div>🆔 <strong>${isAr ? 'رقم الطلب:' : 'Order ID:'}</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(data.id)}</code></div>
+      ${data.storeRegion ? `<div>🌍 <strong>${isAr ? 'الريجين:' : 'Region:'}</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(data.storeRegion)}</span></div>` : ''}
+      <div>💰 <strong>${isAr ? 'السعر:' : 'Price:'}</strong> <span style="color:var(--green); font-weight:900;">${Number(data.amountEgp || 0).toLocaleString('en-US')} ${isAr ? 'ج.م' : 'EGP'}</span></div>
+      <div>💬 <strong>${isAr ? 'الواتساب:' : 'WhatsApp:'}</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(data.whatsappPhone || '')}</span></div>
     </div>
     ${codeBoxHtml}
     <div style="display:flex; gap:8px; margin-top:14px;">
-      <button type="button" class="btn" style="flex:1; justify-content:center;" onclick="promptRestoreOrder()">🔍 بحث عن طلب آخر</button>
-      <a href="/store" class="btn" style="flex:1; justify-content:center; border-color:rgba(0,240,255,0.45); color:var(--cyan);">🎮 المتجر (/store)</a>
+      <button type="button" class="btn" style="flex:1; justify-content:center;" onclick="promptRestoreOrder()">${isAr ? '🔍 بحث عن طلب آخر' : '🔍 Another Order'}</button>
+      <a href="/store" class="btn" style="flex:1; justify-content:center; border-color:rgba(0,240,255,0.45); color:var(--cyan);">${isAr ? '🎮 المتجر (/store)' : '🎮 Store (/store)'}</a>
     </div>
   `;
 }

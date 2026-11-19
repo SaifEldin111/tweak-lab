@@ -364,7 +364,7 @@
           </span>
           <span class="brand-wordmark"><span class="brand-tweak">Tweak</span><span class="brand-lab">Lab</span></span>
         </a>
-        <span class="admin-header-sub">لوحة التحكم • إدارة طلبات <strong style="color:var(--green);">PC</strong> وبطاقات <strong style="color:var(--cyan);">PSN</strong></span>
+        <span class="admin-header-sub">لوحة التحكم • إدارة طلبات <strong style="color:var(--green);">PC</strong> وبطاقات <strong style="color:var(--cyan);">PSN</strong> و <strong style="color:#a78bfa;">Steam</strong></span>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <button class="btn" onclick="testSound()">🔔 تجربة صوت الإشعار</button>
@@ -434,6 +434,7 @@
       <div class="orders-filter-bar" style="margin-bottom:0;" id="orders-filter-bar">
         <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setAdminOrderFilter('all')">الكل (<span id="flt-count-all">0</span>)</button>
         <button type="button" class="filter-pill-btn" data-filter="psn" onclick="setAdminOrderFilter('psn')">🎮 بطاقات PSN (<span id="flt-count-psn">0</span>)</button>
+        <button type="button" class="filter-pill-btn" data-filter="steam" onclick="setAdminOrderFilter('steam')">💻 Steam Gift Card (<span id="flt-count-steam">0</span>)</button>
         <button type="button" class="filter-pill-btn" data-filter="pc" onclick="setAdminOrderFilter('pc')">⚡ باقات PC (<span id="flt-count-pc">0</span>)</button>
         <button type="button" class="filter-pill-btn" data-filter="pending" onclick="setAdminOrderFilter('pending')">⏳ قيد المراجعة (<span id="flt-count-pending">0</span>)</button>
       </div>
@@ -775,12 +776,22 @@ function saveGiftCodeDraft(orderId, val) {
   window.__giftCodeDrafts[orderId] = val;
 }
 
-function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel) {
+function isSteamStoreOrder(o) {
+  if (!o || o.orderType !== 'gaming_store') return false;
+  return (
+    String(o.storeCategory || '').toLowerCase() === 'steam' ||
+    String(o.storeProductId || '').toLowerCase().startsWith('steam-') ||
+    String(o.packageName || '').toLowerCase().includes('steam')
+  );
+}
+
+function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel, isSteamFlag) {
   if (!waIntlDigits) return;
   const inp = document.getElementById('gift-code-input-' + orderId);
   const code = (inp && inp.value ? inp.value.trim() : '') || (window.__giftCodeDrafts[orderId] || '').trim();
+  const cardKind = isSteamFlag === '1' ? 'بطاقة Steam Wallet' : 'بطاقة PlayStation';
   const msg = code
-    ? `مرحباً من TweakLab 🎮⚡\nتم تأكيد طلبك #${orderId}\nالبطاقة: ${pkgLabel}\n🎁 كود بطاقة PlayStation الرقمي:\n${code}\n\nشكراً لتعاملك مع TweakLab!`
+    ? `مرحباً من TweakLab 🎮⚡\nتم تأكيد طلبك #${orderId}\nالبطاقة: ${pkgLabel}\n🎁 كود ${cardKind} الرقمي:\n${code}\n\nشكراً لتعاملك مع TweakLab!`
     : `مرحباً من TweakLab 🎮⚡\nبخصوص طلبك #${orderId} (${pkgLabel}): `;
   window.open(`https://wa.me/${waIntlDigits}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 }
@@ -788,6 +799,12 @@ function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel) {
 function formatPsnShortLabel(o) {
   const val = String(o.storeValueLabel || '').trim();
   const regCode = String(o.storeRegionCode || '').trim().toUpperCase();
+  if (isSteamStoreOrder(o)) {
+    const pid = String(o.storeProductId || '').toLowerCase();
+    const sm = /^steam-usd-(\d+)$/.exec(pid);
+    const amt = val || (sm ? `$${sm[1]}` : '');
+    return amt ? `Steam Wallet ${amt} — USD (Egypt & Global)` : (o.packageName || 'Steam Wallet Gift Card');
+  }
   if (val && regCode) {
     return `PSN Gift Card ${val} - ${regCode}`;
   }
@@ -805,7 +822,8 @@ function renderOrders(orders, forceRender = false) {
   const allOrders = Array.isArray(orders) ? orders : [];
   const pending = allOrders.filter((o) => o.status === 'pending');
   const confirmed = allOrders.filter((o) => o.status === 'approved' || o.status === 'expired');
-  const psnOrders = allOrders.filter((o) => o.orderType === 'gaming_store');
+  const steamOrders = allOrders.filter((o) => isSteamStoreOrder(o));
+  const psnOrders = allOrders.filter((o) => o.orderType === 'gaming_store' && !isSteamStoreOrder(o));
   const pcOrders = allOrders.filter((o) => o.orderType !== 'gaming_store');
   const revenue = confirmed.reduce((sum, o) => sum + (Number(o.amountEgp) || 99), 0);
 
@@ -817,10 +835,12 @@ function renderOrders(orders, forceRender = false) {
 
   const cAll = document.getElementById('flt-count-all');
   const cPsn = document.getElementById('flt-count-psn');
+  const cSteam = document.getElementById('flt-count-steam');
   const cPc = document.getElementById('flt-count-pc');
   const cPend = document.getElementById('flt-count-pending');
   if (cAll) cAll.textContent = allOrders.length;
   if (cPsn) cPsn.textContent = psnOrders.length;
+  if (cSteam) cSteam.textContent = steamOrders.length;
   if (cPc) cPc.textContent = pcOrders.length;
   if (cPend) cPend.textContent = pending.length;
 
@@ -850,7 +870,8 @@ function renderOrders(orders, forceRender = false) {
   }
 
   const filteredOrders = allOrders.filter((o) => {
-    if (activeAdminOrderFilter === 'psn') return o.orderType === 'gaming_store';
+    if (activeAdminOrderFilter === 'psn') return o.orderType === 'gaming_store' && !isSteamStoreOrder(o);
+    if (activeAdminOrderFilter === 'steam') return isSteamStoreOrder(o);
     if (activeAdminOrderFilter === 'pc') return o.orderType !== 'gaming_store';
     if (activeAdminOrderFilter === 'pending') return o.status === 'pending';
     return true;
@@ -867,6 +888,7 @@ function renderOrders(orders, forceRender = false) {
   container.innerHTML = filteredOrders
     .map((o) => {
       const isStoreOrder = o.orderType === 'gaming_store';
+      const isSteamOrder = isSteamStoreOrder(o);
       const isApprovedOrExpired = o.status === 'approved' || o.status === 'expired';
       const badgeClass =
         isApprovedOrExpired ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
@@ -904,21 +926,23 @@ function renderOrders(orders, forceRender = false) {
         }
       }
 
-      const orderTypePill = isStoreOrder
+      const orderTypePill = isSteamOrder
+        ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(139,92,246,0.2); border:1px solid rgba(167,139,250,0.68); color:#d8b4fe; box-shadow:0 0 12px rgba(139,92,246,0.25);">💻 Steam Gift Card</span>`
+        : isStoreOrder
         ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,240,255,0.16); border:1px solid rgba(0,240,255,0.55); color:var(--cyan); box-shadow:0 0 10px rgba(0,240,255,0.16);">🎮 بطاقة PSN</span>`
         : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,255,136,0.14); border:1px solid rgba(0,255,136,0.45); color:var(--green);">⚡ باقة PC</span>`;
 
       const psnCodeDeliverySection = isStoreOrder
         ? `<div class="psn-code-delivery-box">
              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
-               <label for="gift-code-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 كود البطاقة الرقمي (Gift Card Code):</label>
+               <label for="gift-code-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">${isSteamOrder ? '💻 كود بطاقة Steam الرقمي (Steam Wallet Code):' : '🎁 كود البطاقة الرقمي (Gift Card Code):'}</label>
                ${
                  o.deliveredCode
                    ? `<button type="button" class="btn" style="padding:3px 9px; font-size:0.73rem; border-color:var(--green); color:var(--green);" data-copy="${escapeHtml(o.deliveredCode)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ كود البطاقة');">📋 نسخ الكود المحفوظ</button>`
                    : ''
                }
              </div>
-             <input type="text" id="gift-code-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="مثال: ABCD-1234-EFGH" value="${escapeHtml(currentDraftCode)}" oninput="saveGiftCodeDraft('${o.id}', this.value)" autocomplete="off" />
+             <input type="text" id="gift-code-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="${isSteamOrder ? 'مثال: XXXXX-XXXXX-XXXXX' : 'مثال: ABCD-1234-EFGH'}" value="${escapeHtml(currentDraftCode)}" oninput="saveGiftCodeDraft('${o.id}', this.value)" autocomplete="off" />
              <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem;" onclick="deliverPsnCode('${o.id}', this)">
                ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الكود المحفوظ للعميل' : '✅ تأكيد الطلب وإرسال الكود'}
              </button>
@@ -945,8 +969,8 @@ function renderOrders(orders, forceRender = false) {
 
             ${
               isStoreOrder
-                ? `<div style="background:rgba(0,112,255,0.12); border:1px solid rgba(0,240,255,0.38); border-radius:10px; padding:10px 12px; margin-bottom:8px;">
-                     <div dir="ltr" style="font-size:0.98rem; font-weight:900; color:var(--cyan); text-align:right;">${escapeHtml(psnShortLabel)}</div>
+                ? `<div style="background:${isSteamOrder ? 'rgba(139,92,246,0.12)' : 'rgba(0,112,255,0.12)'}; border:1px solid ${isSteamOrder ? 'rgba(167,139,250,0.45)' : 'rgba(0,240,255,0.38)'}; border-radius:10px; padding:10px 12px; margin-bottom:8px;">
+                     <div dir="ltr" style="font-size:0.98rem; font-weight:900; color:${isSteamOrder ? '#d8b4fe' : 'var(--cyan)'}; text-align:right;">${escapeHtml(psnShortLabel)}</div>
                      <div style="font-size:0.84rem; color:#e4f2ff; margin-top:2px;">📦 ${escapeHtml(o.packageName || psnShortLabel)}</div>
                      ${o.storeRegion ? `<div style="font-size:0.8rem; color:#a9e6ff; margin-top:2px;">🌍 الريجين: <strong style="color:#fff;">${escapeHtml(o.storeRegion)}</strong></div>` : ''}
                    </div>`
@@ -961,7 +985,7 @@ function renderOrders(orders, forceRender = false) {
               </div>
               ${
                 waIntlDigits
-                  ? `<button type="button" class="btn" style="padding:4px 10px; font-size:0.76rem; border-color:#25d366; color:#25d366; background:rgba(37,211,102,0.12); font-weight:800;" data-wa="${escapeHtml(waIntlDigits)}" data-pkg="${escapeHtml(psnShortLabel || o.packageName || '')}" onclick="openPsnWhatsappWithCode('${o.id}', this.getAttribute('data-wa'), this.getAttribute('data-pkg'))">💬 فتح واتساب</button>`
+                  ? `<button type="button" class="btn" style="padding:4px 10px; font-size:0.76rem; border-color:#25d366; color:#25d366; background:rgba(37,211,102,0.12); font-weight:800;" data-wa="${escapeHtml(waIntlDigits)}" data-pkg="${escapeHtml(psnShortLabel || o.packageName || '')}" data-steam="${isSteamOrder ? '1' : '0'}" onclick="openPsnWhatsappWithCode('${o.id}', this.getAttribute('data-wa'), this.getAttribute('data-pkg'), this.getAttribute('data-steam'))">💬 فتح واتساب</button>`
                   : ''
               }
             </div>
@@ -1002,7 +1026,7 @@ function renderOrders(orders, forceRender = false) {
                       ${
                         isDiscounted
                           ? `<del style="color:var(--text-muted); font-size:0.8rem; margin-right:5px;">${basePrice} ج.م</del>`
-                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">${isStoreOrder ? '(بطاقة PSN)' : '(السعر الأساسي)'}</span>`
+                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">${isSteamOrder ? '(Steam Gift Card)' : isStoreOrder ? '(بطاقة PSN)' : '(السعر الأساسي)'}</span>`
                       }
                     </span>
                   </div>

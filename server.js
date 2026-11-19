@@ -1426,6 +1426,8 @@ async function handleRequest(req, res) {
           id: newOrder.id,
           accessToken: newOrder.accessToken,
           orderType: newOrder.orderType,
+          storeProductId: newOrder.storeProductId,
+          storeCategory: newOrder.storeCategory,
           packageName: newOrder.packageName,
           amountEgp: newOrder.amountEgp,
           storeRegion: newOrder.storeRegion,

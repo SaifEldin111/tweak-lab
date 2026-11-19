@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>TweakLab | Digital Gaming Store — PlayStation (PSN) Gift Cards</title>
-  <meta name="description" content="Official PlayStation (PSN) Gift Cards across US, SA, UAE &amp; TR regions in Egypt with instant digital code delivery via InstaPay &amp; Vodafone Cash." />
+  <title>TweakLab | Digital Gaming Store — PlayStation (PSN) &amp; Steam Wallet Gift Cards</title>
+  <meta name="description" content="Official PlayStation (PSN) &amp; Steam Wallet (PC) Gift Cards up to 11% OFF in Egypt with instant digital code delivery via InstaPay &amp; Vodafone Cash." />
   <link rel="canonical" href="https://tweak-lab-a177.vercel.app/store" />
-  <meta property="og:title" content="TweakLab Digital Gaming Store | PlayStation (PSN) Gift Cards" />
-  <meta property="og:description" content="Official PlayStation (PSN) Gift Cards for US, SA, UAE &amp; TR with instant code delivery via InstaPay &amp; Vodafone Cash." />
+  <meta property="og:title" content="TweakLab Digital Gaming Store | PlayStation (PSN) &amp; Steam Wallet Cards" />
+  <meta property="og:description" content="Official PlayStation (PSN) &amp; Steam Wallet (PC) Gift Cards up to 11% OFF with instant code delivery via InstaPay &amp; Vodafone Cash." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tweak-lab-a177.vercel.app/store" />
   <meta name="theme-color" content="#070a10" />
@@ -324,6 +324,16 @@
       color: var(--green);
       box-shadow: 0 0 18px rgba(0, 255, 136, 0.26);
     }
+    .filter-tab-btn.steam-tab.active {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.22), rgba(0, 255, 136, 0.16));
+      border-color: rgba(0, 240, 255, 0.78);
+      color: var(--cyan);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.28);
+    }
+    .filter-tab-btn.steam-tab.active .filter-count {
+      background: var(--cyan);
+      color: #03121a;
+    }
     .filter-tab-btn.soon-tab.active {
       background: linear-gradient(135deg, rgba(255, 184, 0, 0.16), rgba(0, 240, 255, 0.14));
       border-color: rgba(255, 184, 0, 0.65);
@@ -469,6 +479,7 @@
       gap: 18px;
     }
     .products-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .products-grid.steam-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .product-card {
       position: relative;
       display: flex;
@@ -483,27 +494,68 @@
     }
     .product-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(0, 240, 255, 0.82);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 140, 255, 0.28);
+      border-color: rgba(0, 255, 136, 0.78);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 255, 136, 0.22);
+    }
+    .product-card.steam-card:hover {
+      border-color: rgba(0, 240, 255, 0.85);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 28px rgba(0, 240, 255, 0.26);
     }
     .card-visual-banner {
       position: relative;
-      padding: 20px 18px 18px;
-      min-height: 122px;
+      padding: 16px 16px 16px;
+      min-height: 132px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 10px;
       overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       background:
         radial-gradient(circle at 12% 18%, rgba(0, 240, 255, 0.26), transparent 55%),
         linear-gradient(135deg, #07193a 0%, #092c6b 55%, #061329 100%);
     }
+    .card-visual-banner.steam-banner {
+      background:
+        radial-gradient(circle at 86% 18%, rgba(0, 255, 136, 0.22), transparent 52%),
+        radial-gradient(circle at 14% 82%, rgba(0, 240, 255, 0.24), transparent 55%),
+        linear-gradient(135deg, #0b1829 0%, #152b47 52%, #09131f 100%);
+    }
+    .card-discount-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    @keyframes goldDiscountShimmer {
+      0% { background-position: -180% 0; }
+      100% { background-position: 180% 0; }
+    }
+    .discount-glow-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #1a0d00;
+      background: linear-gradient(110deg, #ff9f00 0%, #ffd740 40%, #fff1a8 52%, #ff9f00 68%, #ff7a00 100%);
+      background-size: 220% 100%;
+      border: 1px solid rgba(255, 232, 130, 0.92);
+      box-shadow: 0 0 16px rgba(255, 174, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.45);
+      animation: goldDiscountShimmer 3.2s linear infinite;
+      white-space: nowrap;
+    }
     .card-visual-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .card-brand-pill {
       display: inline-flex;
@@ -511,8 +563,8 @@
       gap: 6px;
       padding: 3px 10px;
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.48);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       font-size: 0.72rem;
       font-weight: 800;
       color: #e6f2ff;
@@ -520,14 +572,14 @@
     .card-hot-tag {
       padding: 3px 9px;
       border-radius: 999px;
-      font-size: 0.69rem;
+      font-size: 0.68rem;
       font-weight: 900;
       background: linear-gradient(90deg, #00ff88, #00f0ff);
       color: #03120b;
       white-space: nowrap;
     }
     .card-value-display {
-      margin-top: 14px;
+      margin-top: 4px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -541,22 +593,28 @@
       letter-spacing: -0.02em;
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
     }
-    .card-emblem-svg { width: 34px; height: 34px; opacity: 0.9; flex-shrink: 0; }
+    .card-emblem-svg { width: 34px; height: 34px; opacity: 0.92; flex-shrink: 0; }
     .card-body {
-      padding: 16px 18px 18px;
+      padding: 15px 16px 17px;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: space-between;
-      gap: 14px;
+      gap: 13px;
     }
     .card-title { font-size: 1rem; font-weight: 900; color: #ffffff; margin-bottom: 5px; line-height: 1.35; }
-    .card-desc { font-size: 0.82rem; color: #9bb0cb; line-height: 1.55; margin-bottom: 10px; }
+    .card-desc { font-size: 0.81rem; color: #9bb0cb; line-height: 1.5; margin-bottom: 10px; }
+    .card-badges-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
     .card-delivery-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 8px;
@@ -564,34 +622,76 @@
       border: 1px solid rgba(0, 255, 136, 0.34);
       color: #9effd0;
     }
-    .card-footer-row {
+    .card-compat-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.38);
+      color: #aef7ff;
+    }
+    .card-pricing-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .card-price-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .price-old-strike {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #8b9bb4;
+      text-decoration: line-through;
+      text-decoration-color: rgba(255, 99, 114, 0.85);
+      text-decoration-thickness: 1.6px;
+    }
+    .price-new-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding-top: 12px;
-      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .card-price-box { display: flex; flex-direction: column; }
-    .card-price-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
     .card-price-val {
-      font-size: 1.32rem;
+      font-size: 1.48rem;
       font-weight: 900;
       color: var(--green);
-      text-shadow: 0 0 12px rgba(0, 255, 136, 0.32);
-      line-height: 1.15;
+      text-shadow: 0 0 14px rgba(0, 255, 136, 0.38);
+      line-height: 1.1;
+    }
+    .price-save-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      background: rgba(255, 184, 0, 0.16);
+      border: 1px solid rgba(255, 184, 0, 0.55);
+      color: #ffd54f;
+      white-space: nowrap;
     }
     .order-now-btn {
+      width: 100%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 10px 16px;
+      gap: 7px;
+      padding: 11px 16px;
       border-radius: 11px;
       border: none;
       background: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
       color: #03120b;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       font-weight: 900;
       cursor: pointer;
       font-family: inherit;
@@ -603,6 +703,37 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 24px rgba(0, 255, 136, 0.5);
       filter: brightness(1.06);
+    }
+    .steam-info-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(16, 33, 56, 0.92), rgba(7, 13, 24, 0.96));
+      border: 1px solid rgba(0, 240, 255, 0.38);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.42);
+    }
+    .steam-info-pills {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .steam-info-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.38);
+      color: #c8ffe2;
+      font-size: 0.78rem;
+      font-weight: 800;
     }
 
     /* ========================================================================
@@ -1003,14 +1134,14 @@
     .discord-neon-btn:hover svg { fill: #03120a; }
 
     @media (max-width: 1040px) {
-      .products-grid, .products-grid.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .products-grid, .products-grid.cols-3, .products-grid.steam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 640px) {
       .navbar { padding: 10px 14px; }
       .brand-wordmark { font-size: 1.22rem; }
       .nav-actions { width: 100%; justify-content: space-between; gap: 7px; }
       .nav-hub-switch-btn, .nav-btn { font-size: 0.75rem; padding: 6px 10px; }
-      .products-grid, .products-grid.cols-3, .locked-games-grid { grid-template-columns: 1fr; }
+      .products-grid, .products-grid.cols-3, .products-grid.steam-grid, .locked-games-grid { grid-template-columns: 1fr; }
       .filter-tabs-wrap { width: 100%; }
       .filter-tab-btn { flex: 1 1 100%; justify-content: center; padding: 10px 12px; font-size: 0.86rem; }
       .region-buttons-group { width: 100%; }
@@ -1046,35 +1177,39 @@
     </div>
   </nav>
 
-  <!-- STORE HERO & 2-TAB SWITCHER -->
+  <!-- STORE HERO & 3-TAB SWITCHER -->
   <header class="store-hero">
     <div class="store-hero-inner">
       <div class="hero-eyebrow">
-        <span>🎮</span>
-        <span>TWEAKLAB GAMING STORE • PLAYSTATION PSN DIGITAL CODES</span>
+        <span>🔥</span>
+        <span>TWEAKLAB GAMING STORE • PSN &amp; STEAM DIGITAL CODES • UP TO 11% OFF</span>
       </div>
       <h1 data-i18n-html="heroTitle">
-        Official <span class="accent-green">PlayStation (PSN)</span> Digital <span class="accent-cyan">Gift Cards</span>
+        Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards
       </h1>
       <p class="store-hero-sub" data-i18n-html="heroSub">
-        100% genuine <strong>PlayStation PSN</strong> codes across <strong>US, SA, UAE &amp; TR</strong> regions in EGP with fast delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.
+        100% genuine <strong>PlayStation (PSN)</strong> &amp; <strong>Steam Wallet (PC)</strong> gift cards up to <strong>11% OFF</strong> with instant digital code delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.
       </p>
-      <span class="eg-micro-hint">كروت بلايستيشن أصلية لجميع الريجينات واستلام الكود فوراً</span>
+      <span class="eg-micro-hint">كروت بلايستيشن وستيم بخصم لفترة محدودة واستلام الكود فوراً</span>
 
       <div class="store-trust-strip">
-        <span class="trust-pill" data-i18n-html="trust1">⚡ <strong>PSN:</strong> Digital Code • Fast Delivery</span>
-        <span class="trust-pill" data-i18n-html="trust2">🌍 <strong>Regions:</strong> US • SA • UAE • TR</span>
+        <span class="trust-pill" data-i18n-html="trust1">🔥 <strong>Up to 11% OFF:</strong> Cheaper Than Market Price</span>
+        <span class="trust-pill" data-i18n-html="trust2">⚡ <strong>Delivery:</strong> Instant Official Digital Code</span>
         <span class="trust-pill" data-i18n-html="trust3">💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
 
-      <!-- Clear 2-Tab Bar above Products -->
+      <!-- Clear 3-Tab Bar above Products -->
       <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist">
         <button type="button" class="filter-tab-btn active" id="tab-btn-psn" data-tab="psn" role="tab" aria-selected="true" onclick="setStoreTab('psn')">
-          <span data-i18n="tabPsn">🎮 PlayStation (PSN) Cards</span>
+          <span data-i18n="tabPsn">🎮 PlayStation (PSN)</span>
           <span class="filter-count" id="count-psn">15</span>
         </button>
+        <button type="button" class="filter-tab-btn steam-tab" id="tab-btn-steam" data-tab="steam" role="tab" aria-selected="false" onclick="setStoreTab('steam')">
+          <span data-i18n="tabSteam">💻 Steam Wallet (PC)</span>
+          <span class="filter-count" id="count-steam">5</span>
+        </button>
         <button type="button" class="filter-tab-btn soon-tab" id="tab-btn-soon" data-tab="topup-soon" role="tab" aria-selected="false" onclick="setStoreTab('topup-soon')">
-          <span data-i18n="tabSoon">🔒 Game Top-Up</span>
+          <span data-i18n="tabSoon">🔒 Game Top-Ups</span>
           <span class="soon-pill-badge" data-i18n="soonBadge">Coming Soon</span>
         </button>
       </div>
@@ -1089,9 +1224,9 @@
       <div class="section-top-bar">
         <div class="section-title-group">
           <h2 id="heading-psn" data-i18n="psnHeading">🎮 PlayStation Gift Cards (PSN)</h2>
-          <p data-i18n="psnSub">Select your PlayStation account region below to view available denominations in EGP</p>
+          <p data-i18n="psnSub">Select your PlayStation account region below to view available denominations &amp; exclusive discounts in EGP</p>
         </div>
-        <span class="delivery-chip" data-i18n="psnChip">⚡ Digital Code • Fast Delivery</span>
+        <span class="delivery-chip" data-i18n="psnChip">⚡ Digital Code • Instant Delivery</span>
       </div>
 
       <!-- Region Selector -->
@@ -1105,7 +1240,32 @@
       <div class="products-grid" id="psn-products-grid"></div>
     </section>
 
-    <!-- TAB 2: GAMES TOP-UP (COMING SOON NOTICE — NO CHECKOUT MODAL) -->
+    <!-- TAB 2: STEAM WALLET (PC) GIFT CARDS -->
+    <section class="catalog-section hidden-section" id="section-steam" aria-labelledby="heading-steam">
+      <div class="section-top-bar">
+        <div class="section-title-group">
+          <h2 id="heading-steam" data-i18n="steamHeading">💻 Steam Wallet Gift Cards (PC)</h2>
+          <p data-i18n="steamSub">Official USD Steam Wallet codes compatible with Global, Egypt &amp; MENA Steam accounts at discounted EGP prices</p>
+          <span class="eg-micro-hint">شغالة على الحساب المصري والأمريكي • استلام كود فوري</span>
+        </div>
+        <span class="delivery-chip" data-i18n="steamChip">⚡ Digital Code • Instant Delivery</span>
+      </div>
+
+      <div class="steam-info-bar">
+        <div class="region-selector-label">
+          <span data-i18n="steamRegionLabel">🌐 Region: USD (Global / Egypt &amp; MENA)</span>
+        </div>
+        <div class="steam-info-pills">
+          <span class="steam-info-pill" data-i18n="steamCompat1">🇪🇬🇺🇸 Works on Egypt &amp; US Accounts</span>
+          <span class="steam-info-pill" data-i18n="steamCompat2">🔥 Up to 11% OFF Limited Discount</span>
+          <span class="steam-info-pill" data-i18n="steamCompat3">⚡ Instant Code Delivery</span>
+        </div>
+      </div>
+
+      <div class="products-grid steam-grid" id="steam-products-grid"></div>
+    </section>
+
+    <!-- TAB 3: GAMES TOP-UP (COMING SOON NOTICE — NO CHECKOUT MODAL) -->
     <section class="catalog-section hidden-section" id="section-topup-soon" aria-labelledby="heading-topup-soon">
       <div class="coming-soon-glass-card" id="coming-soon-notice-card">
         <div class="coming-soon-inner">
@@ -1139,40 +1299,50 @@
 
           <div class="locked-inline-toast" id="coming-soon-inline-toast"></div>
 
-          <button type="button" class="back-to-psn-btn" onclick="setStoreTab('psn')">
-            <span>🎮</span>
-            <span data-i18n="backToPsnBtn">Browse Available PlayStation Cards</span>
-          </button>
+          <div style="display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px;">
+            <button type="button" class="back-to-psn-btn" onclick="setStoreTab('psn')">
+              <span>🎮</span>
+              <span data-i18n="backToPsnBtn">Browse PlayStation (PSN)</span>
+            </button>
+            <button type="button" class="back-to-psn-btn" style="background:linear-gradient(135deg, #00f0ff 0%, #00ff88 100%);" onclick="setStoreTab('steam')">
+              <span>💻</span>
+              <span data-i18n="backToSteamBtn">Browse Steam Wallet (PC)</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- STORE ORDER MODAL (PSN DIGITAL CODES — WHATSAPP + TRANSFER SCREENSHOT ONLY) -->
+  <!-- STORE ORDER MODAL (PSN & STEAM DIGITAL CODES — WHATSAPP + TRANSFER SCREENSHOT ONLY) -->
   <div class="modal-backdrop" id="store-order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading" onclick="if(event.target===this) closeOrderModal()">
     <div class="modal-dialog">
       <button type="button" class="modal-close-btn" onclick="closeOrderModal()" aria-label="Close">✕</button>
 
       <!-- STEP 1: ORDER FORM VIEW -->
       <div id="modal-checkout-view">
-        <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;" data-i18n="modalCheckoutTitle">💳 Complete Your PlayStation Card Order</h3>
-        <p style="font-size:0.84rem; color:var(--text-muted);" data-i18n="modalCheckoutSub">Transfer the exact amount shown below and upload your receipt screenshot to receive your PSN code.</p>
+        <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;" data-i18n="modalCheckoutTitle">💳 Complete Your Digital Gift Card Order</h3>
+        <p id="modal-checkout-sub" style="font-size:0.84rem; color:var(--text-muted);" data-i18n="modalCheckoutSub">Transfer the exact discounted amount shown below and upload your receipt screenshot to receive your digital code.</p>
         <span class="eg-micro-hint">حوّل على إنستاباي أو فودافون كاش وارفع صورة التحويل</span>
 
         <!-- Selected Product Summary -->
         <div class="modal-product-summary">
           <div>
+            <div style="margin-bottom:5px;">
+              <span class="discount-glow-badge" id="modal-discount-badge" style="font-size:0.68rem; padding:3px 9px;">🔥 DISCOUNT • 10% OFF</span>
+            </div>
             <div class="summary-title" id="modal-product-title">PlayStation PSN $50</div>
             <div class="summary-meta">
               <span id="modal-product-region-badge">🇺🇸 US</span>
               <span>•</span>
-              <span id="modal-product-delivery-badge" style="color:var(--green);">Digital Code • Fast Delivery</span>
+              <span id="modal-product-delivery-badge" style="color:var(--green);">Digital Code • Instant Delivery</span>
             </div>
           </div>
           <div class="summary-price-pill">
+            <span id="modal-product-old-price" class="price-old-strike" style="font-size:0.74rem; display:block;">3,100 EGP</span>
             <span class="sp-val" id="modal-product-price">2,790 EGP</span>
-            <span class="sp-lbl" data-i18n="modalFinalPriceLbl">Final Price</span>
+            <span class="sp-lbl" data-i18n="modalFinalPriceLbl">Discounted Price</span>
           </div>
         </div>
 
@@ -1349,32 +1519,41 @@ const TAGS_EN = { '🔥 الأكثر طلباً': '🔥 Most Popular', '💎 أ�
 
 const STORE_I18N = {
   en: {
-    pageTitle: 'TweakLab | Digital Gaming Store — PlayStation (PSN) Gift Cards',
+    pageTitle: 'TweakLab | Digital Gaming Store — PlayStation (PSN) & Steam Wallet Gift Cards',
     langBtn: '🌐 العربية',
     navSwitchToPc: 'PC Performance ⚡',
     navTrack: '🔍 Track Order',
-    heroTitle: 'Official <span class="accent-green">PlayStation (PSN)</span> Digital <span class="accent-cyan">Gift Cards</span>',
-    heroSub: '100% genuine <strong>PlayStation PSN</strong> codes across <strong>US, SA, UAE &amp; TR</strong> regions in EGP with fast delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.',
-    trust1: '⚡ <strong>PSN:</strong> Digital Code • Fast Delivery',
-    trust2: '🌍 <strong>Regions:</strong> US • SA • UAE • TR',
+    heroTitle: 'Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards',
+    heroSub: '100% genuine <strong>PlayStation (PSN)</strong> &amp; <strong>Steam Wallet (PC)</strong> gift cards up to <strong>11% OFF</strong> with instant digital code delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.',
+    trust1: '🔥 <strong>Up to 11% OFF:</strong> Cheaper Than Market Price',
+    trust2: '⚡ <strong>Delivery:</strong> Instant Official Digital Code',
     trust3: '💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash',
-    tabPsn: '🎮 PlayStation (PSN) Cards',
-    tabSoon: '🔒 Game Top-Up',
+    tabPsn: '🎮 PlayStation (PSN)',
+    tabSteam: '💻 Steam Wallet (PC)',
+    tabSoon: '🔒 Game Top-Ups',
     soonBadge: 'Coming Soon',
     psnHeading: '🎮 PlayStation Gift Cards (PSN)',
-    psnSub: 'Select your PlayStation account region below to view available denominations in EGP',
-    psnChip: '⚡ Digital Code • Fast Delivery',
+    psnSub: 'Select your PlayStation account region below to view available denominations & exclusive discounts in EGP',
+    psnChip: '⚡ Digital Code • Instant Delivery',
     regionPrompt: '🌍 Select Account Region:',
+    steamHeading: '💻 Steam Wallet Gift Cards (PC)',
+    steamSub: 'Official USD Steam Wallet codes compatible with Global, Egypt & MENA Steam accounts at discounted EGP prices',
+    steamChip: '⚡ Digital Code • Instant Delivery',
+    steamRegionLabel: '🌐 Region: USD (Global / Egypt & MENA)',
+    steamCompat1: '🇪🇬🇺🇸 Works on Egypt & US Accounts',
+    steamCompat2: '🔥 Up to 11% OFF Limited Discount',
+    steamCompat3: '⚡ Instant Code Delivery',
     soonPillLg: 'Coming Soon on TweakLab',
     soonTitle: 'Game Top-Up Section Under Preparation 🛠️',
     soonDesc: 'We are preparing the fastest and safest top-up experience for <strong>Fortnite V-Bucks</strong> and <strong>Valorant Points</strong> on TweakLab. Launching very soon!',
     lockedFnSub: 'Safe manual top-up',
     lockedValSub: 'Direct Riot ID top-up',
     lockedPill: '🔒 Soon',
-    backToPsnBtn: 'Browse Available PlayStation Cards',
-    modalCheckoutTitle: '💳 Complete Your PlayStation Card Order',
-    modalCheckoutSub: 'Transfer the exact amount shown below and upload your receipt screenshot to receive your PSN code.',
-    modalFinalPriceLbl: 'Final Price',
+    backToPsnBtn: 'Browse PlayStation (PSN)',
+    backToSteamBtn: 'Browse Steam Wallet (PC)',
+    modalCheckoutTitle: '💳 Complete Your Digital Gift Card Order',
+    modalCheckoutSub: 'Transfer the exact discounted amount shown below and upload your receipt screenshot to receive your digital code.',
+    modalFinalPriceLbl: 'Discounted Price',
     tabInsta: 'InstaPay Egypt',
     tabInstaSub: 'Instant transfer',
     tabVodaSub: 'Vodafone Wallet',
@@ -1385,7 +1564,7 @@ const STORE_I18N = {
     ussdLbl: 'Quick Dial Code:',
     instaDirectLink: '⚡ Open Direct InstaPay Link',
     vodaDialBtn: '📞 Tap to Dial Transfer Code on Mobile',
-    lblWhatsapp: '💬 WhatsApp Number (required to receive your PSN code):',
+    lblWhatsapp: '💬 WhatsApp Number (required to receive your digital code):',
     phWhatsapp: 'e.g. 010xxxxxxxx',
     errWhatsapp: 'Please enter a valid WhatsApp number (digits only, e.g. 010xxxxxxxx)',
     lblScreenshot: '📸 Upload Payment Transfer Screenshot (required):',
@@ -1401,42 +1580,51 @@ const STORE_I18N = {
     trackPh: 'TL-123456 or 010xxxxxxxx',
     trackBtn: '🔎 View Order Status',
     ftPc: '⚡ PC Performance Lab',
-    ftStore: '🎮 PSN Gift Cards Store',
+    ftStore: '🎮 PSN & Steam Gift Cards',
     ftGuides: '📚 Performance Guides',
     ftG1: 'Fortnite FPS Guide',
     ftG2: 'Valorant Input Delay',
     socDiscord: 'Join TweakLab Discord',
     socYoutube: 'TweakLab YouTube',
     socInsta: 'TweakLab Instagram',
-    ftCopy: '© 2027 <strong style="color:var(--green);">TweakLab</strong> — All rights reserved • PC Performance Lab &amp; Safe PSN Digital Store'
+    ftCopy: '© 2027 <strong style="color:var(--green);">TweakLab</strong> — All rights reserved • PC Performance Lab &amp; Safe PSN / Steam Digital Store'
   },
   ar: {
-    pageTitle: 'متجر TweakLab | بطاقات PlayStation (PSN) الرقمية لجميع الريجينات في مصر',
+    pageTitle: 'متجر TweakLab | بطاقات PlayStation (PSN) و Steam Wallet الرقمية بخصم حتى 11%',
     langBtn: '🌐 English',
     navSwitchToPc: 'تظبيط الأداء ⚡',
     navTrack: '🔍 متابعة الطلب',
-    heroTitle: 'متجر <span class="accent-green">بطاقات PlayStation (PSN)</span> الرقمية في <span class="accent-cyan">مصر</span>',
-    heroSub: 'بطاقات <strong>PlayStation PSN</strong> أصلية 100% لجميع الريجينات (<strong>أمريكي • سعودي • إماراتي • تركي</strong>) بأفضل الأسعار بالجنيه المصري وتسليم كود رقمي سريع عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.',
-    trust1: '⚡ <strong>PSN:</strong> كود رقمي رسمي • تسليم سريع',
-    trust2: '🌍 <strong>الريجينات:</strong> US • SA • UAE • TR',
+    heroTitle: 'متجر بطاقات <span class="accent-green">PlayStation (PSN)</span> و <span class="accent-cyan">Steam Wallet</span> في مصر',
+    heroSub: 'بطاقات <strong>PlayStation (PSN)</strong> و <strong>Steam Wallet (PC)</strong> أصلية 100% بخصومات حصرية تصل إلى <strong>11%</strong> وتسليم كود رقمي فوري عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.',
+    trust1: '🔥 <strong>خصم حتى 11%:</strong> أرخص من سعر السوق',
+    trust2: '⚡ <strong>التسليم:</strong> كود رقمي أصلي فوري',
     trust3: '💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash',
     tabPsn: '🎮 بطاقات PlayStation (PSN)',
+    tabSteam: '💻 بطاقات Steam Wallet (PC)',
     tabSoon: '🔒 شحن الألعاب',
     soonBadge: 'قريباً',
     psnHeading: '🎮 بطاقات PlayStation (PSN Gift Cards)',
-    psnSub: 'اختر ريجين حسابك بالأسفل لتظهر لك الفئات المتاحة فوراً بالسعر بالجنيه المصري',
-    psnChip: '⚡ كود رقمي • تسليم سريع',
+    psnSub: 'اختر ريجين حسابك بالأسفل لتظهر لك الفئات المتاحة بخصومات حصرية بالجنيه المصري',
+    psnChip: '⚡ كود رقمي • تسليم فوري',
     regionPrompt: '🌍 اختر ريجين الحساب (Region):',
+    steamHeading: '💻 بطاقات Steam Wallet (PC)',
+    steamSub: 'أكواد Steam Wallet (USD) أصلية 100% شغالة على الحساب المصري والأمريكي والـ MENA بخصم لفترة محدودة',
+    steamChip: '⚡ كود رقمي • تسليم فوري',
+    steamRegionLabel: '🌐 الريجين: USD (Global / Egypt & MENA)',
+    steamCompat1: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي',
+    steamCompat2: '🔥 خصم لفترة محدودة حتى 11%',
+    steamCompat3: '⚡ تسليم الكود فوراً',
     soonPillLg: 'قريباً على TweakLab • Coming Soon',
     soonTitle: 'قسم شحن الألعاب قيد التجهيز حالياً 🛠️',
     soonDesc: 'بنجهزلك أسرع وأأمن تجربة شحن لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> على TweakLab. هيتوفر قريباً جداً!',
     lockedFnSub: 'شحن يدوي آمن وسريع',
     lockedValSub: 'شحن مباشر بالـ Riot ID',
     lockedPill: '🔒 قريباً',
-    backToPsnBtn: 'تصفح بطاقات PlayStation المتاحة حالياً',
-    modalCheckoutTitle: '💳 إتمام طلب بطاقة PlayStation',
-    modalCheckoutSub: 'حوّل المبلغ الموضح بالأسفل وارفع سكرين شوت الإيصال لاستلام كود الـ PSN الرقمي على الواتساب',
-    modalFinalPriceLbl: 'السعر النهائي',
+    backToPsnBtn: 'تصفح بطاقات PlayStation',
+    backToSteamBtn: 'تصفح بطاقات Steam Wallet',
+    modalCheckoutTitle: '💳 إتمام طلب البطاقة الرقمية',
+    modalCheckoutSub: 'حوّل المبلغ المخفّض الموضح بالأسفل وارفع سكرين شوت الإيصال لاستلام الكود الرقمي فوراً',
+    modalFinalPriceLbl: 'السعر بعد الخصم',
     tabInsta: 'InstaPay مصر',
     tabInstaSub: 'إنستاباي (تحويل فوري)',
     tabVodaSub: 'محفظة فودافون كاش',
@@ -1447,7 +1635,7 @@ const STORE_I18N = {
     ussdLbl: 'كود التحويل:',
     instaDirectLink: '⚡ فتح رابط الدفع المباشر على InstaPay',
     vodaDialBtn: '📞 اتصال مباشر للتحويل من الموبايل',
-    lblWhatsapp: '💬 رقم الواتساب (مطلوب لاستلام كود الـ PSN الرقمي):',
+    lblWhatsapp: '💬 رقم الواتساب (مطلوب لاستلام الكود الرقمي):',
     phWhatsapp: 'مثال: 010xxxxxxxx',
     errWhatsapp: 'يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx)',
     lblScreenshot: '📸 ارفع صورة سكرين شوت التحويل (مطلوب):',
@@ -1463,14 +1651,14 @@ const STORE_I18N = {
     trackPh: 'TL-123456 أو 010xxxxxxxx',
     trackBtn: '🔎 عرض حالة الطلب',
     ftPc: '⚡ معمل تظبيط الأداء (PC)',
-    ftStore: '🎮 متجر بطاقات PSN',
+    ftStore: '🎮 متجر بطاقات PSN و Steam',
     ftGuides: '📚 شروحات الأداء',
     ftG1: 'حل دروب فريم فورتنايت',
     ftG2: 'تقليل Input Delay فالورانت',
     socDiscord: 'انضم لمجتمع TweakLab على Discord',
     socYoutube: 'قناة TweakLab على YouTube',
     socInsta: 'صفحة TweakLab على Instagram',
-    ftCopy: '© 2027 <strong style="color:var(--green);">TweakLab</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر بطاقات PlayStation الآمن 100%'
+    ftCopy: '© 2027 <strong style="color:var(--green);">TweakLab</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر بطاقات PlayStation و Steam الآمن 100%'
   }
 };
 
@@ -1512,6 +1700,7 @@ function applyStoreLang(lang) {
 
   renderRegionButtons();
   renderPsnProducts();
+  renderSteamProducts();
   if (selectedProduct) updateModalPaymentNumbers();
   if (activeTrackedOrder && document.getElementById('modal-status-view').style.display === 'block') {
     showStoreOrderStatusView(activeTrackedOrder);
@@ -1530,38 +1719,88 @@ function getPsnEmblemSvg() {
   </svg>`;
 }
 
-function buildPsnCardHtml(p) {
+function getSteamEmblemSvg() {
+  return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+    <circle cx="20" cy="20" r="16" stroke="#00ff88" stroke-width="2.2" fill="rgba(0,240,255,0.12)"/>
+    <circle cx="24.5" cy="15.5" r="4.5" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,255,136,0.2)"/>
+    <circle cx="14.5" cy="24.5" r="3.2" stroke="#ffffff" stroke-width="2.2"/>
+    <path d="M17.2 22.4L21.2 18.4M8 21.5l4.2 1.8" stroke="#00ff88" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function buildStoreCardHtml(p) {
   const isAr = storeLang === 'ar';
-  const titleText = isAr ? p.title : `PlayStation PSN ${p.valueLabel} (${p.region})`;
-  const descText = isAr ? p.subtitle : `Official ${REGION_NAMES_EN[p.region] || p.region} PlayStation Store digital code • Instant redemption`;
-  const deliveryText = isAr ? p.deliveryBadge : 'Digital Code • Fast Delivery';
+  const isSteam = p.category === 'steam';
+  const origPrice = Number(p.originalPrice || 0);
+  const currPrice = Number(p.priceEgp || 0);
+  const saveAmt = origPrice > currPrice ? (origPrice - currPrice) : 0;
+  const discPct = Number(p.discountPercent || (origPrice > currPrice ? Math.round((saveAmt / origPrice) * 100) : 0));
+
+  const discountBadgeText = isAr
+    ? `🔥 خصم DISCOUNT • ${discPct}%`
+    : `🔥 DISCOUNT • ${discPct}% OFF`;
+
+  const titleText = isSteam
+    ? (isAr ? p.title : `Steam Wallet ${p.valueLabel} (PC)`)
+    : (isAr ? p.title : `PlayStation PSN ${p.valueLabel} (${p.region})`);
+
+  const descText = isSteam
+    ? (isAr ? p.subtitle : (p.subtitleEn || 'Works on Egypt & US Steam accounts • Instant digital code'))
+    : (isAr ? p.subtitle : `Official ${REGION_NAMES_EN[p.region] || p.region} PlayStation Store digital code • Instant redemption`);
+
+  const deliveryText = isAr ? (p.deliveryBadge || 'كود رقمي • تسليم فوري') : 'Digital Code • Instant Delivery';
+  const compatText = isSteam
+    ? (isAr ? (p.compatibilityBadgeAr || '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري') : (p.compatibilityBadgeEn || '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code'))
+    : '';
   const tagText = p.tag ? (isAr ? p.tag : (TAGS_EN[p.tag] || p.tag)) : '';
 
+  const brandPillText = isSteam
+    ? `💻 STEAM USD`
+    : `${escapeHtml(p.flag)} PSN ${escapeHtml(p.region)}`;
+
+  const oldPriceText = isAr
+    ? `بدلاً من ${formatPriceEgp(origPrice)}`
+    : `Instead of ${formatPriceEgp(origPrice)}`;
+
+  const savePillText = isAr
+    ? `وفّر ${formatPriceEgp(saveAmt)}`
+    : `Save ${formatPriceEgp(saveAmt)}`;
+
   return `
-    <article class="product-card">
-      <div class="card-visual-banner">
-        <div class="card-visual-top">
-          <span class="card-brand-pill">${escapeHtml(p.flag)} PSN ${escapeHtml(p.region)}</span>
+    <article class="product-card ${isSteam ? 'steam-card' : ''}">
+      <div class="card-visual-banner ${isSteam ? 'steam-banner' : ''}">
+        <div class="card-discount-row">
+          ${discPct > 0 ? `<span class="discount-glow-badge">${escapeHtml(discountBadgeText)}</span>` : '<span></span>'}
           ${tagText ? `<span class="card-hot-tag">${escapeHtml(tagText)}</span>` : ''}
+        </div>
+        <div class="card-visual-top">
+          <span class="card-brand-pill">${brandPillText}</span>
         </div>
         <div class="card-value-display">
           <span class="card-value-big">${escapeHtml(p.valueLabel)}</span>
-          ${getPsnEmblemSvg()}
+          ${isSteam ? getSteamEmblemSvg() : getPsnEmblemSvg()}
         </div>
       </div>
       <div class="card-body">
         <div>
           <h3 class="card-title">${escapeHtml(titleText)}</h3>
           <p class="card-desc">${escapeHtml(descText)}</p>
-          <span class="card-delivery-tag">
-            <span>⚡</span>
-            <span>${escapeHtml(deliveryText)}</span>
-          </span>
+          <div class="card-badges-stack">
+            ${compatText ? `<span class="card-compat-tag">${escapeHtml(compatText)}</span>` : ''}
+            <span class="card-delivery-tag">
+              <span>⚡</span>
+              <span>${escapeHtml(deliveryText)}</span>
+            </span>
+          </div>
         </div>
-        <div class="card-footer-row">
-          <div class="card-price-box">
-            <span class="card-price-label">${isAr ? 'السعر بالجنيه' : 'Price in EGP'}</span>
-            <span class="card-price-val">${formatPriceEgp(p.priceEgp)}</span>
+        <div class="card-pricing-footer">
+          <div class="card-price-block">
+            ${origPrice > currPrice ? `<span class="price-old-strike">${escapeHtml(oldPriceText)}</span>` : ''}
+            <div class="price-new-row">
+              <span class="card-price-val">${formatPriceEgp(currPrice)}</span>
+              ${saveAmt > 0 ? `<span class="price-save-pill">${escapeHtml(savePillText)}</span>` : ''}
+            </div>
+            <span class="eg-micro-hint" style="margin-top:3px; font-size:0.71rem;">خصم لفترة محدودة • أرخص من سعر السوق</span>
           </div>
           <button type="button" class="order-now-btn" data-product-id="${escapeHtml(p.id)}" onclick="openOrderModal(this.getAttribute('data-product-id'))">
             <span>${isAr ? 'اطلب الآن' : 'Order Now'}</span>
@@ -1593,9 +1832,19 @@ function renderPsnProducts() {
   const psnAll = (storeCatalog.products || []).filter((p) => p.category === 'psn');
   const items = psnAll.filter((p) => p.region === activePsnRegion);
   grid.className = items.length === 3 ? 'products-grid cols-3' : 'products-grid';
-  grid.innerHTML = items.map(buildPsnCardHtml).join('');
+  grid.innerHTML = items.map(buildStoreCardHtml).join('');
   const elPsn = document.getElementById('count-psn');
   if (elPsn) elPsn.textContent = psnAll.length;
+}
+
+function renderSteamProducts() {
+  const grid = document.getElementById('steam-products-grid');
+  if (!grid) return;
+  const steamAll = (storeCatalog.products || []).filter((p) => p.category === 'steam');
+  grid.className = 'products-grid steam-grid';
+  grid.innerHTML = steamAll.map(buildStoreCardHtml).join('');
+  const elSteam = document.getElementById('count-steam');
+  if (elSteam) elSteam.textContent = steamAll.length;
 }
 
 function selectPsnRegion(regionCode) {
@@ -1605,21 +1854,28 @@ function selectPsnRegion(regionCode) {
 }
 
 function setStoreTab(tabId) {
-  activeStoreTab = tabId === 'topup-soon' ? 'topup-soon' : 'psn';
+  activeStoreTab = tabId === 'steam' ? 'steam' : tabId === 'topup-soon' ? 'topup-soon' : 'psn';
   const btnPsn = document.getElementById('tab-btn-psn');
+  const btnSteam = document.getElementById('tab-btn-steam');
   const btnSoon = document.getElementById('tab-btn-soon');
   const secPsn = document.getElementById('section-psn');
+  const secSteam = document.getElementById('section-steam');
   const secSoon = document.getElementById('section-topup-soon');
 
   if (btnPsn) {
     btnPsn.classList.toggle('active', activeStoreTab === 'psn');
     btnPsn.setAttribute('aria-selected', activeStoreTab === 'psn' ? 'true' : 'false');
   }
+  if (btnSteam) {
+    btnSteam.classList.toggle('active', activeStoreTab === 'steam');
+    btnSteam.setAttribute('aria-selected', activeStoreTab === 'steam' ? 'true' : 'false');
+  }
   if (btnSoon) {
     btnSoon.classList.toggle('active', activeStoreTab === 'topup-soon');
     btnSoon.setAttribute('aria-selected', activeStoreTab === 'topup-soon' ? 'true' : 'false');
   }
   if (secPsn) secPsn.classList.toggle('hidden-section', activeStoreTab !== 'psn');
+  if (secSteam) secSteam.classList.toggle('hidden-section', activeStoreTab !== 'steam');
   if (secSoon) secSoon.classList.toggle('hidden-section', activeStoreTab !== 'topup-soon');
 }
 
@@ -1661,16 +1917,47 @@ function updateModalPaymentNumbers() {
   document.getElementById('store-voda-dial-btn').href = `tel:*9*7*${phone}*${price}%23`;
 
   if (selectedProduct) {
+    const isSteam = selectedProduct.category === 'steam';
+    const origPrice = Number(selectedProduct.originalPrice || 0);
+    const discPct = Number(selectedProduct.discountPercent || 0);
+
+    const headingEl = document.getElementById('modal-heading');
+    if (headingEl) {
+      headingEl.textContent = isSteam
+        ? (isAr ? '💳 إتمام طلب بطاقة Steam Wallet (PC)' : '💳 Complete Your Steam Wallet Order')
+        : (isAr ? '💳 إتمام طلب بطاقة PlayStation (PSN)' : '💳 Complete Your PlayStation Card Order');
+    }
+
+    const discBadgeEl = document.getElementById('modal-discount-badge');
+    if (discBadgeEl) {
+      if (discPct > 0) {
+        discBadgeEl.style.display = 'inline-flex';
+        discBadgeEl.textContent = isAr ? `🔥 خصم DISCOUNT • ${discPct}%` : `🔥 DISCOUNT • ${discPct}% OFF`;
+      } else {
+        discBadgeEl.style.display = 'none';
+      }
+    }
+
+    const oldPriceEl = document.getElementById('modal-product-old-price');
+    if (oldPriceEl) {
+      if (origPrice > price) {
+        oldPriceEl.style.display = 'block';
+        oldPriceEl.textContent = formatPriceEgp(origPrice);
+      } else {
+        oldPriceEl.style.display = 'none';
+      }
+    }
+
     document.getElementById('modal-product-price').textContent = formatPriceEgp(price);
-    document.getElementById('modal-product-title').textContent = isAr
-      ? (selectedProduct.fullTitle || selectedProduct.title)
-      : `PlayStation PSN ${selectedProduct.valueLabel} — ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region}`;
-    document.getElementById('modal-product-region-badge').textContent = isAr
-      ? `${selectedProduct.flag} ريجين ${selectedProduct.regionLabel}`
-      : `${selectedProduct.flag} ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region} (${selectedProduct.region})`;
+    document.getElementById('modal-product-title').textContent = isSteam
+      ? (isAr ? (selectedProduct.fullTitle || selectedProduct.title) : `Steam Wallet ${selectedProduct.valueLabel} (PC) — USD`)
+      : (isAr ? (selectedProduct.fullTitle || selectedProduct.title) : `PlayStation PSN ${selectedProduct.valueLabel} — ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region}`);
+    document.getElementById('modal-product-region-badge').textContent = isSteam
+      ? (isAr ? '🌐 USD (المصري والأمريكي والـ MENA)' : '🌐 USD (Global / Egypt & MENA)')
+      : (isAr ? `${selectedProduct.flag} ريجين ${selectedProduct.regionLabel}` : `${selectedProduct.flag} ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region} (${selectedProduct.region})`);
     document.getElementById('modal-product-delivery-badge').textContent = isAr
-      ? selectedProduct.deliveryBadge
-      : 'Digital Code • Fast Delivery';
+      ? (selectedProduct.deliveryBadge || 'كود رقمي • تسليم فوري')
+      : 'Digital Code • Instant Delivery';
     const submitBtn = document.getElementById('store-submit-btn');
     if (submitBtn && !submitBtn.disabled) {
       submitBtn.textContent = isAr
@@ -1708,7 +1995,7 @@ function copyStoreText(text, btn) {
 }
 
 function openOrderModal(productId) {
-  const product = (storeCatalog.products || []).find((p) => p.id === productId && p.category === 'psn');
+  const product = (storeCatalog.products || []).find((p) => p.id === productId && (p.category === 'psn' || p.category === 'steam'));
   if (!product) return;
   selectedProduct = product;
   storeScreenshotDataUrl = '';
@@ -1829,6 +2116,8 @@ async function submitStoreOrder(e) {
     activeTrackedOrder = {
       id: data.order.id,
       accessToken: data.order.accessToken,
+      storeProductId: data.order.storeProductId || selectedProduct.id,
+      storeCategory: data.order.storeCategory || selectedProduct.category || 'psn',
       packageName: data.order.packageName || selectedProduct.fullTitle,
       storeRegion: data.order.storeRegion || selectedProduct.regionLabel || '',
       amountEgp: data.order.amountEgp || selectedProduct.priceEgp,
@@ -1863,6 +2152,7 @@ function copyDeliveredStoreCode(btn) {
 
 function showStoreOrderStatusView(order) {
   const isAr = storeLang === 'ar';
+  const isSteam = order.storeCategory === 'steam' || String(order.storeProductId || '').toLowerCase().startsWith('steam-') || String(order.packageName || '').toLowerCase().includes('steam');
   document.getElementById('modal-checkout-view').style.display = 'none';
   document.getElementById('modal-status-view').style.display = 'block';
   document.getElementById('store-order-modal').classList.add('open');
@@ -1877,11 +2167,17 @@ function showStoreOrderStatusView(order) {
     pill.className = 'status-pill-lg approved';
     pill.textContent = isAr ? '✅ تم تأكيد الدفع وقبول طلبك بنجاح!' : '✅ Payment Confirmed & Order Approved!';
     title.textContent = deliveredCode
-      ? (isAr ? 'كود بطاقة PlayStation جاهز الآن! 🎉' : 'Your PlayStation Gift Card Code Is Ready! 🎉')
+      ? (isSteam
+          ? (isAr ? 'كود بطاقة Steam Wallet جاهز الآن! 🎉' : 'Your Steam Wallet Code Is Ready! 🎉')
+          : (isAr ? 'كود بطاقة PlayStation جاهز الآن! 🎉' : 'Your PlayStation Gift Card Code Is Ready! 🎉'))
       : (isAr ? 'تم قبول طلبك وتنفيذ التسليم 🎉' : 'Order Approved & Delivery in Progress 🎉');
     desc.textContent = deliveredCode
-      ? (isAr ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل متجر PlayStation على حسابك.' : 'Tap "Copy Code" below and redeem it directly in the PlayStation Store.')
-      : (isAr ? 'تم التحقق من تحويلك بنجاح، ستستلم كود الـ PSN مباشرة على رقم الواتساب.' : 'Your payment is verified! Your PSN code is being sent to your WhatsApp shortly.');
+      ? (isSteam
+          ? (isAr ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل محفظة Steam (Redeem a Steam Wallet Code).' : 'Tap "Copy Code" below and redeem it directly in your Steam Wallet (Redeem a Steam Gift Card).')
+          : (isAr ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل متجر PlayStation على حسابك.' : 'Tap "Copy Code" below and redeem it directly in the PlayStation Store.'))
+      : (isSteam
+          ? (isAr ? 'تم التحقق من تحويلك بنجاح، ستستلم كود Steam Wallet مباشرة على رقم الواتساب.' : 'Your payment is verified! Your Steam Wallet code is being sent to your WhatsApp shortly.')
+          : (isAr ? 'تم التحقق من تحويلك بنجاح، ستستلم كود الـ PSN مباشرة على رقم الواتساب.' : 'Your payment is verified! Your PSN code is being sent to your WhatsApp shortly.'));
   } else if (order.status === 'rejected') {
     pill.className = 'status-pill-lg rejected';
     pill.textContent = isAr ? '❌ لم يتم التحقق من إيصال التحويل' : '❌ Transfer Receipt Declined';
@@ -1889,16 +2185,22 @@ function showStoreOrderStatusView(order) {
     desc.textContent = isAr ? 'تأكد من صورة التحويل أو تواصل معنا على الواتساب برقم طلبك.' : 'Please verify your transfer screenshot or message us on WhatsApp with your Order ID.';
   } else {
     pill.className = 'status-pill-lg pending';
-    pill.textContent = isAr ? '⏳ جاري مراجعة إيصال الدفع وتجهيز كود الـ PSN' : '⏳ Reviewing payment & preparing your PSN code';
+    pill.textContent = isSteam
+      ? (isAr ? '⏳ جاري مراجعة إيصال الدفع وتجهيز كود Steam Wallet' : '⏳ Reviewing payment & preparing your Steam Wallet code')
+      : (isAr ? '⏳ جاري مراجعة إيصال الدفع وتجهيز كود الـ PSN' : '⏳ Reviewing payment & preparing your PSN code');
     title.textContent = isAr ? 'تم تسجيل طلبك بنجاح! 🎉' : 'Order Submitted Successfully! 🎉';
     desc.textContent = isAr
       ? 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيظهر الكود هنا ويصلك على الواتساب.'
       : 'Your receipt reached our team. This screen updates automatically upon approval and your code will appear right here & on WhatsApp.';
   }
 
+  const codeLabel = isSteam
+    ? (isAr ? '🎁 كود بطاقة Steam الرقمي (Steam Wallet Code):' : '🎁 Your Steam Wallet (PC) Gift Card Code:')
+    : (isAr ? '🎁 كود البطاقة الرقمي (PSN Gift Card Code):' : '🎁 Your PlayStation (PSN) Gift Card Code:');
+
   const deliveredCodeBoxHtml = order.status === 'approved' && deliveredCode
     ? `<div style="margin:0 0 12px; padding:16px 14px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28); text-align:center;">
-         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${isAr ? '🎁 كود البطاقة الرقمي (PSN Gift Card Code):' : '🎁 Your PlayStation (PSN) Gift Card Code:'}</div>
+         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeLabel}</div>
          <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
          <button type="button" class="submit-store-btn" style="padding:11px 16px; font-size:0.94rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredStoreCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
        </div>`
@@ -1919,7 +2221,7 @@ function showStoreOrderStatusView(order) {
     `رقم طلبي من المتجر: ${order.id}\n` +
     `المنتج: ${order.packageName}\n` +
     `المبلغ: ${order.amountEgp} ج.م\n` +
-    `برجاء متابعة إرسال كود الـ PSN.`
+    `برجاء متابعة إرسال كود ${isSteam ? 'Steam Wallet' : 'الـ PSN'}.`
   );
   document.getElementById('status-whatsapp-btn').href = `https://wa.me/201021464317?text=${encodeURIComponent(waMsg)}`;
 }
@@ -1936,6 +2238,8 @@ function startStoreOrderPolling() {
         activeTrackedOrder.status = d.status;
         activeTrackedOrder.deliveredCode = d.deliveredCode || '';
         activeTrackedOrder.storeRegion = d.storeRegion || activeTrackedOrder.storeRegion || '';
+        activeTrackedOrder.storeCategory = d.storeCategory || activeTrackedOrder.storeCategory || '';
+        activeTrackedOrder.storeProductId = d.storeProductId || activeTrackedOrder.storeProductId || '';
         showStoreOrderStatusView(activeTrackedOrder);
         if ((d.status === 'approved' && d.deliveredCode) || d.status === 'rejected') {
           clearInterval(storePollTimer);
@@ -1987,6 +2291,8 @@ async function lookupStoreOrderByQuery(rawQuery) {
     activeTrackedOrder = {
       id: data.id,
       accessToken: data.accessToken,
+      storeProductId: data.storeProductId || '',
+      storeCategory: data.storeCategory || '',
       packageName: data.packageName,
       storeRegion: data.storeRegion || '',
       amountEgp: data.amountEgp,
@@ -2034,7 +2340,9 @@ async function initGamingStore() {
   }
 
   applyStoreLang(storeLang);
-  setStoreTab('psn');
+  const params = new URLSearchParams(window.location.search);
+  const initialTab = params.get('tab') === 'steam' ? 'steam' : 'psn';
+  setStoreTab(initialTab);
 
   try {
     const cfgRes = await fetch('/api/config');
@@ -2044,7 +2352,6 @@ async function initGamingStore() {
     }
   } catch (e) {}
 
-  const params = new URLSearchParams(window.location.search);
   const trackId = params.get('track');
   if (trackId) {
     lookupStoreOrderByQuery(trackId);
