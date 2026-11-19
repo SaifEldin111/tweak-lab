@@ -413,6 +413,54 @@ const STORE_PRODUCTS = [
     deliveryBadge: 'كود رقمي • تسليم فوري',
     requiresAccount: false,
     tag: '💎 أفضل قيمة'
+  },
+
+  // ==========================================================================
+  // 6. GTA VI PS5 OFFICIAL US PSN BUNDLES (FEATURED HERO CAROUSEL BUNDLES)
+  // ==========================================================================
+  {
+    id: 'gta6-psn-us-70',
+    category: 'gta6',
+    region: 'US',
+    regionLabel: 'أمريكي (US)',
+    flag: '🇺🇸',
+    title: 'باقة GTA VI Standard ($70 PSN US)',
+    titleEn: 'GTA VI Standard Pack ($50 + $20 = $70 PSN US)',
+    fullTitle: 'باقة GTA VI Standard (PS5) — $70 PSN US ($50 + $20 كودين رسميين)',
+    valueLabel: '$70 ($50 + $20)',
+    subtitle: 'كودين PSN أمريكي رسميين ($50 + $20 = $70) لشحن حسابك الشخصي وشراء GTA VI فوراً',
+    subtitleEn: '2 Official US PSN Codes ($50 + $20 = $70) — safe on your personal PS5 account with instant delivery',
+    originalPrice: 4360,
+    priceEgp: 3850,
+    discountPercent: 12,
+    codeCount: 2,
+    codeLabels: ['Code 1 - $50', 'Code 2 - $20'],
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كودين رقميين ($50 + $20) • تسليم فوري',
+    requiresAccount: false,
+    tag: '🔥 الأكثر طلباً لـ GTA VI'
+  },
+  {
+    id: 'gta6-psn-us-100',
+    category: 'gta6',
+    region: 'US',
+    regionLabel: 'أمريكي (US)',
+    flag: '🇺🇸',
+    title: 'باقة GTA VI Ultimate ($100 PSN US)',
+    titleEn: 'GTA VI Ultimate Pack ($100 PSN US)',
+    fullTitle: 'باقة GTA VI Ultimate (PS5) — $100 PSN US (كود رسمي شامل)',
+    valueLabel: '$100',
+    subtitle: 'كود PSN أمريكي رسمي $100 يغطي اللعبة كاملة + الضرائب أو الإضافات على PS5 بتسليم فوري',
+    subtitleEn: '1 Official $100 US PSN Code covering Full Game + US Store Tax or Deluxe content on PS5',
+    originalPrice: 6150,
+    priceEgp: 5450,
+    discountPercent: 11,
+    codeCount: 1,
+    codeLabels: ['Code - $100'],
+    deliveryType: 'digital_code',
+    deliveryBadge: 'كود رقمي رسمي ($100) • تسليم فوري',
+    requiresAccount: false,
+    tag: '💎 أفضل قيمة لـ GTA VI'
   }
 ];
 

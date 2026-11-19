@@ -346,6 +346,21 @@
       border-color: rgba(0, 240, 255, 0.42);
       color: var(--cyan);
     }
+    .portal-gta-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      color: #140800;
+      background: linear-gradient(110deg, #ff7a00 0%, #ffb800 45%, #00ff88 100%);
+      border: 1px solid rgba(255, 224, 130, 0.9);
+      box-shadow: 0 0 18px rgba(255, 165, 0, 0.55), 0 0 12px rgba(0, 255, 136, 0.3);
+      white-space: nowrap;
+    }
     .portal-card-title {
       font-size: clamp(1.42rem, 2.5vw, 1.82rem);
       font-weight: 900;
@@ -730,7 +745,10 @@
           <div class="portal-card-content">
             <div class="portal-card-top">
               <div class="portal-icon-box" aria-hidden="true">🎮</div>
-              <span class="portal-card-tag" data-i18n="storeTag">PSN &amp; STEAM • UP TO 11% OFF</span>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span class="portal-gta-live-badge" data-i18n="storeGtaBadge">🌴 GTA VI Bundles Live</span>
+                <span class="portal-card-tag" data-i18n="storeTag">PSN &amp; STEAM • UP TO 11% OFF</span>
+              </div>
             </div>
             <h2 class="portal-card-title" data-i18n="storeTitle">Digital Gaming Store</h2>
             <p class="portal-card-desc" data-i18n="storeDesc">
@@ -825,7 +843,8 @@ const PORTAL_I18N = {
     pcFeat2: '🆓 Free Lite Trial',
     pcFeat3: '🛡️ Zero Ban Risk',
     pcCta: 'Enter PC Lab ⚡',
-    storeTag: 'PSN & STEAM • UP TO 11% OFF',
+    storeGtaBadge: '🌴 GTA VI Bundles Live',
+    storeTag: 'PSN & STEAM • UP TO 12% OFF',
     storeTitle: 'Digital Gaming Store',
     storeDesc: 'Official PlayStation (PSN) & Steam Wallet (PC) Gift Cards up to 11% OFF with instant code delivery.',
     storeFeat1: '🎁 PSN & Steam Codes',
@@ -856,7 +875,8 @@ const PORTAL_I18N = {
     pcFeat2: '🆓 نسخة Free Lite مجانية',
     pcFeat3: '🛡️ آمن 100% بدون بان',
     pcCta: 'دخول معمل الأداء ⚡',
-    storeTag: 'بلايستيشن وستيم • خصم حتى 11%',
+    storeGtaBadge: '🌴 GTA VI Bundles Live',
+    storeTag: 'بلايستيشن وستيم • خصم حتى 12%',
     storeTitle: 'متجر البطاقات الرقمية (Gaming Store)',
     storeDesc: 'بطاقات PlayStation و Steam الرقمية بخصومات حصرية وتسليم كود فوري.',
     storeFeat1: '🎁 أكواد PSN و Steam أصلية',
@@ -941,6 +961,7 @@ function showPortalPsnResult(data) {
   const isApproved = data.status === 'approved';
   const isRejected = data.status === 'rejected';
   const deliveredCode = String(data.deliveredCode || '').trim();
+  const deliveredCode2 = String(data.deliveredCode2 || '').trim();
   const statusPill = isApproved
     ? `<span style="padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.8rem; font-weight:900;">${isAr ? '✅ تم قبول الطلب وتسليم الكود' : '✅ Approved & Code Delivered'}</span>`
     : isRejected
@@ -952,11 +973,21 @@ function showPortalPsnResult(data) {
     : (isAr ? '🎁 كود بطاقة PlayStation الرقمي الخاص بك:' : '🎁 Your PlayStation (PSN) Gift Card Code:');
 
   const codeBox = isApproved && deliveredCode
-    ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
-         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>
-         <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
-         <button type="button" class="primary-btn" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
-       </div>`
+    ? (deliveredCode2
+        ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 1 — $50 PSN US:</div>
+             <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.25rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode)}</div>
+             <button type="button" class="primary-btn" style="margin-bottom:14px; padding:10px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ Code 1 ($50) — Copy Code' : '📋 Copy Code 1 ($50)'}</button>
+
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:6px;">🎁 Code 2 — $20 PSN US:</div>
+             <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.25rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:10px 12px; margin-bottom:8px; word-break:break-all;">${escapeHtml(deliveredCode2)}</div>
+             <button type="button" class="primary-btn" style="padding:10px;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ Code 2 ($20) — Copy Code' : '📋 Copy Code 2 ($20)'}</button>
+           </div>`
+        : `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>
+             <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
+             <button type="button" class="primary-btn" data-code="${escapeHtml(deliveredCode)}" onclick="copyPortalPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+           </div>`)
     : isApproved
     ? `<div style="margin:14px 0; padding:14px; border-radius:12px; background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.4); color:#d8ffeb; font-size:0.86rem; font-weight:700;">${isAr ? `تم قبول طلبك بنجاح! جاري إرسال كود ${isSteam ? 'Steam Wallet' : 'الـ PSN'} على الواتساب خلال لحظات.` : `Your order is approved! Your ${isSteam ? 'Steam Wallet' : 'PSN'} code is being sent to your WhatsApp shortly.`}</div>`
     : '';

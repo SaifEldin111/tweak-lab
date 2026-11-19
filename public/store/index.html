@@ -1327,6 +1327,306 @@
       .product-card:hover { transform: none; }
       .order-now-btn:hover { transform: none; }
     }
+
+    /* ============================================================
+       OFFICIAL GTA VI KEN BURNS CINEMATIC CAROUSEL BANNER
+       ============================================================ */
+    .gta6-hero-banner {
+      position: relative;
+      max-width: 1120px;
+      margin: 0 auto 26px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(251, 146, 60, 0.48);
+      background: #060811;
+      box-shadow:
+        0 22px 55px rgba(0, 0, 0, 0.78),
+        0 0 38px rgba(244, 63, 94, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      text-align: start;
+      isolation: isolate;
+    }
+    .gta6-slides-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background: #05070e;
+    }
+    .gta6-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 22%;
+      opacity: 0;
+      transform: scale(1) translateZ(0);
+      transition:
+        opacity 1.15s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 4.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: opacity, transform;
+      filter: saturate(1.12) contrast(1.05);
+    }
+    .gta6-slide.active {
+      opacity: 1;
+      transform: scale(1.085) translateZ(0);
+    }
+    /* Directional dark gradient overlay: bg-gradient-to-r from-black/95 via-black/80 to-black/45 */
+    .gta6-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.80) 54%, rgba(0, 0, 0, 0.45) 100%),
+        linear-gradient(180deg, rgba(4, 7, 14, 0.35) 0%, rgba(4, 7, 14, 0.85) 100%);
+    }
+    html[dir="rtl"] .gta6-gradient-overlay {
+      background:
+        linear-gradient(270deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.80) 54%, rgba(0, 0, 0, 0.45) 100%),
+        linear-gradient(180deg, rgba(4, 7, 14, 0.35) 0%, rgba(4, 7, 14, 0.85) 100%);
+    }
+    .gta6-banner-content {
+      position: relative;
+      z-index: 2;
+      padding: 26px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .gta6-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .gta6-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.26) 0%, rgba(245, 158, 11, 0.26) 100%);
+      border: 1px solid rgba(251, 146, 60, 0.82);
+      color: #fde68a;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 0 22px rgba(244, 63, 94, 0.35);
+    }
+    .gta6-dots-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(6, 10, 18, 0.76);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .gta6-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      border: none;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.34);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .gta6-dot.active {
+      width: 22px;
+      background: linear-gradient(90deg, #ff5e7e, #ffb800, #00ff88);
+      box-shadow: 0 0 10px rgba(255, 184, 0, 0.75);
+    }
+    .gta6-headline-wrap {
+      max-width: 780px;
+    }
+    .gta6-title {
+      font-size: clamp(1.35rem, 3vw, 2.05rem);
+      font-weight: 900;
+      line-height: 1.18;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+    }
+    .gta6-title .gta6-vice-gradient {
+      background: linear-gradient(90deg, #ff7eb3 0%, #ffb86c 52%, #00ff88 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gta6-eg-hint {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-top: 4px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+    html[lang="ar"] .gta6-eg-hint {
+      display: none !important;
+    }
+    .gta6-trust-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #dcfce7;
+      background: rgba(5, 12, 20, 0.72);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      padding: 8px 14px;
+      border-radius: 12px;
+      width: fit-content;
+      max-width: 100%;
+    }
+    .gta6-bundles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .gta6-bundle-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(10, 15, 27, 0.88) 0%, rgba(5, 8, 16, 0.94) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .gta6-bundle-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 255, 136, 0.55);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 22px rgba(0, 255, 136, 0.16);
+    }
+    .gta6-bundle-card.ultimate-bundle {
+      border-color: rgba(251, 146, 60, 0.45);
+    }
+    .gta6-bundle-card.ultimate-bundle:hover {
+      border-color: rgba(251, 191, 36, 0.85);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 24px rgba(251, 146, 60, 0.22);
+    }
+    .gta6-bundle-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .gta6-bundle-tag {
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      color: #7dd3fc;
+    }
+    .gta6-bundle-name {
+      font-size: 1.04rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 4px 0 3px;
+      line-height: 1.3;
+    }
+    .gta6-bundle-sub {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .gta6-bundle-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .gta6-price-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .gta6-old-price {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      text-decoration: line-through;
+      text-decoration-color: #ff4757;
+      text-decoration-thickness: 1.8px;
+      font-weight: 700;
+    }
+    .gta6-new-price-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .gta6-new-price {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1.05;
+      text-shadow: 0 0 16px rgba(0, 255, 136, 0.35);
+    }
+    .gta6-save-pill {
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid rgba(0, 255, 136, 0.45);
+      color: #00ff88;
+    }
+    .gta6-order-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 11px;
+      border: 1px solid #00ff88;
+      background: linear-gradient(135deg, #00ff88 0%, #00d46a 100%);
+      color: #03140b;
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .gta6-order-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 26px rgba(0, 255, 136, 0.6);
+      filter: brightness(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .gta6-bundles-grid {
+        grid-template-columns: 1fr;
+      }
+      .gta6-bundle-card,
+      .gta6-dots-nav {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+    }
+
     @media (max-width: 640px) {
       .navbar { padding: 8px 10px; }
       .navbar-inner { flex-wrap: nowrap; gap: 6px; }
@@ -1343,7 +1643,15 @@
         min-height: 32px;
         gap: 4px;
       }
-      .store-hero { padding: 26px 14px 20px; }
+      .store-hero { padding: 20px 12px 18px; }
+      .gta6-hero-banner { margin-bottom: 18px; border-radius: 16px; }
+      .gta6-banner-content { padding: 16px 14px 15px; gap: 13px; }
+      .gta6-top-badge { font-size: 0.67rem; padding: 5px 10px; }
+      .gta6-title { font-size: 1.22rem; }
+      .gta6-trust-row { font-size: 0.72rem; padding: 7px 10px; gap: 5px 10px; }
+      .gta6-bundle-card { padding: 13px 13px; }
+      .gta6-bundle-bottom { flex-direction: column; align-items: stretch; }
+      .gta6-order-btn { width: 100%; padding: 11px 14px; }
       .store-container { padding: 24px 14px 48px; }
       .products-grid, .products-grid.cols-3, .products-grid.steam-grid, .locked-games-grid { grid-template-columns: 1fr; gap: 16px; }
       .card-visual-banner { min-height: 190px; padding: 13px 13px 11px; }
@@ -1437,10 +1745,96 @@
       <span class="eg-micro-hint">كروت بلايستيشن وستيم بخصم لفترة محدودة واستلام الكود فوراً</span>
 
       <div class="store-trust-strip">
-        <span class="trust-pill" data-i18n-html="trust1">🔥 <strong>Up to 11% OFF:</strong> Cheaper Than Market Price</span>
+        <span class="trust-pill" data-i18n-html="trust1">🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price</span>
         <span class="trust-pill" data-i18n-html="trust2">⚡ <strong>Delivery:</strong> Instant Official Digital Code</span>
         <span class="trust-pill" data-i18n-html="trust3">💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
+
+      <!-- OFFICIAL GTA VI KEN BURNS CINEMATIC CAROUSEL BANNER (ABOVE TABS) -->
+      <section class="gta6-hero-banner" id="gta6-promo-banner" aria-label="Official Rockstar Games GTA VI PS5 PSN Bundles">
+        <div class="gta6-slides-stage" aria-hidden="true">
+          <img src="/gta6-1.jpg" alt="Official Rockstar Games GTA VI Key Art — Jason &amp; Lucia Vice City" class="gta6-slide active" data-gta-slide="0" fetchpriority="high" />
+          <img src="/gta6-2.jpg" alt="Official Rockstar Games GTA VI Vice City Neon Skyline Wallpaper" class="gta6-slide" data-gta-slide="1" loading="eager" />
+          <img src="/gta6-3.jpg" alt="Official Rockstar Games GTA VI Jason &amp; Lucia Vice City Beach Wallpaper" class="gta6-slide" data-gta-slide="2" loading="eager" />
+          <img src="/gta6-4.jpg" alt="Official Rockstar Games GTA VI Widescreen PS5 Key Art" class="gta6-slide" data-gta-slide="3" loading="eager" />
+        </div>
+        <div class="gta6-gradient-overlay" aria-hidden="true"></div>
+
+        <div class="gta6-banner-content">
+          <div class="gta6-top-bar">
+            <span class="gta6-top-badge" data-i18n="gta6TopBadge">🔥 PS5 OFFICIAL DIGITAL BUNDLES • INSTANT CODE DELIVERY</span>
+            <div class="gta6-dots-nav" role="tablist" aria-label="GTA VI Wallpaper Slides">
+              <button type="button" class="gta6-dot active" data-gta-dot="0" aria-label="GTA VI Wallpaper 1" onclick="goToGta6Slide(0)"></button>
+              <button type="button" class="gta6-dot" data-gta-dot="1" aria-label="GTA VI Wallpaper 2" onclick="goToGta6Slide(1)"></button>
+              <button type="button" class="gta6-dot" data-gta-dot="2" aria-label="GTA VI Wallpaper 3" onclick="goToGta6Slide(2)"></button>
+              <button type="button" class="gta6-dot" data-gta-dot="3" aria-label="GTA VI Wallpaper 4" onclick="goToGta6Slide(3)"></button>
+            </div>
+          </div>
+
+          <div class="gta6-headline-wrap">
+            <h2 class="gta6-title" data-i18n-html="gta6MainTitle">
+              GET READY FOR <span class="gta6-vice-gradient">GTA VI</span> — CHARGE YOUR US PSN NOW
+            </h2>
+            <span class="gta6-eg-hint">اشحن حسابك الأمريكي رسمي بأرخص سعر في مصر قبل زحمة اللانش واستلم الأكواد في ثواني</span>
+          </div>
+
+          <div class="gta6-trust-row" data-i18n="gta6TrustStrip">
+            ✅ 100% Official US Codes • ✅ Safe on Personal Account • ✅ No Account Ban Risk
+          </div>
+
+          <div class="gta6-bundles-grid">
+            <!-- Bundle 1: GTA VI Standard Pack ($50 + $20 = $70 PSN US) -->
+            <article class="gta6-bundle-card" id="gta6-bundle-70">
+              <div>
+                <div class="gta6-bundle-top">
+                  <span class="discount-glow-badge" data-i18n="gta6Pack70Disc">🔥 DISCOUNT • 12% OFF</span>
+                  <span class="gta6-bundle-tag" data-i18n="gta6Pack70Tag">🇺🇸 2 Official Codes ($50 + $20)</span>
+                </div>
+                <h3 class="gta6-bundle-name" data-i18n="gta6Pack70Title">GTA VI Standard Pack ($50 + $20 = $70 PSN US)</h3>
+                <p class="gta6-bundle-sub" data-i18n="gta6Pack70Sub">Delivered as two 100% official US codes ($50 + $20) • Full $70 PS5 game balance</p>
+              </div>
+              <div class="gta6-bundle-bottom">
+                <div class="gta6-price-col">
+                  <span class="gta6-old-price" data-i18n="gta6Pack70Old">Instead of 4,360 EGP</span>
+                  <div class="gta6-new-price-row">
+                    <span class="gta6-new-price" data-i18n="gta6Pack70Price">3,850 EGP</span>
+                    <span class="gta6-save-pill" data-i18n="gta6Pack70Save">Save 510 EGP</span>
+                  </div>
+                </div>
+                <button type="button" class="gta6-order-btn" onclick="openOrderModal('gta6-psn-us-70')">
+                  <span data-i18n="gta6Pack70Btn">Order $70 Bundle</span>
+                  <span>⚡</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Bundle 2: GTA VI Ultimate Pack ($100 PSN US) -->
+            <article class="gta6-bundle-card ultimate-bundle" id="gta6-bundle-100">
+              <div>
+                <div class="gta6-bundle-top">
+                  <span class="discount-glow-badge" data-i18n="gta6Pack100Disc">🔥 DISCOUNT • 11% OFF</span>
+                  <span class="gta6-bundle-tag" data-i18n="gta6Pack100Tag">💎 1 Official Code ($100 US)</span>
+                </div>
+                <h3 class="gta6-bundle-name" data-i18n="gta6Pack100Title">GTA VI Ultimate Pack ($100 PSN US)</h3>
+                <p class="gta6-bundle-sub" data-i18n="gta6Pack100Sub">Single official $100 US code • Covers Deluxe Edition / taxes &amp; extra wallet credit</p>
+              </div>
+              <div class="gta6-bundle-bottom">
+                <div class="gta6-price-col">
+                  <span class="gta6-old-price" data-i18n="gta6Pack100Old">Instead of 6,150 EGP</span>
+                  <div class="gta6-new-price-row">
+                    <span class="gta6-new-price" data-i18n="gta6Pack100Price">5,450 EGP</span>
+                    <span class="gta6-save-pill" data-i18n="gta6Pack100Save">Save 700 EGP</span>
+                  </div>
+                </div>
+                <button type="button" class="gta6-order-btn" onclick="openOrderModal('gta6-psn-us-100')">
+                  <span data-i18n="gta6Pack100Btn">Order $100 Bundle</span>
+                  <span>⚡</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
 
       <!-- Clear 3-Tab Bar above Products with Official SVG Icons -->
       <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist">
@@ -1803,10 +2197,29 @@ const STORE_I18N = {
     navTrack: '🔍 Track Order',
     navTrackShort: '🔍 Track',
     heroTitle: 'Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards',
-    heroSub: '100% genuine <strong>PlayStation (PSN)</strong> &amp; <strong>Steam Wallet (PC)</strong> gift cards up to <strong>11% OFF</strong> with instant digital code delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.',
-    trust1: '🔥 <strong>Up to 11% OFF:</strong> Cheaper Than Market Price',
+    heroSub: '100% genuine <strong>PlayStation (PSN)</strong> &amp; <strong>Steam Wallet (PC)</strong> gift cards up to <strong>12% OFF</strong> with instant digital code delivery via <strong>InstaPay</strong> &amp; <strong>Vodafone Cash</strong>.',
+    trust1: '🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price',
     trust2: '⚡ <strong>Delivery:</strong> Instant Official Digital Code',
     trust3: '💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash',
+    gta6TopBadge: '🔥 PS5 OFFICIAL DIGITAL BUNDLES • INSTANT CODE DELIVERY',
+    gta6MainTitle: 'GET READY FOR <span class="gta6-vice-gradient">GTA VI</span> — CHARGE YOUR US PSN NOW',
+    gta6TrustStrip: '✅ 100% Official US Codes • ✅ Safe on Personal Account • ✅ No Account Ban Risk',
+    gta6Pack70Disc: '🔥 DISCOUNT • 12% OFF',
+    gta6Pack70Tag: '🇺🇸 2 Official Codes ($50 + $20)',
+    gta6Pack70Title: 'GTA VI Standard Pack ($50 + $20 = $70 PSN US)',
+    gta6Pack70Sub: 'Delivered as two 100% official US codes ($50 + $20) • Full $70 PS5 game balance',
+    gta6Pack70Old: 'Instead of 4,360 EGP',
+    gta6Pack70Price: '3,850 EGP',
+    gta6Pack70Save: 'Save 510 EGP',
+    gta6Pack70Btn: 'Order $70 Bundle',
+    gta6Pack100Disc: '🔥 DISCOUNT • 11% OFF',
+    gta6Pack100Tag: '💎 1 Official Code ($100 US)',
+    gta6Pack100Title: 'GTA VI Ultimate Pack ($100 PSN US)',
+    gta6Pack100Sub: 'Single official $100 US code • Covers Deluxe Edition / taxes & extra wallet credit',
+    gta6Pack100Old: 'Instead of 6,150 EGP',
+    gta6Pack100Price: '5,450 EGP',
+    gta6Pack100Save: 'Save 700 EGP',
+    gta6Pack100Btn: 'Order $100 Bundle',
     tabPsn: 'PlayStation (PSN)',
     tabSteam: 'Steam Wallet (PC)',
     tabSoon: '🔒 Game Top-Ups',
@@ -1877,10 +2290,29 @@ const STORE_I18N = {
     navTrack: '🔍 متابعة الطلب',
     navTrackShort: '🔍 طلبي',
     heroTitle: 'متجر بطاقات <span class="accent-green">PlayStation (PSN)</span> و <span class="accent-cyan">Steam Wallet</span> في مصر',
-    heroSub: 'بطاقات <strong>PlayStation (PSN)</strong> و <strong>Steam Wallet (PC)</strong> أصلية 100% بخصومات حصرية تصل إلى <strong>11%</strong> وتسليم كود رقمي فوري عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.',
-    trust1: '🔥 <strong>خصم حتى 11%:</strong> أرخص من سعر السوق',
+    heroSub: 'بطاقات <strong>PlayStation (PSN)</strong> و <strong>Steam Wallet (PC)</strong> أصلية 100% بخصومات حصرية تصل إلى <strong>12%</strong> وتسليم كود رقمي فوري عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.',
+    trust1: '🔥 <strong>خصم حتى 12%:</strong> أرخص من سعر السوق',
     trust2: '⚡ <strong>التسليم:</strong> كود رقمي أصلي فوري',
     trust3: '💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash',
+    gta6TopBadge: '🔥 باقات GTA VI الرسمية للـ PS5 • استلام الأكواد فوراً',
+    gta6MainTitle: 'استعد لـ <span class="gta6-vice-gradient">GTA VI</span> — اشحن حسابك الأمريكي بأرخص سعر في مصر',
+    gta6TrustStrip: '✅ أكواد أمريكية رسمية 100% • ✅ آمنة على حسابك الشخصي • ✅ بدون أي خطر حظر (Ban)',
+    gta6Pack70Disc: '🔥 خصم DISCOUNT • 12%',
+    gta6Pack70Tag: '🇺🇸 كودين رسميين ($50 + $20)',
+    gta6Pack70Title: 'GTA VI Standard Pack ($50 + $20 = $70 PSN US)',
+    gta6Pack70Sub: 'تسليم كودين رسميين ($50 + $20 أمريكي) • رصيد $70 كامل للعبة GTA VI على PS5',
+    gta6Pack70Old: 'بدلاً من 4,360 ج.م',
+    gta6Pack70Price: '3,850 ج.م',
+    gta6Pack70Save: 'وفّر 510 ج.م',
+    gta6Pack70Btn: 'Order $70 Bundle',
+    gta6Pack100Disc: '🔥 خصم DISCOUNT • 11%',
+    gta6Pack100Tag: '💎 كود واحد ($100 أمريكي)',
+    gta6Pack100Title: 'GTA VI Ultimate Pack ($100 PSN US)',
+    gta6Pack100Sub: 'كود رقمي رسمي واحد $100 أمريكي • يغطي النسخة الخاصة والإضافات ورصيد إضافي',
+    gta6Pack100Old: 'بدلاً من 6,150 ج.م',
+    gta6Pack100Price: '5,450 ج.م',
+    gta6Pack100Save: 'وفّر 700 ج.م',
+    gta6Pack100Btn: 'Order $100 Bundle',
     tabPsn: 'بطاقات PlayStation (PSN)',
     tabSteam: 'بطاقات Steam Wallet (PC)',
     tabSoon: '🔒 شحن الألعاب',
@@ -2248,12 +2680,15 @@ function updateModalPaymentNumbers() {
 
   if (selectedProduct) {
     const isSteam = selectedProduct.category === 'steam';
+    const isGta6 = selectedProduct.category === 'gta6';
     const origPrice = Number(selectedProduct.originalPrice || 0);
     const discPct = Number(selectedProduct.discountPercent || 0);
 
     const headingEl = document.getElementById('modal-heading');
     if (headingEl) {
-      headingEl.textContent = isSteam
+      headingEl.textContent = isGta6
+        ? (isAr ? '🌴 إتمام طلب باقة GTA VI الرسمية (PS5 US PSN)' : '🌴 Complete Your GTA VI PS5 Bundle Order')
+        : isSteam
         ? (isAr ? '💳 إتمام طلب بطاقة Steam Wallet (PC)' : '💳 Complete Your Steam Wallet Order')
         : (isAr ? '💳 إتمام طلب بطاقة PlayStation (PSN)' : '💳 Complete Your PlayStation Card Order');
     }
@@ -2279,13 +2714,17 @@ function updateModalPaymentNumbers() {
     }
 
     document.getElementById('modal-product-price').textContent = formatPriceEgp(price);
-    document.getElementById('modal-product-title').textContent = isSteam
+    document.getElementById('modal-product-title').textContent = isGta6
+      ? (isAr ? (selectedProduct.title || selectedProduct.fullTitle) : (selectedProduct.titleEn || selectedProduct.fullTitle))
+      : isSteam
       ? (isAr ? (selectedProduct.fullTitle || selectedProduct.title) : `Steam Wallet ${selectedProduct.valueLabel} (PC) — USD`)
       : (isAr ? (selectedProduct.fullTitle || selectedProduct.title) : `PlayStation PSN ${selectedProduct.valueLabel} — ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region}`);
     document.getElementById('modal-product-region-badge').textContent = isSteam
       ? (isAr ? '🌐 USD (المصري والأمريكي والـ MENA)' : '🌐 USD (Global / Egypt & MENA)')
       : (isAr ? `${selectedProduct.flag} ريجين ${selectedProduct.regionLabel}` : `${selectedProduct.flag} ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region} (${selectedProduct.region})`);
-    document.getElementById('modal-product-delivery-badge').textContent = isAr
+    document.getElementById('modal-product-delivery-badge').textContent = isGta6 && Number(selectedProduct.codeCount) === 2
+      ? (isAr ? '⚡ كودين رسميين ($50 + $20 أمريكي) • تسليم فوري' : '⚡ 2 Official US Codes ($50 + $20) • Instant Delivery')
+      : isAr
       ? (selectedProduct.deliveryBadge || 'كود رقمي • تسليم فوري')
       : 'Digital Code • Instant Delivery';
     const submitBtn = document.getElementById('store-submit-btn');
@@ -2325,7 +2764,9 @@ function copyStoreText(text, btn) {
 }
 
 function openOrderModal(productId) {
-  const product = (storeCatalog.products || []).find((p) => p.id === productId && (p.category === 'psn' || p.category === 'steam'));
+  const product = (storeCatalog.products || []).find(
+    (p) => p.id === productId && (p.category === 'psn' || p.category === 'steam' || p.category === 'gta6')
+  );
   if (!product) return;
   selectedProduct = product;
   storeScreenshotDataUrl = '';
@@ -2453,7 +2894,9 @@ async function submitStoreOrder(e) {
       amountEgp: data.order.amountEgp || selectedProduct.priceEgp,
       whatsappPhone: data.order.whatsappPhone || rawWa,
       deliveryBadge: data.order.deliveryBadge || selectedProduct.deliveryBadge,
+      codeCount: Number(data.order.codeCount || selectedProduct.codeCount || 1),
       deliveredCode: '',
+      deliveredCode2: '',
       paymentMethod: selectedStorePayMethod,
       status: data.order.status || 'pending',
       whatsappText: data.order.quickApproveWhatsappText || ''
@@ -2492,18 +2935,24 @@ function showStoreOrderStatusView(order) {
   const title = document.getElementById('status-view-title');
   const desc = document.getElementById('status-view-desc');
   const deliveredCode = String(order.deliveredCode || '').trim();
+  const deliveredCode2 = String(order.deliveredCode2 || '').trim();
+  const isDualCode = Number(order.codeCount || 1) === 2 || String(order.storeProductId || '') === 'gta6-psn-us-70' || Boolean(deliveredCode2);
 
   if (order.status === 'approved') {
     pill.className = 'status-pill-lg approved';
     pill.textContent = isAr ? '✅ تم تأكيد الدفع وقبول طلبك بنجاح!' : '✅ Payment Confirmed & Order Approved!';
     title.textContent = deliveredCode
-      ? (isSteam
+      ? (isDualCode && deliveredCode2
+          ? (isAr ? 'أكواد باقة GTA VI Standard ($50 + $20 = $70) جاهزة الآن! 🎉' : 'Your GTA VI Standard Pack ($50 + $20 = $70) Codes Are Ready! 🎉')
+          : isSteam
           ? (isAr ? 'كود بطاقة Steam Wallet جاهز الآن! 🎉' : 'Your Steam Wallet Code Is Ready! 🎉')
           : (isAr ? 'كود بطاقة PlayStation جاهز الآن! 🎉' : 'Your PlayStation Gift Card Code Is Ready! 🎉'))
       : (isAr ? 'تم قبول طلبك وتنفيذ التسليم 🎉' : 'Order Approved & Delivery in Progress 🎉');
     desc.textContent = deliveredCode
       ? (isSteam
           ? (isAr ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل محفظة Steam (Redeem a Steam Wallet Code).' : 'Tap "Copy Code" below and redeem it directly in your Steam Wallet (Redeem a Steam Gift Card).')
+          : isDualCode && deliveredCode2
+          ? (isAr ? 'انسخ الكودين بالأسفل (Code 1 بقيمة $50 + Code 2 بقيمة $20) وفعّلهم على حسابك الأمريكي في متجر PlayStation.' : 'Copy both official US codes below (Code 1: $50 + Code 2: $20) and redeem them in the US PlayStation Store.')
           : (isAr ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل متجر PlayStation على حسابك.' : 'Tap "Copy Code" below and redeem it directly in the PlayStation Store.'))
       : (isSteam
           ? (isAr ? 'تم التحقق من تحويلك بنجاح، ستستلم كود Steam Wallet مباشرة على رقم الواتساب.' : 'Your payment is verified! Your Steam Wallet code is being sent to your WhatsApp shortly.')
@@ -2529,11 +2978,25 @@ function showStoreOrderStatusView(order) {
     : (isAr ? '🎁 كود البطاقة الرقمي (PSN Gift Card Code):' : '🎁 Your PlayStation (PSN) Gift Card Code:');
 
   const deliveredCodeBoxHtml = order.status === 'approved' && deliveredCode
-    ? `<div style="margin:0 0 12px; padding:16px 14px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28); text-align:center;">
-         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeLabel}</div>
-         <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
-         <button type="button" class="submit-store-btn" style="padding:11px 16px; font-size:0.94rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredStoreCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
-       </div>`
+    ? (isDualCode && deliveredCode2
+        ? `<div style="margin:0 0 12px; padding:16px 14px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28); text-align:center;">
+             <div style="font-size:0.84rem; font-weight:900; color:#c8ffe2; margin-bottom:10px;">${isAr ? '🌴 أكواد باقة GTA VI Standard ($50 + $20 = $70 PSN US):' : '🌴 Your GTA VI Standard Pack Codes ($50 + $20 = $70 PSN US):'}</div>
+             <div style="background:rgba(5,9,18,0.88); border:1px solid rgba(0,255,136,0.38); border-radius:11px; padding:11px 12px; margin-bottom:10px;">
+               <div style="font-size:0.78rem; font-weight:800; color:#9df5c8; margin-bottom:5px;">🎁 Code 1 — $50 PSN US</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#03070e; border:1px solid rgba(0,255,136,0.45); border-radius:9px; padding:10px 12px; margin-bottom:9px; word-break:break-all;">${escapeHtml(deliveredCode)}</div>
+               <button type="button" class="submit-store-btn" style="padding:9px 14px; font-size:0.88rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredStoreCode(this)">${isAr ? '📋 نسخ Code 1 ($50)' : '📋 Copy Code 1 ($50)'}</button>
+             </div>
+             <div style="background:rgba(5,9,18,0.88); border:1px solid rgba(0,240,255,0.4); border-radius:11px; padding:11px 12px;">
+               <div style="font-size:0.78rem; font-weight:800; color:#a5f3fc; margin-bottom:5px;">🎁 Code 2 — $20 PSN US</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00f0ff; background:#03070e; border:1px solid rgba(0,240,255,0.45); border-radius:9px; padding:10px 12px; margin-bottom:9px; word-break:break-all;">${escapeHtml(deliveredCode2)}</div>
+               <button type="button" class="submit-store-btn" style="padding:9px 14px; font-size:0.88rem;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyDeliveredStoreCode(this)">${isAr ? '📋 نسخ Code 2 ($20)' : '📋 Copy Code 2 ($20)'}</button>
+             </div>
+           </div>`
+        : `<div style="margin:0 0 12px; padding:16px 14px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28); text-align:center;">
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeLabel}</div>
+             <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
+             <button type="button" class="submit-store-btn" style="padding:11px 16px; font-size:0.94rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredStoreCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+           </div>`)
     : '';
 
   const methodText = order.paymentMethod === 'vodafone' ? 'Vodafone Cash' : 'InstaPay';
@@ -2564,9 +3027,16 @@ function startStoreOrderPolling() {
       const res = await fetch(`/api/orders/${encodeURIComponent(activeTrackedOrder.id)}?token=${encodeURIComponent(activeTrackedOrder.accessToken)}`);
       if (!res.ok) return;
       const d = await res.json();
-      if (d && (d.status !== activeTrackedOrder.status || (d.deliveredCode || '') !== (activeTrackedOrder.deliveredCode || ''))) {
+      if (
+        d &&
+        (d.status !== activeTrackedOrder.status ||
+          (d.deliveredCode || '') !== (activeTrackedOrder.deliveredCode || '') ||
+          (d.deliveredCode2 || '') !== (activeTrackedOrder.deliveredCode2 || ''))
+      ) {
         activeTrackedOrder.status = d.status;
         activeTrackedOrder.deliveredCode = d.deliveredCode || '';
+        activeTrackedOrder.deliveredCode2 = d.deliveredCode2 || '';
+        activeTrackedOrder.codeCount = Number(d.codeCount || activeTrackedOrder.codeCount || 1);
         activeTrackedOrder.storeRegion = d.storeRegion || activeTrackedOrder.storeRegion || '';
         activeTrackedOrder.storeCategory = d.storeCategory || activeTrackedOrder.storeCategory || '';
         activeTrackedOrder.storeProductId = d.storeProductId || activeTrackedOrder.storeProductId || '';
@@ -2628,7 +3098,9 @@ async function lookupStoreOrderByQuery(rawQuery) {
       amountEgp: data.amountEgp,
       whatsappPhone: data.whatsappPhone,
       deliveryBadge: data.deliveryBadge,
+      codeCount: Number(data.codeCount || 1),
       deliveredCode: data.deliveredCode || '',
+      deliveredCode2: data.deliveredCode2 || '',
       paymentMethod: data.paymentMethod,
       status: data.status
     };
@@ -2654,6 +3126,37 @@ function submitStoreTrackLookup(e) {
   lookupStoreOrderByQuery(q);
 }
 
+/* ============================================================
+   OFFICIAL GTA VI 3.5s KEN BURNS CAROUSEL CONTROLLER
+   ============================================================ */
+let gta6CurrentSlide = 0;
+let gta6CarouselTimer = null;
+
+function applyGta6Slide(idx) {
+  const slides = document.querySelectorAll('.gta6-slide');
+  const dots = document.querySelectorAll('.gta6-dot');
+  if (!slides.length) return;
+  gta6CurrentSlide = ((idx % slides.length) + slides.length) % slides.length;
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === gta6CurrentSlide);
+  });
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === gta6CurrentSlide);
+  });
+}
+
+function goToGta6Slide(idx) {
+  applyGta6Slide(idx);
+  startGta6Carousel();
+}
+
+function startGta6Carousel() {
+  if (gta6CarouselTimer) clearInterval(gta6CarouselTimer);
+  gta6CarouselTimer = setInterval(() => {
+    applyGta6Slide(gta6CurrentSlide + 1);
+  }, 3500);
+}
+
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeOrderModal();
@@ -2662,6 +3165,8 @@ document.addEventListener('keydown', (e) => {
 });
 
 async function initGamingStore() {
+  startGta6Carousel();
+
   if (!storeCatalog || !Array.isArray(storeCatalog.products) || storeCatalog.products.length === 0) {
     try {
       const res = await fetch('/api/store/products');

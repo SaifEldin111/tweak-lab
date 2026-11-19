@@ -5986,9 +5986,12 @@ function showPsnOrderInRestoreModal(data) {
 
   const isAr = currentLang === 'ar';
   const isSteam = String(data.storeCategory || '').toLowerCase() === 'steam' || String(data.storeProductId || '').toLowerCase().startsWith('steam-') || String(data.packageName || '').toLowerCase().includes('steam');
+  const isGta6 = String(data.storeCategory || '').toLowerCase() === 'gta6' || String(data.storeProductId || '').toLowerCase().startsWith('gta6-') || String(data.packageName || '').toLowerCase().includes('gta vi');
   const isApproved = data.status === 'approved';
   const isRejected = data.status === 'rejected';
   const deliveredCode = String(data.deliveredCode || '').trim();
+  const deliveredCode2 = String(data.deliveredCode2 || '').trim();
+  const isDualCode = Number(data.codeCount || 1) === 2 || String(data.storeProductId || '') === 'gta6-psn-us-70' || Boolean(deliveredCode2);
   const statusPillHtml = isApproved
     ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.82rem; font-weight:900;">${isAr ? '✅ تم قبول الطلب وتسليم الكود' : '✅ Approved & Code Delivered'}</span>`
     : isRejected
@@ -6000,18 +6003,34 @@ function showPsnOrderInRestoreModal(data) {
     : (isAr ? '🎁 كود بطاقة PlayStation الرقمي الخاص بك:' : '🎁 Your PlayStation (PSN) Gift Card Code:');
 
   const codeBoxHtml = isApproved && deliveredCode
-    ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
-         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>
-         <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
-         <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:11px 16px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
-       </div>`
+    ? (isDualCode && deliveredCode2
+        ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+             <div style="font-size:0.85rem; font-weight:900; color:#c8ffe2; margin-bottom:10px;">${isAr ? '🌴 أكواد باقة GTA VI Standard ($50 + $20 = $70 PSN US):' : '🌴 Your GTA VI Standard Pack Codes ($50 + $20 = $70 PSN US):'}</div>
+             <div style="background:rgba(5,9,18,0.85); border:1px solid rgba(0,255,136,0.35); border-radius:11px; padding:11px 12px; margin-bottom:10px;">
+               <div style="font-size:0.77rem; font-weight:800; color:#9df5c8; margin-bottom:5px;">🎁 Code 1 — $50 PSN US</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#03070e; border:1px solid rgba(0,255,136,0.45); border-radius:9px; padding:10px 12px; margin-bottom:9px; word-break:break-all;">${escapeHtml(deliveredCode)}</div>
+               <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:9px 14px; font-size:0.86rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">${isAr ? '📋 نسخ Code 1 ($50)' : '📋 Copy Code 1 ($50)'}</button>
+             </div>
+             <div style="background:rgba(5,9,18,0.85); border:1px solid rgba(0,240,255,0.38); border-radius:11px; padding:11px 12px;">
+               <div style="font-size:0.77rem; font-weight:800; color:#a5f3fc; margin-bottom:5px;">🎁 Code 2 — $20 PSN US</div>
+               <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.22rem; font-weight:900; letter-spacing:2px; color:#00f0ff; background:#03070e; border:1px solid rgba(0,240,255,0.45); border-radius:9px; padding:10px 12px; margin-bottom:9px; word-break:break-all;">${escapeHtml(deliveredCode2)}</div>
+               <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:9px 14px; font-size:0.86rem;" data-code="${escapeHtml(deliveredCode2)}" onclick="copyDeliveredPsnCode(this)">${isAr ? '📋 نسخ Code 2 ($20)' : '📋 Copy Code 2 ($20)'}</button>
+             </div>
+           </div>`
+        : `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+             <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">${codeTitle}</div>
+             <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
+             <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:11px 16px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">${isAr ? '📋 نسخ الكود (Copy Code)' : '📋 Copy Code'}</button>
+           </div>`)
     : isApproved
     ? `<div style="margin:14px 0; padding:14px; border-radius:12px; background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.4); color:#d8ffeb; font-size:0.86rem; font-weight:700;">
          ${isAr ? `تم قبول طلبك بنجاح! جاري إرسال كود ${isSteam ? 'Steam Wallet' : 'الـ PSN'} على رقم الواتساب الخاص بك خلال لحظات.` : `Your order is approved! Your ${isSteam ? 'Steam Wallet' : 'PSN'} code is being sent to your WhatsApp shortly.`}
        </div>`
     : '';
 
-  const typeBadgeHtml = isSteam
+  const typeBadgeHtml = isGta6
+    ? `<span style="padding:4px 11px; border-radius:999px; background:linear-gradient(135deg, rgba(244,63,94,0.24), rgba(245,158,11,0.24)); border:1px solid rgba(251,146,60,0.75); color:#fed7aa; font-size:0.76rem; font-weight:900;">${isAr ? '🌴 باقة GTA VI (PS5)' : '🌴 GTA VI PS5 Bundle'}</span>`
+    : isSteam
     ? `<span style="padding:4px 11px; border-radius:999px; background:rgba(139,92,246,0.18); border:1px solid rgba(167,139,250,0.65); color:#d8b4fe; font-size:0.76rem; font-weight:900;">💻 Steam Gift Card</span>`
     : `<span style="padding:4px 11px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:#00f0ff; font-size:0.76rem; font-weight:900;">${isAr ? '🎮 بطاقة PSN' : '🎮 PSN Gift Card'}</span>`;
 

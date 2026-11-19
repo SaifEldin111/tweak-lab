@@ -367,6 +367,7 @@ function mergeOrderLists(...lists) {
           screenshotFileIds: newer.screenshotFileIds || older.screenshotFileIds,
           screenshotMime: newer.screenshotMime || older.screenshotMime,
           deliveredCode: newer.deliveredCode !== undefined ? newer.deliveredCode : (older.deliveredCode || ''),
+          deliveredCode2: newer.deliveredCode2 !== undefined ? newer.deliveredCode2 : (older.deliveredCode2 || ''),
           deliveredAt: newer.deliveredAt || older.deliveredAt || '',
           updatedAt: Math.max(tExisting, tItem) ? new Date(Math.max(tExisting, tItem)).toISOString() : new Date().toISOString()
         });
@@ -1360,9 +1361,11 @@ async function handleRequest(req, res) {
         storeRegion: storeProduct ? (storeProduct.regionLabel || storeProduct.region || '') : '',
         storeRegionCode: storeProduct ? (storeProduct.region || '') : '',
         storeValueLabel: storeProduct ? (storeProduct.valueLabel || '') : '',
+        codeCount: storeProduct ? (Number(storeProduct.codeCount) || 1) : 0,
         deliveryType: storeProduct ? storeProduct.deliveryType : 'pc_bundle',
         deliveryBadge: storeProduct ? storeProduct.deliveryBadge : '',
         deliveredCode: '',
+        deliveredCode2: '',
         deliveredAt: '',
         whatsappPhone: isGamingStoreOrder ? cleanSenderPhone : '',
         gameAccount: cleanGameAccount,
@@ -1428,6 +1431,7 @@ async function handleRequest(req, res) {
           orderType: newOrder.orderType,
           storeProductId: newOrder.storeProductId,
           storeCategory: newOrder.storeCategory,
+          codeCount: newOrder.codeCount || 1,
           packageName: newOrder.packageName,
           amountEgp: newOrder.amountEgp,
           storeRegion: newOrder.storeRegion,
@@ -1572,8 +1576,10 @@ async function handleRequest(req, res) {
           storeRegion: matchedOrder.storeRegion || '',
           storeRegionCode: matchedOrder.storeRegionCode || '',
           storeValueLabel: matchedOrder.storeValueLabel || '',
+          codeCount: Number(matchedOrder.codeCount) || (matchedOrder.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
           deliveryBadge: matchedOrder.deliveryBadge || '',
           deliveredCode: isApproved ? (matchedOrder.deliveredCode || '') : '',
+          deliveredCode2: isApproved ? (matchedOrder.deliveredCode2 || '') : '',
           deliveredAt: isApproved ? (matchedOrder.deliveredAt || '') : '',
           whatsappPhone: matchedOrder.whatsappPhone || matchedOrder.senderPhone || '',
           gameAccount: matchedOrder.gameAccount || '',
@@ -1711,8 +1717,10 @@ async function handleRequest(req, res) {
           storeRegion: order.storeRegion || '',
           storeRegionCode: order.storeRegionCode || '',
           storeValueLabel: order.storeValueLabel || '',
+          codeCount: Number(order.codeCount) || (order.storeProductId === 'gta6-psn-us-70' ? 2 : 1),
           deliveryBadge: order.deliveryBadge || '',
           deliveredCode: isApproved ? (order.deliveredCode || '') : '',
+          deliveredCode2: isApproved ? (order.deliveredCode2 || '') : '',
           deliveredAt: isApproved ? (order.deliveredAt || '') : '',
           whatsappPhone: order.whatsappPhone || order.senderPhone || '',
           gameAccount: order.gameAccount || '',
@@ -2155,7 +2163,7 @@ async function handleRequest(req, res) {
       if (pin !== settings.adminPin) {
         return sendJson(res, 401, { error: 'غير مصرح' });
       }
-      const { orderId, action, giftCode, deliveredCode } = await readJsonBody(req);
+      const { orderId, action, giftCode, deliveredCode, giftCode2, deliveredCode2 } = await readJsonBody(req);
       const orders = loadOrders();
       const idx = orders.findIndex((o) => o.id === orderId);
 
@@ -2174,12 +2182,20 @@ async function handleRequest(req, res) {
       if (idx === -1) return sendJson(res, 404, { error: 'الطلب غير موجود' });
 
       const cleanCode = String(deliveredCode !== undefined ? deliveredCode : (giftCode !== undefined ? giftCode : '')).trim().slice(0, 120);
+      const cleanCode2 = String(deliveredCode2 !== undefined ? deliveredCode2 : (giftCode2 !== undefined ? giftCode2 : '')).trim().slice(0, 120);
+      const isDualCodeOrder = Number(orders[idx].codeCount) === 2 || String(orders[idx].storeProductId || '').toLowerCase() === 'gta6-psn-us-70';
 
       if (action === 'deliver-code') {
         if (!cleanCode) {
-          return sendJson(res, 400, { error: 'يرجى كتابة كود البطاقة الرقمي (Gift Card Code) قبل التأكيد والإرسال.' });
+          return sendJson(res, 400, { error: isDualCodeOrder ? 'يرجى كتابة الكود الأول (Code 1 - $50) والكود الثاني (Code 2 - $20) قبل التأكيد والإرسال.' : 'يرجى كتابة كود البطاقة الرقمي (Gift Card Code) قبل التأكيد والإرسال.' });
+        }
+        if (isDualCodeOrder && !cleanCode2) {
+          return sendJson(res, 400, { error: 'هذه الباقة تتكون من كودين ($50 + $20 = $70) — يرجى كتابة الكود الثاني (Code 2 - $20) أيضاً قبل التأكيد.' });
         }
         orders[idx].deliveredCode = cleanCode;
+        if (isDualCodeOrder || cleanCode2) {
+          orders[idx].deliveredCode2 = cleanCode2;
+        }
         orders[idx].deliveredAt = new Date().toISOString();
         orders[idx].status = 'approved';
         orders[idx].updatedAt = new Date().toISOString();
@@ -2196,6 +2212,7 @@ async function handleRequest(req, res) {
         orders[idx].status = action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'pending';
         if (action === 'approve' && cleanCode) {
           orders[idx].deliveredCode = cleanCode;
+          if (cleanCode2) orders[idx].deliveredCode2 = cleanCode2;
           orders[idx].deliveredAt = new Date().toISOString();
         }
         orders[idx].updatedAt = new Date().toISOString();

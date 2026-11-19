@@ -33,15 +33,16 @@ const robots = fs.readFileSync(robotsPath, 'utf8');
 assert(robots.includes('Disallow: /admin'), 'robots.txt missing Disallow: /admin');
 assert(robots.includes('Sitemap: https://tweak-lab-a177.vercel.app/sitemap.xml'), 'robots.txt missing Sitemap directive');
 
-// 3. Verify store catalog (15 PSN + 5 Steam Wallet = 20 products with discount metadata), dual portal, pc page, store page, and guide HTML pages exist
+// 3. Verify store catalog (15 PSN + 5 Steam Wallet + 2 GTA VI Bundles = 22 products with discount metadata), dual portal, pc page, store page, GTA VI wallpapers, and guide HTML pages exist
 const storeCatalog = require(path.join(root, 'data', 'storeProducts.js'));
-assert(Array.isArray(storeCatalog.products) && storeCatalog.products.length === 20, 'data/storeProducts.js must contain 20 products (15 PSN + 5 Steam)');
+assert(Array.isArray(storeCatalog.products) && storeCatalog.products.length === 22, 'data/storeProducts.js must contain 22 products (15 PSN + 5 Steam + 2 GTA VI Bundles)');
 assert(storeCatalog.products.filter((p) => p.category === 'psn').length === 15, 'data/storeProducts.js must contain 15 PSN gift card products');
 assert(storeCatalog.products.filter((p) => p.category === 'steam').length === 5, 'data/storeProducts.js must contain 5 Steam Wallet products');
+assert(storeCatalog.products.filter((p) => p.category === 'gta6').length === 2, 'data/storeProducts.js must contain 2 GTA VI PS5 bundles');
 assert(Array.isArray(storeCatalog.psnRegions) && storeCatalog.psnRegions.length === 4, 'data/storeProducts.js missing 4 PSN regions');
 storeCatalog.products.forEach((p) => {
   assert(
-    p.id && p.title && (p.category === 'psn' || p.category === 'steam') && Number(p.priceEgp) > 0 && Number(p.originalPrice) > Number(p.priceEgp) && Number(p.discountPercent) > 0,
+    p.id && p.title && (p.category === 'psn' || p.category === 'steam' || p.category === 'gta6') && Number(p.priceEgp) > 0 && Number(p.originalPrice) > Number(p.priceEgp) && Number(p.discountPercent) > 0,
     `Invalid store product or discount metadata: ${JSON.stringify(p)}`
   );
 });
@@ -51,13 +52,22 @@ storeCatalog.products.forEach((p) => {
   'public/index.html',
   'public/pc/index.html',
   'public/store/index.html',
+  'public/gta6-1.jpg',
+  'public/gta6-2.jpg',
+  'public/gta6-3.jpg',
+  'public/gta6-4.jpg',
   'public/assets/guides.css',
   'public/guides/index.html',
   'public/guides/fix-fortnite-fps-drops/index.html',
   'public/guides/reduce-valorant-input-delay/index.html',
   'public/guides/best-windows-settings-gaming/index.html'
 ].forEach((rel) => {
-  assert(fs.existsSync(path.join(root, rel)), `Missing required site file: ${rel}`);
+  const fullPath = path.join(root, rel);
+  assert(fs.existsSync(fullPath), `Missing required site file: ${rel}`);
+  if (rel.endsWith('.jpg')) {
+    const buf = fs.readFileSync(fullPath);
+    assert(buf.length > 50000 && buf[0] === 0xff && buf[1] === 0xd8, `Invalid or corrupt JPEG asset: ${rel}`);
+  }
 });
 
 // 4. Validate server.js and inline scripts in index.html, pc/index.html, store/index.html & admin.html
