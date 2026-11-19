@@ -602,39 +602,43 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      direction: ltr;
       gap: 6px;
-      flex-wrap: wrap;
-    }
-    @keyframes goldDiscountShimmer {
-      0% { background-position: -180% 0; }
-      100% { background-position: 180% 0; }
+      flex-wrap: nowrap;
+      width: 100%;
     }
     .discount-glow-badge {
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-      color: #1a0d00;
-      background: linear-gradient(110deg, #ff9f00 0%, #ffd740 40%, #fff1a8 52%, #ff9f00 68%, #ff7a00 100%);
-      background-size: 220% 100%;
-      border: 1px solid rgba(255, 232, 130, 0.94);
-      box-shadow: 0 0 16px rgba(255, 174, 0, 0.58), 0 2px 8px rgba(0, 0, 0, 0.5);
-      animation: goldDiscountShimmer 3.2s linear infinite;
+      justify-content: center;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.45;
+      color: #00ff88;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      box-shadow: none;
+      animation: none;
       white-space: nowrap;
     }
     .card-hot-tag {
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.65rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, #00ff88, #00f0ff);
-      color: #03120b;
-      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.35);
+      padding: 2px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.45;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 240, 255, 0.42);
+      color: #a5f3fc;
       white-space: nowrap;
     }
     /* Center Official Brand Logo & Bold Wordmark */
@@ -809,13 +813,13 @@
     .price-save-pill {
       display: inline-flex;
       align-items: center;
-      padding: 3px 9px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 900;
-      background: rgba(255, 184, 0, 0.16);
-      border: 1px solid rgba(255, 184, 0, 0.55);
-      color: #ffd54f;
+      padding: 2px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #00ff88;
       white-space: nowrap;
     }
     .order-now-btn {
@@ -1316,8 +1320,10 @@
         background: rgba(4, 7, 13, 0.93);
       }
       .discount-glow-badge {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         animation: none;
-        box-shadow: 0 2px 10px rgba(255, 174, 0, 0.42);
+        box-shadow: none;
       }
       .card-visual-banner::after {
         display: none;
@@ -1337,11 +1343,11 @@
       margin: 0 auto 26px;
       border-radius: 22px;
       overflow: hidden;
-      border: 1px solid rgba(251, 146, 60, 0.48);
+      border: 1px solid rgba(0, 255, 136, 0.38);
       background: #060811;
       box-shadow:
         0 22px 55px rgba(0, 0, 0, 0.78),
-        0 0 38px rgba(244, 63, 94, 0.18),
+        0 0 34px rgba(0, 255, 136, 0.14),
         inset 0 1px 0 rgba(255, 255, 255, 0.14);
       text-align: start;
       isolation: isolate;
@@ -1409,14 +1415,15 @@
       gap: 7px;
       padding: 6px 14px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.26) 0%, rgba(245, 158, 11, 0.26) 100%);
-      border: 1px solid rgba(251, 146, 60, 0.82);
-      color: #fde68a;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 255, 136, 0.45);
+      color: #00ff88;
       font-size: 0.76rem;
-      font-weight: 900;
+      font-weight: 800;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      box-shadow: 0 0 22px rgba(244, 63, 94, 0.35);
     }
     .gta6-dots-nav {
       display: inline-flex;
@@ -1441,8 +1448,8 @@
     }
     .gta6-dot.active {
       width: 22px;
-      background: linear-gradient(90deg, #ff5e7e, #ffb800, #00ff88);
-      box-shadow: 0 0 10px rgba(255, 184, 0, 0.75);
+      background: linear-gradient(90deg, #00ff88, #00f0ff);
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.65);
     }
     .gta6-headline-wrap {
       max-width: 780px;
@@ -1457,7 +1464,7 @@
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
     }
     .gta6-title .gta6-vice-gradient {
-      background: linear-gradient(90deg, #ff7eb3 0%, #ffb86c 52%, #00ff88 100%);
+      background: linear-gradient(90deg, #ff7eb3 0%, #00f0ff 52%, #00ff88 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -1511,27 +1518,30 @@
       box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 22px rgba(0, 255, 136, 0.16);
     }
     .gta6-bundle-card.ultimate-bundle {
-      border-color: rgba(251, 146, 60, 0.45);
+      border-color: rgba(0, 255, 136, 0.35);
     }
     .gta6-bundle-card.ultimate-bundle:hover {
-      border-color: rgba(251, 191, 36, 0.85);
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 24px rgba(251, 146, 60, 0.22);
+      border-color: rgba(0, 255, 136, 0.75);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 255, 136, 0.22);
     }
     .gta6-bundle-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      direction: ltr;
       gap: 8px;
       flex-wrap: wrap;
     }
     .gta6-bundle-tag {
-      font-size: 0.7rem;
-      font-weight: 900;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(0, 240, 255, 0.15);
-      border: 1px solid rgba(0, 240, 255, 0.45);
-      color: #7dd3fc;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 240, 255, 0.42);
+      color: #a5f3fc;
     }
     .gta6-bundle-name {
       font-size: 1.04rem;
@@ -2255,8 +2265,8 @@
   <header class="store-hero">
     <div class="store-hero-inner">
       <div class="hero-eyebrow">
-        <span>🔥</span>
-        <span>TWEAKLAB GAMING STORE • PSN &amp; STEAM DIGITAL CODES • UP TO 11% OFF</span>
+        <span>⚡</span>
+        <span>TWEAKLAB GAMING STORE • PSN &amp; STEAM DIGITAL CODES • UP TO 12% OFF</span>
       </div>
       <h1 data-i18n-html="heroTitle">
         Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards
@@ -2266,7 +2276,7 @@
       </p>
 
       <div class="store-trust-strip">
-        <span class="trust-pill" data-i18n-html="trust1">🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price</span>
+        <span class="trust-pill" data-i18n-html="trust1">⚡ <strong>Up to 12% OFF:</strong> Cheaper Than Market Price</span>
         <span class="trust-pill" data-i18n-html="trust2">⚡ <strong>Delivery:</strong> Within 1 Hour Max</span>
         <span class="trust-pill" data-i18n-html="trust3">💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
@@ -2283,7 +2293,7 @@
 
         <div class="gta6-banner-content">
           <div class="gta6-top-bar">
-            <span class="gta6-top-badge" data-i18n="gta6TopBadge">🔥 GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES</span>
+            <span class="gta6-top-badge" data-i18n="gta6TopBadge">GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES</span>
             <div class="gta6-dots-nav" role="tablist" aria-label="GTA VI Wallpaper Slides">
               <button type="button" class="gta6-dot active" data-gta-dot="0" aria-label="GTA VI Wallpaper 1" onclick="goToGta6Slide(0)"></button>
               <button type="button" class="gta6-dot" data-gta-dot="1" aria-label="GTA VI Wallpaper 2" onclick="goToGta6Slide(1)"></button>
@@ -2307,9 +2317,9 @@
             <!-- Bundle 1: GTA VI Standard Pack ($50 + $20 + $10 = $80 PSN US) -->
             <article class="gta6-bundle-card" id="gta6-bundle-80">
               <div>
-                <div class="gta6-bundle-top">
-                  <span class="discount-glow-badge" data-i18n="gta6Pack70Disc">🔥 DISCOUNT • 12% OFF</span>
+                <div class="gta6-bundle-top" dir="ltr">
                   <span class="gta6-bundle-tag" data-i18n="gta6Pack70Tag">3 Official US Codes ($50 + $20 + $10)</span>
+                  <span class="discount-glow-badge" data-i18n="gta6Pack70Disc">12% OFF</span>
                 </div>
                 <h3 class="gta6-bundle-name" data-i18n="gta6Pack70Title">GTA VI Standard Pack ($50 + $20 + $10 = $80 PSN US)</h3>
                 <p class="gta6-bundle-sub" style="color:#dbeafe; font-size:0.81rem; margin-bottom:4px;" data-i18n="gta6Pack70Sub">Delivered as three 100% official US codes ($50 + $20 + $10) • Full $80 PS5 Standard Edition balance</p>
@@ -2333,9 +2343,9 @@
             <!-- Bundle 2: GTA VI Ultimate Pack ($100 PSN US) -->
             <article class="gta6-bundle-card ultimate-bundle" id="gta6-bundle-100">
               <div>
-                <div class="gta6-bundle-top">
-                  <span class="discount-glow-badge" data-i18n="gta6Pack100Disc">🔥 DISCOUNT • 11% OFF</span>
-                  <span class="gta6-bundle-tag" data-i18n="gta6Pack100Tag">💎 1 Official Code ($100 US)</span>
+                <div class="gta6-bundle-top" dir="ltr">
+                  <span class="gta6-bundle-tag" data-i18n="gta6Pack100Tag">1 Official Code ($100 US)</span>
+                  <span class="discount-glow-badge" data-i18n="gta6Pack100Disc">11% OFF</span>
                 </div>
                 <h3 class="gta6-bundle-name" data-i18n="gta6Pack100Title">GTA VI Ultimate Pack ($100 PSN US)</h3>
                 <p class="gta6-bundle-sub" dir="rtl" data-i18n="gta6Pack100Sub">كود رسمي واحد بقيمة $100 أمريكي بيغطي سعر اللعبة أو النسخة الخاصة ويسيبلك رصيد إضافي في المحفظة.</p>
@@ -2448,7 +2458,7 @@
         </div>
         <div class="steam-info-pills">
           <span class="steam-info-pill" data-i18n="steamCompat1">🇪🇬🇺🇸 Works on Egypt &amp; US Accounts</span>
-          <span class="steam-info-pill" data-i18n="steamCompat2">🔥 Up to 11% OFF Limited Discount</span>
+          <span class="steam-info-pill" data-i18n="steamCompat2">11% OFF Limited Discount</span>
           <span class="steam-info-pill" data-i18n="steamCompat3">⚡ Delivery Within 1 Hour</span>
         </div>
       </div>
@@ -2619,7 +2629,7 @@
         <div class="modal-product-summary">
           <div>
             <div style="margin-bottom:5px;">
-              <span class="discount-glow-badge" id="modal-discount-badge" style="font-size:0.68rem; padding:3px 9px;">🔥 DISCOUNT • 10% OFF</span>
+              <span class="discount-glow-badge" id="modal-discount-badge">10% OFF</span>
             </div>
             <div class="summary-title" id="modal-product-title">PlayStation PSN $50</div>
             <div class="summary-meta">
@@ -2804,7 +2814,12 @@ let activeTrackedOrder = null;
 let storePollTimer = null;
 
 const REGION_NAMES_EN = { US: 'USA', SA: 'Saudi', UAE: 'UAE', TR: 'Turkey' };
-const TAGS_EN = { '🔥 الأكثر طلباً': '🔥 Most Popular', '💎 أفضل قيمة': '💎 Best Value' };
+const TAGS_EN = {
+  'الأكثر طلباً': 'Most Popular',
+  'أفضل قيمة': 'Best Value',
+  'الأكثر طلباً لـ GTA VI': 'Most Popular for GTA VI',
+  'أفضل قيمة لـ GTA VI': 'Best Value for GTA VI'
+};
 
 const STORE_I18N = {
   en: {
@@ -2817,14 +2832,14 @@ const STORE_I18N = {
     navTrackShort: '🔍 Track',
     heroTitle: 'Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards',
     heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود في خلال ساعة بحد أقصى وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
-    trust1: '🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price',
+    trust1: '⚡ <strong>Up to 12% OFF:</strong> Cheaper Than Market Price',
     trust2: '⚡ <strong>Delivery:</strong> Within 1 Hour Max',
     trust3: '💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash',
-    gta6TopBadge: '🔥 GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES',
+    gta6TopBadge: 'GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES',
     gta6MainTitle: 'GET READY FOR <span class="gta6-vice-gradient">GTA VI</span> — CHARGE YOUR US PSN NOW',
     gta6SubDesc: 'دي بطاقات شحن رسمية لحسابك الأمريكي على بلايستيشن، بتستلم الكود وتفعّله في حسابك عشان تشتري اللعبة أول ما تنزل بأرخص سعر في مصر.',
     gta6TrustStrip: '✅ 100% Official US Codes • ✅ Safe on Personal Account • ✅ No Account Ban Risk',
-    gta6Pack70Disc: '🔥 DISCOUNT • 12% OFF',
+    gta6Pack70Disc: '12% OFF',
     gta6Pack70Tag: '3 Official US Codes ($50 + $20 + $10)',
     gta6Pack70Title: 'GTA VI Standard Pack ($50 + $20 + $10 = $80 PSN US)',
     gta6Pack70Sub: 'Delivered as three 100% official US codes ($50 + $20 + $10) • Full $80 PS5 Standard Edition balance',
@@ -2833,8 +2848,8 @@ const STORE_I18N = {
     gta6Pack70Price: '4,400 EGP',
     gta6Pack70Save: 'Save 600 EGP',
     gta6Pack70Btn: 'Order $80 Bundle',
-    gta6Pack100Disc: '🔥 DISCOUNT • 11% OFF',
-    gta6Pack100Tag: '💎 1 Official Code ($100 US)',
+    gta6Pack100Disc: '11% OFF',
+    gta6Pack100Tag: '1 Official Code ($100 US)',
     gta6Pack100Title: 'GTA VI Ultimate Pack ($100 PSN US)',
     gta6Pack100Sub: 'كود رسمي واحد بقيمة $100 أمريكي بيغطي سعر اللعبة أو النسخة الخاصة ويسيبلك رصيد إضافي في المحفظة.',
     gta6Pack100Old: 'Instead of 6,150 EGP',
@@ -2854,7 +2869,7 @@ const STORE_I18N = {
     steamChip: '⚡ Digital Code • Delivery Within 1 Hour',
     steamRegionLabel: '🌐 Region: USD (Global / Egypt & MENA)',
     steamCompat1: '🇪🇬🇺🇸 Works on Egypt & US Accounts',
-    steamCompat2: '🔥 Up to 11% OFF Limited Discount',
+    steamCompat2: '11% OFF Limited Discount',
     steamCompat3: '⚡ Delivery Within 1 Hour',
     soonPillLg: 'Coming Soon on TweakLab',
     soonTitle: 'Game Top-Up Section Under Preparation 🛠️',
@@ -2935,14 +2950,14 @@ const STORE_I18N = {
     navTrackShort: '🔍 طلبي',
     heroTitle: 'متجر بطاقات <span class="accent-green">PlayStation (PSN)</span> و <span class="accent-cyan">Steam Wallet</span> في مصر',
     heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود في خلال ساعة بحد أقصى وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
-    trust1: '🔥 <strong>خصم حتى 12%:</strong> أرخص من سعر السوق',
+    trust1: '⚡ <strong>خصم حتى 12%:</strong> أرخص من سعر السوق',
     trust2: '⚡ <strong>التسليم:</strong> سريع خلال ساعة بحد أقصى',
     trust3: '💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash',
-    gta6TopBadge: '🔥 باقات GTA VI الرسمية للـ PS5 • تسليم خلال ساعة',
+    gta6TopBadge: 'باقات GTA VI الرسمية للـ PS5 • تسليم خلال ساعة',
     gta6MainTitle: 'استعد لـ <span class="gta6-vice-gradient">GTA VI</span> — اشحن حسابك الأمريكي بأرخص سعر في مصر',
     gta6SubDesc: 'دي بطاقات شحن رسمية لحسابك الأمريكي على بلايستيشن، بتستلم الكود وتفعّله في حسابك عشان تشتري اللعبة أول ما تنزل بأرخص سعر في مصر.',
     gta6TrustStrip: '✅ أكواد أمريكية رسمية 100% • ✅ آمنة على حسابك الشخصي • ✅ بدون أي خطر حظر (Ban)',
-    gta6Pack70Disc: '🔥 خصم DISCOUNT • 12%',
+    gta6Pack70Disc: 'خصم 12%',
     gta6Pack70Tag: '3 أكواد أمريكية رسمية ($50 + $20 + $10)',
     gta6Pack70Title: 'GTA VI Standard Pack ($50 + $20 + $10 = $80 PSN US)',
     gta6Pack70Sub: '3 أكواد أمريكية رسمية ($50 + $20 + $10) • رصيد 80$ كامل للنسخة العادية',
@@ -2951,8 +2966,8 @@ const STORE_I18N = {
     gta6Pack70Price: '4,400 ج.م',
     gta6Pack70Save: 'وفّر 600 ج.م',
     gta6Pack70Btn: 'اطلب باقة 80$',
-    gta6Pack100Disc: '🔥 خصم DISCOUNT • 11%',
-    gta6Pack100Tag: '💎 كود واحد ($100 أمريكي)',
+    gta6Pack100Disc: 'خصم 11%',
+    gta6Pack100Tag: 'كود واحد ($100 أمريكي)',
     gta6Pack100Title: 'باقة GTA VI Ultimate ($100 PSN US)',
     gta6Pack100Sub: 'كود رسمي واحد بقيمة $100 أمريكي بيغطي سعر اللعبة أو النسخة الخاصة ويسيبلك رصيد إضافي في المحفظة.',
     gta6Pack100Old: 'بدلاً من 6,150 ج.م',
@@ -2972,7 +2987,7 @@ const STORE_I18N = {
     steamChip: '⚡ كود رقمي • تسليم خلال ساعة',
     steamRegionLabel: '🌐 الريجين: USD (المصري والأمريكي والـ MENA)',
     steamCompat1: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي',
-    steamCompat2: '🔥 خصم لفترة محدودة حتى 11%',
+    steamCompat2: 'خصم لفترة محدودة حتى 11%',
     steamCompat3: '⚡ تسليم سريع خلال ساعة',
     soonPillLg: 'قريباً على TweakLab • Coming Soon',
     soonTitle: 'قسم شحن الألعاب قيد التجهيز حالياً 🛠️',
@@ -3163,8 +3178,8 @@ function buildStoreCardHtml(p) {
   const discPct = Number(p.discountPercent || (origPrice > currPrice ? Math.round((saveAmt / origPrice) * 100) : 0));
 
   const discountBadgeText = isAr
-    ? `🔥 خصم DISCOUNT • ${discPct}%`
-    : `🔥 DISCOUNT • ${discPct}% OFF`;
+    ? `خصم ${discPct}%`
+    : `${discPct}% OFF`;
 
   const titleText = isSteam
     ? (isAr ? p.title : `Steam Wallet ${p.valueLabel} (PC)`)
@@ -3197,9 +3212,9 @@ function buildStoreCardHtml(p) {
       <div class="card-visual-banner ${isSteam ? 'steam-banner' : 'psn-banner'}">
         ${isSteam ? getSteamCircuitPatternSvg() : getPsnPatternSvg()}
 
-        <div class="card-discount-row">
+        <div class="card-discount-row" dir="ltr">
+          ${tagText ? `<span class="card-hot-tag">${escapeHtml(tagText)}</span>` : '<span></span>'}
           ${discPct > 0 ? `<span class="discount-glow-badge">${escapeHtml(discountBadgeText)}</span>` : '<span></span>'}
-          ${tagText ? `<span class="card-hot-tag">${escapeHtml(tagText)}</span>` : ''}
         </div>
 
         <div class="card-brand-center">
@@ -3366,7 +3381,7 @@ function updateModalPaymentNumbers() {
     if (discBadgeEl) {
       if (discPct > 0) {
         discBadgeEl.style.display = 'inline-flex';
-        discBadgeEl.textContent = isAr ? `🔥 خصم DISCOUNT • ${discPct}%` : `🔥 DISCOUNT • ${discPct}% OFF`;
+        discBadgeEl.textContent = isAr ? `خصم ${discPct}%` : `${discPct}% OFF`;
       } else {
         discBadgeEl.style.display = 'none';
       }

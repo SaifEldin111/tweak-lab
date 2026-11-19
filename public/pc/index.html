@@ -720,61 +720,31 @@
       font-size: 0.95rem;
       margin-left: 8px;
     }
-    /* Classy Metallic Gold Box with Light Sheen (Shiny) Sweep */
-    .gold-shiny-box {
-      position: relative;
-      overflow: hidden;
+    /* Unified Minimalist Sleek Discount Badge (Static Dark Glass + Neon Green) */
+    .pc-discount-badge {
       display: inline-flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 4px 11px;
-      border-radius: 8px;
-      background: linear-gradient(145deg, #ffd700 0%, #e6a817 50%, #c68c0a 100%);
-      border: 1px solid #ffe885;
-      box-shadow: 0 3px 12px rgba(230, 168, 23, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.85);
-      line-height: 1.18;
-      vertical-align: middle;
-      cursor: default;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.45;
+      color: #00ff88;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      box-shadow: none;
+      animation: none;
+      white-space: nowrap;
       user-select: none;
-      min-width: 78px;
     }
-    .gold-box-top {
-      font-size: 0.80rem;
-      font-weight: 900;
-      color: #1a1000;
-      letter-spacing: -0.2px;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-      white-space: nowrap;
-    }
-    .gold-box-sub {
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #382100;
-      opacity: 0.92;
-      white-space: nowrap;
-    }
-    /* The realistic "Shiny" Light Beam Glare Sweep */
-    .gold-shiny-box::after {
-      content: '';
+    .pkg-discount-top-right {
       position: absolute;
-      top: -60%;
-      left: -80%;
-      width: 45%;
-      height: 220%;
-      background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.85) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: rotate(25deg);
-      animation: goldShinySweep 3.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
-    }
-    @keyframes goldShinySweep {
-      0% { left: -80%; }
-      30%, 100% { left: 160%; }
+      top: -12px;
+      right: 24px;
     }
     .promo-glow-active {
       border-color: var(--green) !important;
@@ -983,9 +953,9 @@
       }
     }
     .delivery-guarantee {
-      background: rgba(255, 184, 0, 0.12);
-      border: 1px solid rgba(255, 184, 0, 0.45);
-      color: #ffe082;
+      background: rgba(0, 255, 136, 0.08);
+      border: 1px solid rgba(0, 255, 136, 0.35);
+      color: #d8ffeb;
       padding: 14px 16px;
       border-radius: 12px;
       font-size: 0.92rem;
@@ -3426,12 +3396,9 @@
             <div>
               <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;" data-i18n="priceExclusiveLabel">السعر الحصري للحزمة الكاملة</div>
               <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:6px;">
-                <span class="price-num" id="display-price">99 ج.م</span>
-                <span class="price-old" id="display-price-old">350 ج.م</span>
-                <div class="gold-shiny-box" id="gold-shimmer-badge">
-                  <span class="gold-box-top">وفر 251 ج.م</span>
-                  <span class="gold-box-sub">خصم 72% 🔥</span>
-                </div>
+                <span class="price-num" id="display-price">99 EGP</span>
+                <span class="price-old" id="display-price-old">350 EGP</span>
+                <span class="pc-discount-badge" id="pc-hero-discount-badge">72% OFF</span>
               </div>
             </div>
             <div style="text-align:end;">
@@ -3813,7 +3780,8 @@
 
         <!-- Card 2: Pro Pack (99 EGP One-Time) -->
         <div class="pkg-compare-card pkg-pro-highlighted">
-          <div class="pkg-popular-ribbon" data-i18n="pkgPopularRibbon">🔥 Most Popular</div>
+          <div class="pkg-popular-ribbon" data-i18n="pkgPopularRibbon">Most Popular</div>
+          <span class="pc-discount-badge pkg-discount-top-right" id="pkg-pro-discount-badge">72% OFF</span>
           <div>
             <div class="pkg-header-top">
               <span class="badge badge-fps">PRO EDITION • 2027 FPS+</span>
@@ -4528,7 +4496,7 @@ const I18N = {
     reviewsSectionHeading: 'نتائج وتجارب اللاعبين (Verified Buyers)',
     packagesSectionHeading: 'اختار الباقة المناسبة ليك',
     packagesSectionSub: 'قارن بين النسخة التجريبية المجانية والباقة الكاملة واختار اللي يناسب جهازك.',
-    pkgPopularRibbon: '🔥 الأفضل والأكثر طلباً',
+    pkgPopularRibbon: 'الأكثر طلباً',
     pkgLifetimeUpdates: 'شامل التحديثات مدى الحياة',
     pkgProTitle: 'Pro Pack - الباقة الكاملة',
     currencyWord: 'جنيه',
@@ -4730,7 +4698,7 @@ const I18N = {
     reviewsSectionHeading: 'Verified Gamer Reviews',
     packagesSectionHeading: 'Choose Your Pack',
     packagesSectionSub: 'قارن بين النسخة التجريبية المجانية والباقة الكاملة واختار اللي يناسب جهازك.',
-    pkgPopularRibbon: '🔥 Most Popular',
+    pkgPopularRibbon: 'Most Popular',
     pkgLifetimeUpdates: 'Lifetime Updates Included',
     pkgProTitle: 'Pro Pack — Full Bundle',
     currencyWord: 'EGP',
@@ -5117,18 +5085,12 @@ function updatePriceUi(price, isDiscount, code) {
     renderSubmitButtonText();
   }
 
-  // 8. Gold Shiny Box (Stacked Compact Design)
-  const goldTop = document.querySelector('.gold-box-top');
-  const goldSub = document.querySelector('.gold-box-sub');
-  if (goldTop && goldSub) {
-    if (currentLang === 'en') {
-      goldTop.textContent = `Save ${savedAmt} EGP`;
-      goldSub.textContent = isDiscount ? `${pct}% OFF CODE 🔥` : `${pct}% OFF 🔥`;
-    } else {
-      goldTop.textContent = `وفر ${savedAmt} ج.م`;
-      goldSub.textContent = isDiscount ? `خصم ${pct}% كود 🔥` : `خصم ${pct}% 🔥`;
-    }
-  }
+  // 8. Unified Minimalist Sleek Discount Badges (Hero + Pro Pack Card)
+  const discountLabel = currentLang === 'en' ? `${pct}% OFF` : `خصم ${pct}%`;
+  const heroDiscEl = document.getElementById('pc-hero-discount-badge');
+  if (heroDiscEl) heroDiscEl.textContent = discountLabel;
+  const proDiscEl = document.getElementById('pkg-pro-discount-badge');
+  if (proDiscEl) proDiscEl.textContent = discountLabel;
 }
 
 function copyVodafoneCode(btn) {
@@ -5173,10 +5135,10 @@ function handleDiscountCodeInput(rawVal) {
     const discountPct = Math.round((saving / basePrice) * 100);
     if (inputEl) inputEl.classList.add('promo-glow-active');
     if (badgeStatus) {
-      badgeStatus.textContent = currentLang === 'en' ? `${discountPct}% OFF Active 🔥` : `خصم ${discountPct}% مفعل 🔥`;
-      badgeStatus.style.background = 'rgba(255,184,0,0.2)';
-      badgeStatus.style.borderColor = 'var(--amber)';
-      badgeStatus.style.color = '#ffe066';
+      badgeStatus.textContent = currentLang === 'en' ? `${discountPct}% OFF` : `خصم ${discountPct}%`;
+      badgeStatus.style.background = 'rgba(0,0,0,0.75)';
+      badgeStatus.style.borderColor = 'rgba(0,255,136,0.4)';
+      badgeStatus.style.color = '#00ff88';
     }
     if (feedbackBox) {
       feedbackBox.style.display = 'block';

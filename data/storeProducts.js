@@ -75,7 +75,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'psn-us-100',
@@ -93,7 +93,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
+    tag: 'أفضل قيمة'
   },
 
   // ==========================================================================
@@ -151,7 +151,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'psn-sa-100',
@@ -169,7 +169,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
+    tag: 'أفضل قيمة'
   },
 
   // ==========================================================================
@@ -227,7 +227,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'psn-uae-100',
@@ -245,7 +245,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
+    tag: 'أفضل قيمة'
   },
 
   // ==========================================================================
@@ -285,7 +285,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'psn-tr-1000',
@@ -303,7 +303,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
+    tag: 'أفضل قيمة'
   },
 
   // ==========================================================================
@@ -370,7 +370,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'steam-usd-50',
@@ -391,7 +391,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً'
+    tag: 'الأكثر طلباً'
   },
   {
     id: 'steam-usd-100',
@@ -412,7 +412,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
+    tag: 'أفضل قيمة'
   },
 
   // ==========================================================================
@@ -438,7 +438,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: '3 أكواد رقمية ($50 + $20 + $10) • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '🔥 الأكثر طلباً لـ GTA VI'
+    tag: 'الأكثر طلباً لـ GTA VI'
   },
   {
     id: 'gta6-psn-us-100',
@@ -460,7 +460,7 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي رسمي ($100) • تسليم خلال ساعة',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة لـ GTA VI'
+    tag: 'أفضل قيمة لـ GTA VI'
   }
 ];
 
