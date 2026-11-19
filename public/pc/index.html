@@ -2892,11 +2892,11 @@
        ========================================================================== */
     .eg-micro-hint {
       display: block;
-      font-size: 0.75rem;
-      color: #9ca3af;
+      font-size: 0.78rem;
+      color: #b5c6dc;
       font-weight: 600;
-      line-height: 1.45;
-      margin-top: 5px;
+      line-height: 1.55;
+      margin-top: 6px;
       direction: rtl;
       unicode-bidi: isolate;
       text-align: center;
@@ -2907,11 +2907,15 @@
     html[lang="ar"] .eg-micro-hint {
       display: none !important;
     }
+    html[lang="ar"] .hero-cta-stack .eg-micro-hint {
+      display: block !important;
+    }
     .hero-cta-stack {
       display: flex;
       flex-direction: column;
       align-items: stretch;
       min-width: 0;
+      max-width: 295px;
     }
     .nav-clean-actions {
       display: inline-flex;
@@ -3058,6 +3062,7 @@
       }
       .hero-cta-stack {
         width: 100%;
+        max-width: 100%;
       }
       .input-field, select.input-field {
         font-size: 16px;
@@ -3140,8 +3145,8 @@
         <h1 class="hero-main-heading" data-i18n-html="heroMainHeadline">
           Eliminate <span class="hero-accent-green">FPS Drops</span> &amp; <span class="hero-accent-cyan">Input Delay</span> in Competitive Games!
         </h1>
-        <p class="hero-lead-desc" data-i18n-html="heroSubtitle">
-          <strong>TweakLab 2027 FPS+</strong> tunes Windows &amp; GPU scheduling in 1 click to maximize FPS, stabilize 1% Lows, and kill micro-stutters — <strong>with zero hardware upgrades</strong>.
+        <p class="hero-lead-desc" dir="rtl" data-i18n-html="heroSubtitle">
+          أقوى باقة لتظبيط الويندوز ورفع استقرار الفريمات (1% Low) وتقليل استجابة الماوس والكيبورد في الألعاب التنافسية. بتستلم الملفات كاملة + فيديو شرح خطوة بخطوة في خلال دقايق.
         </p>
 
         <div class="hero-cta-row" style="align-items:flex-start;">
@@ -3149,13 +3154,13 @@
             <button type="button" id="hero-primary-cta-btn" class="hero-btn-primary" onclick="scrollToCheckoutSection()">
               <span id="hero-primary-cta-text">Get Full Pack - <span id="hero-cta-price-val">99</span> EGP</span>
             </button>
-            <span class="eg-micro-hint">النسخة الكاملة بـ 99 جنيه (دفع مرة واحدة)</span>
+            <span class="eg-micro-hint" dir="rtl">الحزمة الكاملة بكل التعديلات والتحديثات الجاية — بتدفع مرة واحدة بس وبتفضل معاك على طول.</span>
           </div>
           <div class="hero-cta-stack">
             <button type="button" id="hero-secondary-cta-btn" class="hero-btn-ghost" onclick="scrollToSectionById('packages-section')" data-i18n="heroTryFreeLiteBtn">
               Try Free Lite
             </button>
-            <span class="eg-micro-hint">دي النسخة المجانية لو حابب تجرب الأداء الأول</span>
+            <span class="eg-micro-hint" dir="rtl">نسخة مجانية خفيفة لو حابب تجرب فرق الأداء والفريمات على جهازك الأول قبل ما تشتري النسخة الكاملة.</span>
           </div>
         </div>
 
@@ -3276,7 +3281,7 @@
       <div class="funnel-section-header">
         <span class="funnel-section-eyebrow">⚡ PERFORMANCE &amp; SAFETY</span>
         <h2 id="features-section-heading" class="funnel-section-title" data-i18n="funnelFeaturesHeading">إيه اللي بتعمله باقة Tweak Lab في جهازك؟</h2>
-        <p class="funnel-section-sub" data-i18n="funnelFeaturesSub">أربع ركائز أساسية مصممة بلغة الجيمرز لرفع الفريمات والقضاء على اللاج نهائياً بأمان تام</p>
+        <p class="funnel-section-sub" dir="rtl" data-i18n="funnelFeaturesSub">أربع ركائز أساسية مصممة بلغة الجيمرز لرفع الفريمات والقضاء على اللاج نهائياً بأمان تام</p>
       </div>
 
       <!-- 4 Gamer-Focused Dark Cards with Subtle Neon-Green Borders -->
@@ -3286,7 +3291,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </div>
           <h3 data-i18n="fCard1Title">تقليل الـ Input Delay لأقصى درجة</h3>
-          <p data-i18n="fCard1Desc">استجابة لحظية للماوس والكيبورد (0.5ms) عبر ضبط Win32PrioritySeparation وإلغاء طوابير الانتظار في الويندوز عشان حركتك وطلقاتك تسبق الخصم.</p>
+          <p dir="rtl" data-i18n="fCard1Desc">استجابة لحظية للماوس والكيبورد (0.5ms) عبر ضبط Win32PrioritySeparation وإلغاء طوابير الانتظار في الويندوز عشان حركتك وطلقاتك تسبق الخصم.</p>
         </div>
 
         <div class="funnel-feature-card">
@@ -3294,7 +3299,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
           </div>
           <h3 data-i18n="fCard2Title">تنظيف الويندوز من العمليات المخفية</h3>
-          <p data-i18n="fCard2Desc">إيقاف خدمات الـ Telemetry والـ Bloatware اللي بتسحب من البروسيسور والرامات في الخلفية بدون علمك، وتوجيه 100% من موارد الجهاز للعبة المفتوحة.</p>
+          <p dir="rtl" data-i18n="fCard2Desc">إيقاف خدمات الـ Telemetry والـ Bloatware اللي بتسحب من البروسيسور والرامات في الخلفية بدون علمك، وتوجيه 100% من موارد الجهاز للعبة المفتوحة.</p>
         </div>
 
         <div class="funnel-feature-card">
@@ -3302,7 +3307,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </div>
           <h3 data-i18n="fCard3Title">ثبات فريمات الـ 1% Lows وقت الفايتات</h3>
-          <p data-i18n="fCard3Desc">تفعيل خطة الطاقة القصوى Ultimate Performance وإلغاء Core Parking لمنع سقوط الفريمات المفاجئ (Micro-Stutters) وقت البناء السريع والاشتباكات.</p>
+          <p dir="rtl" data-i18n="fCard3Desc">تفعيل خطة الطاقة القصوى Ultimate Performance وإلغاء Core Parking لمنع سقوط الفريمات المفاجئ (Micro-Stutters) وقت البناء السريع والاشتباكات.</p>
         </div>
 
         <div class="funnel-feature-card">
@@ -3310,7 +3315,7 @@
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
           </div>
           <h3 data-i18n="fCard4Title">تظبيط استجابة الشبكة والبينج</h3>
-          <p data-i18n="fCard4Desc">إلغاء خنق الشبكة في الويندوز (NetworkThrottlingIndex) وتنظيف الـ DNS والـ Winsock لثبات البينج ومنع الـ Packet Loss وتسجيل الطلقات بدقة.</p>
+          <p dir="rtl" data-i18n="fCard4Desc">إلغاء خنق الشبكة في الويندوز (NetworkThrottlingIndex) وتنظيف الـ DNS والـ Winsock لثبات البينج ومنع الـ Packet Loss وتسجيل الطلقات بدقة.</p>
         </div>
       </div>
 
@@ -3324,7 +3329,7 @@
             <h3 style="color:#fff; font-size:1.06rem; font-weight:900; margin-bottom:5px;" data-i18n="safetyBannerTitle">
               ضمان الأمان الكامل: سكريبتات وأوامر ويندوز رسمية 100% — بدون أي برامج خارجية أو خطر بان!
             </h3>
-            <p style="color:#c4d4e8; font-size:0.89rem; line-height:1.65; margin:0;" data-i18n-html="safetyBannerDesc">
+            <p dir="rtl" style="color:#c4d4e8; font-size:0.89rem; line-height:1.65; margin:0;" data-i18n-html="safetyBannerDesc">
               الباقة بالكامل بتشتغل بأوامر ومفاتيح الويندوز الرسمية (Official Windows Registry &amp; Native Commands) من غير أي برامج طرف تالت تشتغل في الخلفية أو تتداخل مع ملفات الألعاب — عشان كده هي <strong>آمنة 100% ومستحيل تسبب أي حظر (Ban)</strong> في <strong>Valorant</strong> أو <strong>Fortnite</strong> أو <strong>CS2</strong>، ومعاها نقطة استرجاع تلقائية بضغطة زرار.
             </p>
           </div>
@@ -3349,7 +3354,7 @@
               </svg>
             </div>
             <h4 class="deliverable-title" data-i18n="deliv1Title">الأداة الأوتوماتيكية (35+ تظبيطة)</h4>
-            <p class="deliverable-desc" data-i18n="deliv1Desc">تظبيط شامل بضغطة زرار + وضع Pro Gaming + نقطة استرجاع أوتوماتيكية للرجوع في أي وقت.</p>
+            <p class="deliverable-desc" dir="rtl" data-i18n="deliv1Desc">تظبيط شامل بضغطة زرار + وضع Pro Gaming + نقطة استرجاع أوتوماتيكية للرجوع في أي وقت.</p>
           </div>
 
           <!-- Card 2: RAM & Ping Cleaner -->
@@ -3364,7 +3369,7 @@
               </svg>
             </div>
             <h4 class="deliverable-title" data-i18n="deliv2Title">أداة تنظيف الرامات والبينج</h4>
-            <p class="deliverable-desc" data-i18n="deliv2Desc">ملف مستقل قبل أي جيم لمسح الكاش، تفريغ الرامات، وتظبيط الـ DNS لتقليل البينج فوراً.</p>
+            <p class="deliverable-desc" dir="rtl" data-i18n="deliv2Desc">ملف مستقل قبل أي جيم لمسح الكاش، تفريغ الرامات، وتظبيط الـ DNS لتقليل البينج فوراً.</p>
           </div>
 
           <!-- Card 3: Interactive Control Guide -->
@@ -3383,7 +3388,7 @@
               </svg>
             </div>
             <h4 class="deliverable-title" data-i18n="deliv3Title">الدليل التفاعلي الكامل</h4>
-            <p class="deliverable-desc" data-i18n="deliv3Desc">لوحة تحكم تفتح على متصفحك بالخطوات وجداول إعدادات كروت NVIDIA و AMD و Intel والـ BIOS.</p>
+            <p class="deliverable-desc" dir="rtl" data-i18n="deliv3Desc">لوحة تحكم تفتح على متصفحك بالخطوات وجداول إعدادات كروت NVIDIA و AMD و Intel والـ BIOS.</p>
           </div>
 
           <!-- Card 4: Video Tutorial -->
@@ -3395,7 +3400,7 @@
               </svg>
             </div>
             <h4 class="deliverable-title" data-i18n="deliv4Title">فيديو الشرح العملي</h4>
-            <p class="deliverable-desc" data-i18n="deliv4Desc">شرح عملي خطوة بخطوة يوضحلك إزاي تشغل الأدوات وتختار أنسب إعدادات لجهازك.</p>
+            <p class="deliverable-desc" dir="rtl" data-i18n="deliv4Desc">شرح عملي خطوة بخطوة يوضحلك إزاي تشغل الأدوات وتختار أنسب إعدادات لجهازك.</p>
           </div>
         </div>
 
@@ -3407,7 +3412,7 @@
               <path d="m9 12 2 2 4-4"/>
             </svg>
           </div>
-          <p class="deliverables-trust-text" data-i18n="delivTrustText">
+          <p class="deliverables-trust-text" dir="rtl" data-i18n="delivTrustText">
             آمن 100% على جهازك وحساباتك: أوامر ويندوز رسمية لا تمس ملفات الألعاب ولا تتعارض مع أنظمة الحماية (Vanguard / FaceIt / Ricochet).
           </p>
         </div>
@@ -3424,7 +3429,7 @@
                 <span class="badge badge-safe">100% Safe</span>
               </div>
               <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard1Title">1. تفعيل خطة الطاقة القصوى (Ultimate Performance) + إلغاء Core Parking</h3>
-              <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard1Desc">يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.</p>
+              <p dir="rtl" style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard1Desc">يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.</p>
             </div>
             <div class="tweak-card">
               <div style="margin-bottom:8px;">
@@ -3432,7 +3437,7 @@
                 <span class="badge badge-safe">100% Safe</span>
               </div>
               <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard2Title">2. ضبط أولوية الألعاب (MMCSS GPU Priority 8 &amp; Win32Priority 0x26)</h3>
-              <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard2Desc">يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.</p>
+              <p dir="rtl" style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard2Desc">يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.</p>
             </div>
             <div class="tweak-card">
               <div style="margin-bottom:8px;">
@@ -3440,7 +3445,7 @@
                 <span class="badge badge-safe">100% Safe</span>
               </div>
               <h3 style="color:#fff; font-size:1.02rem; margin-bottom:6px;" data-i18n="prevCard3Title">3. إلغاء خنق الشبكة (NetworkThrottlingIndex) + ضبط البنج والـ DNS</h3>
-              <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard3Desc">يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.</p>
+              <p dir="rtl" style="color:var(--text-muted); font-size:0.88rem;" data-i18n="prevCard3Desc">يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.</p>
             </div>
           </div>
         </div>
@@ -3454,7 +3459,7 @@
       <div class="funnel-section-header">
         <span class="funnel-section-eyebrow">📊 BENCHMARK PROOF • BEFORE &amp; AFTER</span>
         <h2 id="real-fps-results-heading" class="funnel-section-title" data-i18n="realFpsHeading">Real FPS Results (Before &amp; After)</h2>
-        <p class="funnel-section-sub" data-i18n="realFpsSub">Real frame-rate &amp; input delay improvements across 3 hardware tiers after applying TweakLab</p>
+        <p class="funnel-section-sub" dir="rtl" data-i18n="realFpsSub">مقارنة فعلية لفرق الفريمات وثبات الأداء قبل وبعد تظبيط TweakLab على 3 فئات أجهزة مختلفة.</p>
       </div>
 
       <div class="real-fps-grid">
@@ -3543,7 +3548,7 @@
       <div class="pc-guides-banner">
         <div>
           <div style="font-size:1.02rem; font-weight:900; color:#fff; margin-bottom:4px;" data-i18n="pcGuidesBannerTitle">📚 Free PC Optimization &amp; FPS Guides</div>
-          <div style="font-size:0.86rem; color:var(--text-muted);" data-i18n="pcGuidesBannerDesc">Read our step-by-step guides for fixing Fortnite FPS drops, cutting Valorant input delay &amp; tuning Windows 10/11.</div>
+          <div dir="rtl" style="font-size:0.86rem; color:var(--text-muted);" data-i18n="pcGuidesBannerDesc">شروحات عملية مجانية خطوة بخطوة لحل دروب الفريمات في فورتنايت، تقليل الـ Input Delay في فالورانت، وأفضل إعدادات ويندوز للألعاب.</div>
         </div>
         <a href="/guides" class="pc-guides-banner-btn" data-i18n="pcGuidesBannerBtn">Read Guides →</a>
       </div>
@@ -3581,7 +3586,7 @@
       <div class="funnel-section-header">
         <span class="funnel-section-eyebrow">🎯 CHOOSE YOUR PACK</span>
         <h2 id="packages-section-heading" class="funnel-section-title" data-i18n="packagesSectionHeading">Choose Your Pack</h2>
-        <p class="funnel-section-sub" data-i18n="packagesSectionSub">Quick comparison between the Free Lite trial and the complete Pro Pack</p>
+        <p class="funnel-section-sub" dir="rtl" data-i18n="packagesSectionSub">قارن بين النسخة التجريبية المجانية والباقة الكاملة واختار اللي يناسب جهازك.</p>
       </div>
 
       <div class="packages-compare-grid">
@@ -3596,7 +3601,7 @@
               <span class="pkg-price-main" style="color:var(--cyan);">0 <span data-i18n="currencyWord">EGP</span></span>
               <span class="pkg-price-sub" data-i18n="freeLitePriceSub">Quick starter trial</span>
             </div>
-            <p class="free-lite-sub" data-i18n="freeLiteSub" style="margin-bottom:12px;">Download our free Lite optimizer in one click with zero forms and feel the smoothness yourself:</p>
+            <p class="free-lite-sub" dir="rtl" data-i18n="freeLiteSub" style="margin-bottom:12px;">نسخة مجانية خفيفة لو حابب تجرب فرق الأداء والفريمات على جهازك الأول قبل ما تشتري النسخة الكاملة:</p>
             <ul class="pkg-checklist">
               <li>
                 <span class="pkg-check-icon">✔</span>
@@ -3624,7 +3629,7 @@
             <a id="free-lite-dl-btn" href="/TweakLab_Free_Lite.bat" download="TweakLab_Free_Lite.bat" class="btn free-lite-btn" style="width:100%;" data-i18n="freeLiteBtn">
               ⬇ Download Free Lite Now
             </a>
-            <span class="eg-micro-hint">دي النسخة المجانية لو حابب تجرب الأداء الأول</span>
+            <span class="eg-micro-hint" dir="rtl">نسخة مجانية خفيفة لو حابب تجرب فرق الأداء والفريمات على جهازك الأول قبل ما تشتري النسخة الكاملة.</span>
             <div class="free-lite-note" style="text-align:center; margin-top:8px;" data-i18n="freeLiteNote">Direct file: TweakLab_Free_Lite.bat • Right-click → Run as Administrator</div>
           </div>
         </div>
@@ -3643,8 +3648,8 @@
               <span class="price-old" id="pkg-pro-old-price" style="font-size:1rem;">350 EGP</span>
               <span class="pkg-price-sub" data-i18n="pkgOneTimeSub">One-time lifetime payment</span>
             </div>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;" data-i18n="pkgProLead">
-              The complete competitive tuning suite for maximum FPS and ultra-low input delay:
+            <p dir="rtl" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;" data-i18n="pkgProLead">
+              الحزمة الكاملة بكل التعديلات والتحديثات الجاية — بتدفع مرة واحدة بس وبتفضل معاك على طول:
             </p>
             <ul class="pkg-checklist">
               <li>
@@ -3673,7 +3678,7 @@
             <button type="button" class="hero-btn-primary" style="width:100%; font-size:1.04rem; padding:15px 22px;" onclick="scrollToCheckoutSection()">
               <span data-i18n="pkgProOrderBtn">⚡ Get Full Pack - 99 EGP</span>
             </button>
-            <span class="eg-micro-hint">النسخة الكاملة بـ 99 جنيه (دفع مرة واحدة)</span>
+            <span class="eg-micro-hint" dir="rtl">الحزمة الكاملة بكل التعديلات والتحديثات الجاية — بتدفع مرة واحدة بس وبتفضل معاك على طول.</span>
             <div style="text-align:center; margin-top:8px; font-size:0.78rem; color:var(--text-muted);" data-i18n="pkgProNote">
               Instant delivery on this page after InstaPay or Vodafone Cash confirmation
             </div>
@@ -3689,8 +3694,7 @@
       <div class="funnel-section-header">
         <span class="funnel-section-eyebrow">🔒 INSTANT DIGITAL DELIVERY</span>
         <h2 id="checkout-section-heading" class="funnel-section-title" data-i18n="checkoutSectionHeading">Checkout &amp; Order Confirmation</h2>
-        <p class="funnel-section-sub" data-i18n="checkoutSectionSub">Copy the transfer number in 1 click, upload your receipt screenshot, and unlock your full pack right here</p>
-        <span class="eg-micro-hint">حوّل على إنستاباي أو فودافون كاش وارفع صورة التحويل</span>
+        <p class="funnel-section-sub" dir="rtl" data-i18n="checkoutSectionSub">اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.</p>
       </div>
 
       <div class="checkout-funnel-wrapper">
@@ -4154,9 +4158,9 @@
         <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.4); color:var(--green); font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:10px;">
           <span data-i18n="restoreModalBadge">🔍 Track Your Order (PC Pack or PSN Card)</span>
         </div>
-        <h3 style="color:#fff; font-size:1.22rem; font-weight:900; margin-bottom:6px;" data-i18n="restoreModalTitle">Open Your Order, Get Your PSN Code, or Leave a Review</h3>
-        <p style="color:var(--text-muted); font-size:0.86rem; line-height:1.6; margin-bottom:14px;" data-i18n-html="restoreModalDesc">
-          Enter your <strong style="color:var(--cyan);">Order ID (e.g. TL-123456)</strong> or <strong style="color:var(--green);">Phone / WhatsApp Number</strong> to check your status or claim your code:
+        <h3 style="color:#fff; font-size:1.22rem; font-weight:900; margin-bottom:6px;" data-i18n="restoreModalTitle">Open Your Order, Claim Your Code, or Leave a Review</h3>
+        <p dir="rtl" style="color:var(--text-muted); font-size:0.88rem; line-height:1.65; margin-bottom:14px;" data-i18n-html="restoreModalDesc">
+          اكتب رقم تليفونك أو رقم الطلب عشان تتابع حالته، وأول ما يتأكد هتلاقي الكود بتاعك جاهز للنسخ هنا.
         </p>
         <form onsubmit="submitRestoreOrderLookup(event)">
           <input type="text" id="restore-order-query-input" class="input-field" data-i18n-placeholder="restoreModalPh" placeholder="e.g. TL-123456 or 01012345678" style="margin-bottom:8px; direction:ltr; text-align:center; font-weight:800; font-size:1rem;" required />
@@ -4205,13 +4209,13 @@ const I18N = {
     navReturnOrder: 'الرجوع لطلبي الحالي',
     navRestore: '🔍 متابعة الطلب',
     navRestoreShort: '🔍 طلبي',
-    heroMainHeadline: 'اقضِ نهائياً على الـ <span class="hero-accent-green">Drop FPS</span> والـ <span class="hero-accent-cyan">Input Delay</span> في الألعاب التنافسية!',
+    heroMainHeadline: 'اتخلص نهائياً من الـ <span class="hero-accent-green">Drop FPS</span> والـ <span class="hero-accent-cyan">Input Delay</span> في الألعاب التنافسية!',
     heroTryFreeLiteBtn: 'جرب النسخة المجانية (Free Lite)',
     trustBadge1: 'آمن 100% وبدون بان',
     trustBadge2: 'أوامر ويندوز رسمية',
     trustBadge3: 'تسليم فوري بعد التأكيد',
     funnelFeaturesHeading: 'إيه اللي بتعمله باقة TweakLab في جهازك؟',
-    funnelFeaturesSub: 'أربع ركائز أساسية مصممة بلغة الجيمرز لرفع الفريمات والقضاء على اللاج نهائياً بأمان تام',
+    funnelFeaturesSub: 'أربع ركائز أساسية مصممة بلغة الجيمرز لرفع الفريمات والقضاء على اللاج والتقطيع نهائياً بأمان تام',
     fCard1Title: 'تقليل الـ Input Delay لأقصى درجة',
     fCard1Desc: 'استجابة لحظية للماوس والكيبورد (0.5ms) عبر ضبط Win32PrioritySeparation وإلغاء طوابير الانتظار في الويندوز عشان حركتك وطلقاتك تسبق الخصم.',
     fCard2Title: 'تنظيف الويندوز من العمليات المخفية',
@@ -4223,7 +4227,7 @@ const I18N = {
     safetyBannerTitle: 'ضمان الأمان الكامل: سكريبتات وأوامر ويندوز رسمية 100% — بدون أي برامج خارجية أو خطر بان!',
     safetyBannerDesc: 'الباقة بالكامل بتشتغل بأوامر ومفاتيح الويندوز الرسمية (Official Windows Registry &amp; Native Commands) من غير أي برامج طرف تالت تشتغل في الخلفية — عشان كده هي <strong>آمنة 100% ومستحيل تسبب أي حظر (Ban)</strong> في <strong>Valorant</strong> أو <strong>Fortnite</strong> أو <strong>CS2</strong>، ومعاها نقطة استرجاع تلقائية بضغطة زرار.',
     realFpsHeading: 'نتائج حقيقية قبل وبعد (Real FPS Results)',
-    realFpsSub: 'مقارنة فعلية لفرق الفريمات وثبات الـ Input Delay على 3 فئات أجهزة مختلفة بعد تطبيق حزمة TweakLab',
+    realFpsSub: 'مقارنة فعلية لفرق الفريمات وثبات الأداء قبل وبعد تظبيط TweakLab على 3 فئات أجهزة مختلفة.',
     rfCard1Badge: '🎮 جهاز اقتصادي — Valorant',
     rfCard2Badge: '🚀 جهاز متوسط — Fortnite Performance Mode',
     rfCard3Badge: '💻 لابتوب جيمنج — Warzone / Apex',
@@ -4238,17 +4242,17 @@ const I18N = {
     rfDiscordPrompt: 'عايز تشوف سكرين شوتات أكتر من أجهزة اللاعبين؟',
     rfDiscordRoomLink: 'ادخل روم <span dir="ltr">#before-after</span> على Discord',
     pcGuidesBannerTitle: '📚 شروحات مجانية لرفع الـ FPS وتظبيط الويندوز',
-    pcGuidesBannerDesc: 'اقرأ أدلة TweakLab العملية لحل دروب فريم فورتنايت، تقليل Input Delay في فالورانت، وأفضل إعدادات ويندوز 10 و 11.',
+    pcGuidesBannerDesc: 'شروحات عملية مجانية خطوة بخطوة لحل دروب الفريمات في فورتنايت، تقليل الـ Input Delay في فالورانت، وأفضل إعدادات ويندوز للألعاب.',
     pcGuidesBannerBtn: 'تصفح الشروحات ←',
     reviewsSectionHeading: 'نتائج وتجارب اللاعبين (Verified Buyers)',
-    packagesSectionHeading: 'اختر الباقة المناسبة ليك',
-    packagesSectionSub: 'مقارنة سريعة بين النسخة التجريبية المجانية والباقة الاحترافية الكاملة',
+    packagesSectionHeading: 'اختار الباقة المناسبة ليك',
+    packagesSectionSub: 'قارن بين النسخة التجريبية المجانية والباقة الكاملة واختار اللي يناسب جهازك.',
     pkgPopularRibbon: '🔥 الأفضل والأكثر طلباً',
     pkgLifetimeUpdates: 'شامل التحديثات مدى الحياة',
     pkgProTitle: 'Pro Pack - الباقة الكاملة',
     currencyWord: 'جنيه',
     pkgOneTimeSub: 'دفعة واحدة مدى الحياة',
-    pkgProLead: 'الحل النهائي المتكامل لاستخراج أقصى فريمات وأقل Input Delay في الألعاب التنافسية:',
+    pkgProLead: 'الحزمة الكاملة بكل التعديلات والتحديثات الجاية — بتدفع مرة واحدة بس وبتفضل معاك على طول:',
     pkgProPt1: '<strong>جميع تعديلات الـ Registry العميقة (35+ تويك احترافي)</strong> لرفع الفريمات وتثبيت الـ 1% Low',
     pkgProPt2: '<strong>إلغاء الـ Input Delay لأقصى درجة</strong> وضبط أولوية الـ GPU &amp; CPU للألعاب',
     pkgProPt3: '<strong>إعدادات الألعاب التنافسية الكاملة</strong> (Fortnite, Valorant, CS2, Warzone, GTA 5)',
@@ -4257,17 +4261,17 @@ const I18N = {
     pkgProOrderBtn: '⚡ اطلب الباقة الكاملة دلوقتي',
     pkgProNote: 'استلام فوري في نفس الصفحة بعد تأكيد التحويل عبر InstaPay أو Vodafone Cash',
     checkoutSectionHeading: 'قسم الدفع وتأكيد الطلب',
-    checkoutSectionSub: 'انسخ رقم التحويل بضغطة واحدة، ارفع سكرين شوت الإيصال، واستلم ملفات الباقة الكاملة في نفس الصفحة',
+    checkoutSectionSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.',
     restoreModalBadge: '🔍 متابعة طلب سابق (PC / PSN / Steam)',
     restoreModalTitle: 'افتح طلبك، استلم كود البطاقة، أو قيّم تجربتك',
-    restoreModalDesc: 'اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل / الواتساب</strong> لفتح طلبك أو عرض كود PlayStation / Steam فوراً:',
+    restoreModalDesc: 'اكتب رقم تليفونك أو رقم الطلب عشان تتابع حالته، وأول ما يتأكد هتلاقي الكود بتاعك جاهز للنسخ هنا.',
     restoreModalPh: 'مثال: TL-123456 أو 01012345678',
     restoreModalBtn: '🚀 عرض حالة الطلب الآن',
     browseHomeKeepOrderBtn: '🏠 تصفح الصفحة الرئيسية (مع الاحتفاظ بطلبي الحالي نشطاً)',
-    heroSubtitle: 'الحزمة الأقوى في مصر لرفع الفريمات (FPS)، تثبيت الـ 1% Low، وإلغاء الـ Input Lag والـ Stutter بأمان 100%. ادفع بسهولة عبر <strong>InstaPay</strong> أو <strong>Vodafone Cash</strong> واستلم الفولدر الكامل + فيديو الشرح خلال <strong>5 دقائق بالضبط!</strong>',
+    heroSubtitle: 'أقوى باقة لتظبيط الويندوز ورفع استقرار الفريمات (1% Low) وتقليل استجابة الماوس والكيبورد في الألعاب التنافسية. بتستلم الملفات كاملة + فيديو شرح خطوة بخطوة في خلال دقايق.',
     priceExclusiveLabel: 'السعر الحصري للحزمة الكاملة',
     priceLifetimeBadge: 'دفع لمرة واحدة • شامل التحديثات',
-    whatYouGetTitle: '📦 ماذا ستستلم فوراً بعد تأكيد الدفع؟',
+    whatYouGetTitle: '📦 إيه اللي هتستلمه فوراً بعد تأكيد الدفع؟',
     deliv1Title: 'الأداة الأوتوماتيكية (35+ تظبيطة)',
     deliv1Desc: 'تظبيط شامل بضغطة زرار + وضع Pro Gaming + نقطة استرجاع أوتوماتيكية للرجوع في أي وقت.',
     deliv2Title: 'أداة تنظيف الرامات والبينج',
@@ -4333,7 +4337,7 @@ const I18N = {
     expiredHomeBtn: 'العودة للصفحة الرئيسية',
     freeLiteBadge: '🆓 تجربة مجانية • بدون تسجيل أو دفع',
     freeLiteTitle: '⚡ جرب النسخة المجانية (Free Lite)',
-    freeLiteSub: 'حمّل النسخة الخفيفة مجاناً بضغطة واحدة بدون ملء أي فورم وجرّب فرق السلاسة بنفسك:',
+    freeLiteSub: 'نسخة مجانية خفيفة لو حابب تجرب فرق الأداء والفريمات على جهازك الأول قبل ما تشتري النسخة الكاملة:',
     freeLitePt1: 'تنضيف الكاش والملفات المؤقتة',
     freeLitePt2: 'تظبيط البينج (DNS Flush)',
     freeLitePt3: 'تفعيل أقصى طاقة للبروسيسور',
@@ -4390,19 +4394,19 @@ const I18N = {
     trustBadge2: 'Official Windows Commands',
     trustBadge3: 'Instant Delivery on Approval',
     funnelFeaturesHeading: 'What Does TweakLab Do to Your PC?',
-    funnelFeaturesSub: 'Four core esports tuning pillars engineered to boost FPS and crush stutters 100% safely',
+    funnelFeaturesSub: 'أربع ركائز أساسية مصممة بلغة الجيمرز لرفع الفريمات والقضاء على اللاج والتقطيع نهائياً بأمان تام',
     fCard1Title: 'Minimize Input Delay to the Core',
-    fCard1Desc: 'Snappy mouse & keyboard response via Win32PrioritySeparation and kernel queue tuning so every flick and shot registers first.',
+    fCard1Desc: 'استجابة لحظية للماوس والكيبورد (0.5ms) عبر ضبط Win32PrioritySeparation وإلغاء طوابير الانتظار في الويندوز عشان حركتك وطلقاتك تسبق الخصم.',
     fCard2Title: 'Strip Hidden Windows Bloat & Telemetry',
-    fCard2Desc: 'Disables silent background telemetry and resource hogs so 100% of your CPU & RAM power stays locked on your active game.',
+    fCard2Desc: 'إيقاف خدمات الـ Telemetry والـ Bloatware اللي بتسحب من البروسيسور والرامات في الخلفية بدون علمك، وتوجيه 100% من موارد الجهاز للعبة المفتوحة.',
     fCard3Title: 'Lock 1% Low FPS During Intense Fights',
-    fCard3Desc: 'Unlocks Ultimate Performance Power Plan and disables Core Parking to eliminate micro-stutters during box fights and endgames.',
+    fCard3Desc: 'تفعيل خطة الطاقة القصوى Ultimate Performance وإلغاء Core Parking لمنع سقوط الفريمات المفاجئ (Micro-Stutters) وقت البناء السريع والاشتباكات.',
     fCard4Title: 'Optimize Network Latency & Ping Stability',
-    fCard4Desc: 'Removes Windows NetworkThrottlingIndex and cleans DNS/Winsock buffers for cleaner hit-reg and lower packet loss.',
+    fCard4Desc: 'إلغاء خنق الشبكة في الويندوز (NetworkThrottlingIndex) وتنظيف الـ DNS والـ Winsock لثبات البينج ومنع الـ Packet Loss وتسجيل الطلقات بدقة.',
     safetyBannerTitle: '100% Safety Guarantee: Official Windows Scripts Only — Zero Third-Party Apps or Ban Risk!',
-    safetyBannerDesc: 'Every tweak uses native Official Windows Registry &amp; PowerShell commands without any background apps touching game files — making it <strong>100% safe and ban-free</strong> in <strong>Valorant</strong>, <strong>Fortnite</strong> &amp; <strong>CS2</strong>, backed by a 1-click System Restore point.',
+    safetyBannerDesc: 'الباقة بالكامل بتشتغل بأوامر ومفاتيح الويندوز الرسمية (Official Windows Registry &amp; Native Commands) من غير أي برامج طرف تالت تشتغل في الخلفية — عشان كده هي <strong>آمنة 100% ومستحيل تسبب أي حظر (Ban)</strong> في <strong>Valorant</strong> أو <strong>Fortnite</strong> أو <strong>CS2</strong>، ومعاها نقطة استرجاع تلقائية بضغطة زرار.',
     realFpsHeading: 'Real FPS Results (Before & After)',
-    realFpsSub: 'Real frame-rate & input delay improvements across 3 hardware tiers after applying TweakLab',
+    realFpsSub: 'مقارنة فعلية لفرق الفريمات وثبات الأداء قبل وبعد تظبيط TweakLab على 3 فئات أجهزة مختلفة.',
     rfCard1Badge: '🎮 Budget PC — Valorant',
     rfCard2Badge: '🚀 Mid-Range PC — Fortnite Performance',
     rfCard3Badge: '💻 Gaming Laptop — Warzone / Apex',
@@ -4417,17 +4421,17 @@ const I18N = {
     rfDiscordPrompt: 'Want to see more real gamer benchmarks?',
     rfDiscordRoomLink: 'Join <span dir="ltr">#before-after</span> on Discord',
     pcGuidesBannerTitle: '📚 Free PC Optimization & FPS Guides',
-    pcGuidesBannerDesc: 'Read our step-by-step guides for fixing Fortnite FPS drops, cutting Valorant input delay & tuning Windows 10/11.',
+    pcGuidesBannerDesc: 'شروحات عملية مجانية خطوة بخطوة لحل دروب الفريمات في فورتنايت، تقليل الـ Input Delay في فالورانت، وأفضل إعدادات ويندوز للألعاب.',
     pcGuidesBannerBtn: 'Read Guides →',
     reviewsSectionHeading: 'Verified Gamer Reviews',
     packagesSectionHeading: 'Choose Your Pack',
-    packagesSectionSub: 'Quick comparison between the Free Lite trial and the complete Pro Pack',
+    packagesSectionSub: 'قارن بين النسخة التجريبية المجانية والباقة الكاملة واختار اللي يناسب جهازك.',
     pkgPopularRibbon: '🔥 Most Popular',
     pkgLifetimeUpdates: 'Lifetime Updates Included',
     pkgProTitle: 'Pro Pack — Full Bundle',
     currencyWord: 'EGP',
     pkgOneTimeSub: 'One-time lifetime payment',
-    pkgProLead: 'The complete competitive tuning suite for maximum FPS and ultra-low input delay:',
+    pkgProLead: 'الحزمة الكاملة بكل التعديلات والتحديثات الجاية — بتدفع مرة واحدة بس وبتفضل معاك على طول:',
     pkgProPt1: '<strong>All 35+ Deep Registry &amp; OS Tweaks</strong> to boost FPS and lock 1% Lows',
     pkgProPt2: '<strong>Ultra-Low Input Delay Tuning</strong> with dedicated CPU &amp; GPU game priority',
     pkgProPt3: '<strong>Competitive Game Presets</strong> (Fortnite, Valorant, CS2, Warzone, GTA 5)',
@@ -4436,26 +4440,26 @@ const I18N = {
     pkgProOrderBtn: '⚡ Get Full Pack - 99 EGP',
     pkgProNote: 'Instant delivery on this page after InstaPay or Vodafone Cash confirmation',
     checkoutSectionHeading: 'Checkout & Order Confirmation',
-    checkoutSectionSub: 'Copy the transfer number in 1 click, upload your receipt screenshot, and unlock your full pack right here',
+    checkoutSectionSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.',
     restoreModalBadge: '🔍 Track Your Order (PC / PSN / Steam)',
     restoreModalTitle: 'Open Your Order, Claim Your Code, or Leave a Review',
-    restoreModalDesc: 'Enter your <strong style="color:var(--cyan);">Order ID (e.g. TL-123456)</strong> or <strong style="color:var(--green);">Phone / WhatsApp Number</strong> to check your status or claim your code:',
+    restoreModalDesc: 'اكتب رقم تليفونك أو رقم الطلب عشان تتابع حالته، وأول ما يتأكد هتلاقي الكود بتاعك جاهز للنسخ هنا.',
     restoreModalPh: 'e.g. TL-123456 or 01012345678',
     restoreModalBtn: '🚀 Check Order Status',
     browseHomeKeepOrderBtn: '🏠 Browse Storefront Home (Keep Current Order Active)',
-    heroSubtitle: 'Egypt\'s #1 PC optimization pack to boost FPS, stabilize 1% Lows, and eliminate Input Lag &amp; Stutters 100% safely. Pay easily via <strong>InstaPay</strong> or <strong>Vodafone Cash</strong> and unlock the full pack + video guide in <strong>5 minutes!</strong>',
+    heroSubtitle: 'أقوى باقة لتظبيط الويندوز ورفع استقرار الفريمات (1% Low) وتقليل استجابة الماوس والكيبورد في الألعاب التنافسية. بتستلم الملفات كاملة + فيديو شرح خطوة بخطوة في خلال دقايق.',
     priceExclusiveLabel: 'Exclusive Full Pack Price',
     priceLifetimeBadge: 'One-Time Payment • Free Updates',
     whatYouGetTitle: '📦 What You Get Instantly After Payment:',
     deliv1Title: 'Automated Tool (35+ Tweaks)',
-    deliv1Desc: '1-click full optimization + Pro Gaming preset + automatic System Restore point for instant rollback.',
+    deliv1Desc: 'تظبيط شامل بضغطة زرار + وضع Pro Gaming + نقطة استرجاع أوتوماتيكية للرجوع في أي وقت.',
     deliv2Title: 'RAM & Ping Cleaner Tool',
-    deliv2Desc: 'Standalone pre-game script to purge cache, free idle RAM, and tune DNS for lower Ping immediately.',
+    deliv2Desc: 'ملف مستقل قبل أي جيم لمسح الكاش، تفريغ الرامات، وتظبيط الـ DNS لتقليل البينج فوراً.',
     deliv3Title: 'Full Interactive Control Guide',
-    deliv3Desc: 'Browser dashboard with step-by-step tracking plus NVIDIA, AMD, Intel & BIOS tuning tables.',
+    deliv3Desc: 'لوحة تحكم تفتح على متصفحك بالخطوات وجداول إعدادات كروت NVIDIA و AMD و Intel والـ BIOS.',
     deliv4Title: 'Practical Video Tutorial',
-    deliv4Desc: 'Step-by-step video walkthrough showing how to run the tools and pick ideal settings for your PC.',
-    delivTrustText: '100% Safe for your PC & accounts: Official Windows commands that never touch game files or conflict with Anti-Cheats (Vanguard / FaceIt / Ricochet).',
+    deliv4Desc: 'شرح عملي خطوة بخطوة يوضحلك إزاي تشغل الأدوات وتختار أنسب إعدادات لجهازك.',
+    delivTrustText: 'آمن 100% على جهازك وحساباتك: أوامر ويندوز رسمية لا تمس ملفات الألعاب ولا تتعارض مع أنظمة الحماية (Vanguard / FaceIt / Ricochet).',
     checkoutTitle: '💳 Payment & Instant Delivery',
     tabInstaTitle: 'InstaPay Egypt',
     tabInstaSub: 'Instant Bank / Wallet Transfer',
@@ -4512,7 +4516,7 @@ const I18N = {
     expiredHomeBtn: 'Back to Storefront Home',
     freeLiteBadge: '🆓 FREE TRIAL • NO FORM OR PAYMENT REQUIRED',
     freeLiteTitle: '⚡ Try the Free Version (Free Lite)',
-    freeLiteSub: 'Download our free Lite optimizer in one click with zero forms and feel the smoothness yourself:',
+    freeLiteSub: 'نسخة مجانية خفيفة لو حابب تجرب فرق الأداء والفريمات على جهازك الأول قبل ما تشتري النسخة الكاملة:',
     freeLitePt1: 'Clean System Temp & Cache files',
     freeLitePt2: 'Optimize Ping via DNS Flush',
     freeLitePt3: 'Enable Maximum CPU Power Plan',
@@ -4537,11 +4541,11 @@ const I18N = {
     previewHeading: '🔥 Preview of the 35+ Tweaks Inside the Tool & Interactive Guide',
     previewSub: 'All unlocked immediately upon approval',
     prevCard1Title: '1. Ultimate Performance Power Plan + Disable Core Parking',
-    prevCard1Desc: 'Prevents your CPU from downclocking mid-game, eliminates micro-stutters, and boosts 1% Low FPS.',
+    prevCard1Desc: 'يمنع المعالج (CPU) من خفض سرعته أثناء اللعب ويقضي على التقطيع المفاجئ (Micro-Stutters) ويرفع الـ 1% Low FPS.',
     prevCard2Title: '2. Gaming Priority Tuning (MMCSS GPU Priority 8 & Win32Priority 0x26)',
-    prevCard2Desc: 'Directs 100% of CPU & GPU scheduling to your active game window and reduces mouse & keyboard latency.',
+    prevCard2Desc: 'يوجه 100% من موارد المعالج وكرت الشاشة للعبة المفتوحة أمامك ويقلل زمن استجابة الماوس والكيبورد.',
     prevCard3Title: '3. Remove Network Throttling (NetworkThrottlingIndex) + DNS Switcher',
-    prevCard3Desc: 'Removes Windows packet throttling during voice/Discord usage with 1-click Cloudflare DNS 1.1.1.1 switching.',
+    prevCard3Desc: 'يلغي تقييد الباكيتات في الويندوز أثناء تشغيل الصوت والديسكورد، مع أداة تبديل لـ Cloudflare DNS 1.1.1.1 بضغطة زر.',
     chatOnline: 'Online Now (Automated Assistant)',
     chatWelcome: 'Welcome to <strong>Tweak Lab</strong>! ⚡🎮<br>I am your fast assistant for any questions about the FPS pack, payment steps, and safe setup.<br><br>Pick a quick question below or type yours directly:',
     chipPay: '💳 How do I pay and receive the pack?',
@@ -4585,16 +4589,14 @@ function applyLanguage(lang) {
 
   const gTextEl = document.getElementById('delivery-guarantee-text');
   if (gTextEl) {
-    gTextEl.innerHTML = currentLang === 'en'
-      ? `<strong>Guaranteed Delivery Within 5 Minutes!</strong><br />Once you transfer <strong id="guarantee-price-text">${price} EGP</strong> to <strong id="guarantee-phone-text">${phone}</strong> and upload your screenshot here, we get an instant alert — and as soon as we tap <strong>Accept</strong>, your full pack + setup video unlocks right on this page!`
-      : `<strong>ضمان الاستلام خلال 5 دقائق بالضبط!</strong><br />بمجرد تحويل <strong id="guarantee-price-text">${price} جنيه</strong> إلى الرقم <strong id="guarantee-phone-text">${phone}</strong> ورفع صورة السكرين شوت في الخانة المقابلة، يصلنا إشعار فوري، وبمجرد الضغط على <strong>Accept (قبول)</strong> يفتح لك التحميل الفوري للفولدر + رابط الفيديو الشرح في نفس الصفحة خلال 5 دقائق!`;
+    gTextEl.setAttribute('dir', 'rtl');
+    gTextEl.innerHTML = `<strong>ضمان الاستلام خلال 5 دقائق بالضبط!</strong><br />بمجرد تحويل <strong id="guarantee-price-text">${price} جنيه</strong> إلى الرقم <strong id="guarantee-phone-text">${phone}</strong> ورفع صورة السكرين شوت بالأسفل، بيوصلنا إشعار فوري، وأول ما نراجع الطلب بيتفتحلك التحميل الفوري للملفات + فيديو الشرح في نفس الصفحة!`;
   }
 
   const checkoutSub = document.getElementById('checkout-subtext');
   if (checkoutSub) {
-    checkoutSub.innerHTML = currentLang === 'en'
-      ? `Pick your preferred payment method in Egypt, send <strong id="checkout-text-price">${price} EGP</strong> to the number shown, then upload your transfer screenshot below:`
-      : `اختر وسيلة الدفع المناسبة لك في مصر، حوّل <strong id="checkout-text-price">${price} جنيه مصري</strong> للرقم الموضح، ثم ارفع سكرين شوت الإيصال بالأسفل:`;
+    checkoutSub.setAttribute('dir', 'rtl');
+    checkoutSub.innerHTML = `اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل <strong id="checkout-text-price">${price} جنيه</strong> وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.`;
   }
 
   const instaStep3 = document.getElementById('insta-step3-text');

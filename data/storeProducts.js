@@ -32,7 +32,7 @@ const STORE_PRODUCTS = [
     title: 'بطاقة PlayStation PSN $10',
     fullTitle: 'بطاقة PlayStation PSN أمريكي (US) — $10',
     valueLabel: '$10',
-    subtitle: 'رصيد متجر بلايستيشن الأمريكي • كود رقمي أصلي 100%',
+    subtitle: 'بطاقة شحن رقمية لستور بلايستيشن — بتوصلك كود رسمي بتدخله في حسابك عشان تشحن المحفظة وتشتري ألعابك أو اشتراك البلس.',
     originalPrice: 640,
     priceEgp: 575,
     discountPercent: 10,
