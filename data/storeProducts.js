@@ -1,16 +1,14 @@
 /**
  * ============================================================================
- * TWEAK LAB — GAMING STORE PRODUCTS & PRICING CATALOG
+ * TWEAK LAB — GAMING STORE PRODUCTS & PRICING CATALOG (PSN GIFT CARDS)
  * ============================================================================
- * عدّل أي سعر (priceEgp) أو أضف/عدّل أي باقة هنا بسهولة،
+ * عدّل أي سعر (priceEgp) أو أضف/عدّل أي فئة هنا بسهولة،
  * وسيتم تحديث صفحة المتجر (/store) والتحقق من الأسعار في السيرفر تلقائياً.
  */
 
 const STORE_CATEGORIES = [
-  { id: 'all', label: 'الكل', icon: '✨' },
-  { id: 'psn', label: 'بطاقات PlayStation (PSN)', icon: '🎮' },
-  { id: 'fortnite', label: 'Fortnite V-Bucks', icon: '⚡' },
-  { id: 'valorant', label: 'Valorant Points', icon: '🎯' }
+  { id: 'psn', label: 'بطاقات PlayStation (PSN)', icon: '🎮', status: 'active' },
+  { id: 'topup-soon', label: 'شحن الألعاب', icon: '🔒', badge: 'قريباً', status: 'coming_soon' }
 ];
 
 const PSN_REGIONS = [
@@ -274,194 +272,6 @@ const STORE_PRODUCTS = [
     deliveryType: 'digital_code',
     deliveryBadge: 'كود رقمي • تسليم سريع',
     requiresAccount: false,
-    tag: '💎 أفضل قيمة'
-  },
-
-  // ==========================================================================
-  // 5. FORTNITE V-BUCKS & CREW (شحن يدوي آمن)
-  // ==========================================================================
-  {
-    id: 'fn-1000',
-    category: 'fortnite',
-    region: '',
-    regionLabel: 'Fortnite',
-    flag: '⚡',
-    title: '1,000 V-Bucks',
-    fullTitle: 'شحن Fortnite — 1,000 V-Bucks',
-    valueLabel: '1,000 V-Bucks',
-    subtitle: 'كافية للباتل باس أو سكن مميز • شحن رسمي وآمن 100%',
-    priceEgp: 440,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'بيانات حساب فورتنايت (Epic Games / Xbox)',
-    accountPlaceholder: 'اكتب إيميل Epic Games / حساب Xbox',
-    tag: ''
-  },
-  {
-    id: 'fn-2800',
-    category: 'fortnite',
-    region: '',
-    regionLabel: 'Fortnite',
-    flag: '⚡',
-    title: '2,800 V-Bucks',
-    fullTitle: 'شحن Fortnite — 2,800 V-Bucks',
-    valueLabel: '2,800 V-Bucks',
-    subtitle: 'الباقة الأكثر طلباً لشراء الباندلات والباتل باس',
-    priceEgp: 1090,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'بيانات حساب فورتنايت (Epic Games / Xbox)',
-    accountPlaceholder: 'اكتب إيميل Epic Games / حساب Xbox',
-    tag: '🔥 الأكثر طلباً'
-  },
-  {
-    id: 'fn-5000',
-    category: 'fortnite',
-    region: '',
-    regionLabel: 'Fortnite',
-    flag: '⚡',
-    title: '5,000 V-Bucks',
-    fullTitle: 'شحن Fortnite — 5,000 V-Bucks',
-    valueLabel: '5,000 V-Bucks',
-    subtitle: 'كمية كبيرة للسكنات النادرة والهدايا لأصحابك',
-    priceEgp: 1750,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'بيانات حساب فورتنايت (Epic Games / Xbox)',
-    accountPlaceholder: 'اكتب إيميل Epic Games / حساب Xbox',
-    tag: ''
-  },
-  {
-    id: 'fn-13500',
-    category: 'fortnite',
-    region: '',
-    regionLabel: 'Fortnite',
-    flag: '⚡',
-    title: '13,500 V-Bucks',
-    fullTitle: 'شحن Fortnite — 13,500 V-Bucks',
-    valueLabel: '13,500 V-Bucks',
-    subtitle: 'أكبر باقة V-Bucks بأعلى نسبة توفير على الإطلاق',
-    priceEgp: 4250,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'بيانات حساب فورتنايت (Epic Games / Xbox)',
-    accountPlaceholder: 'اكتب إيميل Epic Games / حساب Xbox',
-    tag: '💎 أقصى توفير'
-  },
-  {
-    id: 'fn-crew',
-    category: 'fortnite',
-    region: '',
-    regionLabel: 'Fortnite Crew',
-    flag: '👑',
-    title: 'باقة Fortnite Crew',
-    fullTitle: 'شحن Fortnite — باقة Fortnite Crew الشهرية',
-    valueLabel: 'Fortnite Crew',
-    subtitle: 'تشمل Battle Pass + سكن حصري + 1,000 V-Bucks شهرياً',
-    priceEgp: 590,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'بيانات حساب فورتنايت (Epic Games / Xbox)',
-    accountPlaceholder: 'اكتب إيميل Epic Games / حساب Xbox',
-    tag: '👑 باقة شاملة'
-  },
-
-  // ==========================================================================
-  // 6. VALORANT POINTS — VP (شحن يدوي آمن)
-  // ==========================================================================
-  {
-    id: 'val-475',
-    category: 'valorant',
-    region: '',
-    regionLabel: 'Valorant',
-    flag: '🎯',
-    title: '475 Valorant Points',
-    fullTitle: 'شحن Valorant — 475 VP',
-    valueLabel: '475 VP',
-    subtitle: 'شحن مباشر وآمن بالـ Riot ID بدون الحاجة للباسورد',
-    priceEgp: 260,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'معرف حساب Riot (Riot ID)',
-    accountPlaceholder: 'اكتب Riot ID مثال: Player#EGY',
-    tag: ''
-  },
-  {
-    id: 'val-1000',
-    category: 'valorant',
-    region: '',
-    regionLabel: 'Valorant',
-    flag: '🎯',
-    title: '1,000 Valorant Points',
-    fullTitle: 'شحن Valorant — 1,000 VP',
-    valueLabel: '1,000 VP',
-    subtitle: 'مثالية لتفعيل الـ Battle Pass في فالورانت فوراً',
-    priceEgp: 520,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'معرف حساب Riot (Riot ID)',
-    accountPlaceholder: 'اكتب Riot ID مثال: Player#EGY',
-    tag: ''
-  },
-  {
-    id: 'val-2050',
-    category: 'valorant',
-    region: '',
-    regionLabel: 'Valorant',
-    flag: '🎯',
-    title: '2,050 Valorant Points',
-    fullTitle: 'شحن Valorant — 2,050 VP',
-    valueLabel: '2,050 VP',
-    subtitle: 'تكفي لشراء سكن Vandal أو Phantom بريميوم من الـ Store',
-    priceEgp: 1040,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'معرف حساب Riot (Riot ID)',
-    accountPlaceholder: 'اكتب Riot ID مثال: Player#EGY',
-    tag: '🔥 الأكثر طلباً'
-  },
-  {
-    id: 'val-3650',
-    category: 'valorant',
-    region: '',
-    regionLabel: 'Valorant',
-    flag: '🎯',
-    title: '3,650 Valorant Points',
-    fullTitle: 'شحن Valorant — 3,650 VP',
-    valueLabel: '3,650 VP',
-    subtitle: 'لشراء سكنات الـ Night Market أو السكاكين (Melee)',
-    priceEgp: 1820,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'معرف حساب Riot (Riot ID)',
-    accountPlaceholder: 'اكتب Riot ID مثال: Player#EGY',
-    tag: ''
-  },
-  {
-    id: 'val-5350',
-    category: 'valorant',
-    region: '',
-    regionLabel: 'Valorant',
-    flag: '🎯',
-    title: '5,350 Valorant Points',
-    fullTitle: 'شحن Valorant — 5,350 VP',
-    valueLabel: '5,350 VP',
-    subtitle: 'أفضل باقة لشراء باندلات كاملة بأعلى نقاط بونص',
-    priceEgp: 2620,
-    deliveryType: 'manual_topup',
-    deliveryBadge: 'شحن يدوي آمن • خلال 5-15 دقيقة',
-    requiresAccount: true,
-    accountLabel: 'معرف حساب Riot (Riot ID)',
-    accountPlaceholder: 'اكتب Riot ID مثال: Player#EGY',
     tag: '💎 أفضل قيمة'
   }
 ];

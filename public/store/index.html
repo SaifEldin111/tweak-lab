@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>متجر TweakLab للألعاب | بطاقات PlayStation PSN، شحن V-Bucks و Valorant Points في مصر</title>
-  <meta name="description" content="متجر TweakLab الرسمي في مصر لبطاقات PlayStation PSN (أمريكي، سعودي، إماراتي، تركي) وشحن Fortnite V-Bucks و Valorant Points بأمان وسرعة عبر InstaPay و Vodafone Cash." />
+  <title>متجر TweakLab | بطاقات PlayStation (PSN) الرقمية لجميع الريجينات في مصر</title>
+  <meta name="description" content="متجر TweakLab الرسمي في مصر لبطاقات PlayStation PSN الرقمية (أمريكي، سعودي، إماراتي، تركي) بأفضل الأسعار وتسليم كود فوري عبر InstaPay و Vodafone Cash." />
   <link rel="canonical" href="https://tweak-lab-a177.vercel.app/store" />
-  <meta property="og:title" content="متجر TweakLab للألعاب والشحن | PSN • V-Bucks • Valorant Points" />
-  <meta property="og:description" content="كود رقمي سريع لبطاقات بلايستيشن وشحن يدوي آمن خلال 5-15 دقيقة لفورتنايت وفالورانت عبر إنستاباي وفودافون كاش." />
+  <meta property="og:title" content="متجر TweakLab | بطاقات PlayStation (PSN) الرقمية" />
+  <meta property="og:description" content="بطاقات PlayStation PSN أصلية لجميع الريجينات (أمريكي، سعودي، إماراتي، تركي) • كود رقمي وتسليم سريع عبر InstaPay و Vodafone Cash." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tweak-lab-a177.vercel.app/store" />
   <meta name="theme-color" content="#070a10" />
@@ -32,7 +32,6 @@
       --red: #ff4757;
       --purple: #9b59ff;
       --psn-blue: #0070ff;
-      --valorant-red: #ff4655;
       --vodafone: #e60000;
       --instapay: #7b2cbf;
       --text-main: #f0f6fc;
@@ -217,7 +216,7 @@
     }
 
     /* ========================================================================
-       STORE HERO HEADER & QUICK FILTER TABS
+       STORE HERO HEADER & 2-TAB STORE SWITCHER
        ======================================================================== */
     .store-hero {
       position: relative;
@@ -266,7 +265,7 @@
       text-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
     }
     .store-hero-sub {
-      max-width: 760px;
+      max-width: 740px;
       margin: 0 auto 22px;
       color: #b4c6de;
       font-size: 1.02rem;
@@ -292,11 +291,9 @@
       font-size: 0.82rem;
       font-weight: 700;
     }
-    .trust-pill strong {
-      color: var(--green);
-    }
+    .trust-pill strong { color: var(--green); }
 
-    /* Quick Category Filter Tabs */
+    /* Clear 2-Tab Bar above Products */
     .filter-tabs-wrap {
       display: inline-flex;
       align-items: center;
@@ -306,19 +303,19 @@
       padding: 6px;
       border-radius: 16px;
       background: rgba(10, 15, 26, 0.92);
-      border: 1px solid rgba(0, 255, 136, 0.24);
+      border: 1px solid rgba(0, 255, 136, 0.28);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     .filter-tab-btn {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 10px 18px;
+      gap: 8px;
+      padding: 11px 22px;
       border-radius: 12px;
       border: 1px solid transparent;
       background: transparent;
-      color: #adc0d9;
-      font-size: 0.9rem;
+      color: #b2c5de;
+      font-size: 0.94rem;
       font-weight: 800;
       cursor: pointer;
       font-family: inherit;
@@ -332,12 +329,18 @@
       background: linear-gradient(135deg, rgba(0, 255, 136, 0.22), rgba(0, 240, 255, 0.16));
       border-color: rgba(0, 255, 136, 0.72);
       color: var(--green);
-      box-shadow: 0 0 18px rgba(0, 255, 136, 0.25);
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.26);
+    }
+    .filter-tab-btn.soon-tab.active {
+      background: linear-gradient(135deg, rgba(255, 184, 0, 0.16), rgba(0, 240, 255, 0.14));
+      border-color: rgba(255, 184, 0, 0.65);
+      color: #ffe08a;
+      box-shadow: 0 0 18px rgba(255, 184, 0, 0.22);
     }
     .filter-count {
       font-size: 0.72rem;
       font-weight: 900;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.08);
       color: #d6e4f7;
@@ -345,6 +348,15 @@
     .filter-tab-btn.active .filter-count {
       background: var(--green);
       color: #03120a;
+    }
+    .soon-pill-badge {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: rgba(255, 184, 0, 0.18);
+      border: 1px solid rgba(255, 184, 0, 0.55);
+      color: #ffcf4d;
     }
 
     /* ========================================================================
@@ -356,7 +368,7 @@
       padding: 34px 20px 60px;
     }
     .catalog-section {
-      margin-bottom: 46px;
+      margin-bottom: 42px;
       animation: fadeSlideUp 0.28s ease-out;
     }
     .catalog-section.hidden-section {
@@ -403,11 +415,6 @@
       background: rgba(0, 255, 136, 0.12);
       border: 1px solid rgba(0, 255, 136, 0.45);
       color: var(--green);
-    }
-    .delivery-chip.manual-topup {
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.45);
-      color: var(--cyan);
     }
 
     /* PSN Region Selector */
@@ -478,9 +485,6 @@
     .products-grid.cols-3 {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .products-grid.cols-5 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
     .product-card {
       position: relative;
       display: flex;
@@ -495,16 +499,8 @@
     }
     .product-card:hover {
       transform: translateY(-5px);
-      border-color: rgba(0, 255, 136, 0.72);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 255, 136, 0.2);
-    }
-    .product-card.theme-psn:hover {
-      border-color: rgba(0, 240, 255, 0.8);
+      border-color: rgba(0, 240, 255, 0.82);
       box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 140, 255, 0.28);
-    }
-    .product-card.theme-valorant:hover {
-      border-color: rgba(255, 70, 85, 0.8);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 24px rgba(255, 70, 85, 0.24);
     }
 
     /* Card Visual Artwork Header */
@@ -517,26 +513,9 @@
       justify-content: space-between;
       overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .card-visual-banner.psn-bg {
       background:
         radial-gradient(circle at 12% 18%, rgba(0, 240, 255, 0.26), transparent 55%),
         linear-gradient(135deg, #07193a 0%, #092c6b 55%, #061329 100%);
-    }
-    .card-visual-banner.fortnite-bg {
-      background:
-        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.3), transparent 52%),
-        linear-gradient(135deg, #0b1b3a 0%, #1c144a 52%, #081224 100%);
-    }
-    .card-visual-banner.fortnite-crew-bg {
-      background:
-        radial-gradient(circle at 15% 15%, rgba(0, 255, 136, 0.32), transparent 55%),
-        linear-gradient(135deg, #092625 0%, #1f1248 56%, #08111e 100%);
-    }
-    .card-visual-banner.valorant-bg {
-      background:
-        radial-gradient(circle at 15% 18%, rgba(255, 70, 85, 0.34), transparent 55%),
-        linear-gradient(135deg, #270c14 0%, #161124 58%, #090c14 100%);
     }
     .card-visual-top {
       display: flex;
@@ -623,11 +602,6 @@
       border: 1px solid rgba(0, 255, 136, 0.34);
       color: #9effd0;
     }
-    .card-delivery-tag.manual {
-      background: rgba(0, 240, 255, 0.1);
-      border-color: rgba(0, 240, 255, 0.34);
-      color: #aef7ff;
-    }
     .card-footer-row {
       display: flex;
       align-items: center;
@@ -677,7 +651,154 @@
     }
 
     /* ========================================================================
-       STORE ORDER MODAL & TRACK ORDER MODAL
+       GAMES TOP-UP COMING SOON GLASS CARD & LOCKED PREVIEW CARDS
+       ======================================================================== */
+    .coming-soon-glass-card {
+      position: relative;
+      max-width: 780px;
+      margin: 10px auto 0;
+      padding: 38px 28px;
+      border-radius: 22px;
+      background: linear-gradient(150deg, rgba(13, 21, 35, 0.88) 0%, rgba(7, 11, 19, 0.95) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(0, 255, 136, 0.48);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.6), 0 0 32px rgba(0, 255, 136, 0.14);
+      text-align: center;
+      overflow: hidden;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .coming-soon-glass-card.notice-pulse {
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.65), 0 0 42px rgba(0, 255, 136, 0.42);
+      border-color: var(--green);
+    }
+    .coming-soon-glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(0, 255, 136, 0.15), transparent 48%),
+        radial-gradient(circle at 15% 85%, rgba(0, 240, 255, 0.12), transparent 50%);
+      pointer-events: none;
+    }
+    .coming-soon-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(255, 184, 0, 0.14);
+      border: 1px solid rgba(255, 184, 0, 0.55);
+      color: #ffd35c;
+      font-size: 0.82rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    .coming-soon-title {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .coming-soon-desc {
+      max-width: 580px;
+      margin: 0 auto 24px;
+      color: #bdd0e8;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+    .locked-games-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 580px;
+      margin: 0 auto 26px;
+    }
+    .locked-game-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 16px;
+      border-radius: 14px;
+      background: rgba(6, 10, 18, 0.82);
+      border: 1px dashed rgba(0, 255, 136, 0.3);
+      color: #d6e4f7;
+      text-align: start;
+      cursor: pointer;
+      font-family: inherit;
+      opacity: 0.86;
+      transition: all 0.2s ease;
+    }
+    .locked-game-card:hover {
+      opacity: 1;
+      border-color: rgba(255, 184, 0, 0.65);
+      background: rgba(11, 17, 29, 0.92);
+    }
+    .locked-game-title {
+      font-size: 0.96rem;
+      font-weight: 900;
+      color: #fff;
+      display: block;
+    }
+    .locked-game-sub {
+      font-size: 0.77rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+    .locked-pill {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.42);
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .locked-inline-toast {
+      display: none;
+      margin: -10px auto 18px;
+      max-width: 460px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #aef7d2;
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+    .back-to-psn-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 26px;
+      border-radius: 13px;
+      border: none;
+      background: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+      color: #03120b;
+      font-size: 0.96rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 10px 26px rgba(0, 255, 136, 0.34);
+      transition: all 0.22s ease;
+    }
+    .back-to-psn-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(0, 255, 136, 0.52);
+      filter: brightness(1.05);
+    }
+
+    /* ========================================================================
+       STORE ORDER MODAL & TRACK ORDER MODAL (PSN DIGITAL CODES ONLY)
        ======================================================================== */
     .modal-backdrop {
       display: none;
@@ -911,24 +1032,12 @@
       border-color: var(--red);
       box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.15);
     }
-    .field-hint {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
     .field-error {
       display: none;
       font-size: 0.79rem;
       color: #ff6b78;
       font-weight: 700;
       margin-top: 5px;
-    }
-    .account-box-highlight {
-      background: rgba(0, 240, 255, 0.06);
-      border: 1px solid rgba(0, 240, 255, 0.35);
-      border-radius: 12px;
-      padding: 12px 13px;
-      margin-bottom: 14px;
     }
     .upload-zone {
       border: 1.5px dashed rgba(0, 240, 255, 0.45);
@@ -1115,8 +1224,7 @@
     /* Responsive Rules */
     @media (max-width: 1040px) {
       .products-grid,
-      .products-grid.cols-3,
-      .products-grid.cols-5 {
+      .products-grid.cols-3 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
@@ -1136,17 +1244,17 @@
       }
       .products-grid,
       .products-grid.cols-3,
-      .products-grid.cols-5 {
+      .locked-games-grid {
         grid-template-columns: 1fr;
       }
       .filter-tabs-wrap {
         width: 100%;
       }
       .filter-tab-btn {
-        flex: 1 1 44%;
+        flex: 1 1 100%;
         justify-content: center;
-        padding: 9px 10px;
-        font-size: 0.82rem;
+        padding: 10px 12px;
+        font-size: 0.86rem;
       }
       .region-buttons-group {
         width: 100%;
@@ -1155,6 +1263,9 @@
         flex: 1 1 45%;
         justify-content: center;
         font-size: 0.82rem;
+      }
+      .coming-soon-glass-card {
+        padding: 26px 18px;
       }
       .modal-dialog {
         padding: 18px 15px;
@@ -1202,43 +1313,35 @@
     </div>
   </nav>
 
-  <!-- STORE HERO & QUICK CATEGORY FILTER TABS -->
+  <!-- STORE HERO & 2-TAB SWITCHER -->
   <header class="store-hero">
     <div class="store-hero-inner">
       <div class="hero-eyebrow">
         <span>🎮</span>
-        <span>TWEAKLAB GAMING STORE • INSTAPAY &amp; VODAFONE CASH</span>
+        <span>TWEAKLAB GAMING STORE • PLAYSTATION PSN DIGITAL CODES</span>
       </div>
       <h1>
-        متجر <span class="accent-green">بطاقات PlayStation</span> وشحن <span class="accent-cyan">الألعاب</span> في مصر
+        متجر <span class="accent-green">بطاقات PlayStation (PSN)</span> الرقمية في <span class="accent-cyan">مصر</span>
       </h1>
       <p class="store-hero-sub">
-        اشحن حسابك بأمان 100% وبأفضل سعر بالجنيه المصري — كود رقمي رسمي لبطاقات <strong>PSN</strong> لكل الريجينز، وشحن يدوي آمن وسريع لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.
+        بطاقات <strong>PlayStation PSN</strong> أصلية 100% لجميع الريجينات (<strong>أمريكي • سعودي • إماراتي • تركي</strong>) بأفضل الأسعار بالجنيه المصري وتسليم كود رقمي سريع عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.
       </p>
 
       <div class="store-trust-strip">
-        <span class="trust-pill">⚡ <strong>PSN:</strong> كود رقمي • تسليم سريع</span>
-        <span class="trust-pill">🛡️ <strong>V-Bucks &amp; VP:</strong> شحن يدوي آمن خلال 5-15 دقيقة</span>
+        <span class="trust-pill">⚡ <strong>PSN:</strong> كود رقمي رسمي • تسليم سريع</span>
+        <span class="trust-pill">🌍 <strong>الريجينات:</strong> US • SA • UAE • TR</span>
         <span class="trust-pill">💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
 
-      <!-- Quick Filter Tabs -->
-      <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist" aria-label="فلترة منتجات المتجر">
-        <button type="button" class="filter-tab-btn active" data-filter="all" onclick="setCategoryFilter('all')">
-          <span>✨ الكل</span>
-          <span class="filter-count" id="count-all">25</span>
-        </button>
-        <button type="button" class="filter-tab-btn" data-filter="psn" onclick="setCategoryFilter('psn')">
+      <!-- Clear 2-Tab Bar above Products -->
+      <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist" aria-label="أقسام متجر TweakLab">
+        <button type="button" class="filter-tab-btn active" id="tab-btn-psn" data-tab="psn" role="tab" aria-selected="true" onclick="setStoreTab('psn')">
           <span>🎮 بطاقات PlayStation (PSN)</span>
           <span class="filter-count" id="count-psn">15</span>
         </button>
-        <button type="button" class="filter-tab-btn" data-filter="fortnite" onclick="setCategoryFilter('fortnite')">
-          <span>⚡ Fortnite V-Bucks</span>
-          <span class="filter-count" id="count-fortnite">5</span>
-        </button>
-        <button type="button" class="filter-tab-btn" data-filter="valorant" onclick="setCategoryFilter('valorant')">
-          <span>🎯 Valorant Points</span>
-          <span class="filter-count" id="count-valorant">5</span>
+        <button type="button" class="filter-tab-btn soon-tab" id="tab-btn-soon" data-tab="topup-soon" role="tab" aria-selected="false" onclick="setStoreTab('topup-soon')">
+          <span>🔒 شحن الألعاب</span>
+          <span class="soon-pill-badge">قريباً</span>
         </button>
       </div>
     </div>
@@ -1247,7 +1350,7 @@
   <!-- MAIN CATALOG SECTIONS -->
   <main class="store-container">
 
-    <!-- SECTION 1: PLAYSTATION GIFT CARDS (PSN) WITH REGION SELECTOR -->
+    <!-- TAB 1: PLAYSTATION GIFT CARDS (PSN) WITH REGION SELECTOR -->
     <section class="catalog-section" id="section-psn" aria-labelledby="heading-psn">
       <div class="section-top-bar">
         <div class="section-title-group">
@@ -1272,60 +1375,71 @@
       </div>
     </section>
 
-    <!-- SECTION 2A: FORTNITE V-BUCKS (MANUAL TOP-UP) -->
-    <section class="catalog-section" id="section-fortnite" aria-labelledby="heading-fortnite">
-      <div class="section-top-bar">
-        <div class="section-title-group">
-          <h2 id="heading-fortnite">⚡ شحن Fortnite V-Bucks وباقة Crew</h2>
-          <p>شحن رسمي ومضمون لحسابك (Epic Games / Xbox) بدون أي مخاطر على الحساب</p>
+    <!-- TAB 2: GAMES TOP-UP (COMING SOON NOTICE — NO CHECKOUT MODAL) -->
+    <section class="catalog-section hidden-section" id="section-topup-soon" aria-labelledby="heading-topup-soon">
+      <div class="coming-soon-glass-card" id="coming-soon-notice-card">
+        <div class="coming-soon-inner">
+          <div class="coming-soon-badge">
+            <span>🔒</span>
+            <span>قريباً على TweakLab • Coming Soon</span>
+          </div>
+          <h2 id="heading-topup-soon" class="coming-soon-title">قسم شحن الألعاب قيد التجهيز حالياً 🛠️</h2>
+          <p class="coming-soon-desc">
+            بنجهزلك أسرع وأأمن تجربة شحن لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> على TweakLab. هيتوفر قريباً جداً!
+          </p>
+
+          <!-- Locked Preview Cards (Never open checkout modal) -->
+          <div class="locked-games-grid">
+            <button type="button" class="locked-game-card" onclick="highlightComingSoonNotice('Fortnite V-Bucks')">
+              <div>
+                <span class="locked-game-title">⚡ Fortnite V-Bucks &amp; Crew</span>
+                <span class="locked-game-sub">شحن يدوي آمن وسريع</span>
+              </div>
+              <span class="locked-pill">🔒 قريباً</span>
+            </button>
+            <button type="button" class="locked-game-card" onclick="highlightComingSoonNotice('Valorant Points (VP)')">
+              <div>
+                <span class="locked-game-title">🎯 Valorant Points (VP)</span>
+                <span class="locked-game-sub">شحن مباشر بالـ Riot ID</span>
+              </div>
+              <span class="locked-pill">🔒 قريباً</span>
+            </button>
+          </div>
+
+          <div class="locked-inline-toast" id="coming-soon-inline-toast"></div>
+
+          <button type="button" class="back-to-psn-btn" onclick="setStoreTab('psn')">
+            <span>🎮</span>
+            <span>تصفح بطاقات PlayStation المتاحة حالياً</span>
+          </button>
         </div>
-        <span class="delivery-chip manual-topup">🛡️ شحن يدوي آمن • خلال 5-15 دقيقة</span>
-      </div>
-
-      <div class="products-grid cols-5" id="fortnite-products-grid">
-        <!-- Rendered dynamically from data/storeProducts.js -->
-      </div>
-    </section>
-
-    <!-- SECTION 2B: VALORANT POINTS (MANUAL TOP-UP) -->
-    <section class="catalog-section" id="section-valorant" aria-labelledby="heading-valorant">
-      <div class="section-top-bar">
-        <div class="section-title-group">
-          <h2 id="heading-valorant">🎯 شحن Valorant Points (VP)</h2>
-          <p>شحن مباشر بالـ Riot ID (مثال: Player#EGY) — آمن وسريع خلال دقائق</p>
-        </div>
-        <span class="delivery-chip manual-topup">🛡️ شحن يدوي آمن • خلال 5-15 دقيقة</span>
-      </div>
-
-      <div class="products-grid cols-5" id="valorant-products-grid">
-        <!-- Rendered dynamically from data/storeProducts.js -->
       </div>
     </section>
 
   </main>
 
-  <!-- STORE ORDER MODAL (CHECKOUT + LIVE STATUS TRACKER) -->
+  <!-- STORE ORDER MODAL (PSN DIGITAL CODES — WHATSAPP + TRANSFER SCREENSHOT ONLY) -->
   <div class="modal-backdrop" id="store-order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading" onclick="if(event.target===this) closeOrderModal()">
     <div class="modal-dialog">
       <button type="button" class="modal-close-btn" onclick="closeOrderModal()" aria-label="إغلاق">✕</button>
 
       <!-- STEP 1: ORDER FORM VIEW -->
       <div id="modal-checkout-view">
-        <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;">💳 إتمام طلب المتجر</h3>
-        <p style="font-size:0.84rem; color:var(--text-muted);">حوّل المبلغ الموضح بالأسفل وارفع سكرين شوت الإيصال لتنفيذ طلبك فوراً</p>
+        <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;">💳 إتمام طلب بطاقة PlayStation</h3>
+        <p style="font-size:0.84rem; color:var(--text-muted);">حوّل المبلغ الموضح بالأسفل وارفع سكرين شوت الإيصال لاستلام كود الـ PSN الرقمي على الواتساب</p>
 
         <!-- Selected Product Summary -->
         <div class="modal-product-summary">
           <div>
             <div class="summary-title" id="modal-product-title">بطاقة PlayStation PSN $50</div>
             <div class="summary-meta">
-              <span id="modal-product-region-badge">🇺🇸 أمريكي (US)</span>
+              <span id="modal-product-region-badge">🇺🇸 ريجين أمريكي (US)</span>
               <span>•</span>
               <span id="modal-product-delivery-badge" style="color:var(--green);">كود رقمي • تسليم سريع</span>
             </div>
           </div>
           <div class="summary-price-pill">
-            <span class="sp-val" id="modal-product-price">2,550 ج.م</span>
+            <span class="sp-val" id="modal-product-price">2,790 ج.م</span>
             <span class="sp-lbl">السعر النهائي</span>
           </div>
         </div>
@@ -1373,32 +1487,22 @@
             <button type="button" class="copy-mini-btn" onclick="copyStoreText(storeConfig.paymentPhone || '01020670418', this)">📋 نسخ الرقم</button>
           </div>
           <div style="background:rgba(230,0,0,0.1); border:1px solid rgba(230,0,0,0.35); border-radius:9px; padding:8px 11px; font-size:0.8rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-            <span>💡 كود التحويل: <code id="store-voda-ussd" dir="ltr" style="color:#fff; font-weight:900;">*9*7*01020670418*520#</code></span>
+            <span>💡 كود التحويل: <code id="store-voda-ussd" dir="ltr" style="color:#fff; font-weight:900;">*9*7*01020670418*575#</code></span>
             <button type="button" class="copy-mini-btn" onclick="copyStoreText(document.getElementById('store-voda-ussd').textContent, this)">نسخ الكود</button>
           </div>
-          <a id="store-voda-dial-btn" href="tel:*9*7*01020670418*520%23" class="direct-pay-link voda">
+          <a id="store-voda-dial-btn" href="tel:*9*7*01020670418*575%23" class="direct-pay-link voda">
             📞 اتصال مباشر للتحويل من الموبايل
           </a>
         </div>
 
-        <!-- Order Form -->
+        <!-- Order Form (PSN Digital Code: WhatsApp + Transfer Screenshot Only) -->
         <form id="store-order-form" onsubmit="submitStoreOrder(event)" novalidate>
-          <!-- WhatsApp Phone (Always Required) -->
           <div class="form-group">
-            <label for="store-whatsapp-input">💬 رقم الواتساب (مطلوب لاستلام الكود أو تأكيد الشحن):</label>
+            <label for="store-whatsapp-input">💬 رقم الواتساب (مطلوب لاستلام كود الـ PSN الرقمي):</label>
             <input type="tel" id="store-whatsapp-input" class="input-field" inputmode="numeric" placeholder="مثال: 010xxxxxxxx" autocomplete="tel" required />
             <div class="field-error" id="store-whatsapp-error">يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx)</div>
           </div>
 
-          <!-- Conditional Game Account Field (REQUIRED ONLY for Fortnite V-Bucks & Valorant Points; HIDDEN for PSN) -->
-          <div class="account-box-highlight" id="store-account-field-wrap" style="display:none;">
-            <label for="store-account-input" id="store-account-label" style="color:var(--cyan);">🎯 بيانات الحساب المطلوبة للشحن:</label>
-            <input type="text" id="store-account-input" class="input-field" dir="ltr" placeholder="اكتب Riot ID مثال: Player#EGY" autocomplete="off" />
-            <div class="field-hint" id="store-account-hint">تأكد من كتابة بيانات الحساب بدقة لتنفيذ الشحن خلال 5-15 دقيقة.</div>
-            <div class="field-error" id="store-account-error">يرجى كتابة بيانات الحساب بشكل صحيح لإتمام الشحن.</div>
-          </div>
-
-          <!-- Transfer Screenshot Upload -->
           <div class="form-group">
             <label>📸 ارفع صورة سكرين شوت التحويل (مطلوب):</label>
             <div class="upload-zone" onclick="document.getElementById('store-screenshot-input').click()">
@@ -1411,10 +1515,9 @@
             <div class="field-error" id="store-screenshot-error">يرجى رفع صورة سكرين شوت التحويل أولاً.</div>
           </div>
 
-          <!-- Optional Notes -->
           <div class="form-group">
             <label for="store-notes-input">📝 ملاحظات إضافية (اختياري):</label>
-            <input type="text" id="store-notes-input" class="input-field" placeholder="أي ملاحظة إضافية لفريق الشحن..." />
+            <input type="text" id="store-notes-input" class="input-field" placeholder="أي ملاحظة إضافية لفريق التسليم..." />
           </div>
 
           <button type="submit" class="submit-store-btn" id="store-submit-btn">
@@ -1425,10 +1528,10 @@
 
       <!-- STEP 2: ORDER SUBMITTED & LIVE STATUS VIEW -->
       <div id="modal-status-view" class="order-status-view">
-        <div id="status-pill-badge" class="status-pill-lg pending">⏳ جاري مراجعة إيصال الدفع وتنفيذ الطلب</div>
+        <div id="status-pill-badge" class="status-pill-lg pending">⏳ جاري مراجعة إيصال الدفع وتجهيز كود الـ PSN</div>
         <h3 id="status-view-title" style="font-size:1.3rem; font-weight:900; color:#fff; margin-bottom:6px;">تم تسجيل طلبك بنجاح! 🎉</h3>
         <p id="status-view-desc" style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
-          وصل طلبك وصورة التحويل لفريق TweakLab الآن. بمجرد مراجعة الإيصال، سيتم إرسال الكود / الشحن على الواتساب وتحديث الحالة هنا تلقائياً.
+          وصل طلبك وصورة التحويل لفريق TweakLab الآن. بمجرد مراجعة الإيصال، سيتم إرسال الكود الرقمي على الواتساب وتحديث الحالة هنا تلقائياً.
         </p>
 
         <div class="order-receipt-card" id="status-receipt-card"></div>
@@ -1465,7 +1568,7 @@
       <div class="footer-guides-bar">
         <a href="/" class="footer-guides-link primary-guide-link">⚡ معمل تظبيط الأداء (PC)</a>
         <span style="color:var(--border);">•</span>
-        <a href="/store" class="footer-guides-link primary-guide-link">🎮 متجر البطاقات والشحن</a>
+        <a href="/store" class="footer-guides-link primary-guide-link">🎮 متجر بطاقات PSN</a>
         <span style="color:var(--border);">•</span>
         <a href="/guides" class="footer-guides-link">📚 شروحات الأداء</a>
         <span style="color:var(--border);">•</span>
@@ -1488,7 +1591,7 @@
         </a>
       </div>
       <div style="color:var(--text-muted); font-size:0.82rem;">
-        © 2027 <strong style="color:var(--green);">TWEAK LAB</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر الشحن الآمن 100%
+        © 2027 <strong style="color:var(--green);">TWEAK LAB</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر بطاقات PlayStation الآمن 100%
       </div>
     </div>
   </footer>
@@ -1502,7 +1605,7 @@ let storeConfig = {
   deliveryMinutes: 5
 };
 
-let activeCategory = 'all';
+let activeStoreTab = 'psn';
 let activePsnRegion = 'US';
 let selectedProduct = null;
 let selectedStorePayMethod = 'instapay';
@@ -1526,63 +1629,33 @@ function normalizeDigits(str) {
   return String(str || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
 }
 
-function getEmblemSvg(category, isCrew) {
-  if (category === 'psn') {
-    return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <rect x="3" y="8" width="34" height="24" rx="8" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,112,255,0.2)"/>
-      <circle cx="14" cy="20" r="3" fill="#00ff88"/>
-      <path d="M24 17l4 6M28 17l-4 6" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>`;
-  }
-  if (category === 'fortnite') {
-    return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <polygon points="20,4 34,14 29,34 11,34 6,14" stroke="${isCrew ? '#00ff88' : '#00f0ff'}" stroke-width="2.2" fill="rgba(0,240,255,0.16)"/>
-      <path d="M14 14l6 14 6-14" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`;
-  }
+function getPsnEmblemSvg() {
   return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-    <path d="M6 10l12 20h6L12 10H6zm28 0l-9 15h6l3-5V10z" fill="#ff4655"/>
-    <path d="M12 10l12 20" stroke="#ffffff" stroke-width="1.4" opacity="0.45"/>
+    <rect x="3" y="8" width="34" height="24" rx="8" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,112,255,0.2)"/>
+    <circle cx="14" cy="20" r="3" fill="#00ff88"/>
+    <path d="M24 17l4 6M28 17l-4 6" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
   </svg>`;
 }
 
-function buildProductCardHtml(p) {
-  const isCrew = p.id === 'fn-crew';
-  const themeClass = p.category === 'psn' ? 'theme-psn' : p.category === 'valorant' ? 'theme-valorant' : 'theme-fortnite';
-  const visualClass =
-    p.category === 'psn'
-      ? 'psn-bg'
-      : p.category === 'valorant'
-      ? 'valorant-bg'
-      : isCrew
-      ? 'fortnite-crew-bg'
-      : 'fortnite-bg';
-  const brandPillText =
-    p.category === 'psn'
-      ? `${p.flag} PSN ${p.region}`
-      : p.category === 'fortnite'
-      ? (isCrew ? '👑 Fortnite Crew' : '⚡ Fortnite V-Bucks')
-      : '🎯 Valorant Points';
-  const deliveryClass = p.deliveryType === 'manual_topup' ? 'manual' : '';
-
+function buildPsnCardHtml(p) {
   return `
-    <article class="product-card ${themeClass}">
-      <div class="card-visual-banner ${visualClass}">
+    <article class="product-card">
+      <div class="card-visual-banner">
         <div class="card-visual-top">
-          <span class="card-brand-pill">${escapeHtml(brandPillText)}</span>
+          <span class="card-brand-pill">${escapeHtml(p.flag)} PSN ${escapeHtml(p.region)}</span>
           ${p.tag ? `<span class="card-hot-tag">${escapeHtml(p.tag)}</span>` : ''}
         </div>
         <div class="card-value-display">
           <span class="card-value-big">${escapeHtml(p.valueLabel)}</span>
-          ${getEmblemSvg(p.category, isCrew)}
+          ${getPsnEmblemSvg()}
         </div>
       </div>
       <div class="card-body">
         <div>
           <h3 class="card-title">${escapeHtml(p.title)}</h3>
           <p class="card-desc">${escapeHtml(p.subtitle)}</p>
-          <span class="card-delivery-tag ${deliveryClass}">
-            <span>${p.deliveryType === 'manual_topup' ? '🛡️' : '⚡'}</span>
+          <span class="card-delivery-tag">
+            <span>⚡</span>
             <span>${escapeHtml(p.deliveryBadge)}</span>
           </span>
         </div>
@@ -1617,30 +1690,13 @@ function renderRegionButtons() {
 function renderPsnProducts() {
   const grid = document.getElementById('psn-products-grid');
   if (!grid) return;
-  const items = (storeCatalog.products || []).filter((p) => p.category === 'psn' && p.region === activePsnRegion);
+  const psnAll = (storeCatalog.products || []).filter((p) => p.category === 'psn');
+  const items = psnAll.filter((p) => p.region === activePsnRegion);
   grid.className = items.length === 3 ? 'products-grid cols-3' : 'products-grid';
-  grid.innerHTML = items.map(buildProductCardHtml).join('');
-}
+  grid.innerHTML = items.map(buildPsnCardHtml).join('');
 
-function renderTopupProducts() {
-  const fnGrid = document.getElementById('fortnite-products-grid');
-  const valGrid = document.getElementById('valorant-products-grid');
-  const fnItems = (storeCatalog.products || []).filter((p) => p.category === 'fortnite');
-  const valItems = (storeCatalog.products || []).filter((p) => p.category === 'valorant');
-
-  if (fnGrid) fnGrid.innerHTML = fnItems.map(buildProductCardHtml).join('');
-  if (valGrid) valGrid.innerHTML = valItems.map(buildProductCardHtml).join('');
-
-  const allCount = (storeCatalog.products || []).length;
-  const psnCount = (storeCatalog.products || []).filter((p) => p.category === 'psn').length;
-  const elAll = document.getElementById('count-all');
   const elPsn = document.getElementById('count-psn');
-  const elFn = document.getElementById('count-fortnite');
-  const elVal = document.getElementById('count-valorant');
-  if (elAll) elAll.textContent = allCount;
-  if (elPsn) elPsn.textContent = psnCount;
-  if (elFn) elFn.textContent = fnItems.length;
-  if (elVal) elVal.textContent = valItems.length;
+  if (elPsn) elPsn.textContent = psnAll.length;
 }
 
 function selectPsnRegion(regionCode) {
@@ -1649,18 +1705,38 @@ function selectPsnRegion(regionCode) {
   renderPsnProducts();
 }
 
-function setCategoryFilter(filter) {
-  activeCategory = filter;
-  document.querySelectorAll('.filter-tab-btn').forEach((btn) => {
-    btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
-  });
+function setStoreTab(tabId) {
+  activeStoreTab = tabId === 'topup-soon' ? 'topup-soon' : 'psn';
+  const btnPsn = document.getElementById('tab-btn-psn');
+  const btnSoon = document.getElementById('tab-btn-soon');
   const secPsn = document.getElementById('section-psn');
-  const secFn = document.getElementById('section-fortnite');
-  const secVal = document.getElementById('section-valorant');
+  const secSoon = document.getElementById('section-topup-soon');
 
-  if (secPsn) secPsn.classList.toggle('hidden-section', filter !== 'all' && filter !== 'psn');
-  if (secFn) secFn.classList.toggle('hidden-section', filter !== 'all' && filter !== 'fortnite');
-  if (secVal) secVal.classList.toggle('hidden-section', filter !== 'all' && filter !== 'valorant');
+  if (btnPsn) {
+    btnPsn.classList.toggle('active', activeStoreTab === 'psn');
+    btnPsn.setAttribute('aria-selected', activeStoreTab === 'psn' ? 'true' : 'false');
+  }
+  if (btnSoon) {
+    btnSoon.classList.toggle('active', activeStoreTab === 'topup-soon');
+    btnSoon.setAttribute('aria-selected', activeStoreTab === 'topup-soon' ? 'true' : 'false');
+  }
+  if (secPsn) secPsn.classList.toggle('hidden-section', activeStoreTab !== 'psn');
+  if (secSoon) secSoon.classList.toggle('hidden-section', activeStoreTab !== 'topup-soon');
+}
+
+function highlightComingSoonNotice(gameLabel) {
+  const card = document.getElementById('coming-soon-notice-card');
+  const toast = document.getElementById('coming-soon-inline-toast');
+  if (toast) {
+    toast.textContent = `🔒 شحن ${gameLabel} قيد التجهيز حالياً وسيتوفر قريباً جداً على TweakLab!`;
+    toast.style.display = 'block';
+  }
+  if (card) {
+    card.classList.remove('notice-pulse');
+    void card.offsetWidth;
+    card.classList.add('notice-pulse');
+    setTimeout(() => card.classList.remove('notice-pulse'), 900);
+  }
 }
 
 function updateModalPaymentNumbers() {
@@ -1709,7 +1785,7 @@ function copyStoreText(text, btn) {
 }
 
 function openOrderModal(productId) {
-  const product = (storeCatalog.products || []).find((p) => p.id === productId);
+  const product = (storeCatalog.products || []).find((p) => p.id === productId && p.category === 'psn');
   if (!product) return;
   selectedProduct = product;
   storeScreenshotDataUrl = '';
@@ -1718,45 +1794,11 @@ function openOrderModal(productId) {
     storePollTimer = null;
   }
 
-  // Populate summary
   document.getElementById('modal-product-title').textContent = product.fullTitle || product.title;
-  document.getElementById('modal-product-region-badge').textContent =
-    product.category === 'psn'
-      ? `${product.flag} ريجين ${product.regionLabel}`
-      : `${product.flag} ${product.regionLabel}`;
+  document.getElementById('modal-product-region-badge').textContent = `${product.flag} ريجين ${product.regionLabel}`;
   document.getElementById('modal-product-delivery-badge').textContent = product.deliveryBadge;
   document.getElementById('modal-product-price').textContent = formatPriceEgp(product.priceEgp);
 
-  // Dynamic Account Field (Show ONLY for Fortnite & Valorant; HIDE for PSN)
-  const accWrap = document.getElementById('store-account-field-wrap');
-  const accLabel = document.getElementById('store-account-label');
-  const accInput = document.getElementById('store-account-input');
-  const accHint = document.getElementById('store-account-hint');
-  const accErr = document.getElementById('store-account-error');
-
-  if (product.requiresAccount) {
-    accWrap.style.display = 'block';
-    accInput.required = true;
-    accInput.value = '';
-    accInput.classList.remove('input-error');
-    accErr.style.display = 'none';
-    if (product.category === 'valorant') {
-      accLabel.textContent = '🎯 معرف حساب Riot (Riot ID) — مطلوب:';
-      accInput.placeholder = 'اكتب Riot ID مثال: Player#EGY';
-      accHint.textContent = 'اكتب اسمك مع التاج (#) بالضبط كما يظهر داخل فالورانت — لا نحتاج كلمة المرور.';
-    } else {
-      accLabel.textContent = '🎯 بيانات حساب فورتنايت (Epic Games / Xbox) — مطلوب:';
-      accInput.placeholder = 'اكتب إيميل Epic Games / حساب Xbox';
-      accHint.textContent = 'سيتواصل معك فريق الشحن على الواتساب لتأكيد وإتمام الشحن خلال 5-15 دقيقة.';
-    }
-  } else {
-    accWrap.style.display = 'none';
-    accInput.required = false;
-    accInput.value = '';
-    accErr.style.display = 'none';
-  }
-
-  // Reset upload & errors
   document.getElementById('store-whatsapp-input').classList.remove('input-error');
   document.getElementById('store-whatsapp-error').style.display = 'none';
   document.getElementById('store-screenshot-error').style.display = 'none';
@@ -1828,8 +1870,6 @@ async function submitStoreOrder(e) {
 
   const waInput = document.getElementById('store-whatsapp-input');
   const waErr = document.getElementById('store-whatsapp-error');
-  const accInput = document.getElementById('store-account-input');
-  const accErr = document.getElementById('store-account-error');
   const scrErr = document.getElementById('store-screenshot-error');
 
   const rawWa = normalizeDigits(waInput.value || '').replace(/[\s\-()]/g, '').replace(/^\+/, '');
@@ -1842,19 +1882,6 @@ async function submitStoreOrder(e) {
   } else {
     waInput.classList.remove('input-error');
     waErr.style.display = 'none';
-  }
-
-  const gameAccountVal = selectedProduct.requiresAccount ? String(accInput.value || '').trim() : '';
-  if (selectedProduct.requiresAccount && !gameAccountVal) {
-    accInput.classList.add('input-error');
-    accErr.textContent = selectedProduct.category === 'valorant'
-      ? 'يرجى كتابة Riot ID مثال: Player#EGY'
-      : 'يرجى كتابة إيميل Epic Games / حساب Xbox';
-    accErr.style.display = 'block';
-    hasError = true;
-  } else {
-    accInput.classList.remove('input-error');
-    accErr.style.display = 'none';
   }
 
   if (!storeScreenshotDataUrl) {
@@ -1879,7 +1906,6 @@ async function submitStoreOrder(e) {
         storeProductId: selectedProduct.id,
         whatsappPhone: rawWa,
         senderPhone: rawWa,
-        gameAccount: gameAccountVal,
         paymentMethod: selectedStorePayMethod,
         notes: (document.getElementById('store-notes-input').value || '').trim(),
         screenshotDataUrl: storeScreenshotDataUrl
@@ -1899,7 +1925,6 @@ async function submitStoreOrder(e) {
       packageName: data.order.packageName || selectedProduct.fullTitle,
       amountEgp: data.order.amountEgp || selectedProduct.priceEgp,
       whatsappPhone: data.order.whatsappPhone || rawWa,
-      gameAccount: data.order.gameAccount || gameAccountVal,
       deliveryBadge: data.order.deliveryBadge || selectedProduct.deliveryBadge,
       paymentMethod: selectedStorePayMethod,
       status: data.order.status || 'pending',
@@ -1932,7 +1957,7 @@ function showStoreOrderStatusView(order) {
     pill.className = 'status-pill-lg approved';
     pill.textContent = '✅ تم تأكيد الدفع وقبول طلبك بنجاح!';
     title.textContent = 'تم قبول طلبك وتنفيذ التسليم 🎉';
-    desc.textContent = 'تم التحقق من تحويلك بنجاح، ستستلم الكود أو تأكيد الشحن مباشرة على رقم الواتساب المسجل لدينا.';
+    desc.textContent = 'تم التحقق من تحويلك بنجاح، ستستلم كود بطاقة الـ PSN مباشرة على رقم الواتساب المسجل لدينا.';
   } else if (order.status === 'rejected') {
     pill.className = 'status-pill-lg rejected';
     pill.textContent = '❌ لم يتم التحقق من إيصال التحويل';
@@ -1940,18 +1965,17 @@ function showStoreOrderStatusView(order) {
     desc.textContent = 'تأكد من صورة التحويل أو تواصل معنا على الواتساب برقم طلبك للمساعدة الفورية.';
   } else {
     pill.className = 'status-pill-lg pending';
-    pill.textContent = '⏳ جاري مراجعة إيصال الدفع وتنفيذ الطلب';
+    pill.textContent = '⏳ جاري مراجعة إيصال الدفع وتجهيز كود الـ PSN';
     title.textContent = 'تم تسجيل طلبك بنجاح! 🎉';
-    desc.textContent = 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيصلك التسليم على الواتساب.';
+    desc.textContent = 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيصلك الكود الرقمي على الواتساب.';
   }
 
   const methodText = order.paymentMethod === 'vodafone' ? 'Vodafone Cash' : 'InstaPay';
   document.getElementById('status-receipt-card').innerHTML = `
     <div>🆔 <strong>رقم الطلب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(order.id)}</code></div>
-    <div>📦 <strong>المنتج:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(order.packageName)}</span></div>
+    <div>📦 <strong>البطاقة:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(order.packageName)}</span></div>
     <div>💰 <strong>المبلغ:</strong> <span style="color:var(--green); font-weight:900;">${formatPriceEgp(order.amountEgp)}</span> (${methodText})</div>
     <div>💬 <strong>رقم الواتساب:</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(order.whatsappPhone || '')}</span></div>
-    ${order.gameAccount ? `<div>🎯 <strong>بيانات الحساب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:800;">${escapeHtml(order.gameAccount)}</code></div>` : ''}
     ${order.deliveryBadge ? `<div>⚡ <strong>نوع التسليم:</strong> <span style="color:#aef7d2;">${escapeHtml(order.deliveryBadge)}</span></div>` : ''}
   `;
 
@@ -1960,8 +1984,7 @@ function showStoreOrderStatusView(order) {
     `رقم طلبي من المتجر: ${order.id}\n` +
     `المنتج: ${order.packageName}\n` +
     `المبلغ: ${order.amountEgp} ج.م\n` +
-    (order.gameAccount ? `بيانات الحساب: ${order.gameAccount}\n` : '') +
-    `برجاء متابعة التسليم.`
+    `برجاء متابعة إرسال كود الـ PSN.`
   );
   document.getElementById('status-whatsapp-btn').href = `https://wa.me/201021464317?text=${encodeURIComponent(waMsg)}`;
 }
@@ -2030,7 +2053,6 @@ async function lookupStoreOrderByQuery(rawQuery) {
       packageName: data.packageName,
       amountEgp: data.amountEgp,
       whatsappPhone: data.whatsappPhone,
-      gameAccount: data.gameAccount,
       deliveryBadge: data.deliveryBadge,
       paymentMethod: data.paymentMethod,
       status: data.status
@@ -2065,7 +2087,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 async function initGamingStore() {
-  // Ensure catalog is populated (from /api/store-products.js or /api/store/products fallback)
   if (!storeCatalog || !Array.isArray(storeCatalog.products) || storeCatalog.products.length === 0) {
     try {
       const res = await fetch('/api/store/products');
@@ -2075,9 +2096,8 @@ async function initGamingStore() {
 
   renderRegionButtons();
   renderPsnProducts();
-  renderTopupProducts();
+  setStoreTab('psn');
 
-  // Sync live payment numbers/links from store settings
   try {
     const cfgRes = await fetch('/api/config');
     if (cfgRes.ok) {
@@ -2086,7 +2106,6 @@ async function initGamingStore() {
     }
   } catch (e) {}
 
-  // Support deep link ?track=TL-XXXXXX
   const params = new URLSearchParams(window.location.search);
   const trackId = params.get('track');
   if (trackId) {

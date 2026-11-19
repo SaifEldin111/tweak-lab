@@ -34,10 +34,10 @@ assert(robots.includes('Sitemap: https://tweak-lab-a177.vercel.app/sitemap.xml')
 
 // 3. Verify store catalog, store page, and guide HTML pages exist
 const storeCatalog = require(path.join(root, 'data', 'storeProducts.js'));
-assert(Array.isArray(storeCatalog.products) && storeCatalog.products.length >= 20, 'data/storeProducts.js missing products');
+assert(Array.isArray(storeCatalog.products) && storeCatalog.products.length === 15, 'data/storeProducts.js must contain 15 PSN gift card products');
 assert(Array.isArray(storeCatalog.psnRegions) && storeCatalog.psnRegions.length === 4, 'data/storeProducts.js missing 4 PSN regions');
 storeCatalog.products.forEach((p) => {
-  assert(p.id && p.title && Number(p.priceEgp) > 0, `Invalid store product: ${JSON.stringify(p)}`);
+  assert(p.id && p.title && p.category === 'psn' && Number(p.priceEgp) > 0, `Invalid PSN store product: ${JSON.stringify(p)}`);
 });
 
 [
