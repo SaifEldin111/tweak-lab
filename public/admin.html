@@ -244,8 +244,8 @@
     }
     .orders-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+      gap: 18px;
     }
     .order-card {
       background: var(--bg-card);
@@ -291,9 +291,15 @@
     }
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
       gap: 16px;
       margin-top: 14px;
+    }
+    @media (max-width: 640px) {
+      html, body { overflow-x: clip; max-width: 100%; }
+      .container { padding: 0 12px; margin: 18px auto; }
+      .order-card, .settings-card { padding: 16px 14px; }
+      .input-field, .gift-code-input { font-size: 16px; }
     }
     .input-field {
       width: 100%;
