@@ -2143,29 +2143,28 @@
     }
 
     /* ========================================================================
-       APPLE iOS LIQUID GLASS + HOVER GLASS REFLECTION + PLAYSTATION BLUE GLOW
+       UNIFIED SEE-THROUGH FROSTED GLASSMORPHISM SYSTEM (STORE PAGE)
        ======================================================================== */
     body {
       background-color: #05070c;
       background-image:
-        radial-gradient(ellipse 60% 42% at 16% 6%, rgba(0, 255, 136, 0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 42% at 84% 14%, rgba(0, 136, 255, 0.10) 0%, transparent 58%),
-        radial-gradient(ellipse 65% 48% at 50% 92%, rgba(0, 255, 136, 0.09) 0%, transparent 62%),
+        radial-gradient(ellipse 60% 42% at 16% 6%, rgba(0, 255, 136, 0.11) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 42% at 84% 14%, rgba(0, 240, 255, 0.09) 0%, transparent 58%),
+        radial-gradient(ellipse 65% 48% at 50% 92%, rgba(0, 255, 136, 0.08) 0%, transparent 62%),
         linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px;
       background-attachment: fixed;
     }
     .navbar {
-      background: rgba(255, 255, 255, 0.04) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
-      box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.08), 0 8px 30px rgba(0, 0, 0, 0.38);
+      background: rgba(0, 0, 0, 0.40) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
     }
-
-    /* Default TweakLab iOS Liquid Glass (Steam, GTA VI, FAQ, Payment Info, Tabs) */
     .product-card,
+    .region-selector-bar,
     .steam-info-bar,
     .filter-tabs-wrap,
     .coming-soon-glass-card,
@@ -2173,140 +2172,53 @@
     .faq-item,
     .gta6-bundle-card,
     .footer-guides-bar {
-      position: relative;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.04) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
+      background: rgba(9, 9, 11, 0.35) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 16px 38px rgba(0, 0, 0, 0.45) !important;
-      transition: transform 0.26s ease, border-color 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
     }
-    /* Diagonal Neon-Green iOS Hover Glass Reflection Sweep */
-    .product-card::after,
-    .payment-info-card::after,
-    .gta6-bundle-card::after,
-    .coming-soon-glass-card::after,
-    .order-now-btn::after,
-    .gta6-order-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(0, 255, 136, 0.18) 50%, transparent 80%);
-      transform: translate3d(-125%, 0, 0);
-      transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
-      pointer-events: none;
-      will-change: transform;
-      z-index: 4;
-    }
-    .order-now-btn,
-    .gta6-order-btn {
-      position: relative;
-      overflow: hidden;
-    }
-    .card-visual-banner::after {
-      display: none !important;
-    }
-    .product-card:hover::after,
-    .payment-info-card:hover::after,
-    .gta6-bundle-card:hover::after,
-    .coming-soon-glass-card:hover::after,
-    .order-now-btn:hover::after,
-    .gta6-order-btn:hover::after {
-      transform: translate3d(125%, 0, 0);
-    }
-    .product-card.steam-card:hover,
+    .product-card:hover,
     .payment-info-card:hover,
     .faq-item:hover,
     .faq-item.open,
     .gta6-bundle-card:hover,
     .coming-soon-glass-card:hover {
       border-color: rgba(0, 255, 136, 0.50) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.26), 0 8px 32px rgba(0, 255, 136, 0.15) !important;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.12), 0 18px 40px rgba(0, 0, 0, 0.55) !important;
     }
-
-    /* ========================================================================
-       DEDICATED PLAYSTATION BLUE iOS LIQUID GLASS & BLUE REFLECTION SWEEP
-       ======================================================================== */
-    #tab-btn-psn {
-      border: 1px solid rgba(0, 112, 209, 0.35) !important;
-      background: rgba(0, 112, 209, 0.05) !important;
-    }
-    #tab-btn-psn:hover {
-      border-color: rgba(0, 136, 255, 0.65) !important;
-      background: rgba(0, 112, 209, 0.14) !important;
-      color: #ffffff !important;
-    }
-    #tab-btn-psn.active {
-      background: linear-gradient(135deg, rgba(0, 112, 209, 0.28), rgba(0, 136, 255, 0.16)) !important;
-      border-color: rgba(0, 136, 255, 0.78) !important;
-      color: #8cc8ff !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24), 0 0 22px rgba(0, 112, 209, 0.36) !important;
-    }
-    #tab-btn-psn.active .filter-count {
-      background: #0088ff !important;
-      color: #ffffff !important;
-    }
-    .region-selector-bar {
-      position: relative;
-      overflow: hidden;
-      background: rgba(0, 112, 209, 0.05) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border: 1px solid rgba(0, 112, 209, 0.35) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 12px 32px rgba(0, 0, 0, 0.42) !important;
-    }
-    .region-btn.active {
-      background: linear-gradient(135deg, rgba(0, 112, 209, 0.34), rgba(0, 136, 255, 0.20)) !important;
-      border-color: rgba(0, 136, 255, 0.80) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), 0 0 18px rgba(0, 112, 209, 0.36) !important;
-    }
-    .product-card.psn-card {
-      background: rgba(0, 112, 209, 0.05) !important;
-      backdrop-filter: blur(24px) !important;
-      -webkit-backdrop-filter: blur(24px) !important;
-      border: 1px solid rgba(0, 112, 209, 0.35) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 16px 38px rgba(0, 0, 0, 0.45) !important;
-    }
-    .product-card.psn-card::after {
-      background: linear-gradient(120deg, transparent 20%, rgba(0, 136, 255, 0.24) 50%, transparent 80%) !important;
-    }
-    .product-card.psn-card:hover {
-      border-color: rgba(0, 136, 255, 0.70) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.28), 0 8px 32px rgba(0, 112, 209, 0.28) !important;
-    }
-
-    /* Glass Pills, Tags & Modals */
     .trust-pill,
     .steam-info-pill,
     .nav-btn,
     .region-btn:not(.active),
     .locked-game-card {
-      background: rgba(255, 255, 255, 0.04) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.10) !important;
     }
     .modal-dialog {
-      background: rgba(9, 9, 11, 0.76) !important;
-      backdrop-filter: blur(28px) !important;
-      -webkit-backdrop-filter: blur(28px) !important;
-      border: 1px solid rgba(0, 255, 136, 0.32) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 255, 136, 0.15) !important;
+      background: rgba(9, 9, 11, 0.75) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(0, 255, 136, 0.30) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 255, 136, 0.14) !important;
     }
     .pay-box,
     .pay-tab:not(.active-instapay):not(.active-vodafone),
     .order-receipt-card {
-      background: rgba(255, 255, 255, 0.04) !important;
-      border: 1px solid rgba(255, 255, 255, 0.14) !important;
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+      background: rgba(9, 9, 11, 0.45) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
     }
     @media (max-width: 768px) {
       body {
         background-attachment: scroll;
       }
-      .navbar,
+      .navbar {
+        background: rgba(0, 0, 0, 0.52) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+      }
       .product-card,
       .region-selector-bar,
       .steam-info-bar,
@@ -2315,21 +2227,14 @@
       .payment-info-card,
       .faq-item,
       .gta6-bundle-card {
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
+        background: rgba(9, 9, 11, 0.42) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
       }
       .modal-dialog {
-        background: rgba(9, 9, 11, 0.86) !important;
-        backdrop-filter: blur(18px) !important;
-        -webkit-backdrop-filter: blur(18px) !important;
-      }
-      .product-card::after,
-      .payment-info-card::after,
-      .gta6-bundle-card::after,
-      .coming-soon-glass-card::after,
-      .order-now-btn::after,
-      .gta6-order-btn::after {
-        display: none;
+        background: rgba(9, 9, 11, 0.84) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
       }
     }
   </style>
