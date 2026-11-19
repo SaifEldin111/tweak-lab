@@ -268,16 +268,6 @@
       color: #fff;
       background: rgba(0, 255, 136, 0.1);
     }
-    .lang-btn {
-      border-color: rgba(0, 240, 255, 0.45);
-      background: rgba(0, 240, 255, 0.08);
-      color: var(--cyan);
-    }
-    .lang-btn:hover {
-      border-color: var(--cyan);
-      background: rgba(0, 240, 255, 0.2);
-      color: #fff;
-    }
 
     /* ========================================================================
        CENTERED DUAL-PORTAL STAGE
@@ -809,7 +799,6 @@
 
       <div class="nav-actions">
         <button type="button" class="nav-btn" onclick="openPortalTrackModal()" data-i18n="navTrack">🔍 Track Order</button>
-        <button type="button" class="nav-btn lang-btn" id="portal-lang-btn" onclick="togglePortalLang()">🌐 العربية</button>
       </div>
     </div>
   </nav>
@@ -934,7 +923,8 @@
   </footer>
 
 <script>
-let portalLang = localStorage.getItem('tweaklab_lang') === 'ar' ? 'ar' : 'en';
+try { localStorage.removeItem('tweaklab_lang'); } catch (e) {}
+const portalLang = 'en';
 
 const PORTAL_I18N = {
   en: {
@@ -1007,15 +997,11 @@ function escapeHtml(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function applyPortalLang(lang) {
-  portalLang = lang === 'ar' ? 'ar' : 'en';
-  try { localStorage.setItem('tweaklab_lang', portalLang); } catch (e) {}
-  const t = PORTAL_I18N[portalLang];
-  document.documentElement.lang = portalLang;
-  document.documentElement.dir = portalLang === 'ar' ? 'rtl' : 'ltr';
+function applyPortalLang() {
+  const t = PORTAL_I18N.en;
+  document.documentElement.lang = 'en';
+  document.documentElement.dir = 'ltr';
   document.title = t.pageTitle;
-  const lb = document.getElementById('portal-lang-btn');
-  if (lb) lb.textContent = t.langBtn;
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const k = el.getAttribute('data-i18n');
     if (t[k] !== undefined) el.textContent = t[k];
@@ -1028,10 +1014,6 @@ function applyPortalLang(lang) {
     const k = el.getAttribute('data-i18n-placeholder');
     if (t[k] !== undefined) el.placeholder = t[k];
   });
-}
-
-function togglePortalLang() {
-  applyPortalLang(portalLang === 'en' ? 'ar' : 'en');
 }
 
 function openPortalTrackModal() {
