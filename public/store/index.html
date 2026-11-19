@@ -214,13 +214,10 @@
     .store-hero {
       position: relative;
       padding: 40px 20px 26px;
-      border-bottom: 1px solid rgba(0, 255, 136, 0.18);
-      background:
-        radial-gradient(circle at 80% 15%, rgba(0, 255, 136, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.12) 0%, transparent 48%),
-        linear-gradient(180deg, rgba(7, 10, 16, 0.85) 0%, rgba(7, 10, 16, 0.98) 100%);
+      border-bottom: none;
+      background: transparent;
       text-align: center;
-      overflow: hidden;
+      overflow: visible;
     }
     .store-hero-inner {
       max-width: 1120px;
@@ -398,6 +395,7 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 34px 20px 60px;
+      background: transparent;
     }
     .catalog-section {
       margin-bottom: 42px;
@@ -1235,8 +1233,8 @@
     .tweak-site-footer {
       margin-top: 30px;
       padding: 28px 18px 34px;
-      background: linear-gradient(180deg, rgba(6, 10, 16, 0.4), rgba(4, 7, 12, 0.96));
-      border-top: 1px solid rgba(0, 255, 136, 0.22);
+      background: linear-gradient(180deg, transparent 0%, rgba(6, 10, 16, 0.55) 100%);
+      border-top: 1px solid rgba(0, 255, 136, 0.18);
       text-align: center;
     }
     .tweak-site-footer-inner {
@@ -1704,15 +1702,19 @@
     }
 
     /* ========================================================================
-       AMBIENT ZERO-GRAVITY STORE BACKGROUND (NON-INTRUSIVE GPU 60FPS LAYER)
+       AMBIENT ZERO-GRAVITY STORE BACKGROUND (UNIFIED FULL-SCREEN 60FPS LAYER)
        ======================================================================== */
     .store-ambient-bg {
       position: fixed;
       inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
       pointer-events: none;
       overflow: hidden;
       z-index: 0;
       user-select: none;
+      -webkit-user-select: none;
     }
     .store-hero,
     .store-container,
@@ -1722,44 +1724,56 @@
     }
     .ambient-float-item {
       position: absolute;
-      opacity: 0.17;
+      opacity: 0.20;
       pointer-events: none;
       will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
     .ambient-item-scale {
       display: block;
       transform-origin: center center;
     }
 
-    /* 6 Corner & Edge Positions (Strictly away from center screen) */
+    /* 8 Balanced Edge Positions Spanning Top, Upper-Mid, Lower-Mid & Bottom (Left & Right) */
     .ambient-ps5-tr {
-      top: 6.5%;
-      right: 2.2%;
+      top: 7.5%;
+      right: 1.8%;
       animation: floatRotateSlow 19s ease-in-out infinite;
     }
-    .ambient-ps5-bl {
-      bottom: 7%;
-      left: 2%;
-      animation: floatRotateReverse 22s ease-in-out infinite;
-    }
     .ambient-psn-tl {
-      top: 10.5%;
-      left: 2.4%;
+      top: 8.5%;
+      left: 1.8%;
       animation: floatRotateReverse 18s ease-in-out infinite;
     }
+    .ambient-steam-ul {
+      top: 32%;
+      left: 1.4%;
+      animation: floatRotateSlow 17s ease-in-out infinite;
+    }
+    .ambient-psn-ur {
+      top: 33%;
+      right: 1.4%;
+      animation: floatRotateReverse 20s ease-in-out infinite;
+    }
     .ambient-psn-ml {
-      top: 44%;
-      left: 1.5%;
-      animation: floatRotateSlow 15s ease-in-out infinite;
+      top: 57%;
+      left: 1.6%;
+      animation: floatRotateReverse 15.5s ease-in-out infinite;
     }
     .ambient-steam-mr {
-      top: 47%;
-      right: 1.5%;
-      animation: floatRotateReverse 16s ease-in-out infinite;
+      top: 58%;
+      right: 1.6%;
+      animation: floatRotateSlow 16.5s ease-in-out infinite;
+    }
+    .ambient-ps5-bl {
+      bottom: 6%;
+      left: 1.8%;
+      animation: floatRotateReverse 22s ease-in-out infinite;
     }
     .ambient-steam-br {
-      bottom: 8.5%;
-      right: 2.4%;
+      bottom: 6.5%;
+      right: 1.8%;
       animation: floatRotateSlow 21s ease-in-out infinite;
     }
 
@@ -1883,20 +1897,22 @@
       }
     }
 
-    /* Mobile (< 768px): Scale 0.75, opacity 0.10, pushed to outer edges */
+    /* Mobile (< 768px): 100% Unified 100dvh Parity — Scale 0.72, opacity 0.15, clean outer edges */
     @media (max-width: 767px) {
       .ambient-float-item {
-        opacity: 0.10;
+        opacity: 0.15;
       }
       .ambient-item-scale {
-        transform: scale(0.75);
+        transform: scale(0.72);
       }
-      .ambient-ps5-tr { top: 5.5%; right: -22px; }
-      .ambient-ps5-bl { bottom: 5%; left: -24px; }
-      .ambient-psn-tl { top: 9%; left: -24px; }
-      .ambient-psn-ml { top: 43%; left: -28px; }
-      .ambient-steam-mr { top: 47%; right: -28px; }
-      .ambient-steam-br { bottom: 7%; right: -24px; }
+      .ambient-ps5-tr { top: 6.5%; right: -14px; }
+      .ambient-psn-tl { top: 8%; left: -14px; }
+      .ambient-steam-ul { top: 31%; left: -18px; }
+      .ambient-psn-ur { top: 33%; right: -18px; }
+      .ambient-psn-ml { top: 57%; left: -18px; }
+      .ambient-steam-mr { top: 59%; right: -18px; }
+      .ambient-ps5-bl { bottom: 4.5%; left: -14px; }
+      .ambient-steam-br { bottom: 5.5%; right: -14px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2135,6 +2151,51 @@
             <span class="ambient-mini-val">$100</span>
           </div>
           <div class="ambient-mini-symbols">△ ○ × □ • PSN CODE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2b. Upper-Mid-Left: Mini Steam Wallet Gift Card (Hero / GTA VI Zone) -->
+    <div class="ambient-float-item ambient-steam-ul">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card steam-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">STEAM WALLET</span>
+            <span class="ambient-mini-chip">PC • USD</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="27" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="8.5" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="3.6" fill="currentColor"/>
+              <circle cx="24" cy="43" r="6" stroke="currentColor" stroke-width="3.4"/>
+              <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/>
+              <path d="M6 35.2L21.5 42" stroke="currentColor" stroke-width="4.8" stroke-linecap="round"/>
+            </svg>
+            <span class="ambient-mini-val">$100</span>
+          </div>
+          <div class="ambient-mini-symbols">⚡ GLOBAL / EGYPT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2c. Upper-Mid-Right: Mini PlayStation (PSN) Gift Card (Hero / GTA VI Zone) -->
+    <div class="ambient-float-item ambient-psn-ur">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card psn-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">PSN STORE</span>
+            <span class="ambient-mini-chip">PS5 / PS4</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 52" fill="currentColor">
+              <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+              <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+              <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
+            </svg>
+            <span class="ambient-mini-val">$20</span>
+          </div>
+          <div class="ambient-mini-symbols">△ ○ × □ • OFFICIAL</div>
         </div>
       </div>
     </div>
