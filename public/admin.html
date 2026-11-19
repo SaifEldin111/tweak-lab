@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TWEAK LAB | لوحة تحكم الإدارة وقبول طلبات InstaPay & Vodafone Cash</title>
+  <title>TweakLab | لوحة تحكم الإدارة</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
@@ -60,19 +60,122 @@
       flex-wrap: wrap;
       gap: 14px;
     }
-    .brand {
-      display: flex;
+    .brand-wrap {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      font-weight: 900;
-      font-size: 1.25rem;
-      color: #fff;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    .brand img {
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: #ffffff;
+      direction: ltr;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: transform 0.2s ease;
+    }
+    .brand-icon-box {
       width: 40px;
       height: 40px;
-      border-radius: 50%;
-      border: 2px solid var(--cyan);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #0e1624 0%, #070a10 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .brand:hover .brand-icon-box {
+      border-color: rgba(0, 255, 136, 0.85);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.48), 0 0 10px rgba(0, 255, 136, 0.28);
+      transform: translateY(-1px);
+    }
+    .brand-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      font-weight: 900;
+      font-size: 1.38rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+    .brand-tweak { color: #ffffff; }
+    .brand-lab {
+      color: #00ff88;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.55), 0 0 24px rgba(0, 255, 136, 0.22);
+    }
+    .admin-header-sub {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding-right: 12px;
+      border-right: 1px solid var(--border);
+    }
+    .orders-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .filter-pill-btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: rgba(14, 20, 32, 0.9);
+      color: #b7c8e0;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.83rem;
+      font-weight: 800;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filter-pill-btn:hover {
+      border-color: var(--cyan);
+      color: #fff;
+    }
+    .filter-pill-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 240, 255, 0.14));
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.22);
+    }
+    .psn-code-delivery-box {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(0, 255, 136, 0.08));
+      border: 1.5px solid rgba(0, 255, 136, 0.45);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 10px 0 8px;
+    }
+    .gift-code-input {
+      width: 100%;
+      padding: 10px 12px;
+      background: #050911;
+      border: 1.5px solid rgba(0, 240, 255, 0.45);
+      border-radius: 9px;
+      color: #00ff88;
+      font-family: Consolas, ui-monospace, monospace;
+      font-size: 0.96rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-align: center;
+      outline: none;
+      margin-top: 6px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .gift-code-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.18);
     }
     .container {
       max-width: 1250px;
@@ -227,24 +330,46 @@
   <!-- PIN LOGIN OVERLAY -->
   <div id="login-overlay" style="display:none;">
     <div class="login-box">
-      <h2 style="color:var(--cyan); margin-bottom:10px;">🛡️ دخول لوحة تحكم TWEAK LAB</h2>
-      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+      <div style="display:flex; justify-content:center; margin-bottom:16px;">
+        <div class="brand" dir="ltr">
+          <span class="brand-icon-box" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="20" r="13" fill="rgba(0, 255, 136, 0.08)" />
+              <path d="M6.5 11H20.8L19 14.5H15.2V29H11.4V14.5H6.5V11Z" fill="#FFFFFF" />
+              <path d="M28.5 7.5L19.6 17.6H24.6L18.4 25.5H15.2V29H31.6L33.5 25.5H22.8L30.2 15H25.8L28.5 7.5Z" fill="#00FF88" />
+            </svg>
+          </span>
+          <span class="brand-wordmark"><span class="brand-tweak">Tweak</span><span class="brand-lab">Lab</span></span>
+        </div>
+      </div>
+      <h2 style="color:var(--cyan); margin-bottom:8px; font-size:1.15rem;">🛡️ دخول لوحة تحكم الإدارة</h2>
+      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:16px;">
         أدخل رمز الإدارة (الافتراضي: <code>2027</code>)
       </p>
-      <input type="password" id="pin-input" class="input-field" placeholder="رمز الدخول (2027)" style="text-align:center; font-size:1.2rem; margin-bottom:14px;" />
+      <input type="password" id="pin-input" class="input-field" placeholder="رمز الدخول (2027)" style="text-align:center; font-size:1.2rem; margin-bottom:14px;" onkeydown="if(event.key==='Enter') loginWithPin()" />
       <button class="btn btn-accept" style="width:100%; justify-content:center;" onclick="loginWithPin()">دخول لوحة التحكم</button>
     </div>
   </div>
 
   <header>
     <div class="header-inner">
-      <div class="brand">
-        <img src="/assets/logo.png" alt="Logo" />
-        <span>لوحة تحكم TWEAK LAB <span style="color:var(--green); font-size:0.85rem;">• متابعة وقبول الطلبات الفورية</span></span>
+      <div class="brand-wrap">
+        <a href="/" class="brand" dir="ltr" aria-label="TweakLab Admin">
+          <span class="brand-icon-box" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="20" r="13" fill="rgba(0, 255, 136, 0.08)" />
+              <path d="M6.5 11H20.8L19 14.5H15.2V29H11.4V14.5H6.5V11Z" fill="#FFFFFF" />
+              <path d="M28.5 7.5L19.6 17.6H24.6L18.4 25.5H15.2V29H31.6L33.5 25.5H22.8L30.2 15H25.8L28.5 7.5Z" fill="#00FF88" />
+            </svg>
+          </span>
+          <span class="brand-wordmark"><span class="brand-tweak">Tweak</span><span class="brand-lab">Lab</span></span>
+        </a>
+        <span class="admin-header-sub">لوحة التحكم • إدارة طلبات <strong style="color:var(--green);">PC</strong> وبطاقات <strong style="color:var(--cyan);">PSN</strong></span>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <button class="btn" onclick="testSound()">🔔 تجربة صوت الإشعار</button>
-        <a href="/" target="_blank" class="btn">🛒 فتح صفحة العميل</a>
+        <a href="/store" target="_blank" class="btn" style="border-color:rgba(0,240,255,0.4); color:var(--cyan);">🎮 فتح المتجر (/store)</a>
+        <a href="/" target="_blank" class="btn">⚡ فتح صفحة الـ PC (/)</a>
       </div>
     </div>
   </header>
@@ -303,7 +428,15 @@
       </div>
     </div>
 
-    <h2 style="margin-bottom:16px; color:#fff;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+      <h2 style="color:#fff; margin:0;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
+      <div class="orders-filter-bar" style="margin-bottom:0;" id="orders-filter-bar">
+        <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setAdminOrderFilter('all')">الكل (<span id="flt-count-all">0</span>)</button>
+        <button type="button" class="filter-pill-btn" data-filter="psn" onclick="setAdminOrderFilter('psn')">🎮 بطاقات PSN (<span id="flt-count-psn">0</span>)</button>
+        <button type="button" class="filter-pill-btn" data-filter="pc" onclick="setAdminOrderFilter('pc')">⚡ باقات PC (<span id="flt-count-pc">0</span>)</button>
+        <button type="button" class="filter-pill-btn" data-filter="pending" onclick="setAdminOrderFilter('pending')">⏳ قيد المراجعة (<span id="flt-count-pending">0</span>)</button>
+      </div>
+    </div>
     <div id="orders-container" class="orders-grid"></div>
 
     <!-- VERIFIED REVIEWS MANAGEMENT SECTION -->
@@ -626,16 +759,69 @@ async function quickAddPromoCode() {
   }
 }
 
-function renderOrders(orders) {
-  const pending = orders.filter((o) => o.status === 'pending');
-  const approved = orders.filter((o) => o.status === 'approved');
-  const revenue = approved.reduce((sum, o) => sum + (Number(o.amountEgp) || 99), 0);
+window.__giftCodeDrafts = window.__giftCodeDrafts || {};
+let activeAdminOrderFilter = 'all';
+
+function setAdminOrderFilter(filter) {
+  activeAdminOrderFilter = filter || 'all';
+  document.querySelectorAll('#orders-filter-bar .filter-pill-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === activeAdminOrderFilter);
+  });
+  renderOrders(window.__latestAdminOrders || [], true);
+}
+
+function saveGiftCodeDraft(orderId, val) {
+  window.__giftCodeDrafts[orderId] = val;
+}
+
+function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel) {
+  if (!waIntlDigits) return;
+  const inp = document.getElementById('gift-code-input-' + orderId);
+  const code = (inp && inp.value ? inp.value.trim() : '') || (window.__giftCodeDrafts[orderId] || '').trim();
+  const msg = code
+    ? `مرحباً من TweakLab 🎮⚡\nتم تأكيد طلبك #${orderId}\nالبطاقة: ${pkgLabel}\n🎁 كود بطاقة PlayStation الرقمي:\n${code}\n\nشكراً لتعاملك مع TweakLab!`
+    : `مرحباً من TweakLab 🎮⚡\nبخصوص طلبك #${orderId} (${pkgLabel}): `;
+  window.open(`https://wa.me/${waIntlDigits}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+}
+
+function formatPsnShortLabel(o) {
+  const val = String(o.storeValueLabel || '').trim();
+  const regCode = String(o.storeRegionCode || '').trim().toUpperCase();
+  if (val && regCode) {
+    return `PSN Gift Card ${val} - ${regCode}`;
+  }
+  const pid = String(o.storeProductId || '').toLowerCase();
+  const m = /^psn-(us|sa|uae|tr)-(\d+)$/.exec(pid);
+  if (m) {
+    const r = m[1].toUpperCase();
+    const amt = r === 'TR' ? `${Number(m[2]).toLocaleString('en-US')} TL` : `$${m[2]}`;
+    return `PSN Gift Card ${amt} - ${r}`;
+  }
+  return o.packageName || 'PlayStation PSN Gift Card';
+}
+
+function renderOrders(orders, forceRender = false) {
+  const allOrders = Array.isArray(orders) ? orders : [];
+  const pending = allOrders.filter((o) => o.status === 'pending');
+  const confirmed = allOrders.filter((o) => o.status === 'approved' || o.status === 'expired');
+  const psnOrders = allOrders.filter((o) => o.orderType === 'gaming_store');
+  const pcOrders = allOrders.filter((o) => o.orderType !== 'gaming_store');
+  const revenue = confirmed.reduce((sum, o) => sum + (Number(o.amountEgp) || 99), 0);
 
   document.getElementById('stat-pending').textContent = pending.length;
-  document.getElementById('stat-approved').textContent = approved.length;
-  document.getElementById('stat-revenue').textContent = revenue + ' ج.م';
+  document.getElementById('stat-approved').textContent = confirmed.length;
+  document.getElementById('stat-revenue').textContent = revenue.toLocaleString('en-US') + ' ج.م';
   const totalEl = document.getElementById('stat-total');
-  if (totalEl) totalEl.textContent = orders.length;
+  if (totalEl) totalEl.textContent = allOrders.length;
+
+  const cAll = document.getElementById('flt-count-all');
+  const cPsn = document.getElementById('flt-count-psn');
+  const cPc = document.getElementById('flt-count-pc');
+  const cPend = document.getElementById('flt-count-pending');
+  if (cAll) cAll.textContent = allOrders.length;
+  if (cPsn) cPsn.textContent = psnOrders.length;
+  if (cPc) cPc.textContent = pcOrders.length;
+  if (cPend) cPend.textContent = pending.length;
 
   // Check if there is a brand-new pending order to chime!
   let hasNewPending = false;
@@ -650,36 +836,56 @@ function renderOrders(orders) {
   if (hasNewPending) {
     playAlertChime();
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('🚨 طلب دفع جديد في TWEAK LAB!', {
-        body: 'قام عميل برفع سكرين شوت تحويل وينتظر ضغطك على Accept.'
+      new Notification('🚨 طلب دفع جديد في TweakLab!', {
+        body: 'قام عميل برفع سكرين شوت تحويل وينتظر المراجعة والقبول.'
       });
     }
   }
 
   const container = document.getElementById('orders-container');
-  if (orders.length === 0) {
-    container.innerHTML = `<div style="grid-column:1/-1; background:var(--bg-card); border:1px dashed var(--border); padding:40px; border-radius:14px; text-align:center; color:var(--text-muted);">لا توجد طلبات حتى الآن. بمجرد قيام أي عميل برفع الـ Screenshot سيظهر هنا فوراً مع جرس تنبيه 🔔</div>`;
+  // Prevent auto-refresh poll from wiping typed Gift Card Code while admin is typing!
+  if (!forceRender && document.activeElement && container && container.contains(document.activeElement) && document.activeElement.classList.contains('gift-code-input')) {
     return;
   }
 
-  container.innerHTML = orders
+  const filteredOrders = allOrders.filter((o) => {
+    if (activeAdminOrderFilter === 'psn') return o.orderType === 'gaming_store';
+    if (activeAdminOrderFilter === 'pc') return o.orderType !== 'gaming_store';
+    if (activeAdminOrderFilter === 'pending') return o.status === 'pending';
+    return true;
+  });
+
+  if (filteredOrders.length === 0) {
+    const emptyMsg = allOrders.length === 0
+      ? 'لا توجد طلبات حتى الآن. بمجرد قيام أي عميل برفع الـ Screenshot سيظهر هنا فوراً مع جرس تنبيه 🔔'
+      : 'لا توجد طلبات مطابقة لهذا الفلتر حالياً.';
+    container.innerHTML = `<div style="grid-column:1/-1; background:var(--bg-card); border:1px dashed var(--border); padding:40px; border-radius:14px; text-align:center; color:var(--text-muted);">${emptyMsg}</div>`;
+    return;
+  }
+
+  container.innerHTML = filteredOrders
     .map((o) => {
       const isStoreOrder = o.orderType === 'gaming_store';
+      const isApprovedOrExpired = o.status === 'approved' || o.status === 'expired';
       const badgeClass =
-        o.status === 'approved' ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
+        isApprovedOrExpired ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
       const badgeText =
         o.status === 'approved'
-          ? (isStoreOrder ? '✅ مقبول وتم التسليم' : '✅ مقبول وتم التسليم')
+          ? (isStoreOrder ? (o.deliveredCode ? '✅ تم التسليم بالكود' : '✅ مقبول (تم التسليم)') : '✅ مقبول وتم التسليم')
+          : o.status === 'expired'
+          ? '✅ تم التسليم (انتهت مهلة الرابط)'
           : o.status === 'rejected'
           ? '❌ مرفوض'
-          : (isStoreOrder ? '⏳ بانتظار المراجعة والتسليم' : '⏳ بانتظار القبول (5 دقائق)');
+          : (isStoreOrder ? '⏳ بانتظار المراجعة وتسليم الكود' : '⏳ بانتظار القبول (5 دقائق)');
       const methodLabel = o.paymentMethod === 'instapay' ? '🟣 InstaPay (إنستاباي)' : '🔴 Vodafone Cash (فودافون كاش)';
-      const timeStr = new Date(o.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const timeStr = new Date(o.createdAt).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       const waRawDigits = String(o.whatsappPhone || o.senderPhone || '').replace(/[^0-9]/g, '');
       const waIntlDigits = waRawDigits.startsWith('0') ? ('2' + waRawDigits) : waRawDigits;
-      const waDirectUrl = waIntlDigits
-        ? `https://wa.me/${waIntlDigits}?text=${encodeURIComponent(`مرحباً من Tweak Lab 🎮⚡\nبخصوص طلبك #${o.id} (${o.packageName || 'طلب المتجر'}): `)}`
-        : '';
+      const psnShortLabel = isStoreOrder ? formatPsnShortLabel(o) : '';
+      const currentDraftCode =
+        window.__giftCodeDrafts[o.id] !== undefined
+          ? window.__giftCodeDrafts[o.id]
+          : (o.deliveredCode || '');
 
       let timeBombBadge = '';
       if (!isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)) {
@@ -698,33 +904,69 @@ function renderOrders(orders) {
       }
 
       const orderTypePill = isStoreOrder
-        ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.74rem; font-weight:900; padding:3px 9px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:var(--cyan);">🎮 متجر الألعاب والشحن</span>`
-        : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.74rem; font-weight:900; padding:3px 9px; border-radius:999px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); color:var(--green);">⚡ تظبيط PC</span>`;
+        ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,240,255,0.16); border:1px solid rgba(0,240,255,0.55); color:var(--cyan); box-shadow:0 0 10px rgba(0,240,255,0.16);">🎮 بطاقة PSN</span>`
+        : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,255,136,0.14); border:1px solid rgba(0,255,136,0.45); color:var(--green);">⚡ باقة PC</span>`;
+
+      const psnCodeDeliverySection = isStoreOrder
+        ? `<div class="psn-code-delivery-box">
+             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
+               <label for="gift-code-input-${o.id}" style="font-size:0.84rem; font-weight:900; color:#e6fff2;">🎁 كود البطاقة الرقمي (Gift Card Code):</label>
+               ${
+                 o.deliveredCode
+                   ? `<button type="button" class="btn" style="padding:3px 9px; font-size:0.73rem; border-color:var(--green); color:var(--green);" data-copy="${escapeHtml(o.deliveredCode)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ كود البطاقة');">📋 نسخ الكود المحفوظ</button>`
+                   : ''
+               }
+             </div>
+             <input type="text" id="gift-code-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="مثال: ABCD-1234-EFGH" value="${escapeHtml(currentDraftCode)}" oninput="saveGiftCodeDraft('${o.id}', this.value)" autocomplete="off" />
+             <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem;" onclick="deliverPsnCode('${o.id}', this)">
+               ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الكود المحفوظ للعميل' : '✅ تأكيد الطلب وإرسال الكود'}
+             </button>
+           </div>`
+        : '';
 
       const gameAccountBox = o.gameAccount
         ? `<div style="background:rgba(0,240,255,0.09); border:1px solid rgba(0,240,255,0.45); border-radius:9px; padding:8px 11px; margin:6px 0; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
-             <div style="font-size:0.86rem; color:#d8f8ff;">🎯 <strong>بيانات الحساب للشحن:</strong> <code dir="ltr" style="color:#fff; font-weight:900; background:#06090f; padding:2px 8px; border-radius:6px; border:1px solid rgba(0,240,255,0.35);">${escapeHtml(o.gameAccount)}</code></div>
+             <div style="font-size:0.86rem; color:#d8f8ff;">🎯 <strong>بيانات الحساب:</strong> <code dir="ltr" style="color:#fff; font-weight:900; background:#06090f; padding:2px 8px; border-radius:6px; border:1px solid rgba(0,240,255,0.35);">${escapeHtml(o.gameAccount)}</code></div>
              <button type="button" class="btn" style="padding:3px 9px; font-size:0.74rem;" data-copy="${escapeHtml(o.gameAccount)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ بيانات الحساب');">📋 نسخ</button>
            </div>`
         : '';
 
       return `
-        <div class="order-card ${o.status}">
+        <div class="order-card ${o.status === 'expired' ? 'approved' : o.status}">
           <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:10px;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <strong style="font-family:monospace; font-size:1.1rem; color:var(--cyan);">#${o.id}</strong>
                 ${orderTypePill}
               </div>
               <span class="badge ${badgeClass}">${badgeText}</span>
             </div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">${isStoreOrder ? '💬 <strong>رقم الواتساب:</strong>' : '📱 <strong>رقم المحول:</strong>'} <span style="direction:ltr; display:inline-block; font-weight:800; color:#fff;">${escapeHtml(o.whatsappPhone || o.senderPhone)}</span></div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>${isStoreOrder ? 'المنتج / الباقة:' : 'الباقة:'}</strong> <span style="color:${isStoreOrder ? 'var(--cyan)' : '#fff'}; font-weight:800;">${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</span></div>
-            ${o.storeRegion ? `<div style="font-size:0.88rem; margin-bottom:4px;">🌍 <strong>الريجين:</strong> <span style="color:var(--green); font-weight:800;">${escapeHtml(o.storeRegion)}</span></div>` : ''}
-            ${o.deliveryBadge ? `<div style="font-size:0.82rem; color:#b5f8d8; margin-bottom:4px;">⚡ <strong>التسليم:</strong> ${escapeHtml(o.deliveryBadge)}</div>` : ''}
+
+            ${
+              isStoreOrder
+                ? `<div style="background:rgba(0,112,255,0.12); border:1px solid rgba(0,240,255,0.38); border-radius:10px; padding:10px 12px; margin-bottom:8px;">
+                     <div dir="ltr" style="font-size:0.98rem; font-weight:900; color:var(--cyan); text-align:right;">${escapeHtml(psnShortLabel)}</div>
+                     <div style="font-size:0.84rem; color:#e4f2ff; margin-top:2px;">📦 ${escapeHtml(o.packageName || psnShortLabel)}</div>
+                     ${o.storeRegion ? `<div style="font-size:0.8rem; color:#a9e6ff; margin-top:2px;">🌍 الريجين: <strong style="color:#fff;">${escapeHtml(o.storeRegion)}</strong></div>` : ''}
+                   </div>`
+                : `<div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
+                   <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>الباقة:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</span></div>`
+            }
+
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; font-size:0.92rem; margin-bottom:6px;">
+              <div>
+                ${isStoreOrder ? '💬 <strong>واتساب العميل:</strong>' : '📱 <strong>رقم المحول:</strong>'}
+                <span style="direction:ltr; display:inline-block; font-weight:800; color:#fff;">${escapeHtml(o.whatsappPhone || o.senderPhone)}</span>
+              </div>
+              ${
+                waIntlDigits
+                  ? `<button type="button" class="btn" style="padding:4px 10px; font-size:0.76rem; border-color:#25d366; color:#25d366; background:rgba(37,211,102,0.12); font-weight:800;" data-wa="${escapeHtml(waIntlDigits)}" data-pkg="${escapeHtml(psnShortLabel || o.packageName || '')}" onclick="openPsnWhatsappWithCode('${o.id}', this.getAttribute('data-wa'), this.getAttribute('data-pkg'))">💬 فتح واتساب</button>`
+                  : ''
+              }
+            </div>
+
             ${gameAccountBox}
-            <div style="font-size:0.92rem; margin-bottom:6px;">💳 <strong>وسيلة الدفع:</strong> ${methodLabel}</div>
+            <div style="font-size:0.9rem; margin-bottom:6px;">💳 <strong>وسيلة الدفع:</strong> ${methodLabel}</div>
             ${(() => {
               const basePrice = Number(o.basePriceEgp) || (isStoreOrder ? Number(o.amountEgp) : 99);
               const reqAmount = Number(o.amountEgp) || basePrice;
@@ -753,13 +995,13 @@ function renderOrders(orders) {
                     }
                   </div>`}
                   <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; ${isStoreOrder ? '' : 'border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px;'}">
-                    <span style="font-size:0.86rem; color:#d4ffea;">💰 <strong>${isStoreOrder ? 'المبلغ المطلوب (منتج المتجر):' : 'المبلغ المطلوب بعد الخصم:'}</strong></span>
+                    <span style="font-size:0.86rem; color:#d4ffea;">💰 <strong>${isStoreOrder ? 'السعر المطلوب:' : 'المبلغ المطلوب بعد الخصم:'}</strong></span>
                     <span>
-                      <strong style="color:var(--green); font-size:1.08rem; font-weight:900;">${reqAmount} ج.م</strong>
+                      <strong style="color:var(--green); font-size:1.12rem; font-weight:900;">${Number(reqAmount).toLocaleString('en-US')} ج.م</strong>
                       ${
                         isDiscounted
                           ? `<del style="color:var(--text-muted); font-size:0.8rem; margin-right:5px;">${basePrice} ج.م</del>`
-                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">${isStoreOrder ? '(سعر المتجر)' : '(السعر الأساسي)'}</span>`
+                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">${isStoreOrder ? '(بطاقة PSN)' : '(السعر الأساسي)'}</span>`
                       }
                     </span>
                   </div>
@@ -772,22 +1014,25 @@ function renderOrders(orders) {
             <a href="${o.screenshotUrl}" target="_blank" title="اضغط لتكبير صورة الإيصال">
               <img src="${o.screenshotUrl}" class="screenshot-thumb" alt="Payment Screenshot" />
             </a>
+            ${psnCodeDeliverySection}
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
             ${
-              isStoreOrder && waDirectUrl
-                ? `<a href="${waDirectUrl}" target="_blank" rel="noopener noreferrer" class="btn" style="border-color:#25d366; color:#25d366; background:rgba(37,211,102,0.1); font-weight:800;">💬 تسليم عبر واتساب</a>`
-                : ''
-            }
-            ${
-              o.status === 'pending'
-                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">${isStoreOrder ? '✅ Accept (تأكيد الطلب وتسليم الشحن/الكود)' : '✅ Accept (قبول وتفعيل التحميل فوراً)'}</button>
-                   <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض الطلب</button>`
-                : o.status === 'approved'
-                ? `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة لقيد المراجعة</button>
-                   <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض وإلغاء</button>`
-                : `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ قبول الطلب (تراجع عن الرفض)</button>
-                   <button class="btn" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>`
+              isStoreOrder
+                ? (o.status === 'pending'
+                    ? `<button class="btn btn-reject" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض الطلب</button>`
+                    : o.status === 'approved'
+                    ? `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>
+                       <button class="btn btn-reject" style="min-width:105px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض</button>`
+                    : `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>`)
+                : (o.status === 'pending'
+                    ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ Accept (قبول وتفعيل التحميل فوراً)</button>
+                       <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض الطلب</button>`
+                    : isApprovedOrExpired
+                    ? `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة لقيد المراجعة</button>
+                       <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض وإلغاء</button>`
+                    : `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ قبول الطلب (تراجع عن الرفض)</button>
+                       <button class="btn" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>`)
             }
             ${
               !isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)
@@ -800,6 +1045,49 @@ function renderOrders(orders) {
       `;
     })
     .join('');
+}
+
+async function deliverPsnCode(orderId, btnEl = null) {
+  const inp = document.getElementById('gift-code-input-' + orderId);
+  const code = inp ? inp.value.trim() : (window.__giftCodeDrafts[orderId] || '').trim();
+  if (!code) {
+    showAdminToast('⚠️ يرجى كتابة كود بطاقة PlayStation الرقمي أولاً');
+    if (inp) inp.focus();
+    return;
+  }
+  let originalBtnHtml = '';
+  if (btnEl) {
+    originalBtnHtml = btnEl.innerHTML;
+    btnEl.disabled = true;
+    btnEl.style.opacity = '0.65';
+    btnEl.innerHTML = '⏳ جاري تأكيد الطلب وحفظ الكود...';
+  }
+  try {
+    const res = await fetch('/api/admin/order-action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': adminPin },
+      body: JSON.stringify({ orderId, action: 'deliver-code', deliveredCode: code })
+    });
+    const result = await res.json();
+    if (result.ok && Array.isArray(result.orders)) {
+      delete window.__giftCodeDrafts[orderId];
+      window.__latestAdminOrders = result.orders;
+      renderOrders(result.orders, true);
+      showAdminToast(`✅ تم تأكيد الطلب #${orderId} وحفظ كود PSN بنجاح!`);
+    } else {
+      alert('خطأ: ' + (result.error || 'تعذر حفظ الكود'));
+      fetchAdminData();
+    }
+  } catch (e) {
+    showAdminToast('❌ تعذر الاتصال بالخادم، حاول مرة أخرى');
+    fetchAdminData();
+  } finally {
+    if (btnEl && originalBtnHtml) {
+      btnEl.disabled = false;
+      btnEl.style.opacity = '1';
+      btnEl.innerHTML = originalBtnHtml;
+    }
+  }
 }
 
 function showAdminToast(msg) {
@@ -839,11 +1127,12 @@ async function updateOrder(orderId, action, btnEl = null) {
     });
     const result = await res.json();
     if (result.ok && Array.isArray(result.orders)) {
-      renderOrders(result.orders);
+      window.__latestAdminOrders = result.orders;
+      renderOrders(result.orders, true);
       showAdminToast(
         action === 'delete' ? `🗑️ تم حذف الطلب #${orderId} نهائياً` :
         action === 'reject' ? `❌ تم رفض الطلب #${orderId} بنجاح` :
-        action === 'approve' ? `✅ تم قبول الطلب #${orderId} وتفعيل التحميل` :
+        action === 'approve' ? `✅ تم قبول الطلب #${orderId} بنجاح` :
         `تم تحديث حالة الطلب #${orderId}`
       );
     } else {

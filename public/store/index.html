@@ -1591,7 +1591,7 @@
         </a>
       </div>
       <div style="color:var(--text-muted); font-size:0.82rem;">
-        © 2027 <strong style="color:var(--green);">TWEAK LAB</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر بطاقات PlayStation الآمن 100%
+        © 2027 <strong style="color:var(--green);">TweakLab</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر بطاقات PlayStation الآمن 100%
       </div>
     </div>
   </footer>
@@ -1943,6 +1943,17 @@ async function submitStoreOrder(e) {
   }
 }
 
+function copyDeliveredStoreCode(btn) {
+  const code = btn ? (btn.getAttribute('data-code') || '') : '';
+  if (!code) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code);
+  }
+  const orig = btn.textContent;
+  btn.textContent = 'تم نسخ الكود ✓';
+  setTimeout(() => { btn.textContent = orig; }, 2200);
+}
+
 function showStoreOrderStatusView(order) {
   document.getElementById('modal-checkout-view').style.display = 'none';
   document.getElementById('modal-status-view').style.display = 'block';
@@ -1952,12 +1963,15 @@ function showStoreOrderStatusView(order) {
   const pill = document.getElementById('status-pill-badge');
   const title = document.getElementById('status-view-title');
   const desc = document.getElementById('status-view-desc');
+  const deliveredCode = String(order.deliveredCode || '').trim();
 
   if (order.status === 'approved') {
     pill.className = 'status-pill-lg approved';
     pill.textContent = '✅ تم تأكيد الدفع وقبول طلبك بنجاح!';
-    title.textContent = 'تم قبول طلبك وتنفيذ التسليم 🎉';
-    desc.textContent = 'تم التحقق من تحويلك بنجاح، ستستلم كود بطاقة الـ PSN مباشرة على رقم الواتساب المسجل لدينا.';
+    title.textContent = deliveredCode ? 'كود بطاقة PlayStation جاهز الآن! 🎉' : 'تم قبول طلبك وتنفيذ التسليم 🎉';
+    desc.textContent = deliveredCode
+      ? 'اضغط على زر "نسخ الكود" بالأسفل وفعّله مباشرة داخل متجر PlayStation على حسابك.'
+      : 'تم التحقق من تحويلك بنجاح، ستستلم كود بطاقة الـ PSN مباشرة على رقم الواتساب المسجل لدينا.';
   } else if (order.status === 'rejected') {
     pill.className = 'status-pill-lg rejected';
     pill.textContent = '❌ لم يتم التحقق من إيصال التحويل';
@@ -1967,20 +1981,30 @@ function showStoreOrderStatusView(order) {
     pill.className = 'status-pill-lg pending';
     pill.textContent = '⏳ جاري مراجعة إيصال الدفع وتجهيز كود الـ PSN';
     title.textContent = 'تم تسجيل طلبك بنجاح! 🎉';
-    desc.textContent = 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيصلك الكود الرقمي على الواتساب.';
+    desc.textContent = 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيظهر الكود هنا ويصلك على الواتساب.';
   }
+
+  const deliveredCodeBoxHtml = order.status === 'approved' && deliveredCode
+    ? `<div style="margin:0 0 12px; padding:16px 14px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28); text-align:center;">
+         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">🎁 كود البطاقة الرقمي (PSN Gift Card Code):</div>
+         <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
+         <button type="button" class="submit-store-btn" style="padding:11px 16px; font-size:0.94rem;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredStoreCode(this)">📋 نسخ الكود (Copy Code)</button>
+       </div>`
+    : '';
 
   const methodText = order.paymentMethod === 'vodafone' ? 'Vodafone Cash' : 'InstaPay';
   document.getElementById('status-receipt-card').innerHTML = `
+    ${deliveredCodeBoxHtml}
     <div>🆔 <strong>رقم الطلب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(order.id)}</code></div>
     <div>📦 <strong>البطاقة:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(order.packageName)}</span></div>
+    ${order.storeRegion ? `<div>🌍 <strong>الريجين:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(order.storeRegion)}</span></div>` : ''}
     <div>💰 <strong>المبلغ:</strong> <span style="color:var(--green); font-weight:900;">${formatPriceEgp(order.amountEgp)}</span> (${methodText})</div>
     <div>💬 <strong>رقم الواتساب:</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(order.whatsappPhone || '')}</span></div>
     ${order.deliveryBadge ? `<div>⚡ <strong>نوع التسليم:</strong> <span style="color:#aef7d2;">${escapeHtml(order.deliveryBadge)}</span></div>` : ''}
   `;
 
   const waMsg = order.whatsappText || (
-    `مرحباً Tweak Lab 🎮⚡\n` +
+    `مرحباً TweakLab 🎮⚡\n` +
     `رقم طلبي من المتجر: ${order.id}\n` +
     `المنتج: ${order.packageName}\n` +
     `المبلغ: ${order.amountEgp} ج.م\n` +
@@ -1997,10 +2021,12 @@ function startStoreOrderPolling() {
       const res = await fetch(`/api/orders/${encodeURIComponent(activeTrackedOrder.id)}?token=${encodeURIComponent(activeTrackedOrder.accessToken)}`);
       if (!res.ok) return;
       const d = await res.json();
-      if (d && d.status && d.status !== activeTrackedOrder.status) {
+      if (d && (d.status !== activeTrackedOrder.status || (d.deliveredCode || '') !== (activeTrackedOrder.deliveredCode || ''))) {
         activeTrackedOrder.status = d.status;
+        activeTrackedOrder.deliveredCode = d.deliveredCode || '';
+        activeTrackedOrder.storeRegion = d.storeRegion || activeTrackedOrder.storeRegion || '';
         showStoreOrderStatusView(activeTrackedOrder);
-        if (d.status === 'approved' || d.status === 'rejected') {
+        if ((d.status === 'approved' && d.deliveredCode) || d.status === 'rejected') {
           clearInterval(storePollTimer);
           storePollTimer = null;
         }
@@ -2051,14 +2077,16 @@ async function lookupStoreOrderByQuery(rawQuery) {
       id: data.id,
       accessToken: data.accessToken,
       packageName: data.packageName,
+      storeRegion: data.storeRegion || '',
       amountEgp: data.amountEgp,
       whatsappPhone: data.whatsappPhone,
       deliveryBadge: data.deliveryBadge,
+      deliveredCode: data.deliveredCode || '',
       paymentMethod: data.paymentMethod,
       status: data.status
     };
     showStoreOrderStatusView(activeTrackedOrder);
-    if (data.status === 'pending') startStoreOrderPolling();
+    if (data.status === 'pending' || (data.status === 'approved' && !data.deliveredCode)) startStoreOrderPolling();
   } catch (err) {
     if (errEl) {
       errEl.textContent = 'تعذر الاتصال بالخادم، حاول مرة أخرى.';

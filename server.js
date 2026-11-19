@@ -366,6 +366,8 @@ function mergeOrderLists(...lists) {
           accessToken: bestToken,
           screenshotFileIds: newer.screenshotFileIds || older.screenshotFileIds,
           screenshotMime: newer.screenshotMime || older.screenshotMime,
+          deliveredCode: newer.deliveredCode !== undefined ? newer.deliveredCode : (older.deliveredCode || ''),
+          deliveredAt: newer.deliveredAt || older.deliveredAt || '',
           updatedAt: Math.max(tExisting, tItem) ? new Date(Math.max(tExisting, tItem)).toISOString() : new Date().toISOString()
         });
       }
@@ -1356,8 +1358,12 @@ async function handleRequest(req, res) {
         storeProductId: storeProduct ? storeProduct.id : '',
         storeCategory: storeProduct ? storeProduct.category : '',
         storeRegion: storeProduct ? (storeProduct.regionLabel || storeProduct.region || '') : '',
+        storeRegionCode: storeProduct ? (storeProduct.region || '') : '',
+        storeValueLabel: storeProduct ? (storeProduct.valueLabel || '') : '',
         deliveryType: storeProduct ? storeProduct.deliveryType : 'pc_bundle',
         deliveryBadge: storeProduct ? storeProduct.deliveryBadge : '',
+        deliveredCode: '',
+        deliveredAt: '',
         whatsappPhone: isGamingStoreOrder ? cleanSenderPhone : '',
         gameAccount: cleanGameAccount,
         customerName: cleanCustomerName,
@@ -1522,11 +1528,21 @@ async function handleRequest(req, res) {
       const orders = loadOrders();
       const settings = loadSettings();
 
+      const normPhoneTail = (raw) => {
+        const d = String(raw || '').replace(/[\u0660-\u0669]/g, (c) => String(c.charCodeAt(0) - 0x0660)).replace(/[^0-9]/g, '');
+        if (d.startsWith('201') && d.length === 12) return '0' + d.slice(2);
+        return d;
+      };
+      const queryPhone = normPhoneTail(digitsOnly);
+
       const matchedOrder = orders.find((o) => {
         const oid = String(o.id || '').trim().toUpperCase();
         if (oid === upperQuery || oid === 'TL-' + upperQuery) return true;
-        const oPhone = String(o.senderPhone || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660)).replace(/[^0-9]/g, '');
-        if (digitsOnly.length >= 10 && oPhone && oPhone === digitsOnly) return true;
+        if (queryPhone.length >= 10) {
+          const oPhone = normPhoneTail(o.senderPhone);
+          const oWa = normPhoneTail(o.whatsappPhone);
+          if ((oPhone && oPhone === queryPhone) || (oWa && oWa === queryPhone)) return true;
+        }
         return false;
       });
 
@@ -1542,6 +1558,7 @@ async function handleRequest(req, res) {
       );
 
       if (matchedOrder.orderType === 'gaming_store') {
+        const isApproved = matchedOrder.status === 'approved';
         return sendJson(res, 200, {
           ok: true,
           id: matchedOrder.id,
@@ -1551,7 +1568,11 @@ async function handleRequest(req, res) {
           storeProductId: matchedOrder.storeProductId || '',
           storeCategory: matchedOrder.storeCategory || '',
           storeRegion: matchedOrder.storeRegion || '',
+          storeRegionCode: matchedOrder.storeRegionCode || '',
+          storeValueLabel: matchedOrder.storeValueLabel || '',
           deliveryBadge: matchedOrder.deliveryBadge || '',
+          deliveredCode: isApproved ? (matchedOrder.deliveredCode || '') : '',
+          deliveredAt: isApproved ? (matchedOrder.deliveredAt || '') : '',
           whatsappPhone: matchedOrder.whatsappPhone || matchedOrder.senderPhone || '',
           gameAccount: matchedOrder.gameAccount || '',
           customerName: matchedOrder.customerName,
@@ -1678,6 +1699,7 @@ async function handleRequest(req, res) {
       }
 
       if (order.orderType === 'gaming_store') {
+        const isApproved = order.status === 'approved';
         return sendJson(res, 200, {
           id: order.id,
           orderType: 'gaming_store',
@@ -1685,7 +1707,11 @@ async function handleRequest(req, res) {
           storeProductId: order.storeProductId || '',
           storeCategory: order.storeCategory || '',
           storeRegion: order.storeRegion || '',
+          storeRegionCode: order.storeRegionCode || '',
+          storeValueLabel: order.storeValueLabel || '',
           deliveryBadge: order.deliveryBadge || '',
+          deliveredCode: isApproved ? (order.deliveredCode || '') : '',
+          deliveredAt: isApproved ? (order.deliveredAt || '') : '',
           whatsappPhone: order.whatsappPhone || order.senderPhone || '',
           gameAccount: order.gameAccount || '',
           customerName: order.customerName,
@@ -2127,7 +2153,7 @@ async function handleRequest(req, res) {
       if (pin !== settings.adminPin) {
         return sendJson(res, 401, { error: 'غير مصرح' });
       }
-      const { orderId, action } = await readJsonBody(req);
+      const { orderId, action, giftCode, deliveredCode } = await readJsonBody(req);
       const orders = loadOrders();
       const idx = orders.findIndex((o) => o.id === orderId);
 
@@ -2145,15 +2171,31 @@ async function handleRequest(req, res) {
 
       if (idx === -1) return sendJson(res, 404, { error: 'الطلب غير موجود' });
 
-      if (action === 'reset-timer') {
-        const now = Date.now();
-        orders[idx].firstAccessedAt = new Date(now).toISOString();
-        orders[idx].accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
-        orders[idx].isBurned = false;
+      const cleanCode = String(deliveredCode !== undefined ? deliveredCode : (giftCode !== undefined ? giftCode : '')).trim().slice(0, 120);
+
+      if (action === 'deliver-code') {
+        if (!cleanCode) {
+          return sendJson(res, 400, { error: 'يرجى كتابة كود البطاقة الرقمي (Gift Card Code) قبل التأكيد والإرسال.' });
+        }
+        orders[idx].deliveredCode = cleanCode;
+        orders[idx].deliveredAt = new Date().toISOString();
         orders[idx].status = 'approved';
         orders[idx].updatedAt = new Date().toISOString();
+      } else if (action === 'reset-timer') {
+        if (orders[idx].orderType !== 'gaming_store') {
+          const now = Date.now();
+          orders[idx].firstAccessedAt = new Date(now).toISOString();
+          orders[idx].accessExpiresAt = new Date(now + TIME_BOMB_MS).toISOString();
+          orders[idx].isBurned = false;
+          orders[idx].status = 'approved';
+          orders[idx].updatedAt = new Date().toISOString();
+        }
       } else if (action === 'approve' || action === 'reject' || action === 'pending') {
         orders[idx].status = action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'pending';
+        if (action === 'approve' && cleanCode) {
+          orders[idx].deliveredCode = cleanCode;
+          orders[idx].deliveredAt = new Date().toISOString();
+        }
         orders[idx].updatedAt = new Date().toISOString();
       }
       const updatedOrders = await saveOrders(orders);

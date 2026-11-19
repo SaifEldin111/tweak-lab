@@ -4192,24 +4192,30 @@
     </div>
   </footer>
 
-  <!-- RESTORE PREVIOUS ORDER MODAL (BY ORDER ID OR PHONE NUMBER - WORKS DURING & AFTER 60 MINUTES FOR REVIEW) -->
+  <!-- RESTORE PREVIOUS ORDER MODAL (BY ORDER ID OR PHONE NUMBER - WORKS FOR PC ORDERS & PSN GIFT CARDS) -->
   <div id="restore-order-modal" style="display:none; position:fixed; inset:0; z-index:100000; background:rgba(4, 7, 12, 0.84); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:18px;">
-    <div style="background:var(--bg-card); border:1.5px solid var(--green); border-radius:18px; max-width:460px; width:100%; padding:24px 22px; box-shadow:0 20px 55px rgba(0,0,0,0.8), 0 0 28px rgba(0,255,136,0.22); position:relative; text-align:start;">
+    <div style="background:var(--bg-card); border:1.5px solid var(--green); border-radius:18px; max-width:480px; width:100%; padding:24px 22px; box-shadow:0 20px 55px rgba(0,0,0,0.8), 0 0 28px rgba(0,255,136,0.22); position:relative; text-align:start; max-height:calc(100vh - 36px); overflow-y:auto;">
       <button type="button" onclick="closeRestoreOrderModal()" style="position:absolute; top:14px; inset-inline-end:14px; background:rgba(255,255,255,0.08); border:1px solid var(--border); color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:0.9rem;">✕</button>
-      <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.4); color:var(--green); font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:10px;">
-        <span>🔍 متابعة طلب سابق أو تقييم تجربتك</span>
+
+      <div id="restore-search-form-wrap">
+        <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.4); color:var(--green); font-size:0.78rem; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:10px;">
+          <span>🔍 متابعة طلب سابق (باقة PC أو بطاقة PSN)</span>
+        </div>
+        <h3 style="color:#fff; font-size:1.22rem; font-weight:900; margin-bottom:6px;">افتح طلبك، استلم كود الـ PSN، أو قيّم تجربتك</h3>
+        <p style="color:var(--text-muted); font-size:0.86rem; line-height:1.6; margin-bottom:14px;">
+          اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل / الواتساب</strong> لفتح طلبك أو عرض كود بطاقة PlayStation فوراً:
+        </p>
+        <form onsubmit="submitRestoreOrderLookup(event)">
+          <input type="text" id="restore-order-query-input" class="input-field" placeholder="مثال: TL-123456 أو 01012345678" style="margin-bottom:8px; direction:ltr; text-align:center; font-weight:800; font-size:1rem;" required />
+          <div id="restore-order-error-msg" style="display:none; color:#ff4757; font-size:0.82rem; font-weight:700; margin-bottom:10px; text-align:center;"></div>
+          <button type="submit" id="restore-order-submit-btn" class="btn btn-primary" style="width:100%; font-weight:900; padding:12px 16px;">
+            🚀 عرض حالة الطلب الآن
+          </button>
+        </form>
       </div>
-      <h3 style="color:#fff; font-size:1.22rem; font-weight:900; margin-bottom:6px;">افتح طلبك أو اكتب تقييمك واستلم كود خصم 20%</h3>
-      <p style="color:var(--text-muted); font-size:0.86rem; line-height:1.6; margin-bottom:14px;">
-        اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الموبايل المحول منه</strong> لفتح صفحة الأوردر أو كتابة فريماتك بعد التظبيط:
-      </p>
-      <form onsubmit="submitRestoreOrderLookup(event)">
-        <input type="text" id="restore-order-query-input" class="input-field" placeholder="مثال: TL-123456 أو 01012345678" style="margin-bottom:8px; direction:ltr; text-align:center; font-weight:800; font-size:1rem;" required />
-        <div id="restore-order-error-msg" style="display:none; color:#ff4757; font-size:0.82rem; font-weight:700; margin-bottom:10px; text-align:center;"></div>
-        <button type="submit" id="restore-order-submit-btn" class="btn btn-primary" style="width:100%; font-weight:900; padding:12px 16px;">
-          🚀 فتح صفحة الطلب الآن
-        </button>
-      </form>
+
+      <!-- PSN GIFT CARD DELIVERY RESULT PANEL (NO PC DOWNLOAD LINKS) -->
+      <div id="restore-psn-result-wrap" style="display:none; text-align:center;"></div>
     </div>
   </div>
 
@@ -5842,6 +5848,13 @@ function promptRestoreOrder() {
   const modal = document.getElementById('restore-order-modal');
   const input = document.getElementById('restore-order-query-input');
   const errEl = document.getElementById('restore-order-error-msg');
+  const searchWrap = document.getElementById('restore-search-form-wrap');
+  const psnWrap = document.getElementById('restore-psn-result-wrap');
+  if (searchWrap) searchWrap.style.display = 'block';
+  if (psnWrap) {
+    psnWrap.style.display = 'none';
+    psnWrap.innerHTML = '';
+  }
   if (errEl) {
     errEl.style.display = 'none';
     errEl.textContent = '';
@@ -5855,6 +5868,71 @@ function promptRestoreOrder() {
       setTimeout(() => input.focus(), 60);
     }
   }
+}
+
+function copyDeliveredPsnCode(btn) {
+  const code = btn ? (btn.getAttribute('data-code') || '') : '';
+  if (!code) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code);
+  }
+  const orig = btn.textContent;
+  btn.textContent = 'تم نسخ الكود ✓';
+  btn.style.background = '#00ff88';
+  btn.style.color = '#03120a';
+  setTimeout(() => {
+    btn.textContent = orig;
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 2200);
+}
+
+function showPsnOrderInRestoreModal(data) {
+  const searchWrap = document.getElementById('restore-search-form-wrap');
+  const psnWrap = document.getElementById('restore-psn-result-wrap');
+  if (!psnWrap) return;
+  if (searchWrap) searchWrap.style.display = 'none';
+  psnWrap.style.display = 'block';
+
+  const isApproved = data.status === 'approved';
+  const isRejected = data.status === 'rejected';
+  const deliveredCode = String(data.deliveredCode || '').trim();
+  const statusPillHtml = isApproved
+    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(0,255,136,0.16); border:1px solid #00ff88; color:#00ff88; font-size:0.82rem; font-weight:900;">✅ تم قبول الطلب وتسليم الكود</span>`
+    : isRejected
+    ? `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,71,87,0.16); border:1px solid #ff4757; color:#ff6b78; font-size:0.82rem; font-weight:900;">❌ لم يتم التحقق من الإيصال</span>`
+    : `<span style="display:inline-flex; align-items:center; gap:6px; padding:5px 14px; border-radius:999px; background:rgba(255,184,0,0.14); border:1px solid #ffb800; color:#ffb800; font-size:0.82rem; font-weight:900;">⏳ جاري مراجعة التحويل وتجهيز الكود</span>`;
+
+  const codeBoxHtml = isApproved && deliveredCode
+    ? `<div style="margin:16px 0; padding:18px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(0,255,136,0.14), rgba(0,240,255,0.08)); border:2px solid #00ff88; box-shadow:0 0 26px rgba(0,255,136,0.28);">
+         <div style="font-size:0.82rem; font-weight:800; color:#c8ffe2; margin-bottom:8px;">🎁 كود بطاقة PlayStation الرقمي الخاص بك:</div>
+         <div dir="ltr" style="font-family:Consolas, ui-monospace, monospace; font-size:1.35rem; font-weight:900; letter-spacing:2px; color:#00ff88; background:#050912; border:1px solid rgba(0,255,136,0.45); border-radius:10px; padding:12px 14px; margin-bottom:12px; word-break:break-all; text-shadow:0 0 12px rgba(0,255,136,0.45);">${escapeHtml(deliveredCode)}</div>
+         <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; font-weight:900; padding:11px 16px;" data-code="${escapeHtml(deliveredCode)}" onclick="copyDeliveredPsnCode(this)">📋 نسخ الكود (Copy Code)</button>
+       </div>`
+    : isApproved
+    ? `<div style="margin:14px 0; padding:14px; border-radius:12px; background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.4); color:#d8ffeb; font-size:0.86rem; font-weight:700;">
+         تم قبول طلبك بنجاح! جاري إرسال كود الـ PSN على رقم الواتساب الخاص بك خلال لحظات.
+       </div>`
+    : '';
+
+  psnWrap.innerHTML = `
+    <div style="margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;">
+      <span style="padding:4px 11px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:#00f0ff; font-size:0.76rem; font-weight:900;">🎮 بطاقة PSN</span>
+      ${statusPillHtml}
+    </div>
+    <h3 style="color:#fff; font-size:1.14rem; font-weight:900; margin-bottom:6px;">${escapeHtml(data.packageName || 'بطاقة PlayStation PSN')}</h3>
+    <div style="background:#070b14; border:1px solid var(--border); border-radius:12px; padding:12px 14px; text-align:start; font-size:0.85rem; display:flex; flex-direction:column; gap:5px; margin-top:10px;">
+      <div>🆔 <strong>رقم الطلب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(data.id)}</code></div>
+      ${data.storeRegion ? `<div>🌍 <strong>الريجين:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(data.storeRegion)}</span></div>` : ''}
+      <div>💰 <strong>السعر:</strong> <span style="color:var(--green); font-weight:900;">${Number(data.amountEgp || 0).toLocaleString('en-US')} ج.م</span></div>
+      <div>💬 <strong>الواتساب:</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(data.whatsappPhone || '')}</span></div>
+    </div>
+    ${codeBoxHtml}
+    <div style="display:flex; gap:8px; margin-top:14px;">
+      <button type="button" class="btn" style="flex:1; justify-content:center;" onclick="promptRestoreOrder()">🔍 بحث عن طلب آخر</button>
+      <a href="/store" class="btn" style="flex:1; justify-content:center; border-color:rgba(0,240,255,0.45); color:var(--cyan);">🎮 المتجر (/store)</a>
+    </div>
+  `;
 }
 
 async function submitRestoreOrderLookup(e) {
@@ -5901,16 +5979,17 @@ async function submitRestoreOrderLookup(e) {
       return;
     }
 
-    closeRestoreOrderModal();
     if (btn) {
       btn.disabled = false;
       btn.textContent = origText;
     }
 
     if (data.orderType === 'gaming_store') {
-      window.location.href = `/store?track=${encodeURIComponent(data.id)}`;
+      showPsnOrderInRestoreModal(data);
       return;
     }
+
+    closeRestoreOrderModal();
 
     if (data.status === 'pending') {
       currentOrder = {
