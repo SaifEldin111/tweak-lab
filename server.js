@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const zlib = require('zlib');
+const STORE_CATALOG = require('./data/storeProducts.js');
 
 function getProtectedFileBuffer(filename) {
   const directPath = path.join(PROTECTED_DIR, filename);
@@ -884,6 +885,7 @@ function postHttpsJson(hostname, pathUrl, payloadObj, timeoutMs = 4500) {
 }
 
 async function sendWebhookNotifications(order, settings, hostUrl) {
+  const isGamingStore = order && order.orderType === 'gaming_store';
   const basePrice = Number(order.basePriceEgp || settings.priceEgp || 99);
   const paidAmount = Number(order.amountEgp || basePrice);
   const pkgName = order.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)';
@@ -907,7 +909,9 @@ async function sendWebhookNotifications(order, settings, hostUrl) {
   if (order.isDiscountApplied && paidAmount < basePrice) {
     paidAmountDetailHtml = `<b>${paidAmount} ج.م</b> (بسعر الخصم بدلاً من ${basePrice} ج.م 🎉)`;
   } else {
-    paidAmountDetailHtml = `<b>${paidAmount} ج.م</b> (السعر الأساسي المعتمد)`;
+    paidAmountDetailHtml = isGamingStore
+      ? `<b>${paidAmount} ج.م</b> (سعر منتج المتجر)`
+      : `<b>${paidAmount} ج.م</b> (السعر الأساسي المعتمد)`;
   }
 
   const tasks = [];
@@ -915,22 +919,35 @@ async function sendWebhookNotifications(order, settings, hostUrl) {
   if (settings.discordWebhookUrl && settings.discordWebhookUrl.startsWith('https://')) {
     try {
       const urlObj = new URL(settings.discordWebhookUrl);
+      const discordFields = isGamingStore
+        ? [
+            { name: '📦 المنتج المطلوب', value: pkgName, inline: false },
+            ...(order.storeRegion ? [{ name: '🌍 الريجين', value: order.storeRegion, inline: true }] : []),
+            { name: '💬 رقم الواتساب', value: order.whatsappPhone || order.senderPhone || 'غير محدد', inline: true },
+            ...(order.gameAccount ? [{ name: '🎯 بيانات الحساب للشحن', value: order.gameAccount, inline: false }] : []),
+            { name: '💳 طريقة الدفع', value: payMethodLabel, inline: true },
+            { name: '💰 المبلغ المدفوع', value: `${paidAmount} ج.م`, inline: true },
+            { name: '🖥️ لوحة التحكم (القبول والتسليم)', value: `${hostUrl}/admin` }
+          ]
+        : [
+            { name: '👤 اسم العميل', value: order.customerName || 'غير محدد', inline: true },
+            { name: '📱 رقم الموبايل المحول منه', value: order.senderPhone || 'غير محدد', inline: true },
+            { name: '📦 الباقة المختارة', value: pkgName, inline: false },
+            { name: '💳 طريقة الدفع', value: payMethodLabel, inline: true },
+            { name: '💰 المبلغ المدفوع بالضبط', value: `${paidAmount} ج.م`, inline: true },
+            { name: '🎟️ كود الخصم / صانع المحتوى', value: codeStatusPlain, inline: false },
+            { name: '🖥️ لوحة التحكم (القبول/الرفض اليدوي)', value: `${hostUrl}/admin` }
+          ];
       tasks.push(
         postHttpsJson(urlObj.hostname, urlObj.pathname + urlObj.search, {
           username: 'Tweak Lab Order Bot',
           embeds: [
             {
-              title: `🚨 طلب شراء جديد #${order.id} — دفع ${paidAmount} ج.م`,
-              color: 65416,
-              fields: [
-                { name: '👤 اسم العميل', value: order.customerName || 'غير محدد', inline: true },
-                { name: '📱 رقم الموبايل المحول منه', value: order.senderPhone || 'غير محدد', inline: true },
-                { name: '📦 الباقة المختارة', value: pkgName, inline: false },
-                { name: '💳 طريقة الدفع', value: payMethodLabel, inline: true },
-                { name: '💰 المبلغ المدفوع بالضبط', value: `${paidAmount} ج.م`, inline: true },
-                { name: '🎟️ كود الخصم / صانع المحتوى', value: codeStatusPlain, inline: false },
-                { name: '🖥️ لوحة التحكم (القبول/الرفض اليدوي)', value: `${hostUrl}/admin` }
-              ],
+              title: isGamingStore
+                ? `🎮 طلب متجر وشحن جديد #${order.id} — دفع ${paidAmount} ج.م`
+                : `🚨 طلب شراء جديد #${order.id} — دفع ${paidAmount} ج.م`,
+              color: isGamingStore ? 61695 : 65416,
+              fields: discordFields,
               timestamp: new Date().toISOString()
             }
           ]
@@ -940,21 +957,35 @@ async function sendWebhookNotifications(order, settings, hostUrl) {
   }
 
   if (settings.telegramBotToken && settings.telegramChatId) {
-    const htmlText =
-      `🚨 <b>طلب شراء جديد في TWEAK LAB ⚡</b>\n` +
-      `━━━━━━━━━━━━━━━━━━\n` +
-      `🆔 <b>رقم الطلب:</b> <code>#${escapeTelegramHtml(order.id)}</code>\n` +
-      `👤 <b>اسم العميل:</b> ${escapeTelegramHtml(order.customerName)}\n` +
-      `📱 <b>رقم التليفون المحول منه:</b> <code>${escapeTelegramHtml(order.senderPhone)}</code>\n` +
-      `📦 <b>الباقة المختارة:</b> ${escapeTelegramHtml(pkgName)}\n` +
-      `💳 <b>طريقة الدفع:</b> ${escapeTelegramHtml(payMethodLabel)}\n` +
-      `💰 <b>المبلغ المدفوع بالضبط:</b> ${paidAmountDetailHtml}\n` +
-      `🎟️ <b>كود صانع المحتوى / الخصم:</b> ${codeStatusHtml}\n` +
-      `📝 <b>ملاحظات العميل:</b> ${escapeTelegramHtml(order.notes || 'لا يوجد')}\n` +
-      `⏱️ <b>حماية الرابط (Time-Bomb):</b> ساعة كاملة (60 دقيقة) من أول فتح\n` +
-      `━━━━━━━━━━━━━━━━━━\n` +
-      `⚠️ <b>الطلب الآن قيد المراجعة (Pending) بانتظار قبولك اليدوي:</b>\n` +
-      `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">فتح لوحة تحكم الأدمن لمراجعة الإيصال والقبول (/admin)</a>`;
+    const htmlText = isGamingStore
+      ? `🎮 <b>طلب جديد من متجر TWEAK LAB للألعاب والشحن!</b>\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `🆔 <b>رقم الطلب:</b> <code>#${escapeTelegramHtml(order.id)}</code>\n` +
+        `📦 <b>المنتج:</b> <b>${escapeTelegramHtml(pkgName)}</b>\n` +
+        (order.storeRegion ? `🌍 <b>الريجين:</b> <code>${escapeTelegramHtml(order.storeRegion)}</code>\n` : '') +
+        `💬 <b>رقم الواتساب:</b> <code>${escapeTelegramHtml(order.whatsappPhone || order.senderPhone)}</code>\n` +
+        (order.gameAccount ? `🎯 <b>بيانات الحساب للشحن:</b> <code>${escapeTelegramHtml(order.gameAccount)}</code>\n` : '') +
+        `💳 <b>طريقة الدفع:</b> ${escapeTelegramHtml(payMethodLabel)}\n` +
+        `💰 <b>المبلغ المدفوع:</b> ${paidAmountDetailHtml}\n` +
+        `⚡ <b>نوع التسليم:</b> ${escapeTelegramHtml(order.deliveryBadge || 'كود رقمي / شحن يدوي')}\n` +
+        `📝 <b>ملاحظات العميل:</b> ${escapeTelegramHtml(order.notes || 'لا يوجد')}\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `⚠️ <b>الطلب قيد المراجعة (Pending) — راجع الإيصال وسلم الطلب من لوحة الأدمن:</b>\n` +
+        `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">فتح لوحة تحكم الأدمن (/admin)</a>`
+      : `🚨 <b>طلب شراء جديد في TWEAK LAB ⚡</b>\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `🆔 <b>رقم الطلب:</b> <code>#${escapeTelegramHtml(order.id)}</code>\n` +
+        `👤 <b>اسم العميل:</b> ${escapeTelegramHtml(order.customerName)}\n` +
+        `📱 <b>رقم التليفون المحول منه:</b> <code>${escapeTelegramHtml(order.senderPhone)}</code>\n` +
+        `📦 <b>الباقة المختارة:</b> ${escapeTelegramHtml(pkgName)}\n` +
+        `💳 <b>طريقة الدفع:</b> ${escapeTelegramHtml(payMethodLabel)}\n` +
+        `💰 <b>المبلغ المدفوع بالضبط:</b> ${paidAmountDetailHtml}\n` +
+        `🎟️ <b>كود صانع المحتوى / الخصم:</b> ${codeStatusHtml}\n` +
+        `📝 <b>ملاحظات العميل:</b> ${escapeTelegramHtml(order.notes || 'لا يوجد')}\n` +
+        `⏱️ <b>حماية الرابط (Time-Bomb):</b> ساعة كاملة (60 دقيقة) من أول فتح\n` +
+        `━━━━━━━━━━━━━━━━━━\n` +
+        `⚠️ <b>الطلب الآن قيد المراجعة (Pending) بانتظار قبولك اليدوي:</b>\n` +
+        `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">فتح لوحة تحكم الأدمن لمراجعة الإيصال والقبول (/admin)</a>`;
 
     tasks.push(
       postHttpsJson('api.telegram.org', `/bot${settings.telegramBotToken}/sendMessage`, {
@@ -1012,6 +1043,37 @@ async function handleRequest(req, res) {
   try {
     const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const pathname = parsedUrl.pathname;
+
+    // Fast static catalog endpoints (no cloud DB sync delay)
+    if (req.method === 'GET' && pathname === '/api/store/products') {
+      const payload = JSON.stringify({
+        ok: true,
+        categories: STORE_CATALOG.categories,
+        psnRegions: STORE_CATALOG.psnRegions,
+        products: STORE_CATALOG.products
+      });
+      res.writeHead(200, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'public, max-age=60, must-revalidate'
+      });
+      return res.end(payload);
+    }
+
+    if (req.method === 'GET' && pathname === '/api/store-products.js') {
+      const jsPayload =
+        'window.TWEAKLAB_STORE_CATALOG = ' +
+        JSON.stringify({
+          categories: STORE_CATALOG.categories,
+          psnRegions: STORE_CATALOG.psnRegions,
+          products: STORE_CATALOG.products
+        }) +
+        ';';
+      res.writeHead(200, {
+        'Content-Type': 'application/javascript; charset=utf-8',
+        'Cache-Control': 'public, max-age=60, must-revalidate'
+      });
+      return res.end(jsPayload);
+    }
 
     if (pathname.startsWith('/api/')) {
       await syncFromCloudDb();
@@ -1153,30 +1215,85 @@ async function handleRequest(req, res) {
       });
     }
 
-    // 2. Create New Order + Screenshot Upload
+    // 2. Create New Order + Screenshot Upload (Supports both PC Optimization & Gaming Store orders)
     if (req.method === 'POST' && pathname === '/api/orders') {
       await syncFromCloudDb(true);
       const body = await readJsonBody(req);
-      const { customerName, senderPhone, discountCode, paymentMethod, notes, screenshotDataUrl, paidAmountEgp, packageName } = body;
+      const {
+        orderType,
+        storeProductId,
+        whatsappPhone,
+        gameAccount,
+        customerName,
+        senderPhone,
+        discountCode,
+        paymentMethod,
+        notes,
+        screenshotDataUrl,
+        paidAmountEgp,
+        packageName
+      } = body || {};
 
-      if (!customerName || !senderPhone || !screenshotDataUrl) {
-        return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
-      }
+      const isGamingStoreOrder = Boolean(orderType === 'gaming_store' || storeProductId);
+      let storeProduct = null;
+      let cleanCustomerName = '';
+      let cleanSenderPhone = '';
+      let cleanGameAccount = '';
 
-      const trimmedName = String(customerName).trim();
-      if (!trimmedName || !/^[a-zA-Z\u0600-\u06FF\s]+$/.test(trimmedName)) {
-        return sendJson(res, 400, { error: 'الاسم لازم يكون حروف بس من غير أرقام' });
-      }
+      if (isGamingStoreOrder) {
+        storeProduct = STORE_CATALOG.findProductById(storeProductId);
+        if (!storeProduct) {
+          return sendJson(res, 400, { error: 'المنتج المختار غير موجود في المتجر. حدّث الصفحة وحاول مرة أخرى.' });
+        }
 
-      const normalizedPhone = String(senderPhone).trim().replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
-      if (/[^0-9]/.test(normalizedPhone)) {
-        return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
-      }
-      if (normalizedPhone.length < 11) {
-        return sendJson(res, 400, { error: 'رقم التليفون لازم يكون 11 رقم' });
-      }
-      if (!/^01[0-9]{9}$/.test(normalizedPhone)) {
-        return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+        const rawWa = String(whatsappPhone || senderPhone || '').trim();
+        const normalizedWa = rawWa
+          .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+          .replace(/[\s\-()]/g, '')
+          .replace(/^\+/, '');
+
+        if (!normalizedWa || /[^0-9]/.test(normalizedWa) || normalizedWa.length < 10 || normalizedWa.length > 15) {
+          return sendJson(res, 400, { error: 'يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx).' });
+        }
+
+        cleanGameAccount = String(gameAccount || '').trim().slice(0, 160);
+        if (storeProduct.requiresAccount && !cleanGameAccount) {
+          const hint =
+            storeProduct.category === 'valorant'
+              ? 'يرجى كتابة Riot ID بشكل صحيح (مثال: Player#EGY).'
+              : 'يرجى كتابة إيميل Epic Games أو حساب Xbox لإتمام الشحن.';
+          return sendJson(res, 400, { error: hint });
+        }
+
+        if (!screenshotDataUrl) {
+          return sendJson(res, 400, { error: 'يرجى رفع صورة سكرين شوت التحويل أولاً.' });
+        }
+
+        cleanSenderPhone = normalizedWa;
+        cleanCustomerName = String(customerName || '').trim().slice(0, 80) || (cleanGameAccount ? cleanGameAccount.slice(0, 60) : ('عميل متجر • ' + normalizedWa));
+      } else {
+        if (!customerName || !senderPhone || !screenshotDataUrl) {
+          return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
+        }
+
+        const trimmedName = String(customerName).trim();
+        if (!trimmedName || !/^[a-zA-Z\u0600-\u06FF\s]+$/.test(trimmedName)) {
+          return sendJson(res, 400, { error: 'الاسم لازم يكون حروف بس من غير أرقام' });
+        }
+
+        const normalizedPhone = String(senderPhone).trim().replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+        if (/[^0-9]/.test(normalizedPhone)) {
+          return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+        }
+        if (normalizedPhone.length < 11) {
+          return sendJson(res, 400, { error: 'رقم التليفون لازم يكون 11 رقم' });
+        }
+        if (!/^01[0-9]{9}$/.test(normalizedPhone)) {
+          return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+        }
+
+        cleanCustomerName = trimmedName.slice(0, 80);
+        cleanSenderPhone = normalizedPhone.slice(0, 40);
       }
 
       const match = /^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i.exec(screenshotDataUrl);
@@ -1203,39 +1320,55 @@ async function handleRequest(req, res) {
         console.error('Screenshot cloud upload warning:', e.message);
       }
 
-      // Determine exact charged/paid amount based on active promo code or configured price
-      const codeKey = String(discountCode || '').trim().toUpperCase();
-      const basePrice = Number(settings.priceEgp) || 99;
-      const activePromoCodes = ensureDefaultPromoCodes(settings).activePromoCodes || {};
+      let basePrice = Number(settings.priceEgp) || 99;
       let finalAmount = basePrice;
       let isDiscountApplied = false;
       let discountPercent = 0;
+      const codeKey = String(discountCode || '').trim().toUpperCase();
 
-      if (codeKey === 'FRIEND20' && (!activePromoCodes[codeKey] || Number(activePromoCodes[codeKey]) >= basePrice)) {
-        activePromoCodes[codeKey] = Math.round(basePrice * 0.8);
-      }
+      if (isGamingStoreOrder && storeProduct) {
+        basePrice = Number(storeProduct.priceEgp);
+        finalAmount = Number(storeProduct.priceEgp);
+      } else {
+        // Determine exact charged/paid amount based on active promo code or configured price
+        const activePromoCodes = ensureDefaultPromoCodes(settings).activePromoCodes || {};
 
-      if (codeKey && activePromoCodes[codeKey]) {
-        const promoVal = Number(activePromoCodes[codeKey]);
-        if (!isNaN(promoVal) && promoVal > 0 && promoVal < basePrice) {
-          finalAmount = promoVal;
-          isDiscountApplied = true;
-          discountPercent = Math.round(((basePrice - finalAmount) / basePrice) * 100);
+        if (codeKey === 'FRIEND20' && (!activePromoCodes[codeKey] || Number(activePromoCodes[codeKey]) >= basePrice)) {
+          activePromoCodes[codeKey] = Math.round(basePrice * 0.8);
         }
-      } else if (paidAmountEgp !== undefined && Number(paidAmountEgp) > 0 && Number(paidAmountEgp) === basePrice) {
-        finalAmount = Number(paidAmountEgp);
+
+        if (codeKey && activePromoCodes[codeKey]) {
+          const promoVal = Number(activePromoCodes[codeKey]);
+          if (!isNaN(promoVal) && promoVal > 0 && promoVal < basePrice) {
+            finalAmount = promoVal;
+            isDiscountApplied = true;
+            discountPercent = Math.round(((basePrice - finalAmount) / basePrice) * 100);
+          }
+        } else if (paidAmountEgp !== undefined && Number(paidAmountEgp) > 0 && Number(paidAmountEgp) === basePrice) {
+          finalAmount = Number(paidAmountEgp);
+        }
       }
 
       const newOrder = {
         id: orderId,
         accessToken,
-        customerName: String(customerName).trim().slice(0, 80),
-        senderPhone: String(senderPhone).trim().slice(0, 40),
-        packageName: String(packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)').trim().slice(0, 120),
-        discountCode: String(discountCode || '').trim().slice(0, 60),
+        orderType: isGamingStoreOrder ? 'gaming_store' : 'pc_optimization',
+        storeProductId: storeProduct ? storeProduct.id : '',
+        storeCategory: storeProduct ? storeProduct.category : '',
+        storeRegion: storeProduct ? (storeProduct.regionLabel || storeProduct.region || '') : '',
+        deliveryType: storeProduct ? storeProduct.deliveryType : 'pc_bundle',
+        deliveryBadge: storeProduct ? storeProduct.deliveryBadge : '',
+        whatsappPhone: isGamingStoreOrder ? cleanSenderPhone : '',
+        gameAccount: cleanGameAccount,
+        customerName: cleanCustomerName,
+        senderPhone: cleanSenderPhone,
+        packageName: storeProduct
+          ? storeProduct.fullTitle
+          : String(packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)').trim().slice(0, 120),
+        discountCode: isGamingStoreOrder ? '' : String(discountCode || '').trim().slice(0, 60),
         isDiscountApplied,
         discountPercent,
-        isCreatorCode: Boolean(codeKey && !isDiscountApplied),
+        isCreatorCode: Boolean(!isGamingStoreOrder && codeKey && !isDiscountApplied),
         paymentMethod: paymentMethod === 'vodafone' ? 'vodafone' : 'instapay',
         basePriceEgp: basePrice,
         amountEgp: finalAmount,
@@ -1262,25 +1395,41 @@ async function handleRequest(req, res) {
       }
       await sendWebhookNotifications(newOrder, settings, hostUrl);
 
+      const whatsappText = isGamingStoreOrder
+        ? `مرحباً Tweak Lab 🎮⚡\n` +
+          `طلبت من المتجر: ${newOrder.packageName}\n` +
+          `المبلغ المحول: ${newOrder.amountEgp} ج.م (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
+          `رقم الطلب: ${newOrder.id}\n` +
+          `رقم الواتساب: ${newOrder.whatsappPhone}\n` +
+          (newOrder.gameAccount ? `بيانات الحساب: ${newOrder.gameAccount}\n` : '') +
+          `برجاء مراجعة الإيصال وتأكيد التسليم!`
+        : `مرحباً Tweak Lab ⚡\n` +
+          `قمت بدفع ${newOrder.amountEgp} ج.م عبر (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
+          `الباقة: ${newOrder.packageName}\n` +
+          `رقم الطلب: ${newOrder.id}\n` +
+          `الاسم: ${newOrder.customerName}\n` +
+          `الرقم المحول منه: ${newOrder.senderPhone}\n` +
+          (newOrder.discountCode
+            ? `كود صانع المحتوى / الخصم: ${newOrder.discountCode}${newOrder.isDiscountApplied ? ` (خصم مفعل • دفع ${newOrder.amountEgp} ج.م 🎉)` : ' (كود صانع محتوى 👤)'}\n`
+            : '') +
+          `برجاء قبول الطلب لتفعيل التحميل!`;
+
       return sendJson(res, 201, {
         ok: true,
         order: {
           id: newOrder.id,
           accessToken: newOrder.accessToken,
+          orderType: newOrder.orderType,
+          packageName: newOrder.packageName,
+          amountEgp: newOrder.amountEgp,
+          storeRegion: newOrder.storeRegion,
+          gameAccount: newOrder.gameAccount,
+          whatsappPhone: newOrder.whatsappPhone,
+          deliveryBadge: newOrder.deliveryBadge,
           status: newOrder.status,
           createdAt: newOrder.createdAt,
           deliveryMinutes: settings.deliveryMinutes,
-          quickApproveWhatsappText:
-            `مرحباً Tweak Lab ⚡\n` +
-            `قمت بدفع ${newOrder.amountEgp} ج.م عبر (${newOrder.paymentMethod === 'instapay' ? 'InstaPay' : 'Vodafone Cash'})\n` +
-            `الباقة: ${newOrder.packageName}\n` +
-            `رقم الطلب: ${newOrder.id}\n` +
-            `الاسم: ${newOrder.customerName}\n` +
-            `الرقم المحول منه: ${newOrder.senderPhone}\n` +
-            (newOrder.discountCode
-              ? `كود صانع المحتوى / الخصم: ${newOrder.discountCode}${newOrder.isDiscountApplied ? ` (خصم مفعل • دفع ${newOrder.amountEgp} ج.م 🎉)` : ' (كود صانع محتوى 👤)'}\n`
-              : '') +
-            `برجاء قبول الطلب لتفعيل التحميل!`
+          quickApproveWhatsappText: whatsappText
         }
       });
     }
@@ -1391,6 +1540,29 @@ async function handleRequest(req, res) {
         matchedOrder.reviewSubmitted ||
         allReviews.some((r) => String(r.orderId || '').toUpperCase() === String(matchedOrder.id).toUpperCase())
       );
+
+      if (matchedOrder.orderType === 'gaming_store') {
+        return sendJson(res, 200, {
+          ok: true,
+          id: matchedOrder.id,
+          accessToken: matchedOrder.accessToken,
+          orderType: 'gaming_store',
+          packageName: matchedOrder.packageName,
+          storeProductId: matchedOrder.storeProductId || '',
+          storeCategory: matchedOrder.storeCategory || '',
+          storeRegion: matchedOrder.storeRegion || '',
+          deliveryBadge: matchedOrder.deliveryBadge || '',
+          whatsappPhone: matchedOrder.whatsappPhone || matchedOrder.senderPhone || '',
+          gameAccount: matchedOrder.gameAccount || '',
+          customerName: matchedOrder.customerName,
+          paymentMethod: matchedOrder.paymentMethod,
+          amountEgp: matchedOrder.amountEgp,
+          status: matchedOrder.status,
+          paymentStatus: matchedOrder.status,
+          createdAt: matchedOrder.createdAt,
+          updatedAt: matchedOrder.updatedAt
+        });
+      }
 
       if (matchedOrder.status === 'approved' || matchedOrder.status === 'expired') {
         if (!matchedOrder.firstAccessedAt) {
@@ -1503,6 +1675,27 @@ async function handleRequest(req, res) {
 
       if (!order) {
         return sendJson(res, 404, { error: 'لم يتم العثور على الطلب.' });
+      }
+
+      if (order.orderType === 'gaming_store') {
+        return sendJson(res, 200, {
+          id: order.id,
+          orderType: 'gaming_store',
+          packageName: order.packageName,
+          storeProductId: order.storeProductId || '',
+          storeCategory: order.storeCategory || '',
+          storeRegion: order.storeRegion || '',
+          deliveryBadge: order.deliveryBadge || '',
+          whatsappPhone: order.whatsappPhone || order.senderPhone || '',
+          gameAccount: order.gameAccount || '',
+          customerName: order.customerName,
+          paymentMethod: order.paymentMethod,
+          amountEgp: order.amountEgp,
+          status: order.status,
+          paymentStatus: order.status,
+          createdAt: order.createdAt,
+          updatedAt: order.updatedAt
+        });
       }
 
       const allReviews = loadReviews();
@@ -1647,6 +1840,11 @@ async function handleRequest(req, res) {
           order = restored;
         }
       }
+      if (order && order.orderType === 'gaming_store') {
+        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('⛔ هذا الطلب خاص بمتجر الألعاب والشحن ولا يتضمن ملفات تحميل PC.');
+      }
+
       const isAuthorized = (order && (order.status === 'approved' || (order.status === 'expired' && hasValidSig))) || (!order && hasValidSig);
 
       if (!isAuthorized) {
@@ -1728,6 +1926,11 @@ async function handleRequest(req, res) {
           order = restored;
         }
       }
+      if (order && order.orderType === 'gaming_store') {
+        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('⛔ هذا الطلب خاص بمتجر الألعاب والشحن ولا يتضمن دليل تظبيط PC.');
+      }
+
       const isAuthorized = (order && (order.status === 'approved' || (order.status === 'expired' && hasValidSig))) || (!order && hasValidSig);
 
       if (!isAuthorized) {

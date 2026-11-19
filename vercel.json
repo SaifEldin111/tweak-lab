@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": "{protected_product/**,seed_orders.json,seed_deleted_orders.json}"
+      "includeFiles": "{protected_product/**,data/storeProducts.js,seed_orders.json,seed_deleted_orders.json}"
     }
   },
   "headers": [
@@ -32,6 +32,8 @@
     { "source": "/api/(.*)", "destination": "/api/index.js" },
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/admin/", "destination": "/admin.html" },
+    { "source": "/store", "destination": "/store/index.html" },
+    { "source": "/store/", "destination": "/store/index.html" },
     { "source": "/guides", "destination": "/guides/index.html" },
     { "source": "/guides/", "destination": "/guides/index.html" },
     { "source": "/guides/fix-fortnite-fps-drops", "destination": "/guides/fix-fortnite-fps-drops/index.html" },

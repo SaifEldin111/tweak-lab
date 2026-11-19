@@ -664,15 +664,25 @@ function renderOrders(orders) {
 
   container.innerHTML = orders
     .map((o) => {
+      const isStoreOrder = o.orderType === 'gaming_store';
       const badgeClass =
         o.status === 'approved' ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
       const badgeText =
-        o.status === 'approved' ? '✅ مقبول وتم التسليم' : o.status === 'rejected' ? '❌ مرفوض' : '⏳ بانتظار القبول (5 دقائق)';
+        o.status === 'approved'
+          ? (isStoreOrder ? '✅ مقبول وتم التسليم' : '✅ مقبول وتم التسليم')
+          : o.status === 'rejected'
+          ? '❌ مرفوض'
+          : (isStoreOrder ? '⏳ بانتظار المراجعة والتسليم' : '⏳ بانتظار القبول (5 دقائق)');
       const methodLabel = o.paymentMethod === 'instapay' ? '🟣 InstaPay (إنستاباي)' : '🔴 Vodafone Cash (فودافون كاش)';
       const timeStr = new Date(o.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const waRawDigits = String(o.whatsappPhone || o.senderPhone || '').replace(/[^0-9]/g, '');
+      const waIntlDigits = waRawDigits.startsWith('0') ? ('2' + waRawDigits) : waRawDigits;
+      const waDirectUrl = waIntlDigits
+        ? `https://wa.me/${waIntlDigits}?text=${encodeURIComponent(`مرحباً من Tweak Lab 🎮⚡\nبخصوص طلبك #${o.id} (${o.packageName || 'طلب المتجر'}): `)}`
+        : '';
 
       let timeBombBadge = '';
-      if (o.status === 'approved' || o.status === 'expired' || o.isBurned) {
+      if (!isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)) {
         if (!o.firstAccessedAt) {
           timeBombBadge = `<div style="font-size:0.83rem; color:var(--cyan); background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:6px; margin-top:6px;">⏳ <strong>Time-Bomb:</strong> لم يُفتح بعد (مهلة ساعة واحدة جاهزة تبدأ عند أول فتح)</div>`;
         } else {
@@ -687,28 +697,46 @@ function renderOrders(orders) {
         }
       }
 
+      const orderTypePill = isStoreOrder
+        ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.74rem; font-weight:900; padding:3px 9px; border-radius:999px; background:rgba(0,240,255,0.14); border:1px solid rgba(0,240,255,0.45); color:var(--cyan);">🎮 متجر الألعاب والشحن</span>`
+        : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.74rem; font-weight:900; padding:3px 9px; border-radius:999px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.35); color:var(--green);">⚡ تظبيط PC</span>`;
+
+      const gameAccountBox = o.gameAccount
+        ? `<div style="background:rgba(0,240,255,0.09); border:1px solid rgba(0,240,255,0.45); border-radius:9px; padding:8px 11px; margin:6px 0; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+             <div style="font-size:0.86rem; color:#d8f8ff;">🎯 <strong>بيانات الحساب للشحن:</strong> <code dir="ltr" style="color:#fff; font-weight:900; background:#06090f; padding:2px 8px; border-radius:6px; border:1px solid rgba(0,240,255,0.35);">${escapeHtml(o.gameAccount)}</code></div>
+             <button type="button" class="btn" style="padding:3px 9px; font-size:0.74rem;" data-copy="${escapeHtml(o.gameAccount)}" onclick="navigator.clipboard.writeText(this.getAttribute('data-copy') || ''); showAdminToast('✅ تم نسخ بيانات الحساب');">📋 نسخ</button>
+           </div>`
+        : '';
+
       return `
         <div class="order-card ${o.status}">
           <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <strong style="font-family:monospace; font-size:1.1rem; color:var(--cyan);">#${o.id}</strong>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <strong style="font-family:monospace; font-size:1.1rem; color:var(--cyan);">#${o.id}</strong>
+                ${orderTypePill}
+              </div>
               <span class="badge ${badgeClass}">${badgeText}</span>
             </div>
             <div style="font-size:0.92rem; margin-bottom:4px;">👤 <strong>العميل:</strong> ${escapeHtml(o.customerName)}</div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">📱 <strong>رقم المحول:</strong> <span style="direction:ltr; display:inline-block;">${escapeHtml(o.senderPhone)}</span></div>
-            <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>الباقة:</strong> ${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">${isStoreOrder ? '💬 <strong>رقم الواتساب:</strong>' : '📱 <strong>رقم المحول:</strong>'} <span style="direction:ltr; display:inline-block; font-weight:800; color:#fff;">${escapeHtml(o.whatsappPhone || o.senderPhone)}</span></div>
+            <div style="font-size:0.92rem; margin-bottom:4px;">📦 <strong>${isStoreOrder ? 'المنتج / الباقة:' : 'الباقة:'}</strong> <span style="color:${isStoreOrder ? 'var(--cyan)' : '#fff'}; font-weight:800;">${escapeHtml(o.packageName || 'Best Optimization for 2027 FPS+ (النسخة الكاملة Pro)')}</span></div>
+            ${o.storeRegion ? `<div style="font-size:0.88rem; margin-bottom:4px;">🌍 <strong>الريجين:</strong> <span style="color:var(--green); font-weight:800;">${escapeHtml(o.storeRegion)}</span></div>` : ''}
+            ${o.deliveryBadge ? `<div style="font-size:0.82rem; color:#b5f8d8; margin-bottom:4px;">⚡ <strong>التسليم:</strong> ${escapeHtml(o.deliveryBadge)}</div>` : ''}
+            ${gameAccountBox}
             <div style="font-size:0.92rem; margin-bottom:6px;">💳 <strong>وسيلة الدفع:</strong> ${methodLabel}</div>
             ${(() => {
-              const basePrice = Number(o.basePriceEgp) || 99;
+              const basePrice = Number(o.basePriceEgp) || (isStoreOrder ? Number(o.amountEgp) : 99);
               const reqAmount = Number(o.amountEgp) || basePrice;
               const codeStr = String(o.discountCode || o.creatorCode || '').trim().toUpperCase();
-              const isDiscounted = Boolean(o.isDiscountApplied) || reqAmount < basePrice;
+              const isDiscounted = !isStoreOrder && (Boolean(o.isDiscountApplied) || reqAmount < basePrice);
               const discPct = isDiscounted && basePrice > 0
                 ? (Number(o.discountPercent) || Math.round(((basePrice - reqAmount) / basePrice) * 100))
                 : 0;
 
               return `
                 <div style="background:rgba(0,255,136,0.07); border:1px solid rgba(0,255,136,0.35); border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; flex-direction:column; gap:6px;">
+                  ${isStoreOrder ? '' : `
                   <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
                     <span style="font-size:0.86rem; color:#d4ffea;">🎟️ <strong>الكود المستخدم:</strong></span>
                     ${
@@ -723,15 +751,15 @@ function renderOrders(orders) {
                           </span>`
                         : `<span style="font-size:0.82rem; color:var(--text-muted); font-weight:700;">بدون كود</span>`
                     }
-                  </div>
-                  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px;">
-                    <span style="font-size:0.86rem; color:#d4ffea;">💰 <strong>المبلغ المطلوب بعد الخصم:</strong></span>
+                  </div>`}
+                  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; ${isStoreOrder ? '' : 'border-top:1px dashed rgba(255,255,255,0.12); padding-top:6px;'}">
+                    <span style="font-size:0.86rem; color:#d4ffea;">💰 <strong>${isStoreOrder ? 'المبلغ المطلوب (منتج المتجر):' : 'المبلغ المطلوب بعد الخصم:'}</strong></span>
                     <span>
                       <strong style="color:var(--green); font-size:1.08rem; font-weight:900;">${reqAmount} ج.م</strong>
                       ${
                         isDiscounted
                           ? `<del style="color:var(--text-muted); font-size:0.8rem; margin-right:5px;">${basePrice} ج.م</del>`
-                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">(السعر الأساسي)</span>`
+                          : `<span style="color:var(--text-muted); font-size:0.76rem; margin-right:4px;">${isStoreOrder ? '(سعر المتجر)' : '(السعر الأساسي)'}</span>`
                       }
                     </span>
                   </div>
@@ -747,8 +775,13 @@ function renderOrders(orders) {
           </div>
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
             ${
+              isStoreOrder && waDirectUrl
+                ? `<a href="${waDirectUrl}" target="_blank" rel="noopener noreferrer" class="btn" style="border-color:#25d366; color:#25d366; background:rgba(37,211,102,0.1); font-weight:800;">💬 تسليم عبر واتساب</a>`
+                : ''
+            }
+            ${
               o.status === 'pending'
-                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">✅ Accept (قبول وتفعيل التحميل فوراً)</button>
+                ? `<button class="btn btn-accept" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'approve', this)">${isStoreOrder ? '✅ Accept (تأكيد الطلب وتسليم الشحن/الكود)' : '✅ Accept (قبول وتفعيل التحميل فوراً)'}</button>
                    <button class="btn btn-reject" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'reject', this)">❌ رفض الطلب</button>`
                 : o.status === 'approved'
                 ? `<button class="btn" style="flex:1; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة لقيد المراجعة</button>
@@ -757,7 +790,7 @@ function renderOrders(orders) {
                    <button class="btn" style="min-width:110px; justify-content:center;" onclick="updateOrder('${o.id}', 'pending', this)">↩ إعادة للمراجعة</button>`
             }
             ${
-              (o.status === 'approved' || o.status === 'expired' || o.isBurned)
+              !isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)
                 ? `<button class="btn" style="border-color:var(--amber); color:var(--amber);" onclick="updateOrder('${o.id}', 'reset-timer', this)" title="تجديد مهلة الساعة (60 دقيقة) للعميل وإعادة تفعيل الرابط له">🔄 تجديد ساعة كاملة</button>`
                 : ''
             }

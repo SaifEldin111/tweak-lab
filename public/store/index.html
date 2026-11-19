@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>متجر TweakLab للألعاب | بطاقات PlayStation PSN، شحن V-Bucks و Valorant Points في مصر</title>
+  <meta name="description" content="متجر TweakLab الرسمي في مصر لبطاقات PlayStation PSN (أمريكي، سعودي، إماراتي، تركي) وشحن Fortnite V-Bucks و Valorant Points بأمان وسرعة عبر InstaPay و Vodafone Cash." />
+  <link rel="canonical" href="https://tweak-lab-a177.vercel.app/store" />
+  <meta property="og:title" content="متجر TweakLab للألعاب والشحن | PSN • V-Bucks • Valorant Points" />
+  <meta property="og:description" content="كود رقمي سريع لبطاقات بلايستيشن وشحن يدوي آمن خلال 5-15 دقيقة لفورتنايت وفالورانت عبر إنستاباي وفودافون كاش." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tweak-lab-a177.vercel.app/store" />
+  <meta name="theme-color" content="#070a10" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <script src="/api/store-products.js"></script>
+  <style>
+    :root {
+      --bg-dark: #070a10;
+      --bg-card: #0e1420;
+      --bg-card-2: #0a101c;
+      --border: #1e2c46;
+      --cyan: #00f0ff;
+      --green: #00ff88;
+      --amber: #ffb800;
+      --red: #ff4757;
+      --purple: #9b59ff;
+      --psn-blue: #0070ff;
+      --valorant-red: #ff4655;
+      --vodafone: #e60000;
+      --instapay: #7b2cbf;
+      --text-main: #f0f6fc;
+      --text-muted: #8b9bb4;
+    }
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-x: clip;
+      scroll-behavior: smooth;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-x: clip;
+      font-family: 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(ellipse at 18% 0%, rgba(0, 240, 255, 0.14) 0%, transparent 45%),
+        radial-gradient(ellipse at 82% 0%, rgba(0, 255, 136, 0.13) 0%, transparent 45%),
+        var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ========================================================================
+       STICKY NAVBAR + DUAL-HUB SEGMENTED PILL SWITCHER
+       ======================================================================== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 10, 16, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.22);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+      padding: 12px 24px;
+      width: 100%;
+    }
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .brand-hub-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: #ffffff;
+      direction: ltr;
+      flex-shrink: 0;
+      white-space: nowrap;
+      transition: transform 0.2s ease;
+    }
+    .brand-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #0e1624 0%, #070a10 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.4);
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+    .brand:hover .brand-icon-box {
+      border-color: rgba(0, 255, 136, 0.85);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.48), 0 0 10px rgba(0, 255, 136, 0.28);
+      transform: translateY(-1px);
+    }
+    .brand-wordmark {
+      display: inline-flex;
+      align-items: baseline;
+      font-weight: 900;
+      font-size: 1.38rem;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+    .brand-tweak { color: #ffffff; }
+    .brand-lab {
+      color: #00ff88;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.55), 0 0 24px rgba(0, 255, 136, 0.22);
+    }
+    .dual-hub-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(9, 14, 24, 0.92);
+      border: 1px solid rgba(0, 255, 136, 0.28);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      max-width: 100%;
+    }
+    .hub-pill-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #a9bad4;
+      white-space: nowrap;
+      transition: all 0.22s ease;
+      border: 1px solid transparent;
+    }
+    .hub-pill-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .hub-pill-item.active {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.22), rgba(0, 255, 136, 0.18));
+      border-color: rgba(0, 255, 136, 0.72);
+      color: #00ff88;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.3);
+    }
+    .nav-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(14, 20, 32, 0.9);
+      color: #d7e5f7;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-btn:hover {
+      border-color: var(--cyan);
+      color: #fff;
+      background: rgba(0, 240, 255, 0.1);
+    }
+    .nav-btn-accent {
+      background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+      color: #03120b;
+      border: none;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.35);
+    }
+    .nav-btn-accent:hover {
+      color: #03120b;
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.55);
+    }
+
+    /* ========================================================================
+       STORE HERO HEADER & QUICK FILTER TABS
+       ======================================================================== */
+    .store-hero {
+      position: relative;
+      padding: 40px 20px 26px;
+      border-bottom: 1px solid rgba(0, 255, 136, 0.18);
+      background:
+        radial-gradient(circle at 80% 15%, rgba(0, 255, 136, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.12) 0%, transparent 48%),
+        linear-gradient(180deg, rgba(7, 10, 16, 0.85) 0%, rgba(7, 10, 16, 0.98) 100%);
+      text-align: center;
+      overflow: hidden;
+    }
+    .store-hero-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.11);
+      border: 1px solid rgba(0, 255, 136, 0.42);
+      color: var(--green);
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.14);
+    }
+    .store-hero h1 {
+      font-size: clamp(1.85rem, 4vw, 2.95rem);
+      font-weight: 900;
+      line-height: 1.24;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+    .accent-green {
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    }
+    .accent-cyan {
+      color: var(--cyan);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+    }
+    .store-hero-sub {
+      max-width: 760px;
+      margin: 0 auto 22px;
+      color: #b4c6de;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+    .store-trust-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(14, 20, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d6e4f7;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .trust-pill strong {
+      color: var(--green);
+    }
+
+    /* Quick Category Filter Tabs */
+    .filter-tabs-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 16px;
+      background: rgba(10, 15, 26, 0.92);
+      border: 1px solid rgba(0, 255, 136, 0.24);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .filter-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #adc0d9;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.22s ease;
+    }
+    .filter-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .filter-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.22), rgba(0, 240, 255, 0.16));
+      border-color: rgba(0, 255, 136, 0.72);
+      color: var(--green);
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.25);
+    }
+    .filter-count {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d6e4f7;
+    }
+    .filter-tab-btn.active .filter-count {
+      background: var(--green);
+      color: #03120a;
+    }
+
+    /* ========================================================================
+       MAIN CONTAINER & SECTIONS
+       ======================================================================== */
+    .store-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 34px 20px 60px;
+    }
+    .catalog-section {
+      margin-bottom: 46px;
+      animation: fadeSlideUp 0.28s ease-out;
+    }
+    .catalog-section.hidden-section {
+      display: none;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section-top-bar {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .section-title-group h2 {
+      font-size: clamp(1.32rem, 2.5vw, 1.75rem);
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .section-title-group p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .delivery-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .delivery-chip.instant-code {
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid rgba(0, 255, 136, 0.45);
+      color: var(--green);
+    }
+    .delivery-chip.manual-topup {
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      color: var(--cyan);
+    }
+
+    /* PSN Region Selector */
+    .region-selector-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(13, 21, 36, 0.92), rgba(8, 12, 22, 0.96));
+      border: 1px solid rgba(0, 112, 255, 0.35);
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+    }
+    .region-selector-label {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #d6e6ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .region-buttons-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .region-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 11px;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(7, 11, 20, 0.88);
+      color: #c5d6ed;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .region-btn:hover {
+      border-color: rgba(0, 240, 255, 0.55);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .region-btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 240, 255, 0.18));
+      border-color: var(--green);
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(0, 255, 136, 0.32);
+    }
+    .region-flag {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    /* Product Cards Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .products-grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .products-grid.cols-5 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(15, 22, 36, 0.96) 0%, rgba(8, 12, 20, 0.99) 100%);
+      border: 1.5px solid rgba(30, 44, 70, 0.95);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 255, 136, 0.72);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 255, 136, 0.2);
+    }
+    .product-card.theme-psn:hover {
+      border-color: rgba(0, 240, 255, 0.8);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 140, 255, 0.28);
+    }
+    .product-card.theme-valorant:hover {
+      border-color: rgba(255, 70, 85, 0.8);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 24px rgba(255, 70, 85, 0.24);
+    }
+
+    /* Card Visual Artwork Header */
+    .card-visual-banner {
+      position: relative;
+      padding: 20px 18px 18px;
+      min-height: 122px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .card-visual-banner.psn-bg {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(0, 240, 255, 0.26), transparent 55%),
+        linear-gradient(135deg, #07193a 0%, #092c6b 55%, #061329 100%);
+    }
+    .card-visual-banner.fortnite-bg {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.3), transparent 52%),
+        linear-gradient(135deg, #0b1b3a 0%, #1c144a 52%, #081224 100%);
+    }
+    .card-visual-banner.fortnite-crew-bg {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(0, 255, 136, 0.32), transparent 55%),
+        linear-gradient(135deg, #092625 0%, #1f1248 56%, #08111e 100%);
+    }
+    .card-visual-banner.valorant-bg {
+      background:
+        radial-gradient(circle at 15% 18%, rgba(255, 70, 85, 0.34), transparent 55%),
+        linear-gradient(135deg, #270c14 0%, #161124 58%, #090c14 100%);
+    }
+    .card-visual-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #e6f2ff;
+      backdrop-filter: blur(6px);
+    }
+    .card-hot-tag {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #00ff88, #00f0ff);
+      color: #03120b;
+      box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+      white-space: nowrap;
+    }
+    .card-value-display {
+      margin-top: 14px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-value-big {
+      font-size: 1.72rem;
+      font-weight: 900;
+      color: #ffffff;
+      direction: ltr;
+      letter-spacing: -0.02em;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+    }
+    .card-emblem-svg {
+      width: 34px;
+      height: 34px;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    /* Card Content Body */
+    .card-body {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 5px;
+      line-height: 1.35;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: #9bb0cb;
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+    .card-delivery-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.34);
+      color: #9effd0;
+    }
+    .card-delivery-tag.manual {
+      background: rgba(0, 240, 255, 0.1);
+      border-color: rgba(0, 240, 255, 0.34);
+      color: #aef7ff;
+    }
+    .card-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+    .card-price-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .card-price-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .card-price-val {
+      font-size: 1.32rem;
+      font-weight: 900;
+      color: var(--green);
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.32);
+      line-height: 1.15;
+    }
+    .order-now-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 11px;
+      border: none;
+      background: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+      color: #03120b;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 6px 18px rgba(0, 255, 136, 0.3);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .order-now-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 255, 136, 0.5);
+      filter: brightness(1.06);
+    }
+
+    /* ========================================================================
+       STORE ORDER MODAL & TRACK ORDER MODAL
+       ======================================================================== */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(4, 7, 13, 0.86);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      background: linear-gradient(165deg, #101726 0%, #080c15 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.55);
+      border-radius: 20px;
+      padding: 24px 22px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.82), 0 0 36px rgba(0, 255, 136, 0.2);
+      animation: modalPop 0.22s ease-out;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 14px;
+      inset-inline-end: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      background: rgba(255, 71, 87, 0.24);
+      border-color: var(--red);
+    }
+    .modal-product-summary {
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.11), rgba(0, 240, 255, 0.08));
+      border: 1px solid rgba(0, 255, 136, 0.42);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 8px 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .summary-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .summary-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: #bde9ff;
+      font-weight: 700;
+    }
+    .summary-price-pill {
+      background: rgba(5, 10, 18, 0.85);
+      border: 1.5px solid var(--green);
+      border-radius: 12px;
+      padding: 8px 14px;
+      text-align: center;
+    }
+    .summary-price-pill .sp-val {
+      font-size: 1.32rem;
+      font-weight: 900;
+      color: var(--green);
+      display: block;
+      line-height: 1.1;
+    }
+    .summary-price-pill .sp-lbl {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    /* Payment Tabs & Boxes inside Modal */
+    .pay-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .pay-tab {
+      background: #0a101b;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: #c8d8ee;
+      font-weight: 800;
+      font-size: 0.88rem;
+      transition: all 0.2s ease;
+    }
+    .pay-tab.active-instapay {
+      border-color: #a855f7;
+      background: rgba(123, 44, 191, 0.18);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.25);
+    }
+    .pay-tab.active-vodafone {
+      border-color: #ff4757;
+      background: rgba(230, 0, 0, 0.16);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(230, 0, 0, 0.25);
+    }
+    .pay-box {
+      background: #090e18;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .number-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #05080f;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+    .phone-digits {
+      font-family: Consolas, monospace;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: 1px;
+      direction: ltr;
+    }
+    .copy-mini-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.18s ease;
+    }
+    .copy-mini-btn:hover {
+      background: rgba(0, 240, 255, 0.22);
+      color: #fff;
+    }
+    .direct-pay-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-top: 8px;
+      color: #fff;
+      transition: filter 0.2s ease;
+    }
+    .direct-pay-link.insta {
+      background: linear-gradient(135deg, #7b2cbf, #9d4edd);
+    }
+    .direct-pay-link.voda {
+      background: linear-gradient(135deg, #c80000, #e60000);
+    }
+    .direct-pay-link:hover { filter: brightness(1.1); }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: #e4effc;
+      margin-bottom: 6px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 11px;
+      border: 1.5px solid var(--border);
+      background: #070b13;
+      color: #ffffff;
+      font-size: 0.94rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input-field:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.15);
+    }
+    .input-field.input-error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.15);
+    }
+    .field-hint {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .field-error {
+      display: none;
+      font-size: 0.79rem;
+      color: #ff6b78;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    .account-box-highlight {
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: 12px;
+      padding: 12px 13px;
+      margin-bottom: 14px;
+    }
+    .upload-zone {
+      border: 1.5px dashed rgba(0, 240, 255, 0.45);
+      border-radius: 12px;
+      background: rgba(0, 240, 255, 0.04);
+      padding: 16px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .upload-zone:hover {
+      border-color: var(--green);
+      background: rgba(0, 255, 136, 0.06);
+    }
+    .screenshot-preview {
+      display: none;
+      max-width: 100%;
+      max-height: 170px;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid rgba(0, 255, 136, 0.45);
+    }
+    .submit-store-btn {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 13px;
+      border: none;
+      background: linear-gradient(135deg, #00ff88 0%, #00d9ff 100%);
+      color: #03120b;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 10px 26px rgba(0, 255, 136, 0.34);
+      transition: all 0.2s ease;
+    }
+    .submit-store-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(0, 255, 136, 0.52);
+    }
+    .submit-store-btn:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    /* Order Confirmation / Status View inside Modal */
+    .order-status-view {
+      display: none;
+      text-align: center;
+      padding: 8px 4px;
+    }
+    .status-pill-lg {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+    .status-pill-lg.pending {
+      background: rgba(255, 184, 0, 0.14);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+    }
+    .status-pill-lg.approved {
+      background: rgba(0, 255, 136, 0.16);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+    .status-pill-lg.rejected {
+      background: rgba(255, 71, 87, 0.16);
+      border: 1px solid var(--red);
+      color: #ff6b78;
+    }
+    .order-receipt-card {
+      background: #070b14;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: start;
+      margin: 14px 0 18px;
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .wa-fast-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #25d366;
+      color: #04150a;
+      font-weight: 900;
+      font-size: 0.92rem;
+      text-decoration: none;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 22px rgba(37, 211, 102, 0.3);
+    }
+    .wa-fast-btn:hover { filter: brightness(1.06); }
+
+    /* ========================================================================
+       FOOTER (MATCHING MAIN TWEAKLAB SITE)
+       ======================================================================== */
+    .tweak-site-footer {
+      margin-top: 30px;
+      padding: 28px 18px 34px;
+      background: linear-gradient(180deg, rgba(6, 10, 16, 0.4), rgba(4, 7, 12, 0.96));
+      border-top: 1px solid rgba(0, 255, 136, 0.22);
+      text-align: center;
+    }
+    .tweak-site-footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .footer-guides-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      padding: 10px 16px;
+      background: rgba(14, 20, 32, 0.72);
+      border: 1px solid rgba(0, 255, 136, 0.18);
+      border-radius: 12px;
+    }
+    .footer-guides-link {
+      color: #d6e4f7;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: color 0.2s ease;
+    }
+    .footer-guides-link:hover,
+    .footer-guides-link.primary-guide-link {
+      color: var(--green);
+    }
+    .footer-social-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+    }
+    .discord-neon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(6, 11, 19, 0.96), rgba(0, 255, 136, 0.14));
+      border: 1.5px solid var(--green);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.9rem;
+      padding: 11px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 255, 136, 0.16);
+      transition: all 0.22s ease;
+    }
+    .discord-neon-btn:hover {
+      background: linear-gradient(135deg, var(--green), #00d673);
+      color: #03120a;
+      transform: translateY(-2px);
+    }
+    .discord-neon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--green);
+      flex-shrink: 0;
+    }
+    .discord-neon-btn:hover svg { fill: #03120a; }
+
+    /* Responsive Rules */
+    @media (max-width: 1040px) {
+      .products-grid,
+      .products-grid.cols-3,
+      .products-grid.cols-5 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 640px) {
+      .navbar { padding: 10px 14px; }
+      .brand-hub-group {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .brand-wordmark { font-size: 1.22rem; }
+      .dual-hub-switcher { padding: 3px; }
+      .hub-pill-item { padding: 5px 10px; font-size: 0.74rem; }
+      .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .products-grid,
+      .products-grid.cols-3,
+      .products-grid.cols-5 {
+        grid-template-columns: 1fr;
+      }
+      .filter-tabs-wrap {
+        width: 100%;
+      }
+      .filter-tab-btn {
+        flex: 1 1 44%;
+        justify-content: center;
+        padding: 9px 10px;
+        font-size: 0.82rem;
+      }
+      .region-buttons-group {
+        width: 100%;
+      }
+      .region-btn {
+        flex: 1 1 45%;
+        justify-content: center;
+        font-size: 0.82rem;
+      }
+      .modal-dialog {
+        padding: 18px 15px;
+      }
+      .pay-tabs {
+        grid-template-columns: 1fr;
+      }
+      .footer-social-links {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 340px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVBAR WITH DUAL-HUB SWITCHER -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-hub-group">
+        <a href="/" class="brand" dir="ltr" aria-label="TweakLab Home">
+          <span class="brand-icon-box" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="26" cy="20" r="13" fill="rgba(0, 255, 136, 0.08)" />
+              <path d="M6.5 11H20.8L19 14.5H15.2V29H11.4V14.5H6.5V11Z" fill="#FFFFFF" />
+              <path d="M28.5 7.5L19.6 17.6H24.6L18.4 25.5H15.2V29H31.6L33.5 25.5H22.8L30.2 15H25.8L28.5 7.5Z" fill="#00FF88" />
+            </svg>
+          </span>
+          <span class="brand-wordmark"><span class="brand-tweak">Tweak</span><span class="brand-lab">Lab</span></span>
+        </a>
+
+        <!-- Dual-Hub Segmented Pill Switcher -->
+        <div class="dual-hub-switcher" role="navigation" aria-label="التنقل بين المعمل والمتجر">
+          <a href="/" class="hub-pill-item">⚡ تظبيط الأداء (PC)</a>
+          <a href="/store" class="hub-pill-item active" aria-current="page">🎮 المتجر والشحن</a>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button type="button" class="nav-btn" onclick="openTrackModal()">🔍 متابعة طلب متجر</button>
+        <a href="/guides" class="nav-btn">📚 شروحات الأداء</a>
+        <a href="/#packages-section" class="nav-btn nav-btn-accent">⚡ باقة رفع الـ FPS</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- STORE HERO & QUICK CATEGORY FILTER TABS -->
+  <header class="store-hero">
+    <div class="store-hero-inner">
+      <div class="hero-eyebrow">
+        <span>🎮</span>
+        <span>TWEAKLAB GAMING STORE • INSTAPAY &amp; VODAFONE CASH</span>
+      </div>
+      <h1>
+        متجر <span class="accent-green">بطاقات PlayStation</span> وشحن <span class="accent-cyan">الألعاب</span> في مصر
+      </h1>
+      <p class="store-hero-sub">
+        اشحن حسابك بأمان 100% وبأفضل سعر بالجنيه المصري — كود رقمي رسمي لبطاقات <strong>PSN</strong> لكل الريجينز، وشحن يدوي آمن وسريع لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> عبر <strong>InstaPay</strong> و <strong>Vodafone Cash</strong>.
+      </p>
+
+      <div class="store-trust-strip">
+        <span class="trust-pill">⚡ <strong>PSN:</strong> كود رقمي • تسليم سريع</span>
+        <span class="trust-pill">🛡️ <strong>V-Bucks &amp; VP:</strong> شحن يدوي آمن خلال 5-15 دقيقة</span>
+        <span class="trust-pill">💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash</span>
+      </div>
+
+      <!-- Quick Filter Tabs -->
+      <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist" aria-label="فلترة منتجات المتجر">
+        <button type="button" class="filter-tab-btn active" data-filter="all" onclick="setCategoryFilter('all')">
+          <span>✨ الكل</span>
+          <span class="filter-count" id="count-all">25</span>
+        </button>
+        <button type="button" class="filter-tab-btn" data-filter="psn" onclick="setCategoryFilter('psn')">
+          <span>🎮 بطاقات PlayStation (PSN)</span>
+          <span class="filter-count" id="count-psn">15</span>
+        </button>
+        <button type="button" class="filter-tab-btn" data-filter="fortnite" onclick="setCategoryFilter('fortnite')">
+          <span>⚡ Fortnite V-Bucks</span>
+          <span class="filter-count" id="count-fortnite">5</span>
+        </button>
+        <button type="button" class="filter-tab-btn" data-filter="valorant" onclick="setCategoryFilter('valorant')">
+          <span>🎯 Valorant Points</span>
+          <span class="filter-count" id="count-valorant">5</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CATALOG SECTIONS -->
+  <main class="store-container">
+
+    <!-- SECTION 1: PLAYSTATION GIFT CARDS (PSN) WITH REGION SELECTOR -->
+    <section class="catalog-section" id="section-psn" aria-labelledby="heading-psn">
+      <div class="section-top-bar">
+        <div class="section-title-group">
+          <h2 id="heading-psn">🎮 بطاقات PlayStation (PSN Gift Cards)</h2>
+          <p>اختر ريجين حسابك بالأسفل لتظهر لك الفئات المتاحة فوراً بالسعر بالجنيه المصري</p>
+        </div>
+        <span class="delivery-chip instant-code">⚡ كود رقمي • تسليم سريع</span>
+      </div>
+
+      <!-- Region Selector -->
+      <div class="region-selector-bar">
+        <div class="region-selector-label">
+          <span>🌍 اختر ريجين الحساب (Region):</span>
+        </div>
+        <div class="region-buttons-group" id="psn-region-buttons" role="tablist" aria-label="اختيار ريجين بطاقات PlayStation">
+          <!-- Rendered dynamically from data/storeProducts.js -->
+        </div>
+      </div>
+
+      <div class="products-grid" id="psn-products-grid">
+        <!-- Rendered dynamically from data/storeProducts.js -->
+      </div>
+    </section>
+
+    <!-- SECTION 2A: FORTNITE V-BUCKS (MANUAL TOP-UP) -->
+    <section class="catalog-section" id="section-fortnite" aria-labelledby="heading-fortnite">
+      <div class="section-top-bar">
+        <div class="section-title-group">
+          <h2 id="heading-fortnite">⚡ شحن Fortnite V-Bucks وباقة Crew</h2>
+          <p>شحن رسمي ومضمون لحسابك (Epic Games / Xbox) بدون أي مخاطر على الحساب</p>
+        </div>
+        <span class="delivery-chip manual-topup">🛡️ شحن يدوي آمن • خلال 5-15 دقيقة</span>
+      </div>
+
+      <div class="products-grid cols-5" id="fortnite-products-grid">
+        <!-- Rendered dynamically from data/storeProducts.js -->
+      </div>
+    </section>
+
+    <!-- SECTION 2B: VALORANT POINTS (MANUAL TOP-UP) -->
+    <section class="catalog-section" id="section-valorant" aria-labelledby="heading-valorant">
+      <div class="section-top-bar">
+        <div class="section-title-group">
+          <h2 id="heading-valorant">🎯 شحن Valorant Points (VP)</h2>
+          <p>شحن مباشر بالـ Riot ID (مثال: Player#EGY) — آمن وسريع خلال دقائق</p>
+        </div>
+        <span class="delivery-chip manual-topup">🛡️ شحن يدوي آمن • خلال 5-15 دقيقة</span>
+      </div>
+
+      <div class="products-grid cols-5" id="valorant-products-grid">
+        <!-- Rendered dynamically from data/storeProducts.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STORE ORDER MODAL (CHECKOUT + LIVE STATUS TRACKER) -->
+  <div class="modal-backdrop" id="store-order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading" onclick="if(event.target===this) closeOrderModal()">
+    <div class="modal-dialog">
+      <button type="button" class="modal-close-btn" onclick="closeOrderModal()" aria-label="إغلاق">✕</button>
+
+      <!-- STEP 1: ORDER FORM VIEW -->
+      <div id="modal-checkout-view">
+        <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;">💳 إتمام طلب المتجر</h3>
+        <p style="font-size:0.84rem; color:var(--text-muted);">حوّل المبلغ الموضح بالأسفل وارفع سكرين شوت الإيصال لتنفيذ طلبك فوراً</p>
+
+        <!-- Selected Product Summary -->
+        <div class="modal-product-summary">
+          <div>
+            <div class="summary-title" id="modal-product-title">بطاقة PlayStation PSN $50</div>
+            <div class="summary-meta">
+              <span id="modal-product-region-badge">🇺🇸 أمريكي (US)</span>
+              <span>•</span>
+              <span id="modal-product-delivery-badge" style="color:var(--green);">كود رقمي • تسليم سريع</span>
+            </div>
+          </div>
+          <div class="summary-price-pill">
+            <span class="sp-val" id="modal-product-price">2,550 ج.م</span>
+            <span class="sp-lbl">السعر النهائي</span>
+          </div>
+        </div>
+
+        <!-- Payment Tabs -->
+        <div class="pay-tabs">
+          <div id="store-tab-instapay" class="pay-tab active-instapay" onclick="selectStorePayMethod('instapay')">
+            <span style="font-size:1.25rem;">🏦</span>
+            <span>InstaPay مصر</span>
+            <span style="font-size:0.72rem; color:#d8b4fe;">إنستاباي (تحويل فوري)</span>
+          </div>
+          <div id="store-tab-vodafone" class="pay-tab" onclick="selectStorePayMethod('vodafone')">
+            <span style="font-size:1.25rem;">📲</span>
+            <span>Vodafone Cash</span>
+            <span style="font-size:0.72rem; color:#fca5a5;">محفظة فودافون كاش</span>
+          </div>
+        </div>
+
+        <!-- InstaPay Box -->
+        <div id="store-box-instapay" class="pay-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <strong style="color:#d8b4fe; font-size:0.88rem;">🟣 التحويل عبر تطبيق InstaPay</strong>
+            <span style="font-size:0.78rem; color:var(--green); font-weight:800;" id="store-insta-amount-badge">0 ج.م</span>
+          </div>
+          <div class="number-display">
+            <span class="phone-digits" id="store-instapay-num">01020670418</span>
+            <button type="button" class="copy-mini-btn" onclick="copyStoreText(storeConfig.instapayAddress || storeConfig.paymentPhone || '01020670418', this)">📋 نسخ الرقم</button>
+          </div>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            حوّل <strong id="store-insta-amount-step" style="color:#fff;">0 ج.م</strong> على الرقم أو الرابط المباشر ثم التقط <strong>Screenshot</strong> للإيصال:
+          </p>
+          <a id="store-instapay-direct-btn" href="https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW" target="_blank" rel="noopener noreferrer" class="direct-pay-link insta">
+            ⚡ فتح رابط الدفع المباشر على InstaPay
+          </a>
+        </div>
+
+        <!-- Vodafone Cash Box -->
+        <div id="store-box-vodafone" class="pay-box" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <strong style="color:#ff7b7b; font-size:0.88rem;">🔴 التحويل عبر Vodafone Cash</strong>
+            <span style="font-size:0.78rem; color:var(--green); font-weight:800;" id="store-voda-amount-badge">0 ج.م</span>
+          </div>
+          <div class="number-display">
+            <span class="phone-digits" id="store-vodafone-num">01020670418</span>
+            <button type="button" class="copy-mini-btn" onclick="copyStoreText(storeConfig.paymentPhone || '01020670418', this)">📋 نسخ الرقم</button>
+          </div>
+          <div style="background:rgba(230,0,0,0.1); border:1px solid rgba(230,0,0,0.35); border-radius:9px; padding:8px 11px; font-size:0.8rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+            <span>💡 كود التحويل: <code id="store-voda-ussd" dir="ltr" style="color:#fff; font-weight:900;">*9*7*01020670418*520#</code></span>
+            <button type="button" class="copy-mini-btn" onclick="copyStoreText(document.getElementById('store-voda-ussd').textContent, this)">نسخ الكود</button>
+          </div>
+          <a id="store-voda-dial-btn" href="tel:*9*7*01020670418*520%23" class="direct-pay-link voda">
+            📞 اتصال مباشر للتحويل من الموبايل
+          </a>
+        </div>
+
+        <!-- Order Form -->
+        <form id="store-order-form" onsubmit="submitStoreOrder(event)" novalidate>
+          <!-- WhatsApp Phone (Always Required) -->
+          <div class="form-group">
+            <label for="store-whatsapp-input">💬 رقم الواتساب (مطلوب لاستلام الكود أو تأكيد الشحن):</label>
+            <input type="tel" id="store-whatsapp-input" class="input-field" inputmode="numeric" placeholder="مثال: 010xxxxxxxx" autocomplete="tel" required />
+            <div class="field-error" id="store-whatsapp-error">يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx)</div>
+          </div>
+
+          <!-- Conditional Game Account Field (REQUIRED ONLY for Fortnite V-Bucks & Valorant Points; HIDDEN for PSN) -->
+          <div class="account-box-highlight" id="store-account-field-wrap" style="display:none;">
+            <label for="store-account-input" id="store-account-label" style="color:var(--cyan);">🎯 بيانات الحساب المطلوبة للشحن:</label>
+            <input type="text" id="store-account-input" class="input-field" dir="ltr" placeholder="اكتب Riot ID مثال: Player#EGY" autocomplete="off" />
+            <div class="field-hint" id="store-account-hint">تأكد من كتابة بيانات الحساب بدقة لتنفيذ الشحن خلال 5-15 دقيقة.</div>
+            <div class="field-error" id="store-account-error">يرجى كتابة بيانات الحساب بشكل صحيح لإتمام الشحن.</div>
+          </div>
+
+          <!-- Transfer Screenshot Upload -->
+          <div class="form-group">
+            <label>📸 ارفع صورة سكرين شوت التحويل (مطلوب):</label>
+            <div class="upload-zone" onclick="document.getElementById('store-screenshot-input').click()">
+              <div style="font-size:1.7rem; margin-bottom:4px;">📤</div>
+              <div id="store-upload-label" style="font-weight:800; color:var(--cyan); font-size:0.88rem;">اضغط هنا لاختيار صورة إيصال التحويل من جهازك</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">يدعم PNG, JPG, WEBP — رفع وضغط فوري</div>
+              <img id="store-screenshot-preview" class="screenshot-preview" alt="معاينة الإيصال" />
+            </div>
+            <input type="file" id="store-screenshot-input" accept="image/*" style="display:none;" onchange="handleStoreScreenshotFile(this)" />
+            <div class="field-error" id="store-screenshot-error">يرجى رفع صورة سكرين شوت التحويل أولاً.</div>
+          </div>
+
+          <!-- Optional Notes -->
+          <div class="form-group">
+            <label for="store-notes-input">📝 ملاحظات إضافية (اختياري):</label>
+            <input type="text" id="store-notes-input" class="input-field" placeholder="أي ملاحظة إضافية لفريق الشحن..." />
+          </div>
+
+          <button type="submit" class="submit-store-btn" id="store-submit-btn">
+            🚀 تأكيد الطلب وإرسال الإيصال
+          </button>
+        </form>
+      </div>
+
+      <!-- STEP 2: ORDER SUBMITTED & LIVE STATUS VIEW -->
+      <div id="modal-status-view" class="order-status-view">
+        <div id="status-pill-badge" class="status-pill-lg pending">⏳ جاري مراجعة إيصال الدفع وتنفيذ الطلب</div>
+        <h3 id="status-view-title" style="font-size:1.3rem; font-weight:900; color:#fff; margin-bottom:6px;">تم تسجيل طلبك بنجاح! 🎉</h3>
+        <p id="status-view-desc" style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          وصل طلبك وصورة التحويل لفريق TweakLab الآن. بمجرد مراجعة الإيصال، سيتم إرسال الكود / الشحن على الواتساب وتحديث الحالة هنا تلقائياً.
+        </p>
+
+        <div class="order-receipt-card" id="status-receipt-card"></div>
+
+        <a id="status-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="wa-fast-btn">
+          💬 أرسل رقم الطلب على واتساب لتسريع التسليم الآن
+        </a>
+        <button type="button" class="nav-btn" style="width:100%; justify-content:center; padding:10px;" onclick="closeOrderModal()">
+          العودة لتصفح المتجر
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACK EXISTING STORE ORDER MODAL -->
+  <div class="modal-backdrop" id="store-track-modal" role="dialog" aria-modal="true" aria-labelledby="track-modal-heading" onclick="if(event.target===this) closeTrackModal()">
+    <div class="modal-dialog" style="max-width:460px;">
+      <button type="button" class="modal-close-btn" onclick="closeTrackModal()" aria-label="إغلاق">✕</button>
+      <h3 id="track-modal-heading" style="font-size:1.2rem; font-weight:900; color:#fff; margin-bottom:6px;">🔍 متابعة طلب من المتجر</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
+        اكتب <strong style="color:var(--cyan);">رقم الطلب (مثال: TL-123456)</strong> أو <strong style="color:var(--green);">رقم الواتساب</strong> لمعرفة حالة طلبك الآن:
+      </p>
+      <form onsubmit="submitStoreTrackLookup(event)">
+        <input type="text" id="track-query-input" class="input-field" dir="ltr" style="text-align:center; font-weight:800; margin-bottom:10px;" placeholder="TL-123456 أو 010xxxxxxxx" required />
+        <div class="field-error" id="track-error-msg" style="margin-bottom:10px; text-align:center;"></div>
+        <button type="submit" id="track-submit-btn" class="submit-store-btn">🔎 عرض حالة الطلب</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SITE FOOTER -->
+  <footer class="tweak-site-footer">
+    <div class="tweak-site-footer-inner">
+      <div class="footer-guides-bar">
+        <a href="/" class="footer-guides-link primary-guide-link">⚡ معمل تظبيط الأداء (PC)</a>
+        <span style="color:var(--border);">•</span>
+        <a href="/store" class="footer-guides-link primary-guide-link">🎮 متجر البطاقات والشحن</a>
+        <span style="color:var(--border);">•</span>
+        <a href="/guides" class="footer-guides-link">📚 شروحات الأداء</a>
+        <span style="color:var(--border);">•</span>
+        <a href="/guides/fix-fortnite-fps-drops" class="footer-guides-link">حل دروب فريم فورتنايت</a>
+        <span style="color:var(--border);">•</span>
+        <a href="/guides/reduce-valorant-input-delay" class="footer-guides-link">تقليل Input Delay فالورانت</a>
+      </div>
+      <div class="footer-social-links">
+        <a href="https://discord.gg/ZsdFqXtEMc" target="_blank" rel="noopener noreferrer" class="discord-neon-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.07 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          <span>انضم لمجتمع Tweak Lab على Discord</span>
+        </a>
+        <a href="https://www.youtube.com/@TweakLab-o8w" target="_blank" rel="noopener noreferrer" class="discord-neon-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>قناة Tweak Lab على YouTube</span>
+        </a>
+        <a href="https://www.instagram.com/tweak.lab/" target="_blank" rel="noopener noreferrer" class="discord-neon-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 2A3.75 3.75 0 004 7.75v8.5A3.75 3.75 0 007.75 20h8.5A3.75 3.75 0 0020 16.25v-8.5A3.75 3.75 0 0016.25 4h-8.5zm8.75 1.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/></svg>
+          <span>صفحة Tweak Lab على Instagram</span>
+        </a>
+      </div>
+      <div style="color:var(--text-muted); font-size:0.82rem;">
+        © 2027 <strong style="color:var(--green);">TWEAK LAB</strong> — جميع الحقوق محفوظة • معمل الأداء ومتجر الشحن الآمن 100%
+      </div>
+    </div>
+  </footer>
+
+<script>
+let storeCatalog = window.TWEAKLAB_STORE_CATALOG || { categories: [], psnRegions: [], products: [] };
+let storeConfig = {
+  paymentPhone: '01020670418',
+  instapayAddress: '01020670418',
+  instapayLink: 'https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW',
+  deliveryMinutes: 5
+};
+
+let activeCategory = 'all';
+let activePsnRegion = 'US';
+let selectedProduct = null;
+let selectedStorePayMethod = 'instapay';
+let storeScreenshotDataUrl = '';
+let activeTrackedOrder = null;
+let storePollTimer = null;
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatPriceEgp(num) {
+  return Number(num || 0).toLocaleString('en-US') + ' ج.م';
+}
+
+function normalizeDigits(str) {
+  return String(str || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+}
+
+function getEmblemSvg(category, isCrew) {
+  if (category === 'psn') {
+    return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <rect x="3" y="8" width="34" height="24" rx="8" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,112,255,0.2)"/>
+      <circle cx="14" cy="20" r="3" fill="#00ff88"/>
+      <path d="M24 17l4 6M28 17l-4 6" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>`;
+  }
+  if (category === 'fortnite') {
+    return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+      <polygon points="20,4 34,14 29,34 11,34 6,14" stroke="${isCrew ? '#00ff88' : '#00f0ff'}" stroke-width="2.2" fill="rgba(0,240,255,0.16)"/>
+      <path d="M14 14l6 14 6-14" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+    <path d="M6 10l12 20h6L12 10H6zm28 0l-9 15h6l3-5V10z" fill="#ff4655"/>
+    <path d="M12 10l12 20" stroke="#ffffff" stroke-width="1.4" opacity="0.45"/>
+  </svg>`;
+}
+
+function buildProductCardHtml(p) {
+  const isCrew = p.id === 'fn-crew';
+  const themeClass = p.category === 'psn' ? 'theme-psn' : p.category === 'valorant' ? 'theme-valorant' : 'theme-fortnite';
+  const visualClass =
+    p.category === 'psn'
+      ? 'psn-bg'
+      : p.category === 'valorant'
+      ? 'valorant-bg'
+      : isCrew
+      ? 'fortnite-crew-bg'
+      : 'fortnite-bg';
+  const brandPillText =
+    p.category === 'psn'
+      ? `${p.flag} PSN ${p.region}`
+      : p.category === 'fortnite'
+      ? (isCrew ? '👑 Fortnite Crew' : '⚡ Fortnite V-Bucks')
+      : '🎯 Valorant Points';
+  const deliveryClass = p.deliveryType === 'manual_topup' ? 'manual' : '';
+
+  return `
+    <article class="product-card ${themeClass}">
+      <div class="card-visual-banner ${visualClass}">
+        <div class="card-visual-top">
+          <span class="card-brand-pill">${escapeHtml(brandPillText)}</span>
+          ${p.tag ? `<span class="card-hot-tag">${escapeHtml(p.tag)}</span>` : ''}
+        </div>
+        <div class="card-value-display">
+          <span class="card-value-big">${escapeHtml(p.valueLabel)}</span>
+          ${getEmblemSvg(p.category, isCrew)}
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <h3 class="card-title">${escapeHtml(p.title)}</h3>
+          <p class="card-desc">${escapeHtml(p.subtitle)}</p>
+          <span class="card-delivery-tag ${deliveryClass}">
+            <span>${p.deliveryType === 'manual_topup' ? '🛡️' : '⚡'}</span>
+            <span>${escapeHtml(p.deliveryBadge)}</span>
+          </span>
+        </div>
+        <div class="card-footer-row">
+          <div class="card-price-box">
+            <span class="card-price-label">السعر بالجنيه</span>
+            <span class="card-price-val">${formatPriceEgp(p.priceEgp)}</span>
+          </div>
+          <button type="button" class="order-now-btn" data-product-id="${escapeHtml(p.id)}" onclick="openOrderModal(this.getAttribute('data-product-id'))">
+            <span>اطلب الآن</span>
+            <span>⚡</span>
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderRegionButtons() {
+  const wrap = document.getElementById('psn-region-buttons');
+  if (!wrap) return;
+  wrap.innerHTML = (storeCatalog.psnRegions || [])
+    .map((r) => `
+      <button type="button" class="region-btn ${r.id === activePsnRegion ? 'active' : ''}" role="tab" aria-selected="${r.id === activePsnRegion ? 'true' : 'false'}" onclick="selectPsnRegion('${r.id}')">
+        <span class="region-flag">${r.flag}</span>
+        <span>${escapeHtml(r.nameAr)} (${escapeHtml(r.code)})</span>
+      </button>
+    `)
+    .join('');
+}
+
+function renderPsnProducts() {
+  const grid = document.getElementById('psn-products-grid');
+  if (!grid) return;
+  const items = (storeCatalog.products || []).filter((p) => p.category === 'psn' && p.region === activePsnRegion);
+  grid.className = items.length === 3 ? 'products-grid cols-3' : 'products-grid';
+  grid.innerHTML = items.map(buildProductCardHtml).join('');
+}
+
+function renderTopupProducts() {
+  const fnGrid = document.getElementById('fortnite-products-grid');
+  const valGrid = document.getElementById('valorant-products-grid');
+  const fnItems = (storeCatalog.products || []).filter((p) => p.category === 'fortnite');
+  const valItems = (storeCatalog.products || []).filter((p) => p.category === 'valorant');
+
+  if (fnGrid) fnGrid.innerHTML = fnItems.map(buildProductCardHtml).join('');
+  if (valGrid) valGrid.innerHTML = valItems.map(buildProductCardHtml).join('');
+
+  const allCount = (storeCatalog.products || []).length;
+  const psnCount = (storeCatalog.products || []).filter((p) => p.category === 'psn').length;
+  const elAll = document.getElementById('count-all');
+  const elPsn = document.getElementById('count-psn');
+  const elFn = document.getElementById('count-fortnite');
+  const elVal = document.getElementById('count-valorant');
+  if (elAll) elAll.textContent = allCount;
+  if (elPsn) elPsn.textContent = psnCount;
+  if (elFn) elFn.textContent = fnItems.length;
+  if (elVal) elVal.textContent = valItems.length;
+}
+
+function selectPsnRegion(regionCode) {
+  activePsnRegion = regionCode;
+  renderRegionButtons();
+  renderPsnProducts();
+}
+
+function setCategoryFilter(filter) {
+  activeCategory = filter;
+  document.querySelectorAll('.filter-tab-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
+  });
+  const secPsn = document.getElementById('section-psn');
+  const secFn = document.getElementById('section-fortnite');
+  const secVal = document.getElementById('section-valorant');
+
+  if (secPsn) secPsn.classList.toggle('hidden-section', filter !== 'all' && filter !== 'psn');
+  if (secFn) secFn.classList.toggle('hidden-section', filter !== 'all' && filter !== 'fortnite');
+  if (secVal) secVal.classList.toggle('hidden-section', filter !== 'all' && filter !== 'valorant');
+}
+
+function updateModalPaymentNumbers() {
+  const phone = storeConfig.paymentPhone || '01020670418';
+  const instaNum = storeConfig.instapayAddress || phone;
+  const instaLink = storeConfig.instapayLink || 'https://ipn.eg/S/saifelmasry2729/instapay/9kpkdW';
+  const price = selectedProduct ? Number(selectedProduct.priceEgp) : 0;
+
+  document.getElementById('store-instapay-num').textContent = instaNum;
+  document.getElementById('store-vodafone-num').textContent = phone;
+  document.getElementById('store-instapay-direct-btn').href = instaLink;
+  document.getElementById('store-insta-amount-badge').textContent = formatPriceEgp(price);
+  document.getElementById('store-insta-amount-step').textContent = formatPriceEgp(price);
+  document.getElementById('store-voda-amount-badge').textContent = formatPriceEgp(price);
+
+  const ussd = `*9*7*${phone}*${price}#`;
+  document.getElementById('store-voda-ussd').textContent = ussd;
+  document.getElementById('store-voda-dial-btn').href = `tel:*9*7*${phone}*${price}%23`;
+}
+
+function selectStorePayMethod(method) {
+  selectedStorePayMethod = method === 'vodafone' ? 'vodafone' : 'instapay';
+  const tabI = document.getElementById('store-tab-instapay');
+  const tabV = document.getElementById('store-tab-vodafone');
+  const boxI = document.getElementById('store-box-instapay');
+  const boxV = document.getElementById('store-box-vodafone');
+  if (selectedStorePayMethod === 'instapay') {
+    tabI.className = 'pay-tab active-instapay';
+    tabV.className = 'pay-tab';
+    boxI.style.display = 'block';
+    boxV.style.display = 'none';
+  } else {
+    tabI.className = 'pay-tab';
+    tabV.className = 'pay-tab active-vodafone';
+    boxI.style.display = 'none';
+    boxV.style.display = 'block';
+  }
+}
+
+function copyStoreText(text, btn) {
+  if (!navigator.clipboard) return;
+  navigator.clipboard.writeText(String(text || ''));
+  const old = btn.textContent;
+  btn.textContent = '✅ تم النسخ!';
+  setTimeout(() => { btn.textContent = old; }, 1400);
+}
+
+function openOrderModal(productId) {
+  const product = (storeCatalog.products || []).find((p) => p.id === productId);
+  if (!product) return;
+  selectedProduct = product;
+  storeScreenshotDataUrl = '';
+  if (storePollTimer) {
+    clearInterval(storePollTimer);
+    storePollTimer = null;
+  }
+
+  // Populate summary
+  document.getElementById('modal-product-title').textContent = product.fullTitle || product.title;
+  document.getElementById('modal-product-region-badge').textContent =
+    product.category === 'psn'
+      ? `${product.flag} ريجين ${product.regionLabel}`
+      : `${product.flag} ${product.regionLabel}`;
+  document.getElementById('modal-product-delivery-badge').textContent = product.deliveryBadge;
+  document.getElementById('modal-product-price').textContent = formatPriceEgp(product.priceEgp);
+
+  // Dynamic Account Field (Show ONLY for Fortnite & Valorant; HIDE for PSN)
+  const accWrap = document.getElementById('store-account-field-wrap');
+  const accLabel = document.getElementById('store-account-label');
+  const accInput = document.getElementById('store-account-input');
+  const accHint = document.getElementById('store-account-hint');
+  const accErr = document.getElementById('store-account-error');
+
+  if (product.requiresAccount) {
+    accWrap.style.display = 'block';
+    accInput.required = true;
+    accInput.value = '';
+    accInput.classList.remove('input-error');
+    accErr.style.display = 'none';
+    if (product.category === 'valorant') {
+      accLabel.textContent = '🎯 معرف حساب Riot (Riot ID) — مطلوب:';
+      accInput.placeholder = 'اكتب Riot ID مثال: Player#EGY';
+      accHint.textContent = 'اكتب اسمك مع التاج (#) بالضبط كما يظهر داخل فالورانت — لا نحتاج كلمة المرور.';
+    } else {
+      accLabel.textContent = '🎯 بيانات حساب فورتنايت (Epic Games / Xbox) — مطلوب:';
+      accInput.placeholder = 'اكتب إيميل Epic Games / حساب Xbox';
+      accHint.textContent = 'سيتواصل معك فريق الشحن على الواتساب لتأكيد وإتمام الشحن خلال 5-15 دقيقة.';
+    }
+  } else {
+    accWrap.style.display = 'none';
+    accInput.required = false;
+    accInput.value = '';
+    accErr.style.display = 'none';
+  }
+
+  // Reset upload & errors
+  document.getElementById('store-whatsapp-input').classList.remove('input-error');
+  document.getElementById('store-whatsapp-error').style.display = 'none';
+  document.getElementById('store-screenshot-error').style.display = 'none';
+  document.getElementById('store-screenshot-input').value = '';
+  document.getElementById('store-screenshot-preview').style.display = 'none';
+  document.getElementById('store-upload-label').textContent = 'اضغط هنا لاختيار صورة إيصال التحويل من جهازك';
+  document.getElementById('store-notes-input').value = '';
+
+  const submitBtn = document.getElementById('store-submit-btn');
+  submitBtn.disabled = false;
+  submitBtn.textContent = `🚀 تأكيد الطلب (${formatPriceEgp(product.priceEgp)}) وإرسال الإيصال`;
+
+  updateModalPaymentNumbers();
+  selectStorePayMethod('instapay');
+
+  document.getElementById('modal-checkout-view').style.display = 'block';
+  document.getElementById('modal-status-view').style.display = 'none';
+  document.getElementById('store-order-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOrderModal() {
+  document.getElementById('store-order-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  if (storePollTimer) {
+    clearInterval(storePollTimer);
+    storePollTimer = null;
+  }
+}
+
+function handleStoreScreenshotFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      const canvas = document.createElement('canvas');
+      const maxDim = 1280;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      storeScreenshotDataUrl = canvas.toDataURL('image/jpeg', 0.84);
+      const preview = document.getElementById('store-screenshot-preview');
+      preview.src = storeScreenshotDataUrl;
+      preview.style.display = 'inline-block';
+      document.getElementById('store-upload-label').textContent = '✅ تم تجهيز صورة الإيصال: ' + file.name;
+      document.getElementById('store-screenshot-error').style.display = 'none';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitStoreOrder(e) {
+  e.preventDefault();
+  if (!selectedProduct) return;
+
+  const waInput = document.getElementById('store-whatsapp-input');
+  const waErr = document.getElementById('store-whatsapp-error');
+  const accInput = document.getElementById('store-account-input');
+  const accErr = document.getElementById('store-account-error');
+  const scrErr = document.getElementById('store-screenshot-error');
+
+  const rawWa = normalizeDigits(waInput.value || '').replace(/[\s\-()]/g, '').replace(/^\+/, '');
+  let hasError = false;
+
+  if (!rawWa || /[^0-9]/.test(rawWa) || rawWa.length < 10 || rawWa.length > 15) {
+    waInput.classList.add('input-error');
+    waErr.style.display = 'block';
+    hasError = true;
+  } else {
+    waInput.classList.remove('input-error');
+    waErr.style.display = 'none';
+  }
+
+  const gameAccountVal = selectedProduct.requiresAccount ? String(accInput.value || '').trim() : '';
+  if (selectedProduct.requiresAccount && !gameAccountVal) {
+    accInput.classList.add('input-error');
+    accErr.textContent = selectedProduct.category === 'valorant'
+      ? 'يرجى كتابة Riot ID مثال: Player#EGY'
+      : 'يرجى كتابة إيميل Epic Games / حساب Xbox';
+    accErr.style.display = 'block';
+    hasError = true;
+  } else {
+    accInput.classList.remove('input-error');
+    accErr.style.display = 'none';
+  }
+
+  if (!storeScreenshotDataUrl) {
+    scrErr.style.display = 'block';
+    hasError = true;
+  } else {
+    scrErr.style.display = 'none';
+  }
+
+  if (hasError) return;
+
+  const btn = document.getElementById('store-submit-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري رفع السكرين شوت وتسجيل الطلب...';
+
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderType: 'gaming_store',
+        storeProductId: selectedProduct.id,
+        whatsappPhone: rawWa,
+        senderPhone: rawWa,
+        gameAccount: gameAccountVal,
+        paymentMethod: selectedStorePayMethod,
+        notes: (document.getElementById('store-notes-input').value || '').trim(),
+        screenshotDataUrl: storeScreenshotDataUrl
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || 'حدث خطأ أثناء تسجيل الطلب، حاول مرة أخرى.');
+      btn.disabled = false;
+      btn.textContent = `🚀 تأكيد الطلب (${formatPriceEgp(selectedProduct.priceEgp)}) وإرسال الإيصال`;
+      return;
+    }
+
+    activeTrackedOrder = {
+      id: data.order.id,
+      accessToken: data.order.accessToken,
+      packageName: data.order.packageName || selectedProduct.fullTitle,
+      amountEgp: data.order.amountEgp || selectedProduct.priceEgp,
+      whatsappPhone: data.order.whatsappPhone || rawWa,
+      gameAccount: data.order.gameAccount || gameAccountVal,
+      deliveryBadge: data.order.deliveryBadge || selectedProduct.deliveryBadge,
+      paymentMethod: selectedStorePayMethod,
+      status: data.order.status || 'pending',
+      whatsappText: data.order.quickApproveWhatsappText || ''
+    };
+    try {
+      localStorage.setItem('tweaklab_last_store_order', JSON.stringify(activeTrackedOrder));
+    } catch (err) {}
+
+    showStoreOrderStatusView(activeTrackedOrder);
+    startStoreOrderPolling();
+  } catch (err) {
+    alert('تعذر الاتصال بالخادم، حاول مرة أخرى.');
+    btn.disabled = false;
+    btn.textContent = `🚀 تأكيد الطلب (${formatPriceEgp(selectedProduct.priceEgp)}) وإرسال الإيصال`;
+  }
+}
+
+function showStoreOrderStatusView(order) {
+  document.getElementById('modal-checkout-view').style.display = 'none';
+  document.getElementById('modal-status-view').style.display = 'block';
+  document.getElementById('store-order-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const pill = document.getElementById('status-pill-badge');
+  const title = document.getElementById('status-view-title');
+  const desc = document.getElementById('status-view-desc');
+
+  if (order.status === 'approved') {
+    pill.className = 'status-pill-lg approved';
+    pill.textContent = '✅ تم تأكيد الدفع وقبول طلبك بنجاح!';
+    title.textContent = 'تم قبول طلبك وتنفيذ التسليم 🎉';
+    desc.textContent = 'تم التحقق من تحويلك بنجاح، ستستلم الكود أو تأكيد الشحن مباشرة على رقم الواتساب المسجل لدينا.';
+  } else if (order.status === 'rejected') {
+    pill.className = 'status-pill-lg rejected';
+    pill.textContent = '❌ لم يتم التحقق من إيصال التحويل';
+    title.textContent = 'تم رفض الإيصال لهذا الطلب';
+    desc.textContent = 'تأكد من صورة التحويل أو تواصل معنا على الواتساب برقم طلبك للمساعدة الفورية.';
+  } else {
+    pill.className = 'status-pill-lg pending';
+    pill.textContent = '⏳ جاري مراجعة إيصال الدفع وتنفيذ الطلب';
+    title.textContent = 'تم تسجيل طلبك بنجاح! 🎉';
+    desc.textContent = 'وصل طلبك وصورة التحويل للوحة الإدارة الآن. تتحدث هذه الصفحة تلقائياً بمجرد القبول وسيصلك التسليم على الواتساب.';
+  }
+
+  const methodText = order.paymentMethod === 'vodafone' ? 'Vodafone Cash' : 'InstaPay';
+  document.getElementById('status-receipt-card').innerHTML = `
+    <div>🆔 <strong>رقم الطلب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:900;">#${escapeHtml(order.id)}</code></div>
+    <div>📦 <strong>المنتج:</strong> <span style="color:#fff; font-weight:800;">${escapeHtml(order.packageName)}</span></div>
+    <div>💰 <strong>المبلغ:</strong> <span style="color:var(--green); font-weight:900;">${formatPriceEgp(order.amountEgp)}</span> (${methodText})</div>
+    <div>💬 <strong>رقم الواتساب:</strong> <span dir="ltr" style="display:inline-block; font-weight:800;">${escapeHtml(order.whatsappPhone || '')}</span></div>
+    ${order.gameAccount ? `<div>🎯 <strong>بيانات الحساب:</strong> <code dir="ltr" style="color:var(--cyan); font-weight:800;">${escapeHtml(order.gameAccount)}</code></div>` : ''}
+    ${order.deliveryBadge ? `<div>⚡ <strong>نوع التسليم:</strong> <span style="color:#aef7d2;">${escapeHtml(order.deliveryBadge)}</span></div>` : ''}
+  `;
+
+  const waMsg = order.whatsappText || (
+    `مرحباً Tweak Lab 🎮⚡\n` +
+    `رقم طلبي من المتجر: ${order.id}\n` +
+    `المنتج: ${order.packageName}\n` +
+    `المبلغ: ${order.amountEgp} ج.م\n` +
+    (order.gameAccount ? `بيانات الحساب: ${order.gameAccount}\n` : '') +
+    `برجاء متابعة التسليم.`
+  );
+  document.getElementById('status-whatsapp-btn').href = `https://wa.me/201021464317?text=${encodeURIComponent(waMsg)}`;
+}
+
+function startStoreOrderPolling() {
+  if (storePollTimer) clearInterval(storePollTimer);
+  if (!activeTrackedOrder || !activeTrackedOrder.id || !activeTrackedOrder.accessToken) return;
+  storePollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(activeTrackedOrder.id)}?token=${encodeURIComponent(activeTrackedOrder.accessToken)}`);
+      if (!res.ok) return;
+      const d = await res.json();
+      if (d && d.status && d.status !== activeTrackedOrder.status) {
+        activeTrackedOrder.status = d.status;
+        showStoreOrderStatusView(activeTrackedOrder);
+        if (d.status === 'approved' || d.status === 'rejected') {
+          clearInterval(storePollTimer);
+          storePollTimer = null;
+        }
+      }
+    } catch (e) {}
+  }, 3000);
+}
+
+function openTrackModal() {
+  const errEl = document.getElementById('track-error-msg');
+  const inp = document.getElementById('track-query-input');
+  errEl.style.display = 'none';
+  try {
+    const saved = JSON.parse(localStorage.getItem('tweaklab_last_store_order') || 'null');
+    if (saved && saved.id && !inp.value) inp.value = saved.id;
+  } catch (e) {}
+  document.getElementById('store-track-modal').classList.add('open');
+  setTimeout(() => inp.focus(), 60);
+}
+
+function closeTrackModal() {
+  document.getElementById('store-track-modal').classList.remove('open');
+}
+
+async function lookupStoreOrderByQuery(rawQuery) {
+  const errEl = document.getElementById('track-error-msg');
+  const btn = document.getElementById('track-submit-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري البحث...';
+  }
+  try {
+    const res = await fetch(`/api/orders-lookup?q=${encodeURIComponent(rawQuery)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      if (errEl) {
+        errEl.textContent = data.error || 'لم يتم العثور على طلب بهذا الرقم.';
+        errEl.style.display = 'block';
+      }
+      return;
+    }
+    closeTrackModal();
+    if (data.orderType !== 'gaming_store') {
+      window.location.href = `/?order=${encodeURIComponent(data.id)}&token=${encodeURIComponent(data.accessToken || '')}`;
+      return;
+    }
+    activeTrackedOrder = {
+      id: data.id,
+      accessToken: data.accessToken,
+      packageName: data.packageName,
+      amountEgp: data.amountEgp,
+      whatsappPhone: data.whatsappPhone,
+      gameAccount: data.gameAccount,
+      deliveryBadge: data.deliveryBadge,
+      paymentMethod: data.paymentMethod,
+      status: data.status
+    };
+    showStoreOrderStatusView(activeTrackedOrder);
+    if (data.status === 'pending') startStoreOrderPolling();
+  } catch (err) {
+    if (errEl) {
+      errEl.textContent = 'تعذر الاتصال بالخادم، حاول مرة أخرى.';
+      errEl.style.display = 'block';
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🔎 عرض حالة الطلب';
+    }
+  }
+}
+
+function submitStoreTrackLookup(e) {
+  e.preventDefault();
+  const q = (document.getElementById('track-query-input').value || '').trim();
+  if (!q) return;
+  lookupStoreOrderByQuery(q);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeOrderModal();
+    closeTrackModal();
+  }
+});
+
+async function initGamingStore() {
+  // Ensure catalog is populated (from /api/store-products.js or /api/store/products fallback)
+  if (!storeCatalog || !Array.isArray(storeCatalog.products) || storeCatalog.products.length === 0) {
+    try {
+      const res = await fetch('/api/store/products');
+      if (res.ok) storeCatalog = await res.json();
+    } catch (e) {}
+  }
+
+  renderRegionButtons();
+  renderPsnProducts();
+  renderTopupProducts();
+
+  // Sync live payment numbers/links from store settings
+  try {
+    const cfgRes = await fetch('/api/config');
+    if (cfgRes.ok) {
+      const cfg = await cfgRes.json();
+      storeConfig = { ...storeConfig, ...cfg };
+    }
+  } catch (e) {}
+
+  // Support deep link ?track=TL-XXXXXX
+  const params = new URLSearchParams(window.location.search);
+  const trackId = params.get('track');
+  if (trackId) {
+    lookupStoreOrderByQuery(trackId);
+  }
+}
+
+initGamingStore();
+</script>
+</body>
+</html>
