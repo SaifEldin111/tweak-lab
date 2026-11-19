@@ -1894,6 +1894,193 @@
         animation: none !important;
       }
     }
+
+    /* ========================================================================
+       PAYMENT & DELIVERY INFO BLOCK + INTERACTIVE FAQ ACCORDION
+       ======================================================================== */
+    .store-extra-section {
+      margin-top: 46px;
+    }
+    .store-extra-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 24px;
+    }
+    .store-extra-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.38);
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
+    }
+    .store-extra-title {
+      font-size: clamp(1.38rem, 2.8vw, 1.92rem);
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+    .store-extra-sub {
+      font-size: 0.94rem;
+      color: #b4c6de;
+      line-height: 1.68;
+    }
+
+    /* Payment & Delivery Info Table Grid */
+    .payment-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .payment-info-card {
+      background: linear-gradient(155deg, rgba(14, 21, 35, 0.94) 0%, rgba(8, 12, 22, 0.98) 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.24);
+      border-radius: 18px;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
+    }
+    .payment-info-card.highlight-card {
+      border-color: rgba(0, 255, 136, 0.55);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 22px rgba(0, 255, 136, 0.14);
+    }
+    .payment-info-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .payment-info-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .payment-info-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.73rem;
+      font-weight: 900;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.42);
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .payment-info-card.highlight-card .payment-info-badge {
+      background: rgba(0, 255, 136, 0.16);
+      border-color: rgba(0, 255, 136, 0.65);
+      color: var(--green);
+    }
+    .payment-info-desc {
+      font-size: 0.88rem;
+      color: #c2d3e8;
+      line-height: 1.68;
+      font-weight: 600;
+    }
+
+    /* Interactive FAQ Accordion */
+    .faq-accordion-list {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: linear-gradient(155deg, rgba(14, 20, 33, 0.94) 0%, rgba(8, 12, 20, 0.98) 100%);
+      border: 1.5px solid rgba(30, 44, 70, 0.95);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .faq-item.open {
+      border-color: rgba(0, 255, 136, 0.62);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 20px rgba(0, 255, 136, 0.14);
+    }
+    .faq-question-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 20px;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 900;
+      text-align: start;
+      cursor: pointer;
+      line-height: 1.4;
+      transition: color 0.2s ease;
+    }
+    .faq-question-btn:hover {
+      color: var(--green);
+    }
+    .faq-q-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid rgba(0, 255, 136, 0.42);
+      color: var(--green);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: transform 0.22s ease, background 0.22s ease, color 0.22s ease;
+    }
+    .faq-item.open .faq-q-icon {
+      transform: rotate(45deg);
+      background: var(--green);
+      color: #03120a;
+    }
+    .faq-answer-panel {
+      display: none;
+      padding: 0 20px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .faq-item.open .faq-answer-panel {
+      display: block;
+    }
+    .faq-a-text {
+      padding-top: 12px;
+      font-size: 0.91rem;
+      color: #c7d7eb;
+      line-height: 1.72;
+      font-weight: 600;
+    }
+
+    @media (max-width: 820px) {
+      .payment-info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .payment-info-card {
+        padding: 16px 15px;
+      }
+      .faq-question-btn {
+        padding: 15px 15px;
+        font-size: 0.91rem;
+      }
+      .faq-answer-panel {
+        padding: 0 15px 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2075,12 +2262,12 @@
         Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards
       </h1>
       <p class="store-hero-sub" dir="rtl" data-i18n-html="heroSub">
-        بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود فوراً وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.
+        بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود في خلال ساعة بحد أقصى وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.
       </p>
 
       <div class="store-trust-strip">
         <span class="trust-pill" data-i18n-html="trust1">🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price</span>
-        <span class="trust-pill" data-i18n-html="trust2">⚡ <strong>Delivery:</strong> Instant Official Digital Code</span>
+        <span class="trust-pill" data-i18n-html="trust2">⚡ <strong>Delivery:</strong> Within 1 Hour Max</span>
         <span class="trust-pill" data-i18n-html="trust3">💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
 
@@ -2219,7 +2406,7 @@
           </h2>
           <p dir="rtl" data-i18n="psnSub">بطاقة شحن رقمية لستور بلايستيشن — بتوصلك كود رسمي بتدخله في حسابك عشان تشحن المحفظة وتشتري ألعابك أو اشتراك البلس.</p>
         </div>
-        <span class="delivery-chip" data-i18n="psnChip">⚡ Digital Code • Instant Delivery</span>
+        <span class="delivery-chip" data-i18n="psnChip">⚡ Digital Code • Delivery Within 1 Hour</span>
       </div>
 
       <!-- Region Selector -->
@@ -2251,7 +2438,7 @@
           </h2>
           <p dir="rtl" data-i18n="steamSub">كارت شحن رسمي لمحفظة ستيم — بتستلم الكود وتفعّله على حسابك المصري أو الأمريكي عشان تشتري أي لعبة أو إضافة من الستور.</p>
         </div>
-        <span class="delivery-chip" data-i18n="steamChip">⚡ Digital Code • Instant Delivery</span>
+        <span class="delivery-chip" data-i18n="steamChip">⚡ Digital Code • Delivery Within 1 Hour</span>
       </div>
 
       <div class="steam-info-bar">
@@ -2261,7 +2448,7 @@
         <div class="steam-info-pills">
           <span class="steam-info-pill" data-i18n="steamCompat1">🇪🇬🇺🇸 Works on Egypt &amp; US Accounts</span>
           <span class="steam-info-pill" data-i18n="steamCompat2">🔥 Up to 11% OFF Limited Discount</span>
-          <span class="steam-info-pill" data-i18n="steamCompat3">⚡ Instant Code Delivery</span>
+          <span class="steam-info-pill" data-i18n="steamCompat3">⚡ Delivery Within 1 Hour</span>
         </div>
       </div>
 
@@ -2315,6 +2502,106 @@
       </div>
     </section>
 
+    <!-- PAYMENT & DELIVERY INFO TABLE / BLOCK (1-HOUR DELIVERY TRANSPARENCY) -->
+    <section class="store-extra-section" id="store-payment-delivery-info" aria-labelledby="store-pay-info-heading">
+      <div class="store-extra-header">
+        <span class="store-extra-eyebrow" data-i18n="payInfoEyebrow">⚡ PAYMENT &amp; DELIVERY</span>
+        <h2 class="store-extra-title" id="store-pay-info-heading" data-i18n="payInfoHeading">Payment &amp; Delivery Info</h2>
+        <p class="store-extra-sub" dir="rtl" data-i18n="payInfoSub">كل تفاصيل التحويل ومدة وطريقة استلام الكود الرقمي بتاعك بكل وضوح قبل ما تطلب.</p>
+      </div>
+
+      <div class="payment-info-grid">
+        <article class="payment-info-card">
+          <div class="payment-info-top">
+            <h3 class="payment-info-title" data-i18n="payInfoCol1Title">💳 Payment Methods</h3>
+            <span class="payment-info-badge" data-i18n="payInfoCol1Badge">InstaPay • Vodafone Cash</span>
+          </div>
+          <p class="payment-info-desc" dir="rtl" data-i18n="payInfoCol1Desc">
+            تحويل سريع ومباشر من موبايلك عبر تطبيق InstaPay أو محفظة Vodafone Cash بدون الحاجة لأي فيزا أو كارت بنكي.
+          </p>
+        </article>
+
+        <article class="payment-info-card highlight-card">
+          <div class="payment-info-top">
+            <h3 class="payment-info-title" data-i18n="payInfoCol2Title">⏱️ Delivery Time</h3>
+            <span class="payment-info-badge" data-i18n="payInfoCol2Badge">Within 1 Hour Max</span>
+          </div>
+          <p class="payment-info-desc" dir="rtl" data-i18n="payInfoCol2Desc">
+            في خلال ساعة بحد أقصى من تأكيد التحويل ورفع صورة الإيصال (وغالباً الكود بيوصلك في خلال دقايق).
+          </p>
+        </article>
+
+        <article class="payment-info-card">
+          <div class="payment-info-top">
+            <h3 class="payment-info-title" data-i18n="payInfoCol3Title">📲 How You Receive It</h3>
+            <span class="payment-info-badge" data-i18n="payInfoCol3Badge">WhatsApp + Track Order</span>
+          </div>
+          <p class="payment-info-desc" dir="rtl" data-i18n="payInfoCol3Desc">
+            الكود الرقمي (PSN / Steam) بيوصلك على واتساب وبيظهرلك جوه صفحة Track Order في الموقع مع زرار نسخ مباشر.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FREQUENTLY ASKED QUESTIONS (FAQ ACCORDION) -->
+    <section class="store-extra-section" id="store-faq-section" aria-labelledby="store-faq-heading">
+      <div class="store-extra-header">
+        <span class="store-extra-eyebrow" data-i18n="faqEyebrow">❓ GOT QUESTIONS?</span>
+        <h2 class="store-extra-title" id="store-faq-heading" data-i18n="faqHeading">Frequently Asked Questions (FAQ)</h2>
+        <p class="store-extra-sub" dir="rtl" data-i18n="faqSub">إجابات واضحة وسريعة على أهم الأسئلة الخاصة ببطاقات بلايستيشن وستيم وطريقة الشحن.</p>
+      </div>
+
+      <div class="faq-accordion-list">
+        <div class="faq-item open">
+          <button type="button" class="faq-question-btn" aria-expanded="true" onclick="toggleStoreFaq(this)">
+            <span data-i18n="faqQ1">How fast will I receive my PSN or Steam code?</span>
+            <span class="faq-q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer-panel">
+            <p class="faq-a-text" dir="rtl" data-i18n="faqA1">
+              بعد ما تحول على إنستاباي أو فودافون كاش وترفع صورة التحويل، بنراجع الطلب وبنبعتلك الكود في خلال ساعة بحد أقصى (وغالباً في دقايق)، وتقدر تنسخه من صفحة Track Order.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn" aria-expanded="false" onclick="toggleStoreFaq(this)">
+            <span data-i18n="faqQ2">Are these Gift Cards official and safe for my account?</span>
+            <span class="faq-q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer-panel">
+            <p class="faq-a-text" dir="rtl" data-i18n="faqA2">
+              أيوه طبعاً، كل الأكواد رسمية 100% ومن مصادر معتمدة، بتشحن بيها رصيد محفظتك بنفسك من غير ما نحتاج باسورد حسابك نهائياً.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn" aria-expanded="false" onclick="toggleStoreFaq(this)">
+            <span data-i18n="faqQ3">How do I know which PSN Region to choose?</span>
+            <span class="faq-q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer-panel">
+            <p class="faq-a-text" dir="rtl" data-i18n="faqA3">
+              لازم تختار نفس دولة حسابك على بلايستيشن (أمريكي US، سعودي SA، إماراتي UAE، أو تركي TR) لأن كود كل دولة بيشتغل على نفس الريجين بتاعها بس.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn" aria-expanded="false" onclick="toggleStoreFaq(this)">
+            <span data-i18n="faqQ4">Does Steam Wallet work on Egyptian accounts?</span>
+            <span class="faq-q-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer-panel">
+            <p class="faq-a-text" dir="rtl" data-i18n="faqA4">
+              أيوه، كروت Steam Wallet USD بتشتغل على الحسابات المصرية (MENA-USD) والأمريكية عادي جداً وبتنزل في محفظتك بالدولار.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- STORE ORDER MODAL (PSN & STEAM DIGITAL CODES — WHATSAPP + TRANSFER SCREENSHOT ONLY) -->
@@ -2325,7 +2612,7 @@
       <!-- STEP 1: ORDER FORM VIEW -->
       <div id="modal-checkout-view">
         <h3 id="modal-heading" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;" data-i18n="modalCheckoutTitle">💳 Complete Your Digital Gift Card Order</h3>
-        <p id="modal-checkout-sub" dir="rtl" style="font-size:0.86rem; color:var(--text-muted); line-height:1.65;" data-i18n="modalCheckoutSub">اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.</p>
+        <p id="modal-checkout-sub" dir="rtl" style="font-size:0.86rem; color:var(--text-muted); line-height:1.65;" data-i18n="modalCheckoutSub">اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات في خلال ساعة بحد أقصى.</p>
 
         <!-- Selected Product Summary -->
         <div class="modal-product-summary">
@@ -2337,7 +2624,7 @@
             <div class="summary-meta">
               <span id="modal-product-region-badge">🇺🇸 US</span>
               <span>•</span>
-              <span id="modal-product-delivery-badge" style="color:var(--green);">Digital Code • Instant Delivery</span>
+              <span id="modal-product-delivery-badge" style="color:var(--green);">Digital Code • Delivery Within 1 Hour</span>
             </div>
           </div>
           <div class="summary-price-pill">
@@ -2528,9 +2815,9 @@ const STORE_I18N = {
     navTrack: '🔍 Track Order',
     navTrackShort: '🔍 Track',
     heroTitle: 'Official <span class="accent-green">PlayStation (PSN)</span> &amp; <span class="accent-cyan">Steam Wallet</span> Gift Cards',
-    heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود فوراً وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
+    heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود في خلال ساعة بحد أقصى وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
     trust1: '🔥 <strong>Up to 12% OFF:</strong> Cheaper Than Market Price',
-    trust2: '⚡ <strong>Delivery:</strong> Instant Official Digital Code',
+    trust2: '⚡ <strong>Delivery:</strong> Within 1 Hour Max',
     trust3: '💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash',
     gta6TopBadge: '🔥 GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES',
     gta6MainTitle: 'GET READY FOR <span class="gta6-vice-gradient">GTA VI</span> — CHARGE YOUR US PSN NOW',
@@ -2558,15 +2845,15 @@ const STORE_I18N = {
     soonBadge: 'Coming Soon',
     psnHeading: 'PlayStation Gift Cards (PSN)',
     psnSub: 'بطاقة شحن رقمية لستور بلايستيشن — بتوصلك كود رسمي بتدخله في حسابك عشان تشحن المحفظة وتشتري ألعابك أو اشتراك البلس.',
-    psnChip: '⚡ Digital Code • Instant Delivery',
+    psnChip: '⚡ Digital Code • Delivery Within 1 Hour',
     regionPrompt: '🌍 Select Account Region:',
     steamHeading: 'Steam Wallet Gift Cards (PC)',
     steamSub: 'كارت شحن رسمي لمحفظة ستيم — بتستلم الكود وتفعّله على حسابك المصري أو الأمريكي عشان تشتري أي لعبة أو إضافة من الستور.',
-    steamChip: '⚡ Digital Code • Instant Delivery',
+    steamChip: '⚡ Digital Code • Delivery Within 1 Hour',
     steamRegionLabel: '🌐 Region: USD (Global / Egypt & MENA)',
     steamCompat1: '🇪🇬🇺🇸 Works on Egypt & US Accounts',
     steamCompat2: '🔥 Up to 11% OFF Limited Discount',
-    steamCompat3: '⚡ Instant Code Delivery',
+    steamCompat3: '⚡ Delivery Within 1 Hour',
     soonPillLg: 'Coming Soon on TweakLab',
     soonTitle: 'Game Top-Up Section Under Preparation 🛠️',
     soonDesc: 'بنجهزلك حالياً قسم شحن الألعاب المباشر لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> بأسرع تنفيذ وأعلى أمان، وهيتوفر قريب جداً على الموقع.',
@@ -2575,8 +2862,31 @@ const STORE_I18N = {
     lockedPill: '🔒 Soon',
     backToPsnBtn: 'Browse PlayStation (PSN)',
     backToSteamBtn: 'Browse Steam Wallet (PC)',
+    payInfoEyebrow: '⚡ PAYMENT & DELIVERY',
+    payInfoHeading: 'Payment & Delivery Info',
+    payInfoSub: 'كل تفاصيل التحويل ومدة وطريقة استلام الكود الرقمي بتاعك بكل وضوح قبل ما تطلب.',
+    payInfoCol1Title: '💳 Payment Methods',
+    payInfoCol1Badge: 'InstaPay • Vodafone Cash',
+    payInfoCol1Desc: 'تحويل سريع ومباشر من موبايلك عبر تطبيق InstaPay أو محفظة Vodafone Cash بدون الحاجة لأي فيزا أو كارت بنكي.',
+    payInfoCol2Title: '⏱️ Delivery Time',
+    payInfoCol2Badge: 'Within 1 Hour Max',
+    payInfoCol2Desc: 'في خلال ساعة بحد أقصى من تأكيد التحويل ورفع صورة الإيصال (وغالباً الكود بيوصلك في خلال دقايق).',
+    payInfoCol3Title: '📲 How You Receive It',
+    payInfoCol3Badge: 'WhatsApp + Track Order',
+    payInfoCol3Desc: 'الكود الرقمي (PSN / Steam) بيوصلك على واتساب وبيظهرلك جوه صفحة Track Order في الموقع مع زرار نسخ مباشر.',
+    faqEyebrow: '❓ GOT QUESTIONS?',
+    faqHeading: 'Frequently Asked Questions (FAQ)',
+    faqSub: 'إجابات واضحة وسريعة على أهم الأسئلة الخاصة ببطاقات بلايستيشن وستيم وطريقة الشحن.',
+    faqQ1: 'How fast will I receive my PSN or Steam code?',
+    faqA1: 'بعد ما تحول على إنستاباي أو فودافون كاش وترفع صورة التحويل، بنراجع الطلب وبنبعتلك الكود في خلال ساعة بحد أقصى (وغالباً في دقايق)، وتقدر تنسخه من صفحة Track Order.',
+    faqQ2: 'Are these Gift Cards official and safe for my account?',
+    faqA2: 'أيوه طبعاً، كل الأكواد رسمية 100% ومن مصادر معتمدة، بتشحن بيها رصيد محفظتك بنفسك من غير ما نحتاج باسورد حسابك نهائياً.',
+    faqQ3: 'How do I know which PSN Region to choose?',
+    faqA3: 'لازم تختار نفس دولة حسابك على بلايستيشن (أمريكي US، سعودي SA، إماراتي UAE، أو تركي TR) لأن كود كل دولة بيشتغل على نفس الريجين بتاعها بس.',
+    faqQ4: 'Does Steam Wallet work on Egyptian accounts?',
+    faqA4: 'أيوه، كروت Steam Wallet USD بتشتغل على الحسابات المصرية (MENA-USD) والأمريكية عادي جداً وبتنزل في محفظتك بالدولار.',
     modalCheckoutTitle: '💳 Complete Your Digital Gift Card Order',
-    modalCheckoutSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.',
+    modalCheckoutSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات في خلال ساعة بحد أقصى.',
     modalFinalPriceLbl: 'Discounted Price',
     tabInsta: 'InstaPay Egypt',
     tabInstaSub: 'Instant transfer',
@@ -2622,11 +2932,11 @@ const STORE_I18N = {
     navTrack: '🔍 متابعة الطلب',
     navTrackShort: '🔍 طلبي',
     heroTitle: 'متجر بطاقات <span class="accent-green">PlayStation (PSN)</span> و <span class="accent-cyan">Steam Wallet</span> في مصر',
-    heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود فوراً وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
+    heroSub: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم بخصومات حصرية تصل إلى <strong>12%</strong>، بتستلم الكود في خلال ساعة بحد أقصى وتفعّله على حسابك بسهولة عبر <strong>إنستاباي</strong> أو <strong>فودافون كاش</strong>.',
     trust1: '🔥 <strong>خصم حتى 12%:</strong> أرخص من سعر السوق',
-    trust2: '⚡ <strong>التسليم:</strong> كود رقمي أصلي فوري',
+    trust2: '⚡ <strong>التسليم:</strong> سريع خلال ساعة بحد أقصى',
     trust3: '💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash',
-    gta6TopBadge: '🔥 باقات GTA VI الرسمية للـ PS5 • استلام الأكواد فوراً',
+    gta6TopBadge: '🔥 باقات GTA VI الرسمية للـ PS5 • تسليم خلال ساعة',
     gta6MainTitle: 'استعد لـ <span class="gta6-vice-gradient">GTA VI</span> — اشحن حسابك الأمريكي بأرخص سعر في مصر',
     gta6SubDesc: 'دي بطاقات شحن رسمية لحسابك الأمريكي على بلايستيشن، بتستلم الكود وتفعّله في حسابك عشان تشتري اللعبة أول ما تنزل بأرخص سعر في مصر.',
     gta6TrustStrip: '✅ أكواد أمريكية رسمية 100% • ✅ آمنة على حسابك الشخصي • ✅ بدون أي خطر حظر (Ban)',
@@ -2652,15 +2962,15 @@ const STORE_I18N = {
     soonBadge: 'قريباً',
     psnHeading: 'بطاقات PlayStation (PSN Gift Cards)',
     psnSub: 'بطاقة شحن رقمية لستور بلايستيشن — بتوصلك كود رسمي بتدخله في حسابك عشان تشحن المحفظة وتشتري ألعابك أو اشتراك البلس.',
-    psnChip: '⚡ كود رقمي • تسليم فوري',
+    psnChip: '⚡ كود رقمي • تسليم خلال ساعة',
     regionPrompt: '🌍 اختار ريجين حسابك:',
     steamHeading: 'بطاقات Steam Wallet (PC)',
     steamSub: 'كارت شحن رسمي لمحفظة ستيم — بتستلم الكود وتفعّله على حسابك المصري أو الأمريكي عشان تشتري أي لعبة أو إضافة من الستور.',
-    steamChip: '⚡ كود رقمي • تسليم فوري',
+    steamChip: '⚡ كود رقمي • تسليم خلال ساعة',
     steamRegionLabel: '🌐 الريجين: USD (المصري والأمريكي والـ MENA)',
     steamCompat1: '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي',
     steamCompat2: '🔥 خصم لفترة محدودة حتى 11%',
-    steamCompat3: '⚡ تسليم الكود فوراً',
+    steamCompat3: '⚡ تسليم سريع خلال ساعة',
     soonPillLg: 'قريباً على TweakLab • Coming Soon',
     soonTitle: 'قسم شحن الألعاب قيد التجهيز حالياً 🛠️',
     soonDesc: 'بنجهزلك حالياً قسم شحن الألعاب المباشر لـ <strong>Fortnite V-Bucks</strong> و <strong>Valorant Points</strong> بأسرع تنفيذ وأعلى أمان، وهيتوفر قريب جداً على الموقع.',
@@ -2669,8 +2979,31 @@ const STORE_I18N = {
     lockedPill: '🔒 قريباً',
     backToPsnBtn: 'تصفح بطاقات PlayStation',
     backToSteamBtn: 'تصفح بطاقات Steam Wallet',
+    payInfoEyebrow: '⚡ نظام الدفع والاستلام',
+    payInfoHeading: 'خطوات الدفع ونظام الاستلام (Payment & Delivery Info)',
+    payInfoSub: 'كل تفاصيل التحويل ومدة وطريقة استلام الكود الرقمي بتاعك بكل وضوح قبل ما تطلب.',
+    payInfoCol1Title: '💳 طرق الدفع المتاحة',
+    payInfoCol1Badge: 'InstaPay • Vodafone Cash',
+    payInfoCol1Desc: 'تحويل سريع ومباشر من موبايلك عبر تطبيق InstaPay أو محفظة Vodafone Cash بدون الحاجة لأي فيزا أو كارت بنكي.',
+    payInfoCol2Title: '⏱️ مدة استلام الكود',
+    payInfoCol2Badge: 'في خلال ساعة بحد أقصى',
+    payInfoCol2Desc: 'في خلال ساعة بحد أقصى من تأكيد التحويل ورفع صورة الإيصال (وغالباً الكود بيوصلك في خلال دقايق).',
+    payInfoCol3Title: '📲 طريقة الاستلام',
+    payInfoCol3Badge: 'واتساب + صفحة Track Order',
+    payInfoCol3Desc: 'الكود الرقمي (PSN / Steam) بيوصلك على واتساب وبيظهرلك جوه صفحة Track Order في الموقع مع زرار نسخ مباشر.',
+    faqEyebrow: '❓ إجابات واضحة لكل استفساراتك',
+    faqHeading: 'الأسئلة الشائعة (Frequently Asked Questions)',
+    faqSub: 'إجابات واضحة وسريعة على أهم الأسئلة الخاصة ببطاقات بلايستيشن وستيم وطريقة الشحن.',
+    faqQ1: 'الكود بيوصلني في قد إيه بعد التحويل؟',
+    faqA1: 'بعد ما تحول على إنستاباي أو فودافون كاش وترفع صورة التحويل، بنراجع الطلب وبنبعتلك الكود في خلال ساعة بحد أقصى (وغالباً في دقايق)، وتقدر تنسخه من صفحة Track Order.',
+    faqQ2: 'هل البطاقات دي رسمية وآمنة على حسابي الشخصي؟',
+    faqA2: 'أيوه طبعاً، كل الأكواد رسمية 100% ومن مصادر معتمدة، بتشحن بيها رصيد محفظتك بنفسك من غير ما نحتاج باسورد حسابك نهائياً.',
+    faqQ3: 'إزاي أعرف ريجين بطاقة البلايستيشن المناسب لحسابي؟',
+    faqA3: 'لازم تختار نفس دولة حسابك على بلايستيشن (أمريكي US، سعودي SA، إماراتي UAE، أو تركي TR) لأن كود كل دولة بيشتغل على نفس الريجين بتاعها بس.',
+    faqQ4: 'هل كروت Steam Wallet بتشتغل على الحساب المصري؟',
+    faqA4: 'أيوه، كروت Steam Wallet USD بتشتغل على الحسابات المصرية (MENA-USD) والأمريكية عادي جداً وبتنزل في محفظتك بالدولار.',
     modalCheckoutTitle: '💳 إتمام طلب البطاقة الرقمية',
-    modalCheckoutSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات فوراً.',
+    modalCheckoutSub: 'اختار طريقة الدفع المناسبة ليك (إنستاباي أو فودافون كاش)، حوّل المبلغ وارفع صورة التحويل، وهنراجع طلبك ونبعتلك الكود أو الملفات في خلال ساعة بحد أقصى.',
     modalFinalPriceLbl: 'السعر بعد الخصم',
     tabInsta: 'InstaPay مصر',
     tabInstaSub: 'إنستاباي (تحويل فوري)',
@@ -2838,9 +3171,9 @@ function buildStoreCardHtml(p) {
     ? 'كارت شحن رسمي لمحفظة ستيم — بتستلم الكود وتفعّله على حسابك المصري أو الأمريكي عشان تشتري أي لعبة أو إضافة من الستور.'
     : 'بطاقة شحن رقمية لستور بلايستيشن — بتوصلك كود رسمي بتدخله في حسابك عشان تشحن المحفظة وتشتري ألعابك أو اشتراك البلس.';
 
-  const deliveryText = isAr ? (p.deliveryBadge || 'كود رقمي • تسليم فوري') : 'Digital Code • Instant Delivery';
+  const deliveryText = isAr ? (p.deliveryBadge || 'كود رقمي • تسليم خلال ساعة') : 'Digital Code • Delivery Within 1 Hour';
   const compatText = isSteam
-    ? (isAr ? (p.compatibilityBadgeAr || '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم فوري') : (p.compatibilityBadgeEn || '🇪🇬🇺🇸 Egypt & US Accounts • Instant Code'))
+    ? (isAr ? (p.compatibilityBadgeAr || '🇪🇬🇺🇸 شغال على الحساب المصري والأمريكي • تسليم خلال ساعة') : (p.compatibilityBadgeEn || '🇪🇬🇺🇸 Egypt & US Accounts • Within 1 Hour'))
     : '';
   const tagText = p.tag ? (isAr ? p.tag : (TAGS_EN[p.tag] || p.tag)) : '';
 
@@ -3056,10 +3389,10 @@ function updateModalPaymentNumbers() {
       ? (isAr ? '🌐 USD (المصري والأمريكي والـ MENA)' : '🌐 USD (Global / Egypt & MENA)')
       : (isAr ? `${selectedProduct.flag} ريجين ${selectedProduct.regionLabel}` : `${selectedProduct.flag} ${REGION_NAMES_EN[selectedProduct.region] || selectedProduct.region} (${selectedProduct.region})`);
     document.getElementById('modal-product-delivery-badge').textContent = isGta6 && Number(selectedProduct.codeCount) === 2
-      ? (isAr ? '⚡ كودين رسميين ($50 + $20 أمريكي) • تسليم فوري' : '⚡ 2 Official US Codes ($50 + $20) • Instant Delivery')
+      ? (isAr ? '⚡ كودين رسميين ($50 + $20 أمريكي) • تسليم خلال ساعة' : '⚡ 2 Official US Codes ($50 + $20) • Within 1 Hour')
       : isAr
-      ? (selectedProduct.deliveryBadge || 'كود رقمي • تسليم فوري')
-      : 'Digital Code • Instant Delivery';
+      ? (selectedProduct.deliveryBadge || 'كود رقمي • تسليم خلال ساعة')
+      : 'Digital Code • Delivery Within 1 Hour';
     const submitBtn = document.getElementById('store-submit-btn');
     if (submitBtn && !submitBtn.disabled) {
       submitBtn.textContent = isAr
@@ -3067,6 +3400,14 @@ function updateModalPaymentNumbers() {
         : `🚀 Confirm Order (${formatPriceEgp(price)}) & Send Receipt`;
     }
   }
+}
+
+function toggleStoreFaq(btn) {
+  if (!btn) return;
+  const item = btn.closest('.faq-item');
+  if (!item) return;
+  const isOpen = item.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 
 function selectStorePayMethod(method) {
