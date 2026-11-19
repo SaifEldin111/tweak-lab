@@ -7,6 +7,12 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://tweak-lab-a177.vercel.app/pc</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://tweak-lab-a177.vercel.app/store</loc>
     <lastmod>2026-11-19</lastmod>
     <changefreq>daily</changefreq>
