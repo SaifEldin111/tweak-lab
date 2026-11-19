@@ -2141,6 +2141,102 @@
         padding: 0 15px 15px;
       }
     }
+
+    /* ========================================================================
+       UNIFIED SEE-THROUGH FROSTED GLASSMORPHISM SYSTEM (STORE PAGE)
+       ======================================================================== */
+    body {
+      background-color: #05070c;
+      background-image:
+        radial-gradient(ellipse 60% 42% at 16% 6%, rgba(0, 255, 136, 0.11) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 42% at 84% 14%, rgba(0, 240, 255, 0.09) 0%, transparent 58%),
+        radial-gradient(ellipse 65% 48% at 50% 92%, rgba(0, 255, 136, 0.08) 0%, transparent 62%),
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+      background-attachment: fixed;
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.40) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    .product-card,
+    .region-selector-bar,
+    .steam-info-bar,
+    .filter-tabs-wrap,
+    .coming-soon-glass-card,
+    .payment-info-card,
+    .faq-item,
+    .gta6-bundle-card,
+    .footer-guides-bar {
+      background: rgba(9, 9, 11, 0.35) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .product-card:hover,
+    .payment-info-card:hover,
+    .faq-item:hover,
+    .faq-item.open,
+    .gta6-bundle-card:hover,
+    .coming-soon-glass-card:hover {
+      border-color: rgba(0, 255, 136, 0.50) !important;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.12), 0 18px 40px rgba(0, 0, 0, 0.55) !important;
+    }
+    .trust-pill,
+    .steam-info-pill,
+    .nav-btn,
+    .region-btn:not(.active),
+    .locked-game-card {
+      background: rgba(255, 255, 255, 0.05) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+    .modal-dialog {
+      background: rgba(9, 9, 11, 0.75) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(0, 255, 136, 0.30) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 255, 136, 0.14) !important;
+    }
+    .pay-box,
+    .pay-tab:not(.active-instapay):not(.active-vodafone),
+    .order-receipt-card {
+      background: rgba(9, 9, 11, 0.45) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+      }
+      .navbar {
+        background: rgba(0, 0, 0, 0.52) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+      }
+      .product-card,
+      .region-selector-bar,
+      .steam-info-bar,
+      .filter-tabs-wrap,
+      .coming-soon-glass-card,
+      .payment-info-card,
+      .faq-item,
+      .gta6-bundle-card {
+        background: rgba(9, 9, 11, 0.42) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+      }
+      .modal-dialog {
+        background: rgba(9, 9, 11, 0.84) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+      }
+    }
   </style>
 </head>
 <body>

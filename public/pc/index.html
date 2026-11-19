@@ -3443,6 +3443,118 @@
         padding: 0 15px 15px;
       }
     }
+
+    /* ========================================================================
+       UNIFIED SEE-THROUGH FROSTED GLASSMORPHISM SYSTEM (PC PERFORMANCE LAB)
+       ======================================================================== */
+    body {
+      background-color: #05070c !important;
+      background-image:
+        radial-gradient(ellipse 58% 40% at 15% 8%, rgba(0, 255, 136, 0.11) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 42% at 85% 22%, rgba(0, 240, 255, 0.08) 0%, transparent 58%),
+        radial-gradient(ellipse 65% 45% at 50% 88%, rgba(0, 255, 136, 0.09) 0%, transparent 62%),
+        linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px) !important;
+      background-size: 100% 100%, 100% 100%, 100% 100%, 44px 44px, 44px 44px !important;
+      background-attachment: fixed;
+    }
+    .navbar {
+      background: rgba(0, 0, 0, 0.40) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+    .card,
+    .pkg-compare-card,
+    .real-fps-card,
+    .funnel-feature-card,
+    .deliverable-card,
+    .preview-card,
+    .reviews-marquee-section,
+    .review-marquee-card,
+    .reviews-empty-card,
+    .payment-info-card,
+    .faq-item,
+    .footer-guides-bar,
+    .fps-showcase-frame,
+    .delivery-guarantee,
+    .pay-box {
+      background: rgba(9, 9, 11, 0.35) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .card:hover,
+    .pkg-compare-card:hover,
+    .real-fps-card:hover,
+    .funnel-feature-card:hover,
+    .deliverable-card:hover,
+    .preview-card:hover,
+    .review-marquee-card:hover,
+    .payment-info-card:hover,
+    .faq-item:hover,
+    .faq-item.open {
+      border-color: rgba(0, 255, 136, 0.50) !important;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.12), 0 18px 40px rgba(0, 0, 0, 0.5) !important;
+    }
+    .pkg-compare-card.pkg-pro-highlighted {
+      border-color: rgba(0, 255, 136, 0.38) !important;
+      box-shadow: 0 0 26px rgba(0, 255, 136, 0.12), 0 16px 38px rgba(0, 0, 0, 0.5) !important;
+    }
+    .hero-trust-badge,
+    .nav-track-btn,
+    .rating-summary-pill,
+    .rev-game-tag,
+    .rate-service-mini-link {
+      background: rgba(255, 255, 255, 0.05) !important;
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+    .public-rate-dialog,
+    #restore-order-modal > div {
+      background: rgba(9, 9, 11, 0.75) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      border: 1px solid rgba(0, 255, 136, 0.30) !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 32px rgba(0, 255, 136, 0.15) !important;
+    }
+    .tweak-site-footer {
+      background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 12, 0.65) 100%) !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+      }
+      .navbar {
+        background: rgba(0, 0, 0, 0.52) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+      }
+      .card,
+      .pkg-compare-card,
+      .real-fps-card,
+      .funnel-feature-card,
+      .deliverable-card,
+      .preview-card,
+      .reviews-marquee-section,
+      .review-marquee-card,
+      .reviews-empty-card,
+      .payment-info-card,
+      .faq-item {
+        background: rgba(9, 9, 11, 0.42) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+      }
+      .public-rate-dialog,
+      #restore-order-modal > div {
+        background: rgba(9, 9, 11, 0.84) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+      }
+    }
   </style>
 </head>
 <body>
