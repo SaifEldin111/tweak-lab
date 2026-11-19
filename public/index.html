@@ -19,6 +19,7 @@
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
+  <link rel="preload" as="image" href="/gta6-wp-1.jpg" />
   <meta name="theme-color" content="#070a10" />
   <script>
     (function () {
@@ -87,6 +88,91 @@
     }
     html[lang="ar"] .eg-micro-hint {
       display: none !important;
+    }
+
+    /* ========================================================================
+       SUBTLE AMBIENT GTA VI OFFICIAL WALLPAPERS BACKDROP CAROUSEL (ZERO-INTERACTION)
+       ======================================================================== */
+    .gta6-ambient-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      background: #000000;
+    }
+    .gta6-ambient-slides {
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+    }
+    @media (min-width: 768px) {
+      .gta6-ambient-slides {
+        opacity: 0.25;
+      }
+    }
+    .gta6-ambient-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.35s ease-in-out;
+      will-change: opacity;
+      contain: layout style paint;
+    }
+    .gta6-ambient-slide.active {
+      opacity: 1;
+    }
+    .gta6-ambient-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: blur(5px);
+      -webkit-filter: blur(5px);
+      transform: translate3d(0, 0, 0) scale(1.05);
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    @media (min-width: 768px) {
+      .gta6-ambient-slide img {
+        filter: blur(7px);
+        -webkit-filter: blur(7px);
+      }
+    }
+    .gta6-ambient-slide.active img,
+    .gta6-ambient-slide.leaving img {
+      animation: gta6KenBurnsSlow 6.5s ease-out forwards;
+    }
+    @keyframes gta6KenBurnsSlow {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1.05);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1.11);
+      }
+    }
+    .gta6-ambient-green-mask {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 84% 16%, rgba(0, 255, 136, 0.15) 0%, transparent 56%),
+        linear-gradient(
+          to top right,
+          rgba(0, 0, 0, 0.78) 0%,
+          rgba(9, 9, 11, 0.52) 50%,
+          rgba(0, 255, 136, 0.15) 100%
+        );
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .gta6-ambient-slide.active img,
+      .gta6-ambient-slide.leaving img {
+        animation: none;
+      }
     }
 
     /* ========================================================================
@@ -197,6 +283,8 @@
        CENTERED DUAL-PORTAL STAGE
        ======================================================================== */
     .portal-main {
+      position: relative;
+      z-index: 10;
       flex: 1;
       display: flex;
       align-items: center;
@@ -587,6 +675,8 @@
        MINIMAL FOOTER
        ======================================================================== */
     .tweak-site-footer {
+      position: relative;
+      z-index: 10;
       padding: 20px 16px 26px;
       background: linear-gradient(180deg, rgba(6, 10, 16, 0.35), rgba(4, 7, 12, 0.96));
       border-top: 1px solid rgba(0, 255, 136, 0.18);
@@ -683,6 +773,25 @@
   </style>
 </head>
 <body>
+
+  <!-- SUBTLE AMBIENT GTA VI OFFICIAL WALLPAPERS BACKDROP CAROUSEL (ZERO-INTERACTION) -->
+  <div class="gta6-ambient-backdrop" id="gta6-ambient-backdrop" aria-hidden="true">
+    <div class="gta6-ambient-slides">
+      <div class="gta6-ambient-slide active">
+        <img src="/gta6-wp-1.jpg" alt="" loading="eager" decoding="async" />
+      </div>
+      <div class="gta6-ambient-slide">
+        <img src="/gta6-wp-2.jpg" alt="" loading="lazy" decoding="async" />
+      </div>
+      <div class="gta6-ambient-slide">
+        <img src="/gta6-wp-3.jpg" alt="" loading="lazy" decoding="async" />
+      </div>
+      <div class="gta6-ambient-slide">
+        <img src="/gta6-wp-4.jpg" alt="" loading="lazy" decoding="async" />
+      </div>
+    </div>
+    <div class="gta6-ambient-green-mask"></div>
+  </div>
 
   <!-- CLEAN DECLUTTERED NAVBAR (3 Elements on Portal: Logo, Track Order, Language Toggle) -->
   <nav class="navbar">
@@ -1071,6 +1180,52 @@ document.addEventListener('keydown', (e) => {
 });
 
 applyPortalLang(portalLang);
+
+(function initGta6AmbientBackdrop() {
+  const slides = Array.from(document.querySelectorAll('#gta6-ambient-backdrop .gta6-ambient-slide'));
+  if (slides.length < 2) return;
+  let current = 0;
+  let timer = null;
+
+  function advanceSlide() {
+    if (document.hidden) return;
+    const prev = slides[current];
+    current = (current + 1) % slides.length;
+    const next = slides[current];
+
+    // Preload the slide after next for zero-lag transitions
+    const upcomingImg = slides[(current + 1) % slides.length].querySelector('img');
+    if (upcomingImg && upcomingImg.loading === 'lazy') upcomingImg.loading = 'eager';
+
+    prev.classList.remove('active');
+    prev.classList.add('leaving');
+    next.classList.remove('leaving');
+    // Force reflow only on next if needed to restart Ken Burns cleanly
+    void next.offsetWidth;
+    next.classList.add('active');
+
+    window.setTimeout(() => {
+      prev.classList.remove('leaving');
+    }, 1500);
+  }
+
+  function startCarousel() {
+    if (timer) return;
+    timer = window.setInterval(advanceSlide, 4000);
+  }
+  function stopCarousel() {
+    if (!timer) return;
+    window.clearInterval(timer);
+    timer = null;
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCarousel();
+    else startCarousel();
+  });
+
+  startCarousel();
+})();
 </script>
 </body>
 </html>
