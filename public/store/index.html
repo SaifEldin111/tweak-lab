@@ -1692,9 +1692,346 @@
       .brand-wordmark { font-size: 0.9rem; }
       .nav-hub-switch-btn, .nav-btn { font-size: 0.66rem; padding: 5px 6px; }
     }
+
+    /* ========================================================================
+       AMBIENT ZERO-GRAVITY STORE BACKGROUND (NON-INTRUSIVE GPU 60FPS LAYER)
+       ======================================================================== */
+    .store-ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      user-select: none;
+    }
+    .store-hero,
+    .store-container,
+    .tweak-site-footer {
+      position: relative;
+      z-index: 10;
+    }
+    .ambient-float-item {
+      position: absolute;
+      opacity: 0.17;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .ambient-item-scale {
+      display: block;
+      transform-origin: center center;
+    }
+
+    /* 6 Corner & Edge Positions (Strictly away from center screen) */
+    .ambient-ps5-tr {
+      top: 6.5%;
+      right: 2.2%;
+      animation: floatRotateSlow 19s ease-in-out infinite;
+    }
+    .ambient-ps5-bl {
+      bottom: 7%;
+      left: 2%;
+      animation: floatRotateReverse 22s ease-in-out infinite;
+    }
+    .ambient-psn-tl {
+      top: 10.5%;
+      left: 2.4%;
+      animation: floatRotateReverse 18s ease-in-out infinite;
+    }
+    .ambient-psn-ml {
+      top: 44%;
+      left: 1.5%;
+      animation: floatRotateSlow 15s ease-in-out infinite;
+    }
+    .ambient-steam-mr {
+      top: 47%;
+      right: 1.5%;
+      animation: floatRotateReverse 16s ease-in-out infinite;
+    }
+    .ambient-steam-br {
+      bottom: 8.5%;
+      right: 2.4%;
+      animation: floatRotateSlow 21s ease-in-out infinite;
+    }
+
+    /* Coded PS5 Console + Controller Silhouette Styling */
+    .ambient-ps5-svg {
+      width: 132px;
+      height: 144px;
+      display: block;
+      filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.42));
+    }
+
+    /* Coded Mini PSN & Steam Floating Gift Cards */
+    .ambient-mini-card {
+      width: 142px;
+      height: 84px;
+      border-radius: 13px;
+      padding: 9px 11px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      direction: ltr;
+    }
+    .ambient-mini-card.psn-mini {
+      background: linear-gradient(135deg, #090d16 0%, #0f172a 48%, #1d4ed8 100%);
+      border: 1px solid rgba(96, 165, 250, 0.62);
+      box-shadow: 0 0 24px rgba(37, 99, 235, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    }
+    .ambient-mini-card.steam-mini {
+      background: linear-gradient(135deg, #090d14 0%, #0f2233 50%, #053b2c 100%);
+      border: 1px solid rgba(0, 240, 255, 0.58);
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(0, 240, 255, 0.2);
+    }
+    .ambient-mini-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .ambient-mini-tag {
+      font-size: 0.56rem;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .ambient-mini-chip {
+      font-size: 0.58rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+    }
+    .ambient-mini-card.steam-mini .ambient-mini-chip {
+      background: rgba(0, 255, 136, 0.18);
+      color: #00ff88;
+      border: 1px solid rgba(0, 255, 136, 0.45);
+    }
+    .ambient-mini-center {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .ambient-mini-logo {
+      width: 26px;
+      height: 22px;
+      color: #ffffff;
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.65));
+    }
+    .ambient-mini-card.steam-mini .ambient-mini-logo {
+      color: #00f0ff;
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.65));
+    }
+    .ambient-mini-val {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+    .ambient-mini-symbols {
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      color: rgba(147, 197, 253, 0.72);
+      font-weight: 800;
+    }
+    .ambient-mini-card.steam-mini .ambient-mini-symbols {
+      color: rgba(0, 255, 136, 0.75);
+      letter-spacing: 1px;
+    }
+
+    /* GPU-Only Keyframe Animations (translate3d + rotate only) */
+    @keyframes floatRotateSlow {
+      0% {
+        transform: translate3d(0px, 0px, 0) rotate(-6deg);
+      }
+      33% {
+        transform: translate3d(10px, -18px, 0) rotate(4deg);
+      }
+      66% {
+        transform: translate3d(-8px, -28px, 0) rotate(9deg);
+      }
+      100% {
+        transform: translate3d(0px, 0px, 0) rotate(-6deg);
+      }
+    }
+    @keyframes floatRotateReverse {
+      0% {
+        transform: translate3d(0px, 0px, 0) rotate(7deg);
+      }
+      33% {
+        transform: translate3d(-11px, 16px, 0) rotate(-3deg);
+      }
+      66% {
+        transform: translate3d(9px, -22px, 0) rotate(-9deg);
+      }
+      100% {
+        transform: translate3d(0px, 0px, 0) rotate(7deg);
+      }
+    }
+
+    /* Mobile (< 768px): Scale 0.75, opacity 0.10, pushed to outer edges */
+    @media (max-width: 767px) {
+      .ambient-float-item {
+        opacity: 0.10;
+      }
+      .ambient-item-scale {
+        transform: scale(0.75);
+      }
+      .ambient-ps5-tr { top: 5.5%; right: -22px; }
+      .ambient-ps5-bl { bottom: 5%; left: -24px; }
+      .ambient-psn-tl { top: 9%; left: -24px; }
+      .ambient-psn-ml { top: 43%; left: -28px; }
+      .ambient-steam-mr { top: 47%; right: -28px; }
+      .ambient-steam-br { bottom: 7%; right: -24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ambient-float-item {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- AMBIENT ZERO-GRAVITY FLOATING BACKGROUND LAYER (PS5 SILHOUETTES + MINI PSN & STEAM CARDS) -->
+  <div class="store-ambient-bg" id="store-ambient-bg" aria-hidden="true">
+    <!-- 1. Top-Right: PS5 Console & DualSense Controller Geometric SVG Silhouette -->
+    <div class="ambient-float-item ambient-ps5-tr">
+      <div class="ambient-item-scale">
+        <svg class="ambient-ps5-svg" viewBox="0 0 140 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- PS5 Console Vertical Tower Silhouette -->
+          <path d="M44 10 C48 22, 48 84, 45 104 L55 104 L55 14 Z" fill="rgba(255,255,255,0.16)" stroke="#93c5fd" stroke-width="1.6"/>
+          <path d="M96 10 C92 22, 92 84, 95 104 L85 104 L85 14 Z" fill="rgba(255,255,255,0.16)" stroke="#93c5fd" stroke-width="1.6"/>
+          <!-- Central Glossy Core & Blue LED V-Seam -->
+          <rect x="56" y="15" width="28" height="89" rx="5" fill="#070b14" stroke="#38bdf8" stroke-width="1.5"/>
+          <path d="M56 22 L62 46 M84 22 L78 46" stroke="#00f0ff" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Base Stand -->
+          <ellipse cx="70" cy="106" rx="26" ry="3.8" fill="rgba(56,189,248,0.22)" stroke="#60a5fa" stroke-width="1.4"/>
+          <!-- Floating DualSense Controller Silhouette Below -->
+          <path d="M44 126 C44 119, 53 116, 61 118 L79 118 C87 116, 96 119, 96 126 C99 135, 95 147, 88 148 C83 148, 80 140, 75 138 L65 138 C60 140, 57 148, 52 148 C45 147, 41 135, 44 126 Z" fill="rgba(15,23,42,0.85)" stroke="#93c5fd" stroke-width="1.6"/>
+          <path d="M61 119 L64 126 L76 126 L79 119" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="63" cy="132" r="2.6" stroke="#60a5fa" stroke-width="1.3"/>
+          <circle cx="77" cy="132" r="2.6" stroke="#60a5fa" stroke-width="1.3"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 2. Upper-Left: Mini PlayStation (PSN) Gift Card -->
+    <div class="ambient-float-item ambient-psn-tl">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card psn-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">PLAYSTATION</span>
+            <span class="ambient-mini-chip">🇺🇸 US</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 52" fill="currentColor">
+              <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+              <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+              <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
+            </svg>
+            <span class="ambient-mini-val">$100</span>
+          </div>
+          <div class="ambient-mini-symbols">△ ○ × □ • PSN CODE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Mid-Left: Mini PlayStation (PSN) Gift Card -->
+    <div class="ambient-float-item ambient-psn-ml">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card psn-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">PSN GIFT CARD</span>
+            <span class="ambient-mini-chip">PS5 / PS4</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 52" fill="currentColor">
+              <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+              <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+              <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
+            </svg>
+            <span class="ambient-mini-val">$50</span>
+          </div>
+          <div class="ambient-mini-symbols">△ ○ × □ • DIGITAL</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Mid-Right: Mini Steam Wallet Gift Card -->
+    <div class="ambient-float-item ambient-steam-mr">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card steam-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">STEAM WALLET</span>
+            <span class="ambient-mini-chip">PC • USD</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="27" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="8.5" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="3.6" fill="currentColor"/>
+              <circle cx="24" cy="43" r="6" stroke="currentColor" stroke-width="3.4"/>
+              <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/>
+              <path d="M6 35.2L21.5 42" stroke="currentColor" stroke-width="4.8" stroke-linecap="round"/>
+            </svg>
+            <span class="ambient-mini-val">$50</span>
+          </div>
+          <div class="ambient-mini-symbols">⚡ GLOBAL / EGYPT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Bottom-Left: PS5 Console & DualSense Controller Geometric SVG Silhouette -->
+    <div class="ambient-float-item ambient-ps5-bl">
+      <div class="ambient-item-scale">
+        <svg class="ambient-ps5-svg" viewBox="0 0 140 156" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- PS5 Console Vertical Tower Silhouette -->
+          <path d="M44 10 C48 22, 48 84, 45 104 L55 104 L55 14 Z" fill="rgba(255,255,255,0.16)" stroke="#60a5fa" stroke-width="1.6"/>
+          <path d="M96 10 C92 22, 92 84, 95 104 L85 104 L85 14 Z" fill="rgba(255,255,255,0.16)" stroke="#60a5fa" stroke-width="1.6"/>
+          <!-- Central Glossy Core & Blue LED V-Seam -->
+          <rect x="56" y="15" width="28" height="89" rx="5" fill="#070b14" stroke="#38bdf8" stroke-width="1.5"/>
+          <path d="M56 22 L62 46 M84 22 L78 46" stroke="#00f0ff" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Base Stand -->
+          <ellipse cx="70" cy="106" rx="26" ry="3.8" fill="rgba(56,189,248,0.22)" stroke="#60a5fa" stroke-width="1.4"/>
+          <!-- Floating DualSense Controller Silhouette Below -->
+          <path d="M44 126 C44 119, 53 116, 61 118 L79 118 C87 116, 96 119, 96 126 C99 135, 95 147, 88 148 C83 148, 80 140, 75 138 L65 138 C60 140, 57 148, 52 148 C45 147, 41 135, 44 126 Z" fill="rgba(15,23,42,0.85)" stroke="#93c5fd" stroke-width="1.6"/>
+          <path d="M61 119 L64 126 L76 126 L79 119" stroke="#00f0ff" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="63" cy="132" r="2.6" stroke="#60a5fa" stroke-width="1.3"/>
+          <circle cx="77" cy="132" r="2.6" stroke="#60a5fa" stroke-width="1.3"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 6. Bottom-Right: Mini Steam Wallet Gift Card -->
+    <div class="ambient-float-item ambient-steam-br">
+      <div class="ambient-item-scale">
+        <div class="ambient-mini-card steam-mini">
+          <div class="ambient-mini-top">
+            <span class="ambient-mini-tag">STEAM CODE</span>
+            <span class="ambient-mini-chip">⚡ INSTANT</span>
+          </div>
+          <div class="ambient-mini-center">
+            <svg class="ambient-mini-logo" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="27" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="8.5" stroke="currentColor" stroke-width="3.6"/>
+              <circle cx="42" cy="24" r="3.6" fill="currentColor"/>
+              <circle cx="24" cy="43" r="6" stroke="currentColor" stroke-width="3.4"/>
+              <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/>
+              <path d="M6 35.2L21.5 42" stroke="currentColor" stroke-width="4.8" stroke-linecap="round"/>
+            </svg>
+            <span class="ambient-mini-val">$20</span>
+          </div>
+          <div class="ambient-mini-symbols">⚡ STEAM WALLET</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- DECLUTTERED 4-ITEM STICKY NAVBAR -->
   <nav class="navbar">
