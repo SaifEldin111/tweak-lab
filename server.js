@@ -1243,6 +1243,8 @@ async function handleRequest(req, res) {
       let cleanSenderPhone = '';
       let cleanGameAccount = '';
 
+      const EG_WA_REGEX = /^01[0125][0-9]{8}$/;
+
       if (isGamingStoreOrder) {
         storeProduct = STORE_CATALOG.findProductById(storeProductId);
         if (!storeProduct) {
@@ -1252,11 +1254,10 @@ async function handleRequest(req, res) {
         const rawWa = String(whatsappPhone || senderPhone || '').trim();
         const normalizedWa = rawWa
           .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
-          .replace(/[\s\-()]/g, '')
-          .replace(/^\+/, '');
+          .replace(/\s+/g, '');
 
-        if (!normalizedWa || /[^0-9]/.test(normalizedWa) || normalizedWa.length < 10 || normalizedWa.length > 15) {
-          return sendJson(res, 400, { error: 'يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx).' });
+        if (!normalizedWa || !EG_WA_REGEX.test(normalizedWa)) {
+          return sendJson(res, 400, { error: 'من فضلك اكتب رقم واتساب مصري صحيح مكون من 11 رقم (مثال: 010xxxxxxxx).' });
         }
 
         cleanGameAccount = String(gameAccount || '').trim().slice(0, 160);
@@ -1275,8 +1276,8 @@ async function handleRequest(req, res) {
         cleanSenderPhone = normalizedWa;
         cleanCustomerName = String(customerName || '').trim().slice(0, 80) || (cleanGameAccount ? cleanGameAccount.slice(0, 60) : ('عميل متجر • ' + normalizedWa));
       } else {
-        if (!customerName || !senderPhone || !screenshotDataUrl) {
-          return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الموبايل ورفع صورة سكرين شوت التحويل.' });
+        if (!customerName || !(senderPhone || whatsappPhone) || !screenshotDataUrl) {
+          return sendJson(res, 400, { error: 'يرجى إدخال الاسم ورقم الواتساب الصحيح ورفع صورة سكرين شوت التحويل.' });
         }
 
         const trimmedName = String(customerName).trim();
@@ -1284,22 +1285,19 @@ async function handleRequest(req, res) {
           return sendJson(res, 400, { error: 'الاسم لازم يكون حروف بس من غير أرقام' });
         }
 
-        const normalizedPhone = String(senderPhone).trim().replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
-        if (/[^0-9]/.test(normalizedPhone)) {
-          return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
-        }
-        if (normalizedPhone.length < 11) {
-          return sendJson(res, 400, { error: 'رقم التليفون لازم يكون 11 رقم' });
-        }
-        if (!/^01[0-9]{9}$/.test(normalizedPhone)) {
-          return sendJson(res, 400, { error: 'لازم تكتب أرقام فقط، رقم تليفون صحيح' });
+        const normalizedPhone = String(senderPhone || whatsappPhone || '')
+          .trim()
+          .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+          .replace(/\s+/g, '');
+        if (!EG_WA_REGEX.test(normalizedPhone)) {
+          return sendJson(res, 400, { error: 'من فضلك اكتب رقم واتساب مصري صحيح مكون من 11 رقم (مثال: 010xxxxxxxx).' });
         }
 
         cleanCustomerName = trimmedName.slice(0, 80);
-        cleanSenderPhone = normalizedPhone.slice(0, 40);
+        cleanSenderPhone = normalizedPhone;
       }
 
-      const match = /^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i.exec(screenshotDataUrl);
+      const match = /^data:image\/(png|jpeg|jpg|webp);base64,(.+)$/i.exec(String(screenshotDataUrl || ''));
       if (!match) {
         return sendJson(res, 400, { error: 'صيغة صورة السكرين شوت غير صحيحة. يرجى رفع صورة PNG أو JPG.' });
       }
@@ -1307,6 +1305,9 @@ async function handleRequest(req, res) {
       const extRaw = match[1].toLowerCase();
       const screenshotMime = 'image/' + (extRaw === 'jpg' ? 'jpeg' : extRaw);
       const imgBuffer = Buffer.from(match[2], 'base64');
+      if (!imgBuffer || imgBuffer.length < 64) {
+        return sendJson(res, 400, { error: 'صورة إيصال التحويل غير صالحة أو فارغة. يرجى رفع صورة صحيحة.' });
+      }
 
       const orderId = 'TL-' + Math.floor(100000 + Math.random() * 900000);
       const accessToken = crypto.randomBytes(16).toString('hex');

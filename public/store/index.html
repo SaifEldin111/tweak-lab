@@ -1161,8 +1161,35 @@
       outline: none;
     }
     .input-field:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.15); }
-    .input-field.input-error { border-color: var(--red); }
-    .field-error { display: none; font-size: 0.79rem; color: #ff6b78; font-weight: 700; margin-top: 5px; }
+    .input-field.input-error { border-color: #ff6b35; box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.16); }
+    .input-field.input-valid { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.14); }
+    .wa-input-wrap { position: relative; display: flex; align-items: center; }
+    .wa-input-wrap .input-field { padding-inline-end: 42px; }
+    .wa-valid-check {
+      position: absolute;
+      inset-inline-end: 12px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.16);
+      border: 1px solid rgba(0, 255, 136, 0.65);
+      color: #00ff88;
+      font-size: 0.9rem;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .wa-valid-check.visible {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+    .field-error { display: none; font-size: 0.8rem; color: #ff8a5b; font-weight: 800; margin-top: 6px; line-height: 1.5; }
     .upload-zone {
       border: 1.5px dashed rgba(0, 240, 255, 0.45);
       border-radius: 12px;
@@ -1185,8 +1212,15 @@
       cursor: pointer;
       font-family: inherit;
       box-shadow: 0 10px 26px rgba(0, 255, 136, 0.34);
+      transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
-    .submit-store-btn:disabled { opacity: 0.65; cursor: wait; }
+    .submit-store-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+      box-shadow: none;
+      filter: grayscale(0.45);
+    }
     .order-status-view { display: none; text-align: center; padding: 8px 4px; }
     .status-pill-lg {
       display: inline-flex;
@@ -2761,8 +2795,11 @@
         <form id="store-order-form" onsubmit="submitStoreOrder(event)" novalidate>
           <div class="form-group">
             <label for="store-whatsapp-input" data-i18n="lblWhatsapp">💬 WhatsApp Number (required to receive your PSN code):</label>
-            <input type="tel" id="store-whatsapp-input" class="input-field" inputmode="numeric" data-i18n-placeholder="phWhatsapp" placeholder="e.g. 010xxxxxxxx" autocomplete="tel" required />
-            <div class="field-error" id="store-whatsapp-error" data-i18n="errWhatsapp">Please enter a valid WhatsApp number (digits only, e.g. 010xxxxxxxx)</div>
+            <div class="wa-input-wrap">
+              <input type="tel" id="store-whatsapp-input" class="input-field" inputmode="numeric" maxlength="15" data-i18n-placeholder="phWhatsapp" placeholder="e.g. 010xxxxxxxx" autocomplete="tel" oninput="handleStoreWhatsappInput(this)" onblur="validateStoreWhatsapp(true)" required />
+              <span class="wa-valid-check" id="store-wa-valid-check" aria-hidden="true">✓</span>
+            </div>
+            <div class="field-error" id="store-whatsapp-error" role="alert" data-i18n="errWhatsapp">⚠️ Enter a valid 11-digit WhatsApp number (e.g. 010xxxxxxxx)</div>
           </div>
 
           <div class="form-group">
@@ -2782,7 +2819,7 @@
             <input type="text" id="store-notes-input" class="input-field" data-i18n-placeholder="phNotes" placeholder="Any note for our delivery team..." />
           </div>
 
-          <button type="submit" class="submit-store-btn" id="store-submit-btn">
+          <button type="submit" class="submit-store-btn" id="store-submit-btn" disabled>
             🚀 Confirm Order &amp; Send Receipt
           </button>
         </form>
@@ -2871,8 +2908,10 @@ let activePsnRegion = 'US';
 let selectedProduct = null;
 let selectedStorePayMethod = 'instapay';
 let storeScreenshotDataUrl = '';
+let isStoreOrderSubmitting = false;
 let activeTrackedOrder = null;
 let storePollTimer = null;
+const EG_WA_REGEX = /^01[0125][0-9]{8}$/;
 
 const REGION_NAMES_EN = { US: 'USA', SA: 'Saudi', UAE: 'UAE', TR: 'Turkey' };
 const TAGS_EN = {
@@ -2978,7 +3017,7 @@ const STORE_I18N = {
     vodaDialBtn: '📞 Tap to Dial Transfer Code on Mobile',
     lblWhatsapp: '💬 WhatsApp Number (required to receive your digital code):',
     phWhatsapp: 'e.g. 010xxxxxxxx',
-    errWhatsapp: 'Please enter a valid WhatsApp number (digits only, e.g. 010xxxxxxxx)',
+    errWhatsapp: '⚠️ Enter a valid 11-digit WhatsApp number (e.g. 010xxxxxxxx)',
     lblScreenshot: '📸 Upload Payment Transfer Screenshot (required):',
     uploadPrompt: 'Click here to upload your transfer screenshot',
     uploadSub: 'Supports PNG, JPG, WEBP — instant compression',
@@ -3096,7 +3135,7 @@ const STORE_I18N = {
     vodaDialBtn: '📞 اتصال مباشر للتحويل من الموبايل',
     lblWhatsapp: '💬 رقم الواتساب (مطلوب لاستلام الكود الرقمي):',
     phWhatsapp: 'مثال: 010xxxxxxxx',
-    errWhatsapp: 'يرجى إدخال رقم واتساب صحيح (أرقام فقط، مثال: 010xxxxxxxx)',
+    errWhatsapp: 'من فضلك اكتب رقم واتساب صحيح مكون من 11 رقم (مثال: 010xxxxxxxx) عشان نبعتلك الكود عليه',
     lblScreenshot: '📸 ارفع صورة سكرين شوت التحويل (مطلوب):',
     uploadPrompt: 'اضغط هنا لاختيار صورة إيصال التحويل من جهازك',
     uploadSub: 'يدعم PNG, JPG, WEBP — رفع وضغط فوري',
@@ -3473,11 +3512,12 @@ function updateModalPaymentNumbers() {
       ? (selectedProduct.deliveryBadge || 'كود رقمي • تسليم خلال ساعة')
       : 'Digital Code • Delivery Within 1 Hour';
     const submitBtn = document.getElementById('store-submit-btn');
-    if (submitBtn && !submitBtn.disabled) {
+    if (submitBtn && !isStoreOrderSubmitting) {
       submitBtn.textContent = isAr
         ? `🚀 تأكيد الطلب (${formatPriceEgp(price)}) وإرسال الإيصال`
         : `🚀 Confirm Order (${formatPriceEgp(price)}) & Send Receipt`;
     }
+    syncStoreSubmitButtonState();
   }
 }
 
@@ -3516,6 +3556,88 @@ function copyStoreText(text, btn) {
   setTimeout(() => { btn.textContent = old; }, 1400);
 }
 
+function cleanStoreWhatsapp(raw) {
+  return normalizeDigits(raw || '').replace(/\s+/g, '');
+}
+
+function isValidStoreWhatsapp(raw) {
+  return EG_WA_REGEX.test(cleanStoreWhatsapp(raw));
+}
+
+function syncStoreSubmitButtonState() {
+  const submitBtn = document.getElementById('store-submit-btn');
+  if (!submitBtn || isStoreOrderSubmitting) return;
+  const waInput = document.getElementById('store-whatsapp-input');
+  const waOk = waInput ? isValidStoreWhatsapp(waInput.value) : false;
+  const scrOk = Boolean(storeScreenshotDataUrl && storeScreenshotDataUrl.startsWith('data:image/'));
+  const ready = waOk && scrOk;
+  submitBtn.disabled = !ready;
+  submitBtn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+}
+
+function handleStoreWhatsappInput(inputEl) {
+  if (!inputEl) return;
+  const waErr = document.getElementById('store-whatsapp-error');
+  const checkEl = document.getElementById('store-wa-valid-check');
+  const cleaned = cleanStoreWhatsapp(inputEl.value);
+
+  if (cleaned.length === 0) {
+    inputEl.classList.remove('input-error', 'input-valid');
+    if (waErr) waErr.style.display = 'none';
+    if (checkEl) checkEl.classList.remove('visible');
+    syncStoreSubmitButtonState();
+    return;
+  }
+
+  if (EG_WA_REGEX.test(cleaned)) {
+    inputEl.classList.remove('input-error');
+    inputEl.classList.add('input-valid');
+    if (waErr) waErr.style.display = 'none';
+    if (checkEl) checkEl.classList.add('visible');
+  } else {
+    inputEl.classList.remove('input-valid');
+    inputEl.classList.add('input-error');
+    if (waErr) {
+      waErr.textContent = STORE_I18N[storeLang].errWhatsapp;
+      waErr.style.display = 'block';
+    }
+    if (checkEl) checkEl.classList.remove('visible');
+  }
+  syncStoreSubmitButtonState();
+}
+
+function validateStoreWhatsapp(showErrorIfEmpty = true) {
+  const waInput = document.getElementById('store-whatsapp-input');
+  const waErr = document.getElementById('store-whatsapp-error');
+  const checkEl = document.getElementById('store-wa-valid-check');
+  if (!waInput) return false;
+  const cleaned = cleanStoreWhatsapp(waInput.value);
+  const valid = EG_WA_REGEX.test(cleaned);
+
+  if (valid) {
+    waInput.value = cleaned;
+    waInput.classList.remove('input-error');
+    waInput.classList.add('input-valid');
+    if (waErr) waErr.style.display = 'none';
+    if (checkEl) checkEl.classList.add('visible');
+  } else {
+    waInput.classList.remove('input-valid');
+    if (checkEl) checkEl.classList.remove('visible');
+    if (showErrorIfEmpty || cleaned.length > 0) {
+      waInput.classList.add('input-error');
+      if (waErr) {
+        waErr.textContent = STORE_I18N[storeLang].errWhatsapp;
+        waErr.style.display = 'block';
+      }
+    } else {
+      waInput.classList.remove('input-error');
+      if (waErr) waErr.style.display = 'none';
+    }
+  }
+  syncStoreSubmitButtonState();
+  return valid;
+}
+
 function openOrderModal(productId) {
   const normalizedId = productId === 'gta6-psn-us-70' ? 'gta6-psn-us-80' : productId;
   const product = (storeCatalog.products || []).find(
@@ -3524,9 +3646,14 @@ function openOrderModal(productId) {
   if (!product) return;
   selectedProduct = product;
   storeScreenshotDataUrl = '';
+  isStoreOrderSubmitting = false;
   if (storePollTimer) { clearInterval(storePollTimer); storePollTimer = null; }
 
-  document.getElementById('store-whatsapp-input').classList.remove('input-error');
+  const waInput = document.getElementById('store-whatsapp-input');
+  waInput.value = '';
+  waInput.classList.remove('input-error', 'input-valid');
+  const checkEl = document.getElementById('store-wa-valid-check');
+  if (checkEl) checkEl.classList.remove('visible');
   document.getElementById('store-whatsapp-error').style.display = 'none';
   document.getElementById('store-screenshot-error').style.display = 'none';
   document.getElementById('store-screenshot-input').value = '';
@@ -3535,9 +3662,10 @@ function openOrderModal(productId) {
   document.getElementById('store-notes-input').value = '';
 
   const submitBtn = document.getElementById('store-submit-btn');
-  submitBtn.disabled = false;
+  submitBtn.disabled = true;
 
   updateModalPaymentNumbers();
+  syncStoreSubmitButtonState();
   selectStorePayMethod('instapay');
 
   document.getElementById('modal-checkout-view').style.display = 'block';
@@ -3554,7 +3682,11 @@ function closeOrderModal() {
 
 function handleStoreScreenshotFile(input) {
   const file = input.files && input.files[0];
-  if (!file) return;
+  if (!file) {
+    storeScreenshotDataUrl = '';
+    syncStoreSubmitButtonState();
+    return;
+  }
   const reader = new FileReader();
   reader.onload = function (e) {
     const img = new Image();
@@ -3577,6 +3709,7 @@ function handleStoreScreenshotFile(input) {
       document.getElementById('store-upload-label').textContent =
         (storeLang === 'ar' ? '✅ تم تجهيز صورة الإيصال: ' : '✅ Receipt ready: ') + file.name;
       document.getElementById('store-screenshot-error').style.display = 'none';
+      syncStoreSubmitButtonState();
     };
     img.src = e.target.result;
   };
@@ -3585,34 +3718,29 @@ function handleStoreScreenshotFile(input) {
 
 async function submitStoreOrder(e) {
   e.preventDefault();
-  if (!selectedProduct) return;
+  if (!selectedProduct || isStoreOrderSubmitting) return;
 
   const waInput = document.getElementById('store-whatsapp-input');
-  const waErr = document.getElementById('store-whatsapp-error');
   const scrErr = document.getElementById('store-screenshot-error');
 
-  const rawWa = normalizeDigits(waInput.value || '').replace(/[\s\-()]/g, '').replace(/^\+/, '');
-  let hasError = false;
+  const isWaValid = validateStoreWhatsapp(true);
+  const rawWa = cleanStoreWhatsapp(waInput.value || '');
+  let hasError = !isWaValid;
 
-  if (!rawWa || /[^0-9]/.test(rawWa) || rawWa.length < 10 || rawWa.length > 15) {
-    waInput.classList.add('input-error');
-    waErr.style.display = 'block';
-    hasError = true;
-  } else {
-    waInput.classList.remove('input-error');
-    waErr.style.display = 'none';
-  }
-
-  if (!storeScreenshotDataUrl) {
+  if (!storeScreenshotDataUrl || !storeScreenshotDataUrl.startsWith('data:image/')) {
     scrErr.style.display = 'block';
     hasError = true;
   } else {
     scrErr.style.display = 'none';
   }
 
-  if (hasError) return;
+  if (hasError) {
+    syncStoreSubmitButtonState();
+    return;
+  }
 
   const btn = document.getElementById('store-submit-btn');
+  isStoreOrderSubmitting = true;
   btn.disabled = true;
   btn.textContent = storeLang === 'ar' ? '⏳ جاري رفع السكرين شوت وتسجيل الطلب...' : '⏳ Uploading receipt & submitting order...';
 
@@ -3633,11 +3761,13 @@ async function submitStoreOrder(e) {
     const data = await res.json();
     if (!res.ok) {
       alert(data.error || (storeLang === 'ar' ? 'حدث خطأ أثناء تسجيل الطلب.' : 'Error submitting order.'));
-      btn.disabled = false;
+      isStoreOrderSubmitting = false;
       updateModalPaymentNumbers();
+      syncStoreSubmitButtonState();
       return;
     }
 
+    isStoreOrderSubmitting = false;
     activeTrackedOrder = {
       id: data.order.id,
       accessToken: data.order.accessToken,
@@ -3662,8 +3792,9 @@ async function submitStoreOrder(e) {
     startStoreOrderPolling();
   } catch (err) {
     alert(storeLang === 'ar' ? 'تعذر الاتصال بالخادم، حاول مرة أخرى.' : 'Could not reach server, please try again.');
-    btn.disabled = false;
+    isStoreOrderSubmitting = false;
     updateModalPaymentNumbers();
+    syncStoreSubmitButtonState();
   }
 }
 

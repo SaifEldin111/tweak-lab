@@ -862,6 +862,26 @@
       transform: translateY(-2px) scale(1.012) !important;
       box-shadow: 0 12px 32px rgba(0, 255, 136, 0.5) !important;
     }
+    .btn-submit-order:disabled {
+      opacity: 0.5 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      filter: grayscale(0.45);
+      transform: none !important;
+    }
+    .btn-submit-order:disabled::after {
+      display: none !important;
+    }
+    .submit-motion-zone.is-locked {
+      animation: none !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+    .submit-motion-zone.is-locked .submit-side-motion svg {
+      animation: none !important;
+      opacity: 0.2 !important;
+    }
     .btn-submit-main {
       display: flex;
       align-items: center;
@@ -1140,7 +1160,40 @@
       box-shadow: 0 0 14px rgba(255, 71, 87, 0.35) !important;
     }
     .input-field.input-valid {
-      border-color: rgba(0, 255, 136, 0.65) !important;
+      border-color: rgba(0, 255, 136, 0.72) !important;
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.14);
+    }
+    .wa-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .wa-input-wrap .input-field {
+      padding-inline-end: 44px;
+    }
+    .wa-valid-check {
+      position: absolute;
+      inset-inline-end: 12px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.8);
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.16);
+      border: 1px solid rgba(0, 255, 136, 0.65);
+      color: #00ff88;
+      font-size: 0.9rem;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .wa-valid-check.visible {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
     }
     .field-error-msg {
       display: none;
@@ -3931,8 +3984,11 @@
 
             <div class="form-group">
               <label data-i18n="labelPhone">📱 رقم الموبايل المحول منه (أو حساب إنستاباي):</label>
-              <input type="tel" id="cust-phone" class="input-field" inputmode="numeric" maxlength="11" data-i18n-placeholder="phPhone" placeholder="مثال: 010xxxxxxxx" autocomplete="tel" oninput="handleCustomerPhoneInput(this)" onblur="validateCustomerPhone(true)" required />
-              <div id="cust-phone-error" class="field-error-msg" role="alert">لازم تكتب أرقام فقط، رقم تليفون صحيح</div>
+              <div class="wa-input-wrap">
+                <input type="tel" id="cust-phone" class="input-field" inputmode="numeric" maxlength="15" data-i18n-placeholder="phPhone" placeholder="مثال: 010xxxxxxxx" autocomplete="tel" oninput="handleCustomerPhoneInput(this)" onblur="validateCustomerPhone(true)" required />
+                <span class="wa-valid-check" id="pc-phone-valid-check" aria-hidden="true">✓</span>
+              </div>
+              <div id="cust-phone-error" class="field-error-msg" role="alert">من فضلك اكتب رقم واتساب صحيح مكون من 11 رقم (مثال: 010xxxxxxxx) عشان نبعتلك الكود عليه</div>
             </div>
 
             <div class="form-group">
@@ -3956,6 +4012,7 @@
                 <img id="screenshot-preview" class="screenshot-preview" alt="Screenshot Preview" />
               </div>
               <input type="file" id="screenshot-input" accept="image/*" style="display:none;" onchange="handleScreenshotFile(this)" />
+              <div id="pc-screenshot-error" class="field-error-msg" role="alert">⚠️ من فضلك قم برفع صورة إيصال التحويل أولاً.</div>
             </div>
 
             <div class="form-group">
@@ -3963,14 +4020,14 @@
               <input type="text" id="cust-notes" class="input-field" data-i18n-placeholder="phNotes" placeholder="أي ملاحظة تحب تضيفها مع الطلب..." />
             </div>
 
-            <div class="submit-motion-zone">
+            <div class="submit-motion-zone is-locked" id="pc-submit-motion-zone">
               <div class="submit-side-motion side-start" aria-hidden="true">
                 <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
                 <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
                 <svg viewBox="0 0 16 24"><polyline points="3 4 11 12 3 20"/></svg>
               </div>
 
-              <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order">
+              <button type="submit" id="submit-btn" class="btn btn-primary btn-submit-order" disabled aria-disabled="true">
                 <span class="btn-submit-main">
                   <svg class="btn-submit-vec-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 2L4 5.5v6.2c0 5.1 3.4 9.8 8 11.3 4.6-1.5 8-6.2 8-11.3V5.5L12 2z"/>
@@ -4428,6 +4485,8 @@
 <script>
 let selectedPaymentMethod = 'instapay';
 let screenshotDataUrl = '';
+let isPcOrderSubmitting = false;
+const EG_WA_REGEX = /^01[0125][0-9]{8}$/;
 let uploadedScreenshotName = '';
 let currentOrder = null;
 let pollTimer = null;
@@ -4973,7 +5032,7 @@ function escapeHtml(str) {
 
 function renderSubmitButtonText() {
   const btn = document.getElementById('submit-btn');
-  if (btn && !btn.disabled) {
+  if (btn && !isPcOrderSubmitting) {
     if (currentLang === 'en') {
       btn.innerHTML = `
         <span class="btn-submit-main">
@@ -5007,6 +5066,7 @@ function renderSubmitButtonText() {
         </span>
       `;
     }
+    syncPcSubmitButtonState();
   }
 }
 
@@ -5704,6 +5764,9 @@ function handleScreenshotFile(input) {
       preview.style.display = 'inline-block';
       document.getElementById('upload-label').textContent =
         (currentLang === 'en' ? '✅ Screenshot ready: ' : '✅ تم تجهيز صورة الإيصال: ') + file.name;
+      const scrErr = document.getElementById('pc-screenshot-error');
+      if (scrErr) scrErr.style.display = 'none';
+      syncPcSubmitButtonState();
     };
     img.src = e.target.result;
   };
@@ -5775,81 +5838,111 @@ function validateCustomerName(showErrorIfEmpty = true) {
   return true;
 }
 
-// Strict Egyptian Phone Validation: Digits 0-9 only, 11 digits starting with 01
+// Strict Egyptian WhatsApp / Phone Validation: 11 digits matching /^01[0125][0-9]{8}$/
 function normalizeArabicDigits(str) {
   return String(str || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
 }
 
+function cleanPcPhone(str) {
+  return normalizeArabicDigits(str || '').replace(/\s+/g, '');
+}
+
+function getPcPhoneErrorMsg() {
+  return currentLang === 'en'
+    ? '⚠️ Enter a valid 11-digit WhatsApp number (e.g. 010xxxxxxxx)'
+    : 'من فضلك اكتب رقم واتساب صحيح مكون من 11 رقم (مثال: 010xxxxxxxx) عشان نبعتلك الكود عليه';
+}
+
+function syncPcSubmitButtonState() {
+  const btn = document.getElementById('submit-btn');
+  const zone = document.getElementById('pc-submit-motion-zone');
+  if (!btn || isPcOrderSubmitting) return;
+  const phoneEl = document.getElementById('cust-phone');
+  const phoneOk = phoneEl ? EG_WA_REGEX.test(cleanPcPhone(phoneEl.value)) : false;
+  const scrOk = Boolean(screenshotDataUrl && screenshotDataUrl.startsWith('data:image/'));
+  const ready = phoneOk && scrOk;
+  btn.disabled = !ready;
+  btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+  if (zone) zone.classList.toggle('is-locked', !ready);
+}
+
 function handleCustomerPhoneInput(inputEl) {
   if (!inputEl) return;
-  const raw = normalizeArabicDigits(inputEl.value || '');
-  const hasNonDigits = /[^0-9]/.test(raw);
-  const cleaned = raw.replace(/[^0-9]/g, '').slice(0, 11);
-  if (inputEl.value !== cleaned) {
-    inputEl.value = cleaned;
-  }
-
-  if (hasNonDigits) {
-    setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
-    return;
-  }
+  const cleaned = cleanPcPhone(inputEl.value);
+  const checkEl = document.getElementById('pc-phone-valid-check');
 
   if (cleaned.length === 0) {
     clearFieldError('cust-phone', 'cust-phone-error', false);
+    if (checkEl) checkEl.classList.remove('visible');
+    syncPcSubmitButtonState();
     return;
   }
 
-  if ((cleaned.length >= 1 && cleaned[0] !== '0') || (cleaned.length >= 2 && !cleaned.startsWith('01'))) {
-    setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
-    return;
+  if (EG_WA_REGEX.test(cleaned)) {
+    clearFieldError('cust-phone', 'cust-phone-error', true);
+    if (checkEl) checkEl.classList.add('visible');
+  } else {
+    setFieldError('cust-phone', 'cust-phone-error', getPcPhoneErrorMsg());
+    if (checkEl) checkEl.classList.remove('visible');
   }
-
-  if (cleaned.length < 11) {
-    setFieldError('cust-phone', 'cust-phone-error', 'رقم التليفون لازم يكون 11 رقم');
-    return;
-  }
-
-  clearFieldError('cust-phone', 'cust-phone-error', true);
+  syncPcSubmitButtonState();
 }
 
 function validateCustomerPhone(showError = true) {
   const inputEl = document.getElementById('cust-phone');
+  const checkEl = document.getElementById('pc-phone-valid-check');
   if (!inputEl) return false;
-  const raw = normalizeArabicDigits(inputEl.value || '');
-  const hasNonDigits = /[^0-9]/.test(raw);
-  const cleaned = raw.replace(/[^0-9]/g, '').slice(0, 11);
-  inputEl.value = cleaned;
+  const cleaned = cleanPcPhone(inputEl.value);
+  const valid = EG_WA_REGEX.test(cleaned);
 
-  if (hasNonDigits || !cleaned) {
-    if (showError) {
-      setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
+  if (valid) {
+    inputEl.value = cleaned;
+    clearFieldError('cust-phone', 'cust-phone-error', true);
+    if (checkEl) checkEl.classList.add('visible');
+  } else {
+    if (checkEl) checkEl.classList.remove('visible');
+    if (showError || cleaned.length > 0) {
+      setFieldError('cust-phone', 'cust-phone-error', getPcPhoneErrorMsg());
+    } else {
+      clearFieldError('cust-phone', 'cust-phone-error', false);
     }
-    return false;
   }
-
-  if (cleaned.length < 11) {
-    if (showError) {
-      setFieldError('cust-phone', 'cust-phone-error', 'رقم التليفون لازم يكون 11 رقم');
-    }
-    return false;
-  }
-
-  if (!/^01[0-9]{9}$/.test(cleaned)) {
-    if (showError) {
-      setFieldError('cust-phone', 'cust-phone-error', 'لازم تكتب أرقام فقط، رقم تليفون صحيح');
-    }
-    return false;
-  }
-
-  clearFieldError('cust-phone', 'cust-phone-error', true);
-  return true;
+  syncPcSubmitButtonState();
+  return valid;
 }
 
 async function submitOrder(e) {
   e.preventDefault();
+  if (isPcOrderSubmitting) return;
 
   const isNameValid = validateCustomerName(true);
   const isPhoneValid = validateCustomerPhone(true);
+  const scrErr = document.getElementById('pc-screenshot-error');
+
+  if (!isPhoneValid) {
+    const phoneEl = document.getElementById('cust-phone');
+    if (phoneEl) {
+      phoneEl.focus();
+      if (typeof phoneEl.scrollIntoView === 'function') {
+        phoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    syncPcSubmitButtonState();
+    return;
+  }
+
+  if (!screenshotDataUrl || !screenshotDataUrl.startsWith('data:image/')) {
+    if (scrErr) {
+      scrErr.textContent = currentLang === 'en'
+        ? '⚠️ Please upload your transfer screenshot first.'
+        : '⚠️ من فضلك قم برفع صورة سكرين شوت التحويل أولاً.';
+      scrErr.style.display = 'block';
+    }
+    syncPcSubmitButtonState();
+    return;
+  } else if (scrErr) {
+    scrErr.style.display = 'none';
+  }
 
   if (!isNameValid) {
     const nameEl = document.getElementById('cust-name');
@@ -5862,27 +5955,8 @@ async function submitOrder(e) {
     return;
   }
 
-  if (!isPhoneValid) {
-    const phoneEl = document.getElementById('cust-phone');
-    if (phoneEl) {
-      phoneEl.focus();
-      if (typeof phoneEl.scrollIntoView === 'function') {
-        phoneEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-    return;
-  }
-
-  if (!screenshotDataUrl) {
-    alert(
-      currentLang === 'en'
-        ? '⚠️ Please upload your transfer screenshot first.'
-        : '⚠️ من فضلك قم برفع صورة سكرين شوت التحويل أولاً.'
-    );
-    return;
-  }
-
   const btn = document.getElementById('submit-btn');
+  isPcOrderSubmitting = true;
   btn.disabled = true;
   btn.innerHTML =
     currentLang === 'en'
@@ -5892,7 +5966,8 @@ async function submitOrder(e) {
   try {
     const payload = {
       customerName: document.getElementById('cust-name').value,
-      senderPhone: document.getElementById('cust-phone').value,
+      senderPhone: cleanPcPhone(document.getElementById('cust-phone').value),
+      whatsappPhone: cleanPcPhone(document.getElementById('cust-phone').value),
       discountCode: (document.getElementById('cust-discount').value || '').trim(),
       paymentMethod: selectedPaymentMethod,
       paidAmountEgp: activeChargedPrice,
@@ -5909,11 +5984,13 @@ async function submitOrder(e) {
     const data = await res.json();
     if (!res.ok) {
       alert(data.error || (currentLang === 'en' ? 'Error submitting order.' : 'حدث خطأ أثناء إرسال الطلب'));
-      btn.disabled = false;
+      isPcOrderSubmitting = false;
       renderSubmitButtonText();
+      syncPcSubmitButtonState();
       return;
     }
 
+    isPcOrderSubmitting = false;
     currentOrder = {
       id: data.order.id,
       accessToken: data.order.accessToken,
@@ -5938,8 +6015,9 @@ async function submitOrder(e) {
         ? 'Could not reach server, please try again.'
         : 'تعذر الاتصال بالخادم، حاول مرة أخرى.'
     );
-    btn.disabled = false;
+    isPcOrderSubmitting = false;
     renderSubmitButtonText();
+    syncPcSubmitButtonState();
   }
 }
 
@@ -6212,12 +6290,17 @@ function resetToNewOrder() {
   updateNavbarReturnBtn();
   screenshotDataUrl = '';
   uploadedScreenshotName = '';
-  window.history.replaceState({}, '', '/');
+  isPcOrderSubmitting = false;
+  window.history.replaceState({}, '', '/pc');
   const btn = document.getElementById('submit-btn');
   if (btn) {
-    btn.disabled = false;
     renderSubmitButtonText();
+    syncPcSubmitButtonState();
   }
+  const checkEl = document.getElementById('pc-phone-valid-check');
+  if (checkEl) checkEl.classList.remove('visible');
+  const scrErr = document.getElementById('pc-screenshot-error');
+  if (scrErr) scrErr.style.display = 'none';
   document.getElementById('screenshot-preview').style.display = 'none';
   document.getElementById('upload-label').textContent = I18N[currentLang].uploadLabel;
   if (document.getElementById('cust-discount')) {
