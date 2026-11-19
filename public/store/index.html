@@ -334,6 +334,35 @@
       background: var(--cyan);
       color: #03121a;
     }
+    .tab-brand-svg {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+      display: inline-block;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .filter-tab-btn.active .tab-brand-svg.psn-svg {
+      color: #60a5fa;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.85));
+    }
+    .filter-tab-btn.active .tab-brand-svg.steam-svg {
+      color: var(--cyan);
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.85));
+    }
+    .section-heading-svg {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .section-heading-svg.psn-svg {
+      color: #60a5fa;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.75));
+    }
+    .section-heading-svg.steam-svg {
+      color: var(--cyan);
+      filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.75));
+    }
     .filter-tab-btn.soon-tab.active {
       background: linear-gradient(135deg, rgba(255, 184, 0, 0.16), rgba(0, 240, 255, 0.14));
       border-color: rgba(255, 184, 0, 0.65);
@@ -472,11 +501,11 @@
     }
     .region-flag { font-size: 1.15rem; line-height: 1; }
 
-    /* Product Cards Grid */
+    /* Product Cards Grid & Coded Visual Digital Gift Cards */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
+      gap: 20px;
     }
     .products-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .products-grid.steam-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -486,42 +515,90 @@
       flex-direction: column;
       justify-content: space-between;
       border-radius: 18px;
-      background: linear-gradient(160deg, rgba(15, 22, 36, 0.96) 0%, rgba(8, 12, 20, 0.99) 100%);
-      border: 1.5px solid rgba(30, 44, 70, 0.95);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+      background: linear-gradient(165deg, rgba(16, 22, 34, 0.94) 0%, rgba(8, 11, 18, 0.99) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #27272a;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       overflow: hidden;
-      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
     }
     .product-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(0, 255, 136, 0.78);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 26px rgba(0, 255, 136, 0.22);
+      transform: translateY(-7px);
+      border-color: rgba(59, 130, 246, 0.82);
+      box-shadow:
+        0 22px 46px rgba(0, 0, 0, 0.72),
+        0 0 32px rgba(37, 99, 235, 0.42),
+        0 0 12px rgba(0, 255, 136, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
     }
     .product-card.steam-card:hover {
       border-color: rgba(0, 240, 255, 0.85);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.62), 0 0 28px rgba(0, 240, 255, 0.26);
+      box-shadow:
+        0 22px 46px rgba(0, 0, 0, 0.72),
+        0 0 32px rgba(0, 240, 255, 0.35),
+        0 0 18px rgba(0, 255, 136, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
     }
     .card-visual-banner {
       position: relative;
-      padding: 16px 16px 16px;
-      min-height: 132px;
+      aspect-ratio: 16 / 9;
+      min-height: 176px;
+      padding: 12px 13px 11px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 10px;
       overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background:
-        radial-gradient(circle at 12% 18%, rgba(0, 240, 255, 0.26), transparent 55%),
-        linear-gradient(135deg, #07193a 0%, #092c6b 55%, #061329 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      isolation: isolate;
     }
+    /* PlayStation Coded Card: bg-gradient-to-br from-zinc-950 via-slate-900 to-blue-600 */
+    .card-visual-banner.psn-banner {
+      background:
+        radial-gradient(circle at 50% 44%, rgba(59, 130, 246, 0.38) 0%, transparent 62%),
+        radial-gradient(circle at 88% 92%, rgba(96, 165, 250, 0.28) 0%, transparent 48%),
+        linear-gradient(135deg, #09090b 0%, #0f172a 48%, #2563eb 100%);
+    }
+    /* Steam Wallet Coded Card: bg-gradient-to-br from-neutral-950 via-zinc-900 to-sky-950 */
     .card-visual-banner.steam-banner {
       background:
-        radial-gradient(circle at 86% 18%, rgba(0, 255, 136, 0.22), transparent 52%),
-        radial-gradient(circle at 14% 82%, rgba(0, 240, 255, 0.24), transparent 55%),
-        linear-gradient(135deg, #0b1829 0%, #152b47 52%, #09131f 100%);
+        radial-gradient(circle at 50% 44%, rgba(0, 240, 255, 0.22) 0%, transparent 60%),
+        radial-gradient(circle at 86% 86%, rgba(0, 255, 136, 0.16) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0a0a 0%, #18181b 48%, #082f49 100%);
+    }
+    /* Glossy Holographic Sheen Sweep on Hover */
+    .card-visual-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(118deg, transparent 22%, rgba(255, 255, 255, 0.16) 48%, transparent 72%);
+      transform: translateX(-135%);
+      transition: transform 0.65s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .product-card:hover .card-visual-banner::after {
+      transform: translateX(135%);
+    }
+    /* Subtle Geometric Background Pattern SVG Layer */
+    .card-pattern-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+      transition: opacity 0.28s ease, transform 0.35s ease;
+    }
+    .product-card:hover .card-pattern-svg {
+      opacity: 0.38;
+      transform: scale(1.03);
     }
     .card-discount-row {
+      position: relative;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -536,64 +613,125 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 11px;
+      gap: 4px;
+      padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 900;
       letter-spacing: 0.03em;
       color: #1a0d00;
       background: linear-gradient(110deg, #ff9f00 0%, #ffd740 40%, #fff1a8 52%, #ff9f00 68%, #ff7a00 100%);
       background-size: 220% 100%;
-      border: 1px solid rgba(255, 232, 130, 0.92);
-      box-shadow: 0 0 16px rgba(255, 174, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 232, 130, 0.94);
+      box-shadow: 0 0 16px rgba(255, 174, 0, 0.58), 0 2px 8px rgba(0, 0, 0, 0.5);
       animation: goldDiscountShimmer 3.2s linear infinite;
       white-space: nowrap;
     }
-    .card-visual-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .card-brand-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.48);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #e6f2ff;
-    }
     .card-hot-tag {
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: 999px;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 900;
       background: linear-gradient(90deg, #00ff88, #00f0ff);
       color: #03120b;
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.35);
       white-space: nowrap;
     }
-    .card-value-display {
-      margin-top: 4px;
+    /* Center Official Brand Logo & Bold Wordmark */
+    .card-brand-center {
+      position: relative;
+      z-index: 2;
       display: flex;
-      align-items: baseline;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin: 2px 0;
+      text-align: center;
+    }
+    .card-official-svg {
+      display: block;
+      color: #ffffff;
+      transition: transform 0.28s ease, filter 0.28s ease;
+    }
+    .card-official-svg.psn-official-svg {
+      width: 54px;
+      height: 43px;
+      filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.95)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+    }
+    .product-card:hover .card-official-svg.psn-official-svg {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 18px rgba(96, 165, 250, 1)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+    }
+    .card-official-svg.steam-official-svg {
+      width: 48px;
+      height: 48px;
+      filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.92)) drop-shadow(0 0 22px rgba(0, 255, 136, 0.32));
+    }
+    .product-card:hover .card-official-svg.steam-official-svg {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 18px rgba(0, 240, 255, 1)) drop-shadow(0 0 26px rgba(0, 255, 136, 0.55));
+    }
+    .card-brand-wordmark {
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+      direction: ltr;
+    }
+    .card-brand-wordmark.psn-wordmark {
+      text-shadow: 0 0 14px rgba(59, 130, 246, 0.9), 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+    .card-brand-wordmark.steam-wordmark {
+      color: #eefdff;
+      text-shadow: 0 0 14px rgba(0, 240, 255, 0.85), 0 2px 6px rgba(0, 0, 0, 0.75);
+    }
+    /* Bottom Strip inside Digital Card: Bold Denomination + Region Pill */
+    .card-denom-bar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 8px;
+      padding: 6px 10px;
+      border-radius: 11px;
+      background: rgba(5, 8, 15, 0.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
     .card-value-big {
-      font-size: 1.72rem;
+      font-size: 1.26rem;
       font-weight: 900;
       color: #ffffff;
       direction: ltr;
       letter-spacing: -0.02em;
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+      line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
     }
-    .card-emblem-svg { width: 34px; height: 34px; opacity: 0.92; flex-shrink: 0; }
+    .card-region-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #e6f3ff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 68%;
+    }
+    .steam-card .card-region-chip {
+      border-color: rgba(0, 240, 255, 0.35);
+      color: #c8fbff;
+    }
     .card-body {
       padding: 15px 16px 17px;
       display: flex;
@@ -1133,8 +1271,11 @@
     .discord-neon-btn svg { width: 20px; height: 20px; fill: var(--green); flex-shrink: 0; }
     .discord-neon-btn:hover svg { fill: #03120a; }
 
-    @media (max-width: 1040px) {
-      .products-grid, .products-grid.cols-3, .products-grid.steam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 1120px) {
+      .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 960px) {
+      .products-grid.cols-3, .products-grid.steam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 640px) {
       .navbar { padding: 10px 14px; }
@@ -1142,6 +1283,7 @@
       .nav-actions { width: 100%; justify-content: space-between; gap: 7px; }
       .nav-hub-switch-btn, .nav-btn { font-size: 0.75rem; padding: 6px 10px; }
       .products-grid, .products-grid.cols-3, .products-grid.steam-grid, .locked-games-grid { grid-template-columns: 1fr; }
+      .card-visual-banner { min-height: 192px; padding: 14px 14px 12px; }
       .filter-tabs-wrap { width: 100%; }
       .filter-tab-btn { flex: 1 1 100%; justify-content: center; padding: 10px 12px; font-size: 0.86rem; }
       .region-buttons-group { width: 100%; }
@@ -1198,14 +1340,28 @@
         <span class="trust-pill" data-i18n-html="trust3">💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash</span>
       </div>
 
-      <!-- Clear 3-Tab Bar above Products -->
+      <!-- Clear 3-Tab Bar above Products with Official SVG Icons -->
       <div class="filter-tabs-wrap" id="store-filter-tabs" role="tablist">
         <button type="button" class="filter-tab-btn active" id="tab-btn-psn" data-tab="psn" role="tab" aria-selected="true" onclick="setStoreTab('psn')">
-          <span data-i18n="tabPsn">🎮 PlayStation (PSN)</span>
+          <svg class="tab-brand-svg psn-svg" viewBox="0 0 64 52" fill="currentColor" aria-hidden="true">
+            <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+            <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+            <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
+          </svg>
+          <span data-i18n="tabPsn">PlayStation (PSN)</span>
           <span class="filter-count" id="count-psn">15</span>
         </button>
         <button type="button" class="filter-tab-btn steam-tab" id="tab-btn-steam" data-tab="steam" role="tab" aria-selected="false" onclick="setStoreTab('steam')">
-          <span data-i18n="tabSteam">💻 Steam Wallet (PC)</span>
+          <svg class="tab-brand-svg steam-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4.2"/>
+            <circle cx="42" cy="24" r="9.2" stroke="currentColor" stroke-width="4.2"/>
+            <circle cx="42" cy="24" r="4.2" fill="currentColor"/>
+            <circle cx="24" cy="43" r="6.8" stroke="currentColor" stroke-width="4"/>
+            <circle cx="24" cy="43" r="2.8" fill="currentColor"/>
+            <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="4.2" stroke-linecap="round"/>
+            <path d="M5.5 35.2L21.5 42" stroke="currentColor" stroke-width="5.6" stroke-linecap="round"/>
+          </svg>
+          <span data-i18n="tabSteam">Steam Wallet (PC)</span>
           <span class="filter-count" id="count-steam">5</span>
         </button>
         <button type="button" class="filter-tab-btn soon-tab" id="tab-btn-soon" data-tab="topup-soon" role="tab" aria-selected="false" onclick="setStoreTab('topup-soon')">
@@ -1223,7 +1379,14 @@
     <section class="catalog-section" id="section-psn" aria-labelledby="heading-psn">
       <div class="section-top-bar">
         <div class="section-title-group">
-          <h2 id="heading-psn" data-i18n="psnHeading">🎮 PlayStation Gift Cards (PSN)</h2>
+          <h2 id="heading-psn">
+            <svg class="section-heading-svg psn-svg" viewBox="0 0 64 52" fill="currentColor" aria-hidden="true">
+              <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+              <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+              <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
+            </svg>
+            <span data-i18n="psnHeading">PlayStation Gift Cards (PSN)</span>
+          </h2>
           <p data-i18n="psnSub">Select your PlayStation account region below to view available denominations &amp; exclusive discounts in EGP</p>
         </div>
         <span class="delivery-chip" data-i18n="psnChip">⚡ Digital Code • Instant Delivery</span>
@@ -1244,7 +1407,18 @@
     <section class="catalog-section hidden-section" id="section-steam" aria-labelledby="heading-steam">
       <div class="section-top-bar">
         <div class="section-title-group">
-          <h2 id="heading-steam" data-i18n="steamHeading">💻 Steam Wallet Gift Cards (PC)</h2>
+          <h2 id="heading-steam">
+            <svg class="section-heading-svg steam-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4"/>
+              <circle cx="42" cy="24" r="9.2" stroke="currentColor" stroke-width="4"/>
+              <circle cx="42" cy="24" r="4.2" fill="currentColor"/>
+              <circle cx="24" cy="43" r="6.8" stroke="currentColor" stroke-width="3.8"/>
+              <circle cx="24" cy="43" r="2.8" fill="currentColor"/>
+              <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+              <path d="M5.5 35.2L21.5 42" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+            </svg>
+            <span data-i18n="steamHeading">Steam Wallet Gift Cards (PC)</span>
+          </h2>
           <p data-i18n="steamSub">Official USD Steam Wallet codes compatible with Global, Egypt &amp; MENA Steam accounts at discounted EGP prices</p>
           <span class="eg-micro-hint">شغالة على الحساب المصري والأمريكي • استلام كود فوري</span>
         </div>
@@ -1528,15 +1702,15 @@ const STORE_I18N = {
     trust1: '🔥 <strong>Up to 11% OFF:</strong> Cheaper Than Market Price',
     trust2: '⚡ <strong>Delivery:</strong> Instant Official Digital Code',
     trust3: '💳 <strong>Pay via:</strong> InstaPay &amp; Vodafone Cash',
-    tabPsn: '🎮 PlayStation (PSN)',
-    tabSteam: '💻 Steam Wallet (PC)',
+    tabPsn: 'PlayStation (PSN)',
+    tabSteam: 'Steam Wallet (PC)',
     tabSoon: '🔒 Game Top-Ups',
     soonBadge: 'Coming Soon',
-    psnHeading: '🎮 PlayStation Gift Cards (PSN)',
+    psnHeading: 'PlayStation Gift Cards (PSN)',
     psnSub: 'Select your PlayStation account region below to view available denominations & exclusive discounts in EGP',
     psnChip: '⚡ Digital Code • Instant Delivery',
     regionPrompt: '🌍 Select Account Region:',
-    steamHeading: '💻 Steam Wallet Gift Cards (PC)',
+    steamHeading: 'Steam Wallet Gift Cards (PC)',
     steamSub: 'Official USD Steam Wallet codes compatible with Global, Egypt & MENA Steam accounts at discounted EGP prices',
     steamChip: '⚡ Digital Code • Instant Delivery',
     steamRegionLabel: '🌐 Region: USD (Global / Egypt & MENA)',
@@ -1599,15 +1773,15 @@ const STORE_I18N = {
     trust1: '🔥 <strong>خصم حتى 11%:</strong> أرخص من سعر السوق',
     trust2: '⚡ <strong>التسليم:</strong> كود رقمي أصلي فوري',
     trust3: '💳 <strong>الدفع:</strong> InstaPay &amp; Vodafone Cash',
-    tabPsn: '🎮 بطاقات PlayStation (PSN)',
-    tabSteam: '💻 بطاقات Steam Wallet (PC)',
+    tabPsn: 'بطاقات PlayStation (PSN)',
+    tabSteam: 'بطاقات Steam Wallet (PC)',
     tabSoon: '🔒 شحن الألعاب',
     soonBadge: 'قريباً',
-    psnHeading: '🎮 بطاقات PlayStation (PSN Gift Cards)',
+    psnHeading: 'بطاقات PlayStation (PSN Gift Cards)',
     psnSub: 'اختر ريجين حسابك بالأسفل لتظهر لك الفئات المتاحة بخصومات حصرية بالجنيه المصري',
     psnChip: '⚡ كود رقمي • تسليم فوري',
     regionPrompt: '🌍 اختر ريجين الحساب (Region):',
-    steamHeading: '💻 بطاقات Steam Wallet (PC)',
+    steamHeading: 'بطاقات Steam Wallet (PC)',
     steamSub: 'أكواد Steam Wallet (USD) أصلية 100% شغالة على الحساب المصري والأمريكي والـ MENA بخصم لفترة محدودة',
     steamChip: '⚡ كود رقمي • تسليم فوري',
     steamRegionLabel: '🌐 الريجين: USD (Global / Egypt & MENA)',
@@ -1711,20 +1885,65 @@ function toggleStoreLang() {
   applyStoreLang(storeLang === 'en' ? 'ar' : 'en');
 }
 
-function getPsnEmblemSvg() {
-  return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-    <rect x="3" y="8" width="34" height="24" rx="8" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,112,255,0.2)"/>
-    <circle cx="14" cy="20" r="3" fill="#00ff88"/>
-    <path d="M24 17l4 6M28 17l-4 6" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+function getPsnOfficialLogoSvg() {
+  return `<svg class="card-official-svg psn-official-svg" viewBox="0 0 64 52" fill="currentColor" aria-hidden="true">
+    <path d="M26 5.5L26 44.5L33.5 47L33.5 15.2C33.5 13.4 34.4 12.6 35.9 13.1C37.5 13.6 38.4 15.1 38.4 17.1L38.4 30.2C44.2 32.1 48.2 29.1 48.2 22.1C48.2 14.9 44.7 11.4 36.8 8.7C33.2 7.5 29.5 6.4 26 5.5Z"/>
+    <path d="M23.2 31.8L10.2 36.4C5.4 38.1 4.1 40.9 6.6 43.2C9.0 45.4 14.2 45.8 19.3 44.0L23.2 42.6L23.2 37.8L18.4 39.5C16.0 40.3 14.1 40.0 13.7 39.1C13.3 38.2 14.7 37.2 17.2 36.3L23.2 34.2Z"/>
+    <path d="M36.2 32.7L36.2 37.6L43.4 35.1C46.1 34.1 48.2 34.5 48.7 35.5C49.1 36.5 47.6 37.7 44.8 38.7L36.2 41.8L36.2 46.6L49.4 41.9C54.9 39.9 57.6 36.7 55.6 33.6C53.7 30.6 47.7 29.6 40.8 31.1Z"/>
   </svg>`;
 }
 
-function getSteamEmblemSvg() {
-  return `<svg class="card-emblem-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-    <circle cx="20" cy="20" r="16" stroke="#00ff88" stroke-width="2.2" fill="rgba(0,240,255,0.12)"/>
-    <circle cx="24.5" cy="15.5" r="4.5" stroke="#00f0ff" stroke-width="2.2" fill="rgba(0,255,136,0.2)"/>
-    <circle cx="14.5" cy="24.5" r="3.2" stroke="#ffffff" stroke-width="2.2"/>
-    <path d="M17.2 22.4L21.2 18.4M8 21.5l4.2 1.8" stroke="#00ff88" stroke-width="2.4" stroke-linecap="round"/>
+function getPsnPatternSvg() {
+  return `<svg class="card-pattern-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+    <!-- Triangle Δ (top-left & bottom-right) -->
+    <polygon points="34,34 46,54 22,54" stroke="#93c5fd" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+    <polygon points="274,106 286,126 262,126" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round" opacity="0.65"/>
+    <!-- Circle Ο (top-right & mid-left) -->
+    <circle cx="282" cy="48" r="10" stroke="#60a5fa" stroke-width="2" opacity="0.85"/>
+    <circle cx="48" cy="118" r="8.5" stroke="#ffffff" stroke-width="1.8" opacity="0.55"/>
+    <!-- Cross ╳ (upper-mid-left & lower-right) -->
+    <path d="M74 68l14 14M88 68l-14 14" stroke="#60a5fa" stroke-width="2.1" stroke-linecap="round" opacity="0.72"/>
+    <path d="M232 122l12 12M244 122l-12 12" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" opacity="0.68"/>
+    <!-- Square ▢ (upper-right-mid & lower-left) -->
+    <rect x="226" y="42" width="16" height="16" rx="2" stroke="#ffffff" stroke-width="1.8" opacity="0.6"/>
+    <rect x="78" y="114" width="15" height="15" rx="2" stroke="#60a5fa" stroke-width="2" opacity="0.7"/>
+    <!-- Subtle diagonal accent arcs -->
+    <path d="M-10 148 Q 95 96, 170 185" stroke="rgba(96,165,250,0.4)" stroke-width="1.2"/>
+    <path d="M180 -10 Q 250 75, 335 90" stroke="rgba(147,197,253,0.35)" stroke-width="1.2"/>
+  </svg>`;
+}
+
+function getSteamOfficialLogoSvg() {
+  return `<svg class="card-official-svg steam-official-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3.2" fill="rgba(0,240,255,0.08)"/>
+    <circle cx="42" cy="24" r="9.5" stroke="currentColor" stroke-width="3.6" fill="rgba(0,240,255,0.16)"/>
+    <circle cx="42" cy="24" r="4.2" fill="currentColor"/>
+    <circle cx="24" cy="43" r="6.8" stroke="currentColor" stroke-width="3.4"/>
+    <circle cx="24" cy="43" r="2.8" fill="currentColor"/>
+    <path d="M33.2 27.6L25.6 36.6M40.6 33.4L30.4 41.2" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
+    <path d="M5.2 35.2L21.5 42" stroke="currentColor" stroke-width="5.2" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function getSteamCircuitPatternSvg() {
+  return `<svg class="card-pattern-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+    <!-- Left cyber circuit traces (cyan & neon green) -->
+    <path d="M0 54 H44 L62 72 H92" stroke="#00f0ff" stroke-width="1.5" opacity="0.85"/>
+    <circle cx="94" cy="72" r="3" fill="#00f0ff"/>
+    <path d="M0 112 H36 L52 96 H76" stroke="#00ff88" stroke-width="1.4" opacity="0.78"/>
+    <circle cx="78" cy="96" r="2.8" fill="#00ff88"/>
+    <path d="M22 180 V142 L40 124" stroke="#00f0ff" stroke-width="1.3" opacity="0.65"/>
+    <circle cx="41" cy="123" r="2.5" fill="#00f0ff"/>
+    <!-- Right cyber circuit traces (cyan & neon green) -->
+    <path d="M320 50 H272 L254 68 H226" stroke="#00ff88" stroke-width="1.5" opacity="0.82"/>
+    <circle cx="224" cy="68" r="3" fill="#00ff88"/>
+    <path d="M320 108 H280 L262 90 H236" stroke="#00f0ff" stroke-width="1.5" opacity="0.82"/>
+    <circle cx="234" cy="90" r="2.8" fill="#00f0ff"/>
+    <path d="M292 180 V142 L274 124 H246" stroke="#00ff88" stroke-width="1.3" opacity="0.68"/>
+    <circle cx="244" cy="124" r="2.5" fill="#00ff88"/>
+    <!-- Subtle tech concentric ring behind logo -->
+    <circle cx="160" cy="84" r="54" stroke="#00f0ff" stroke-width="1" stroke-dasharray="5 6" opacity="0.45"/>
+    <circle cx="160" cy="84" r="70" stroke="#00ff88" stroke-width="0.9" stroke-dasharray="3 8" opacity="0.35"/>
   </svg>`;
 }
 
@@ -1754,9 +1973,9 @@ function buildStoreCardHtml(p) {
     : '';
   const tagText = p.tag ? (isAr ? p.tag : (TAGS_EN[p.tag] || p.tag)) : '';
 
-  const brandPillText = isSteam
-    ? `💻 STEAM USD`
-    : `${escapeHtml(p.flag)} PSN ${escapeHtml(p.region)}`;
+  const regionChipText = isSteam
+    ? (isAr ? '🌍 عالمي / مصر USD' : '🌍 Global / Egypt USD')
+    : `${p.flag} ${isAr ? p.regionLabel : `${p.region} (${REGION_NAMES_EN[p.region] || p.region})`}`;
 
   const oldPriceText = isAr
     ? `بدلاً من ${formatPriceEgp(origPrice)}`
@@ -1767,18 +1986,23 @@ function buildStoreCardHtml(p) {
     : `Save ${formatPriceEgp(saveAmt)}`;
 
   return `
-    <article class="product-card ${isSteam ? 'steam-card' : ''}">
-      <div class="card-visual-banner ${isSteam ? 'steam-banner' : ''}">
+    <article class="product-card ${isSteam ? 'steam-card' : 'psn-card'}">
+      <div class="card-visual-banner ${isSteam ? 'steam-banner' : 'psn-banner'}">
+        ${isSteam ? getSteamCircuitPatternSvg() : getPsnPatternSvg()}
+
         <div class="card-discount-row">
           ${discPct > 0 ? `<span class="discount-glow-badge">${escapeHtml(discountBadgeText)}</span>` : '<span></span>'}
           ${tagText ? `<span class="card-hot-tag">${escapeHtml(tagText)}</span>` : ''}
         </div>
-        <div class="card-visual-top">
-          <span class="card-brand-pill">${brandPillText}</span>
+
+        <div class="card-brand-center">
+          ${isSteam ? getSteamOfficialLogoSvg() : getPsnOfficialLogoSvg()}
+          <span class="card-brand-wordmark ${isSteam ? 'steam-wordmark' : 'psn-wordmark'}">${isSteam ? 'STEAM WALLET' : 'PLAYSTATION'}</span>
         </div>
-        <div class="card-value-display">
+
+        <div class="card-denom-bar">
           <span class="card-value-big">${escapeHtml(p.valueLabel)}</span>
-          ${isSteam ? getSteamEmblemSvg() : getPsnEmblemSvg()}
+          <span class="card-region-chip">${escapeHtml(regionChipText)}</span>
         </div>
       </div>
       <div class="card-body">
