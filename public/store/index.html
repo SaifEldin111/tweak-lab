@@ -1437,15 +1437,23 @@
       gap: 7px;
       padding: 6px 14px;
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.75);
+      background: linear-gradient(90deg, rgba(255, 42, 133, 0.25) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(0, 240, 255, 0.25) 100%);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(0, 255, 136, 0.45);
-      color: #00ff88;
+      border: 1px solid rgba(255, 42, 133, 0.6);
+      box-shadow: 0 0 16px rgba(255, 42, 133, 0.25);
       font-size: 0.76rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       text-transform: uppercase;
+    }
+    .gta6-top-badge-text {
+      background: linear-gradient(90deg, #ff6ec7 0%, #ffb86c 50%, #00f0ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 800;
     }
     .gta6-dots-nav {
       display: inline-flex;
@@ -1486,9 +1494,11 @@
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
     }
     .gta6-title .gta6-vice-gradient {
-      background: linear-gradient(90deg, #ff7eb3 0%, #00f0ff 52%, #00ff88 100%);
+      background: linear-gradient(90deg, #ff6ec7 0%, #ffb86c 50%, #00f0ff 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
+      color: transparent;
     }
     .gta6-sub-desc {
       display: block;
@@ -2374,7 +2384,7 @@
 
         <div class="gta6-banner-content">
           <div class="gta6-top-bar">
-            <span class="gta6-top-badge" data-i18n="gta6TopBadge">GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES</span>
+            <span class="gta6-top-badge"><span>🌴</span><span class="gta6-top-badge-text" data-i18n="gta6TopBadge">GTA VI READY — PS5 OFFICIAL DIGITAL BUNDLES</span></span>
             <div class="gta6-dots-nav" role="tablist" aria-label="GTA VI Wallpaper Slides">
               <button type="button" class="gta6-dot active" data-gta-dot="0" aria-label="GTA VI Wallpaper 1" onclick="goToGta6Slide(0)"></button>
               <button type="button" class="gta6-dot" data-gta-dot="1" aria-label="GTA VI Wallpaper 2" onclick="goToGta6Slide(1)"></button>

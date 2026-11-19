@@ -536,9 +536,9 @@
       letter-spacing: 2px;
     }
 
-    /* Smart Infinite Marquee for Verified Buyer Reviews (Homepage) */
+    /* Reviews & Testimonials Section (Always Visible with Summary Bar + Rate Your Experience CTA) */
     .reviews-marquee-section {
-      display: none; /* Hidden strictly while approved reviews < 3 */
+      display: block;
       margin: 10px 0 32px;
       background: linear-gradient(180deg, rgba(11, 18, 30, 0.92), rgba(7, 11, 18, 0.96));
       border: 1px solid rgba(0, 255, 136, 0.35);
@@ -547,6 +547,166 @@
       box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(0, 255, 136, 0.08);
       overflow: hidden;
       position: relative;
+    }
+    .rating-summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #ffffff;
+      font-size: 0.84rem;
+      font-weight: 900;
+      direction: ltr;
+    }
+    .rating-summary-pill .rs-stars {
+      color: #00ff88;
+      font-size: 0.92rem;
+    }
+    .rating-summary-pill .rs-count {
+      color: #94a3b8;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    .rate-exp-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      padding: 7px 15px;
+      border-radius: 999px;
+      background: rgba(0, 255, 136, 0.14);
+      border: 1.5px solid #00ff88;
+      color: #00ff88;
+      font-weight: 900;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.22);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .rate-exp-cta-btn:hover {
+      background: #00ff88;
+      color: #04150c;
+      box-shadow: 0 0 24px rgba(0, 255, 136, 0.45);
+      transform: translateY(-1px);
+    }
+    .reviews-static-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      padding: 0 24px;
+    }
+    .reviews-empty-card {
+      margin: 0 24px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: rgba(7, 11, 20, 0.72);
+      border: 1px dashed rgba(0, 255, 136, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .rate-service-mini-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 18px;
+    }
+    .rate-service-mini-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(0, 255, 136, 0.35);
+      color: #00ff88;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .rate-service-mini-link:hover {
+      background: rgba(0, 255, 136, 0.14);
+      border-color: #00ff88;
+      box-shadow: 0 0 14px rgba(0, 255, 136, 0.25);
+    }
+    .public-rate-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2600;
+      background: rgba(3, 6, 12, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .public-rate-backdrop.open {
+      display: flex;
+    }
+    .public-rate-dialog {
+      position: relative;
+      width: 100%;
+      max-width: 470px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, #0d1422 0%, #070b13 100%);
+      border: 1.5px solid rgba(0, 255, 136, 0.45);
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.78), 0 0 32px rgba(0, 255, 136, 0.16);
+      padding: 24px 22px 22px;
+      color: #f0f6fc;
+    }
+    .public-rate-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      color: #d6e4f7;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .public-rate-close:hover {
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+    .public-stars-picker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      direction: ltr;
+      margin: 6px 0 4px;
+    }
+    .public-star-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      font-size: 1.4rem;
+      color: #475569;
+      cursor: pointer;
+      transition: transform 0.16s ease, color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+    .public-star-btn.active {
+      color: #00ff88;
+      border-color: rgba(0, 255, 136, 0.65);
+      background: rgba(0, 255, 136, 0.12);
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.55);
+    }
+    .public-star-btn:hover {
+      transform: scale(1.08);
     }
     .reviews-marquee-header {
       display: flex;
@@ -3745,22 +3905,36 @@
          SECTION 2: نتائج وتجارب اللاعبين (VERIFIED FPS REVIEWS MARQUEE)
          Auto-hidden when approved reviews < 3; auto-shown when >= 3
          ========================================================================== -->
-    <section id="verified-reviews-marquee-section" class="reviews-marquee-section funnel-section" aria-label="Verified Buyer Reviews">
+    <section id="verified-reviews-marquee-section" class="reviews-marquee-section funnel-section" aria-label="Gamer Reviews & Ratings">
       <div class="reviews-marquee-header">
         <div class="reviews-marquee-title">
           <span style="color:var(--green);">★</span>
-          <span data-i18n="reviewsSectionHeading">نتائج وتجارب اللاعبين (Verified Buyers)</span>
+          <span data-i18n="reviewsSectionHeading">Gamer Reviews &amp; FPS Results</span>
+          <span class="rating-summary-pill" id="pc-rating-summary-pill">
+            <span id="pc-rating-summary-val">4.9</span>
+            <span style="color:#94a3b8;">/ 5</span>
+            <span class="rs-stars">★</span>
+            <span class="rs-count" id="pc-rating-summary-count">Verified Lab</span>
+          </span>
         </div>
         <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <button id="nav-rate-now-btn" type="button" class="btn" onclick="openReviewFromNavbar()" style="display:inline-flex; font-size:0.8rem; padding:6px 14px; border-radius:999px; background:linear-gradient(90deg, rgba(0,255,136,0.22), rgba(0,240,255,0.16)); border:1.5px solid var(--green); color:var(--green); font-weight:900; box-shadow:0 0 16px rgba(0,255,136,0.28); cursor:pointer; align-items:center; gap:6px;">
+          <button id="nav-rate-now-btn" type="button" class="rate-exp-cta-btn" onclick="openPublicRateModal()">
             <span>★</span>
             <span data-i18n="navRateNowBtn">Rate Your Experience</span>
           </button>
-          <span class="rev-verified-badge" style="font-size:0.78rem; padding:4px 11px;">100% Verified Buyer Reviews ✓</span>
+          <span class="rev-verified-badge" style="font-size:0.78rem; padding:4px 11px;">100% Real Gamer Feedback ✓</span>
         </div>
       </div>
-      <div class="reviews-marquee-viewport">
+      <div class="reviews-marquee-viewport" id="reviews-marquee-viewport" style="display:none;">
         <div class="reviews-marquee-track" id="verified-reviews-marquee-track"></div>
+      </div>
+      <div class="reviews-static-grid" id="reviews-static-grid" style="display:none;"></div>
+      <div class="reviews-empty-card" id="reviews-empty-card">
+        <div>
+          <div style="font-weight:900; color:#fff; font-size:0.96rem; margin-bottom:4px;">Tested TweakLab on your PC? Share your FPS boost!</div>
+          <div dir="rtl" style="color:#94a3b8; font-size:0.84rem; font-weight:600;">جرّبت حزمة TweakLab أو النسخة المجانية؟ سيب تقييمك ورأيك عشان تساعد باقي الجيمرز.</div>
+        </div>
+        <button type="button" class="rate-exp-cta-btn" onclick="openPublicRateModal()">★ Rate Your Experience</button>
       </div>
     </section>
 
@@ -3878,6 +4052,13 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="rate-service-mini-wrap">
+        <button type="button" class="rate-service-mini-link" onclick="openPublicRateModal()">
+          <span>★</span>
+          <span>Rate Service</span>
+        </button>
       </div>
     </section>
 
@@ -4413,6 +4594,62 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- INTERACTIVE PUBLIC RATING MODAL (★ RATE YOUR EXPERIENCE) -->
+  <div class="public-rate-backdrop" id="public-rate-modal" role="dialog" aria-modal="true" aria-labelledby="public-rate-title" onclick="if(event.target===this) closePublicRateModal()">
+    <div class="public-rate-dialog">
+      <button type="button" class="public-rate-close" onclick="closePublicRateModal()" aria-label="Close">✕</button>
+      <div style="display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:999px; background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.42); color:#00ff88; font-size:0.74rem; font-weight:800; margin-bottom:10px;">
+        <span>★</span>
+        <span>TWEAKLAB EXPERIENCE RATING</span>
+      </div>
+      <h3 id="public-rate-title" style="font-size:1.25rem; font-weight:900; color:#fff; margin-bottom:4px;">Rate Your Experience</h3>
+      <p dir="rtl" style="font-size:0.86rem; color:#94a3b8; line-height:1.6; margin-bottom:14px;">
+        اختار تقييمك بالنجوم واكتب اسمك ورأيك بكل صراحة عشان نطور الخدمة ونفيد باقي الجيمرز.
+      </p>
+
+      <form id="public-rate-form" onsubmit="submitPublicRating(event)" novalidate>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label style="display:block; font-size:0.84rem; font-weight:800; color:#e2e8f0; margin-bottom:4px;">Your Rating (1 - 5 Stars):</label>
+          <div class="public-stars-picker" id="public-stars-picker" role="radiogroup" aria-label="Star Rating">
+            <button type="button" class="public-star-btn active" data-star="1" onclick="setPublicRatingStars(1)" aria-label="1 Star">★</button>
+            <button type="button" class="public-star-btn active" data-star="2" onclick="setPublicRatingStars(2)" aria-label="2 Stars">★</button>
+            <button type="button" class="public-star-btn active" data-star="3" onclick="setPublicRatingStars(3)" aria-label="3 Stars">★</button>
+            <button type="button" class="public-star-btn active" data-star="4" onclick="setPublicRatingStars(4)" aria-label="4 Stars">★</button>
+            <button type="button" class="public-star-btn active" data-star="5" onclick="setPublicRatingStars(5)" aria-label="5 Stars">★</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label for="public-rate-name" style="display:block; font-size:0.84rem; font-weight:800; color:#e2e8f0; margin-bottom:5px;">Your Name / Nickname:</label>
+          <input type="text" id="public-rate-name" class="input-field" placeholder="e.g. Ahmed / Omar" maxlength="60" required />
+        </div>
+
+        <div class="form-group" style="margin-bottom:12px;">
+          <label for="public-rate-game" style="display:block; font-size:0.84rem; font-weight:800; color:#e2e8f0; margin-bottom:5px;">Main Game / Pack:</label>
+          <select id="public-rate-game" class="input-field">
+            <option value="PC Optimization">PC Optimization (General)</option>
+            <option value="Valorant">Valorant</option>
+            <option value="Fortnite">Fortnite</option>
+            <option value="CS2">CS2</option>
+            <option value="Warzone">Warzone</option>
+            <option value="GTA V">GTA V</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px;">
+          <label for="public-rate-comment" style="display:block; font-size:0.84rem; font-weight:800; color:#e2e8f0; margin-bottom:5px;">Your Review:</label>
+          <textarea id="public-rate-comment" class="input-field" rows="3" placeholder="اكتب رأيك وتجربتك مع TweakLab..." maxlength="400" style="resize:vertical; min-height:84px;" required></textarea>
+        </div>
+
+        <div id="public-rate-feedback" style="display:none; font-size:0.83rem; font-weight:800; margin-bottom:12px; padding:9px 12px; border-radius:10px;"></div>
+
+        <button type="submit" id="public-rate-submit-btn" class="hero-btn-primary" style="width:100%; padding:12px 16px; font-size:0.95rem;">
+          ★ Submit Your Rating
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- SITE FOOTER WITH OFFICIAL COMMUNITY LINKS (DISCORD, YOUTUBE, INSTAGRAM) & GUIDES -->
@@ -5573,14 +5810,145 @@ function renderApprovedDelivery(orderObj, options = {}) {
 }
 
 function openReviewFromNavbar() {
-  const candidate = getActiveReviewCandidateAfterHour() || currentOrder || loadReviewSession7Days();
-  if (!candidate || !candidate.id) {
-    promptRestoreOrder();
+  openPublicRateModal();
+}
+
+let publicRatingStars = 5;
+
+function setPublicRatingStars(n) {
+  publicRatingStars = Math.max(1, Math.min(5, Number(n) || 5));
+  document.querySelectorAll('#public-stars-picker .public-star-btn').forEach((btn) => {
+    const val = Number(btn.getAttribute('data-star') || 0);
+    btn.classList.toggle('active', val <= publicRatingStars);
+  });
+}
+
+function openPublicRateModal() {
+  const modal = document.getElementById('public-rate-modal');
+  const fb = document.getElementById('public-rate-feedback');
+  const btn = document.getElementById('public-rate-submit-btn');
+  if (fb) fb.style.display = 'none';
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = '★ Submit Your Rating';
+  }
+  setPublicRatingStars(5);
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      const nameInput = document.getElementById('public-rate-name');
+      if (nameInput) nameInput.focus();
+    }, 60);
+  }
+}
+
+function closePublicRateModal() {
+  const modal = document.getElementById('public-rate-modal');
+  if (modal) modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function submitPublicRating(e) {
+  e.preventDefault();
+  const nameEl = document.getElementById('public-rate-name');
+  const gameEl = document.getElementById('public-rate-game');
+  const commentEl = document.getElementById('public-rate-comment');
+  const fb = document.getElementById('public-rate-feedback');
+  const btn = document.getElementById('public-rate-submit-btn');
+
+  const customerName = (nameEl ? nameEl.value : '').trim();
+  const game = gameEl ? gameEl.value : 'PC Optimization';
+  const comment = (commentEl ? commentEl.value : '').trim();
+
+  if (customerName.length < 2) {
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = 'rgba(255, 107, 53, 0.14)';
+      fb.style.border = '1px solid rgba(255, 107, 53, 0.5)';
+      fb.style.color = '#ff8a5b';
+      fb.textContent = '⚠️ Please enter your name (at least 2 letters).';
+    }
+    if (nameEl) nameEl.focus();
     return;
   }
-  currentOrder = candidate;
-  renderApprovedDelivery(currentOrder, { scrollToReview: true });
+
+  if (comment.length < 3) {
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = 'rgba(255, 107, 53, 0.14)';
+      fb.style.border = '1px solid rgba(255, 107, 53, 0.5)';
+      fb.style.color = '#ff8a5b';
+      fb.textContent = '⚠️ Please write a short comment about your experience.';
+    }
+    if (commentEl) commentEl.focus();
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ Submitting...';
+  }
+
+  try {
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'public',
+        customerName,
+        game,
+        rating: publicRatingStars,
+        comment
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = 'rgba(255, 71, 87, 0.14)';
+        fb.style.border = '1px solid rgba(255, 71, 87, 0.5)';
+        fb.style.color = '#ff6b78';
+        fb.textContent = data.error || 'Could not submit rating. Please try again.';
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '★ Submit Your Rating';
+      }
+      return;
+    }
+
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = 'rgba(0, 255, 136, 0.14)';
+      fb.style.border = '1px solid rgba(0, 255, 136, 0.5)';
+      fb.style.color = '#00ff88';
+      fb.textContent = '✅ Thank you! Your rating has been published live.';
+    }
+    if (nameEl) nameEl.value = '';
+    if (commentEl) commentEl.value = '';
+    await fetchVerifiedReviews();
+    setTimeout(() => {
+      closePublicRateModal();
+    }, 1100);
+  } catch (err) {
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = 'rgba(255, 71, 87, 0.14)';
+      fb.style.border = '1px solid rgba(255, 71, 87, 0.5)';
+      fb.style.color = '#ff6b78';
+      fb.textContent = '⚠️ Connection error. Please try again.';
+    }
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '★ Submit Your Rating';
+    }
+  }
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closePublicRateModal();
+});
 
 function returnToCurrentOrder() {
   loadSavedOrderSession();
@@ -6743,18 +7111,20 @@ async function submitVerifiedReview(e) {
 function buildReviewCardHtml(r) {
   const starsCount = Math.max(1, Math.min(5, Number(r.rating) || 5));
   const starsStr = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
-  const bFps = Number(r.beforeFps) || 90;
-  const aFps = Number(r.afterFps) || 210;
+  const bFps = Number(r.beforeFps) || 0;
+  const aFps = Number(r.afterFps) || 0;
+  const badgeText = r.verifiedBuyer ? 'Verified Buyer ✓' : 'Gamer Review ✓';
+  const fpsTag = (bFps > 0 && aFps > 0) ? `<span class="rev-fps-badge">${bFps} FPS -> ${aFps} FPS</span>` : '';
   return `
     <div class="review-marquee-card">
       <div>
         <div class="rev-card-top">
           <span class="rev-buyer-name">${escapeHtml(r.customerName)}</span>
-          <span class="rev-verified-badge">Verified Buyer ✓</span>
+          <span class="rev-verified-badge">${badgeText}</span>
         </div>
         <div class="rev-meta-row" style="margin-top:8px;">
-          <span class="rev-game-tag">${escapeHtml(r.game || 'Fortnite')}</span>
-          <span class="rev-fps-badge">${bFps} FPS -> ${aFps} FPS</span>
+          <span class="rev-game-tag">${escapeHtml(r.game || 'PC Optimization')}</span>
+          ${fpsTag}
         </div>
         <div class="rev-stars-row" style="margin-top:7px;">${starsStr}</div>
         <p class="rev-comment-text" style="margin-top:6px;">"${escapeHtml(r.comment)}"</p>
@@ -6763,25 +7133,50 @@ function buildReviewCardHtml(r) {
   `;
 }
 
-function renderVerifiedReviewsMarquee(reviews) {
+function renderVerifiedReviewsMarquee(reviews, averageRating) {
   const sectionEl = document.getElementById('verified-reviews-marquee-section');
+  const viewportEl = document.getElementById('reviews-marquee-viewport');
   const trackEl = document.getElementById('verified-reviews-marquee-track');
-  if (!sectionEl || !trackEl) return;
+  const gridEl = document.getElementById('reviews-static-grid');
+  const emptyEl = document.getElementById('reviews-empty-card');
+  const avgValEl = document.getElementById('pc-rating-summary-val');
+  const countEl = document.getElementById('pc-rating-summary-count');
+  if (!sectionEl) return;
 
   const approved = Array.isArray(reviews) ? reviews.filter((r) => !r.status || r.status === 'approved') : [];
+  sectionEl.style.display = 'block';
 
-  // Strict condition: stay completely hidden while approved reviews < 3; auto-show when >= 3
-  if (approved.length < 3) {
-    sectionEl.style.display = 'none';
-    trackEl.innerHTML = '';
+  const computedAvg = approved.length > 0
+    ? Number(averageRating || (approved.reduce((s, r) => s + Math.max(1, Math.min(5, Number(r.rating) || 5)), 0) / approved.length)).toFixed(1)
+    : '4.9';
+  if (avgValEl) avgValEl.textContent = computedAvg;
+  if (countEl) countEl.textContent = approved.length > 0 ? `(${approved.length} ${approved.length === 1 ? 'Review' : 'Reviews'})` : 'Verified Lab';
+
+  if (approved.length === 0) {
+    if (viewportEl) viewportEl.style.display = 'none';
+    if (gridEl) { gridEl.style.display = 'none'; gridEl.innerHTML = ''; }
+    if (emptyEl) emptyEl.style.display = 'flex';
     return;
   }
 
-  sectionEl.style.display = 'block';
-  // Repeat list enough times so the seamless -50% infinite loop fills wide screens smoothly
-  const baseBatch = approved.length < 5 ? [...approved, ...approved] : approved;
-  const doubledBatch = [...baseBatch, ...baseBatch];
-  trackEl.innerHTML = doubledBatch.map(buildReviewCardHtml).join('');
+  if (emptyEl) emptyEl.style.display = 'none';
+
+  if (approved.length < 3) {
+    if (viewportEl) viewportEl.style.display = 'none';
+    if (gridEl) {
+      gridEl.style.display = 'grid';
+      gridEl.innerHTML = approved.map(buildReviewCardHtml).join('');
+    }
+    return;
+  }
+
+  if (gridEl) { gridEl.style.display = 'none'; gridEl.innerHTML = ''; }
+  if (viewportEl) viewportEl.style.display = 'block';
+  if (trackEl) {
+    const baseBatch = approved.length < 5 ? [...approved, ...approved] : approved;
+    const doubledBatch = [...baseBatch, ...baseBatch];
+    trackEl.innerHTML = doubledBatch.map(buildReviewCardHtml).join('');
+  }
 }
 
 async function fetchVerifiedReviews() {
@@ -6790,7 +7185,7 @@ async function fetchVerifiedReviews() {
     if (res.ok) {
       const data = await res.json();
       if (data && Array.isArray(data.reviews)) {
-        renderVerifiedReviewsMarquee(data.reviews);
+        renderVerifiedReviewsMarquee(data.reviews, data.averageRating);
       }
     }
   } catch (e) {}

@@ -106,11 +106,11 @@
     .gta6-ambient-slides {
       position: absolute;
       inset: 0;
-      opacity: 0.15;
+      opacity: 0.65;
     }
     @media (min-width: 768px) {
       .gta6-ambient-slides {
-        opacity: 0.25;
+        opacity: 0.72;
       }
     }
     .gta6-ambient-slide {
@@ -130,18 +130,12 @@
       object-fit: cover;
       object-position: center center;
       display: block;
-      filter: blur(5px);
-      -webkit-filter: blur(5px);
-      transform: translate3d(0, 0, 0) scale(1.05);
+      filter: none;
+      -webkit-filter: none;
+      transform: translate3d(0, 0, 0) scale(1.02);
       will-change: transform;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-    }
-    @media (min-width: 768px) {
-      .gta6-ambient-slide img {
-        filter: blur(7px);
-        -webkit-filter: blur(7px);
-      }
     }
     .gta6-ambient-slide.active img,
     .gta6-ambient-slide.leaving img {
@@ -149,24 +143,22 @@
     }
     @keyframes gta6KenBurnsSlow {
       0% {
-        transform: translate3d(0, 0, 0) scale(1.05);
+        transform: translate3d(0, 0, 0) scale(1.02);
       }
       100% {
-        transform: translate3d(0, 0, 0) scale(1.11);
+        transform: translate3d(0, 0, 0) scale(1.08);
       }
     }
     .gta6-ambient-green-mask {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background:
-        radial-gradient(ellipse at 84% 16%, rgba(0, 255, 136, 0.15) 0%, transparent 56%),
-        linear-gradient(
-          to top right,
-          rgba(0, 0, 0, 0.78) 0%,
-          rgba(9, 9, 11, 0.52) 50%,
-          rgba(0, 255, 136, 0.15) 100%
-        );
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.25) 50%,
+        rgba(0, 0, 0, 0.65) 100%
+      );
     }
     @media (prefers-reduced-motion: reduce) {
       .gta6-ambient-slide.active img,
@@ -340,39 +332,39 @@
       text-align: start;
       padding: 34px 30px 30px;
       border-radius: 24px;
-      background: linear-gradient(155deg, rgba(15, 23, 38, 0.86) 0%, rgba(8, 12, 22, 0.94) 100%);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1.5px solid rgba(0, 255, 136, 0.32);
-      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 255, 136, 0.08);
+      background: rgba(9, 9, 11, 0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       text-decoration: none;
       color: #fff;
       overflow: hidden;
-      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.26s ease, box-shadow 0.26s ease;
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
     }
     .portal-card::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 85% 15%, rgba(0, 255, 136, 0.16), transparent 55%);
+      background: radial-gradient(circle at 85% 15%, rgba(0, 255, 136, 0.10), transparent 55%);
       pointer-events: none;
       transition: opacity 0.26s ease;
     }
     .portal-card:hover {
       transform: translateY(-7px);
-      border-color: var(--green);
-      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.7), 0 0 38px rgba(0, 255, 136, 0.32);
+      border-color: #00ff88;
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.65), 0 0 38px rgba(0, 255, 136, 0.36);
     }
     .portal-card.store-card {
-      border-color: rgba(0, 240, 255, 0.36);
-      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 240, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     .portal-card.store-card::before {
-      background: radial-gradient(circle at 85% 15%, rgba(0, 240, 255, 0.18), transparent 55%);
+      background: radial-gradient(circle at 85% 15%, rgba(0, 240, 255, 0.12), transparent 55%);
     }
     .portal-card.store-card:hover {
-      border-color: var(--cyan);
-      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 240, 255, 0.34);
+      border-color: #00ff88;
+      box-shadow: 0 26px 65px rgba(0, 0, 0, 0.65), 0 0 40px rgba(0, 255, 136, 0.36);
     }
     .portal-card-content {
       position: relative;
@@ -428,17 +420,25 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      padding: 2px 10px;
-      border-radius: 6px;
+      padding: 3px 11px;
+      border-radius: 999px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.04em;
-      color: #00ff88;
-      background: rgba(0, 0, 0, 0.75);
+      background: linear-gradient(90deg, rgba(255, 42, 133, 0.25) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(0, 240, 255, 0.25) 100%);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(0, 255, 136, 0.4);
+      border: 1px solid rgba(255, 42, 133, 0.6);
+      box-shadow: 0 0 14px rgba(255, 42, 133, 0.24);
       white-space: nowrap;
+    }
+    .portal-gta-live-text {
+      background: linear-gradient(90deg, #ff6ec7 0%, #ffb86c 50%, #00f0ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 800;
     }
     .portal-card-title {
       font-size: clamp(1.42rem, 2.5vw, 1.82rem);
@@ -586,11 +586,16 @@
       gap: 12px;
       padding: 8px 14px;
       border-radius: 999px;
-      background: linear-gradient(145deg, rgba(14, 21, 35, 0.86), rgba(7, 11, 20, 0.94));
+      background: rgba(9, 9, 11, 0.35);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(0, 255, 136, 0.28);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.52), 0 0 18px rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+    .portal-social-dock:hover {
+      border-color: rgba(0, 255, 136, 0.65);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 255, 136, 0.25);
     }
     .social-icon-link {
       position: relative;
@@ -711,13 +716,14 @@
       }
       .portal-card {
         padding: 24px 20px 22px;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        background: linear-gradient(155deg, rgba(14, 22, 36, 0.97) 0%, rgba(8, 12, 22, 0.99) 100%);
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+        background: rgba(9, 9, 11, 0.40);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
       }
       .portal-card.store-card {
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
       }
       .portal-main {
         padding: 24px 14px 32px;
@@ -727,10 +733,11 @@
         margin-bottom: 24px;
       }
       .portal-social-dock {
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        background: rgba(12, 18, 30, 0.96);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+        background: rgba(9, 9, 11, 0.40);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42);
       }
     }
     @media (max-width: 640px) {
@@ -844,7 +851,7 @@
             <div class="portal-card-top">
               <div class="portal-icon-box" aria-hidden="true">🎮</div>
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <span class="portal-gta-live-badge" data-i18n="storeGtaBadge">🌴 GTA VI Bundles Live</span>
+                <span class="portal-gta-live-badge"><span>🌴</span><span class="portal-gta-live-text" data-i18n="storeGtaBadge">GTA VI Bundles Live</span></span>
                 <span class="portal-card-tag" data-i18n="storeTag">PSN &amp; STEAM • UP TO 12% OFF</span>
               </div>
             </div>
@@ -941,7 +948,7 @@ const PORTAL_I18N = {
     pcFeat2: '🆓 Free Lite Trial',
     pcFeat3: '🛡️ Zero Ban Risk',
     pcCta: 'Enter PC Lab ⚡',
-    storeGtaBadge: '🌴 GTA VI Bundles Live',
+    storeGtaBadge: 'GTA VI Bundles Live',
     storeTag: 'PSN & STEAM • UP TO 12% OFF',
     storeTitle: 'Digital Gaming Store',
     storeDesc: 'بطاقات شحن رقمية رسمية لبلايستيشن وستيم، تقدر تشحن بيها رصيد حسابك وتشتري ألعابك وإضافاتك بسهولة.',

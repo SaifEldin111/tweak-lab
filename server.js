@@ -1101,12 +1101,16 @@ async function handleRequest(req, res) {
       });
     }
 
-    // 1b. Public Verified Reviews API (GET approved reviews / POST new verified buyer review)
+    // 1b. Public Verified & Community Reviews API (GET approved reviews / POST new review)
     if (req.method === 'GET' && pathname === '/api/reviews') {
       const approvedReviews = loadReviews().filter((r) => r.status === 'approved');
+      const avg = approvedReviews.length > 0
+        ? Number((approvedReviews.reduce((s, r) => s + Math.max(1, Math.min(5, Number(r.rating) || 5)), 0) / approvedReviews.length).toFixed(1))
+        : 4.9;
       return sendJson(res, 200, {
         ok: true,
         count: approvedReviews.length,
+        averageRating: avg,
         showMarquee: approvedReviews.length >= 3,
         reviews: approvedReviews
       });
@@ -1115,66 +1119,77 @@ async function handleRequest(req, res) {
     if (req.method === 'POST' && pathname === '/api/reviews') {
       await syncFromCloudDb(true);
       const body = await readJsonBody(req);
-      const { orderId, token, sig, customerName, game, beforeFps, afterFps, rating, comment } = body || {};
+      const { mode, orderId, token, sig, customerName, game, beforeFps, afterFps, rating, comment } = body || {};
 
       const cleanOrderId = String(orderId || '').trim().toUpperCase();
+      const isPublicMode = mode === 'public' || !cleanOrderId;
       const cleanToken = String(token || '').trim();
       const cleanSig = String(sig || '').trim();
       const settings = loadSettings();
-      const expectedSig = cleanOrderId ? computeOrderSignature(cleanOrderId, settings.adminPin) : '';
-      const hasValidSig = Boolean(cleanOrderId && cleanSig && cleanSig === expectedSig);
+      const existingReviews = loadReviews();
 
-      const orders = loadOrders();
-      const order = orders.find((o) => String(o.id).toUpperCase() === cleanOrderId && (o.accessToken === cleanToken || hasValidSig || o.accessToken === 'RESTORED_FROM_TELEGRAM'));
-      const isVerifiedOrder = (order && (order.status === 'approved' || order.status === 'expired')) || hasValidSig;
+      let order = null;
+      let isVerifiedOrder = false;
 
-      if (!isVerifiedOrder) {
-        return sendJson(res, 403, { error: 'إضافة التقييم متاحة فقط للمشترين المؤكدين بعد الموافقة على الطلب.' });
-      }
+      if (!isPublicMode) {
+        const expectedSig = cleanOrderId ? computeOrderSignature(cleanOrderId, settings.adminPin) : '';
+        const hasValidSig = Boolean(cleanOrderId && cleanSig && cleanSig === expectedSig);
+        const orders = loadOrders();
+        order = orders.find((o) => String(o.id).toUpperCase() === cleanOrderId && (o.accessToken === cleanToken || hasValidSig || o.accessToken === 'RESTORED_FROM_TELEGRAM'));
+        isVerifiedOrder = (order && (order.status === 'approved' || order.status === 'expired')) || hasValidSig;
 
-      // Check 7-day review expiration window
-      const nowMs = Date.now();
-      if (order) {
-        const baseMs = order.firstAccessedAt
-          ? new Date(order.firstAccessedAt).getTime()
-          : (order.updatedAt ? new Date(order.updatedAt).getTime() : new Date(order.createdAt).getTime());
-        const revExpMs = order.reviewExpiresAt ? new Date(order.reviewExpiresAt).getTime() : (baseMs + REVIEW_WINDOW_MS);
-        if (nowMs > revExpMs) {
-          return sendJson(res, 410, { error: 'انتهت مهلة إرسال التقييم لهذا الطلب (7 أيام).' });
+        if (!isVerifiedOrder) {
+          return sendJson(res, 403, { error: 'إضافة التقييم الموثق متاحة فقط للمشترين بعد الموافقة على الطلب.' });
+        }
+
+        // Check 7-day review expiration window
+        const nowMs = Date.now();
+        if (order) {
+          const baseMs = order.firstAccessedAt
+            ? new Date(order.firstAccessedAt).getTime()
+            : (order.updatedAt ? new Date(order.updatedAt).getTime() : new Date(order.createdAt).getTime());
+          const revExpMs = order.reviewExpiresAt ? new Date(order.reviewExpiresAt).getTime() : (baseMs + REVIEW_WINDOW_MS);
+          if (nowMs > revExpMs) {
+            return sendJson(res, 410, { error: 'انتهت مهلة إرسال التقييم لهذا الطلب (7 أيام).' });
+          }
+        }
+
+        if ((order && order.reviewSubmitted) || existingReviews.some((r) => String(r.orderId || '').toUpperCase() === cleanOrderId)) {
+          return sendJson(res, 200, {
+            ok: true,
+            alreadyReviewed: true,
+            rewardCode: 'FRIEND20'
+          });
         }
       }
 
-      const existingReviews = loadReviews();
-      if ((order && order.reviewSubmitted) || existingReviews.some((r) => String(r.orderId || '').toUpperCase() === cleanOrderId)) {
-        return sendJson(res, 200, {
-          ok: true,
-          alreadyReviewed: true,
-          rewardCode: 'FRIEND20'
-        });
+      const cleanName = String(customerName || (order && order.customerName) || '').trim().slice(0, 60);
+      const cleanComment = String(comment || '').trim().slice(0, 400);
+      if (isPublicMode && cleanName.length < 2) {
+        return sendJson(res, 400, { error: 'من فضلك اكتب اسمك (حرفين على الأقل).' });
       }
-
-      if (!comment || !String(comment).trim()) {
+      if (!cleanComment || cleanComment.length < 3) {
         return sendJson(res, 400, { error: 'يرجى كتابة تعليق قصير عن تجربتك.' });
       }
 
-      const allowedGames = ['Fortnite', 'Valorant', 'Warzone', 'CS2', 'Other'];
-      const chosenGame = allowedGames.includes(game) ? game : 'Other';
-      const bFps = Math.max(1, Math.min(2000, Math.round(Number(beforeFps) || 90)));
-      const aFps = Math.max(1, Math.min(3000, Math.round(Number(afterFps) || 210)));
+      const allowedGames = ['Fortnite', 'Valorant', 'Warzone', 'CS2', 'GTA V', 'PC Optimization', 'Other'];
+      const chosenGame = allowedGames.includes(game) ? game : 'PC Optimization';
+      const bFps = beforeFps ? Math.max(1, Math.min(2000, Math.round(Number(beforeFps)))) : 0;
+      const aFps = afterFps ? Math.max(1, Math.min(3000, Math.round(Number(afterFps)))) : 0;
       const stars = Math.max(1, Math.min(5, Math.round(Number(rating) || 5)));
 
       const newReview = {
         id: 'RV-' + Math.floor(100000 + Math.random() * 900000),
-        orderId: cleanOrderId || 'VERIFIED',
-        customerName: String(customerName || (order && order.customerName) || 'Gamer').trim().slice(0, 60),
+        orderId: isPublicMode ? 'COMMUNITY' : (cleanOrderId || 'VERIFIED'),
+        customerName: cleanName || 'Gamer',
         game: chosenGame,
-        beforeFps: bFps,
-        afterFps: aFps,
+        beforeFps: bFps || (isPublicMode ? 0 : 90),
+        afterFps: aFps || (isPublicMode ? 0 : 210),
         rating: stars,
-        comment: String(comment).trim().slice(0, 400),
-        verifiedBuyer: true,
-        status: 'pending',
-        rewardCode: 'FRIEND20',
+        comment: cleanComment,
+        verifiedBuyer: !isPublicMode,
+        status: isPublicMode ? 'approved' : 'pending',
+        rewardCode: isPublicMode ? '' : 'FRIEND20',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1185,9 +1200,13 @@ async function handleRequest(req, res) {
       await saveReviews(reviews);
 
       if (order) {
-        order.reviewSubmitted = true;
-        order.updatedAt = new Date().toISOString();
-        await saveOrders(orders);
+        const orders = loadOrders();
+        const target = orders.find((o) => String(o.id).toUpperCase() === cleanOrderId);
+        if (target) {
+          target.reviewSubmitted = true;
+          target.updatedAt = new Date().toISOString();
+          await saveOrders(orders);
+        }
       }
 
       // Notify Admin on Telegram (non-blocking)
@@ -1199,22 +1218,29 @@ async function handleRequest(req, res) {
           parse_mode: 'HTML',
           disable_web_page_preview: true,
           text:
-            `🌟 <b>تقييم جديد (Verified Review) بانتظار موافقتك!</b>\n` +
+            `🌟 <b>${isPublicMode ? 'تقييم جديد من صفحة PC Lab!' : 'تقييم جديد (Verified Review) بانتظار موافقتك!'}</b>\n` +
             `━━━━━━━━━━━━━━━━━━\n` +
             `👤 <b>العميل:</b> ${escapeTelegramHtml(newReview.customerName)} (<code>#${escapeTelegramHtml(newReview.orderId)}</code>)\n` +
-            `🎮 <b>اللعبة:</b> <b>${escapeTelegramHtml(newReview.game)}</b>\n` +
-            `🚀 <b>الفريمات:</b> <code>${newReview.beforeFps} FPS ➔ ${newReview.afterFps} FPS</code>\n` +
+            `🎮 <b>القسم/اللعبة:</b> <b>${escapeTelegramHtml(newReview.game)}</b>\n` +
+            (newReview.beforeFps && newReview.afterFps ? `🚀 <b>الفريمات:</b> <code>${newReview.beforeFps} FPS ➔ ${newReview.afterFps} FPS</code>\n` : '') +
             `⭐ <b>التقييم:</b> ${starStr} (${newReview.rating}/5)\n` +
             `💬 <b>التعليق:</b> ${escapeTelegramHtml(newReview.comment)}\n` +
             `━━━━━━━━━━━━━━━━━━\n` +
-            `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">افتح لوحة الأدمن (/admin) للضغط على Approve أو Delete</a>`
+            `🖥️ <a href="${escapeTelegramHtml(hostUrl)}/admin">افتح لوحة الأدمن (/admin) لإدارة التقييمات</a>`
         }).catch(() => {});
       }
+
+      const approvedNow = reviews.filter((r) => r.status === 'approved');
+      const avgNow = approvedNow.length > 0
+        ? Number((approvedNow.reduce((s, r) => s + Math.max(1, Math.min(5, Number(r.rating) || 5)), 0) / approvedNow.length).toFixed(1))
+        : 4.9;
 
       return sendJson(res, 201, {
         ok: true,
         review: newReview,
-        rewardCode: 'FRIEND20'
+        averageRating: avgNow,
+        count: approvedNow.length,
+        rewardCode: isPublicMode ? '' : 'FRIEND20'
       });
     }
 
