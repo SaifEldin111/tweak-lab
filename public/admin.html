@@ -156,6 +156,55 @@
       padding: 12px;
       margin: 10px 0 8px;
     }
+    .dual-delivery-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    @media (max-width: 520px) {
+      .dual-delivery-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+    .btn-wa-send {
+      background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+      color: #03150a;
+      border: none;
+      font-weight: 900;
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.28);
+    }
+    .btn-wa-send:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 8px 22px rgba(37, 211, 102, 0.45);
+    }
+    .admin-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .admin-search-input {
+      flex: 1;
+      min-width: 220px;
+      background: #06090f;
+      border: 1.5px solid var(--border);
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .admin-search-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.14);
+    }
     .gift-code-input {
       width: 100%;
       padding: 10px 12px;
@@ -436,7 +485,7 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
-      <h2 style="color:#fff; margin:0;">📥 الطلبات وإيصالات الدفع (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
+      <h2 style="color:#fff; margin:0;">📥 الطلبات وسجل المبيعات الدائم (تتحدث تلقائياً كل 3 ثوانٍ)</h2>
       <div class="orders-filter-bar" style="margin-bottom:0;" id="orders-filter-bar">
         <button type="button" class="filter-pill-btn active" data-filter="all" onclick="setAdminOrderFilter('all')">الكل (<span id="flt-count-all">0</span>)</button>
         <button type="button" class="filter-pill-btn" data-filter="psn" onclick="setAdminOrderFilter('psn')">🎮 بطاقات PSN (<span id="flt-count-psn">0</span>)</button>
@@ -444,6 +493,11 @@
         <button type="button" class="filter-pill-btn" data-filter="pc" onclick="setAdminOrderFilter('pc')">⚡ باقات PC (<span id="flt-count-pc">0</span>)</button>
         <button type="button" class="filter-pill-btn" data-filter="pending" onclick="setAdminOrderFilter('pending')">⏳ قيد المراجعة (<span id="flt-count-pending">0</span>)</button>
       </div>
+    </div>
+    <div class="admin-search-bar">
+      <input type="text" id="admin-order-search" class="admin-search-input" placeholder="🔍 ابحث في سجل المبيعات برقم الطلب (مثال: TL-123456) أو رقم الموبايل / الواتساب أو اسم العميل أو الكود..." oninput="handleAdminOrderSearch(this.value)" autocomplete="off" />
+      <span id="admin-search-count" style="font-size:0.82rem; color:var(--cyan); font-weight:800; white-space:nowrap;"></span>
+      <button type="button" id="admin-search-clear" class="btn" style="display:none; padding:7px 12px; font-size:0.8rem;" onclick="clearAdminOrderSearch()">✕ مسح البحث</button>
     </div>
     <div id="orders-container" class="orders-grid"></div>
 
@@ -771,6 +825,27 @@ window.__giftCodeDrafts = window.__giftCodeDrafts || {};
 window.__giftCode2Drafts = window.__giftCode2Drafts || {};
 window.__giftCode3Drafts = window.__giftCode3Drafts || {};
 let activeAdminOrderFilter = 'all';
+let adminOrderSearchQuery = '';
+
+function normalizeAdminDigits(str) {
+  return String(str || '').replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660));
+}
+
+function handleAdminOrderSearch(val) {
+  adminOrderSearchQuery = String(val || '').trim();
+  const clearBtn = document.getElementById('admin-search-clear');
+  if (clearBtn) clearBtn.style.display = adminOrderSearchQuery ? 'inline-flex' : 'none';
+  renderOrders(window.__latestAdminOrders || [], true);
+}
+
+function clearAdminOrderSearch() {
+  adminOrderSearchQuery = '';
+  const inp = document.getElementById('admin-order-search');
+  if (inp) inp.value = '';
+  const clearBtn = document.getElementById('admin-search-clear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  renderOrders(window.__latestAdminOrders || [], true);
+}
 
 function setAdminOrderFilter(filter) {
   activeAdminOrderFilter = filter || 'all';
@@ -821,22 +896,42 @@ function isDualCodeStoreOrder(o) {
   return Number(o.codeCount) === 2 || String(o.storeProductId || '').toLowerCase() === 'gta6-psn-us-70';
 }
 
-function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel, isSteamFlag) {
-  if (!waIntlDigits) return;
+function openPsnWhatsappWithCode(orderId, waIntlDigits, pkgLabel, isSteamFlag, requireCode = false) {
+  if (!waIntlDigits) {
+    showAdminToast('⚠️ رقم واتساب العميل غير متوفر لهذا الطلب');
+    return;
+  }
   const inp = document.getElementById('gift-code-input-' + orderId);
   const inp2 = document.getElementById('gift-code-2-input-' + orderId);
   const inp3 = document.getElementById('gift-code-3-input-' + orderId);
   const code = (inp && inp.value ? inp.value.trim() : '') || (window.__giftCodeDrafts[orderId] || '').trim();
   const code2 = (inp2 && inp2.value ? inp2.value.trim() : '') || (window.__giftCode2Drafts[orderId] || '').trim();
   const code3 = (inp3 && inp3.value ? inp3.value.trim() : '') || (window.__giftCode3Drafts[orderId] || '').trim();
+
+  if (requireCode && !code) {
+    showAdminToast('⚠️ اكتب الكود الرقمي في الخانة الأول قبل الضغط على Send via WhatsApp');
+    if (inp) inp.focus();
+    return;
+  }
+  if (requireCode && inp2 && !code2) {
+    showAdminToast('⚠️ اكتب Code 2 ($20) أيضاً قبل الإرسال على واتساب');
+    inp2.focus();
+    return;
+  }
+  if (requireCode && inp3 && !code3) {
+    showAdminToast('⚠️ اكتب Code 3 ($10) أيضاً قبل الإرسال على واتساب');
+    inp3.focus();
+    return;
+  }
+
   const cardKind = isSteamFlag === '1' ? 'بطاقة Steam Wallet' : 'بطاقة PlayStation (PSN)';
   let msg = `مرحباً من TweakLab 🎮⚡\nبخصوص طلبك #${orderId} (${pkgLabel}): `;
   if (code && code2 && code3) {
-    msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد طلب باقة GTA VI #${orderId}\nالباقة: ${pkgLabel}\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n🎁 Code 3 - $10 PSN US:\n${code3}\n\nشكراً لتعاملك مع TweakLab!`;
+    msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد وتسليم طلب باقة GTA VI #${orderId}\n📦 الباقة: ${pkgLabel}\n\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n🎁 Code 3 - $10 PSN US:\n${code3}\n\n✅ أكوادك محفوظة بشكل دائم في صفحة Track Order على الموقع.\nشكراً لتعاملك مع TweakLab!`;
   } else if (code && code2) {
-    msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد طلب باقة GTA VI #${orderId}\nالباقة: ${pkgLabel}\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n\nشكراً لتعاملك مع TweakLab!`;
+    msg = `مرحباً من TweakLab 🌴🎮⚡\nتم تأكيد وتسليم طلب باقة GTA VI #${orderId}\n📦 الباقة: ${pkgLabel}\n\n🎁 Code 1 - $50 PSN US:\n${code}\n🎁 Code 2 - $20 PSN US:\n${code2}\n\n✅ أكوادك محفوظة بشكل دائم في صفحة Track Order على الموقع.\nشكراً لتعاملك مع TweakLab!`;
   } else if (code) {
-    msg = `مرحباً من TweakLab 🎮⚡\nتم تأكيد طلبك #${orderId}\nالبطاقة: ${pkgLabel}\n🎁 كود ${cardKind} الرقمي:\n${code}\n\nشكراً لتعاملك مع TweakLab!`;
+    msg = `مرحباً من TweakLab 🎮⚡\nتم تأكيد وتسليم طلبك #${orderId}\n📦 البطاقة: ${pkgLabel}\n🎁 كود ${cardKind} الرقمي:\n${code}\n\n✅ الكود محفوظ لك بشكل دائم في صفحة Track Order على الموقع.\nشكراً لتعاملك مع TweakLab!`;
   }
   window.open(`https://wa.me/${waIntlDigits}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
 }
@@ -921,17 +1016,48 @@ function renderOrders(orders, forceRender = false) {
     return;
   }
 
+  const qNorm = normalizeAdminDigits(adminOrderSearchQuery || '').trim().toLowerCase();
+  const qDigits = qNorm.replace(/[^0-9]/g, '');
+
   const filteredOrders = allOrders.filter((o) => {
-    if (activeAdminOrderFilter === 'psn') return o.orderType === 'gaming_store' && !isSteamStoreOrder(o);
-    if (activeAdminOrderFilter === 'steam') return isSteamStoreOrder(o);
-    if (activeAdminOrderFilter === 'pc') return o.orderType !== 'gaming_store';
-    if (activeAdminOrderFilter === 'pending') return o.status === 'pending';
+    if (activeAdminOrderFilter === 'psn' && !(o.orderType === 'gaming_store' && !isSteamStoreOrder(o))) return false;
+    if (activeAdminOrderFilter === 'steam' && !isSteamStoreOrder(o)) return false;
+    if (activeAdminOrderFilter === 'pc' && o.orderType === 'gaming_store') return false;
+    if (activeAdminOrderFilter === 'pending' && o.status !== 'pending') return false;
+
+    if (qNorm) {
+      const hay = normalizeAdminDigits([
+        o.id,
+        o.customerName,
+        o.whatsappPhone,
+        o.senderPhone,
+        o.packageName,
+        o.storeRegion,
+        o.deliveredCode,
+        o.deliveredCode2,
+        o.deliveredCode3
+      ].filter(Boolean).join(' ')).toLowerCase();
+      if (hay.includes(qNorm)) return true;
+      if (qDigits.length >= 4) {
+        const phoneDigits = normalizeAdminDigits((o.whatsappPhone || '') + ' ' + (o.senderPhone || '')).replace(/[^0-9]/g, '');
+        const cleanQDigits = (qDigits.startsWith('201') && qDigits.length === 12) ? ('0' + qDigits.slice(2)) : qDigits;
+        if (phoneDigits.includes(cleanQDigits)) return true;
+      }
+      return false;
+    }
     return true;
   });
+
+  const searchCountEl = document.getElementById('admin-search-count');
+  if (searchCountEl) {
+    searchCountEl.textContent = qNorm ? `نتائج البحث: ${filteredOrders.length} من ${allOrders.length}` : `إجمالي السجل: ${filteredOrders.length} طلب`;
+  }
 
   if (filteredOrders.length === 0) {
     const emptyMsg = allOrders.length === 0
       ? 'لا توجد طلبات حتى الآن. بمجرد قيام أي عميل برفع الـ Screenshot سيظهر هنا فوراً مع جرس تنبيه 🔔'
+      : qNorm
+      ? `لا توجد طلبات مطابقة للبحث "${escapeHtml(adminOrderSearchQuery)}".`
       : 'لا توجد طلبات مطابقة لهذا الفلتر حالياً.';
     container.innerHTML = `<div style="grid-column:1/-1; background:var(--bg-card); border:1px dashed var(--border); padding:40px; border-radius:14px; text-align:center; color:var(--text-muted);">${emptyMsg}</div>`;
     return;
@@ -949,7 +1075,7 @@ function renderOrders(orders, forceRender = false) {
         isApprovedOrExpired ? 'badge-approved' : o.status === 'rejected' ? 'badge-rejected' : 'badge-pending';
       const badgeText =
         o.status === 'approved'
-          ? (isStoreOrder ? (o.deliveredCode ? (isTripleCodeOrder ? '✅ تم تسليم الـ 3 أكواد ($50 + $20 + $10)' : isDualCodeOrder ? '✅ تم تسليم الكودين ($50 + $20)' : '✅ تم التسليم بالكود') : '✅ مقبول (تم التسليم)') : '✅ مقبول وتم التسليم')
+          ? (isStoreOrder ? (o.deliveredCode ? (isTripleCodeOrder ? '✅ Delivered — تم تسليم الـ 3 أكواد ($50+$20+$10)' : isDualCodeOrder ? '✅ Delivered — تم تسليم الكودين ($50+$20)' : '✅ Delivered — تم التسليم بالكود') : '✅ Delivered (تم التسليم)') : '✅ مقبول وتم التسليم')
           : o.status === 'expired'
           ? '✅ تم التسليم (انتهت مهلة الرابط)'
           : o.status === 'rejected'
@@ -957,7 +1083,7 @@ function renderOrders(orders, forceRender = false) {
           : (isStoreOrder ? '⏳ بانتظار المراجعة وتسليم الكود' : '⏳ بانتظار القبول (5 دقائق)');
       const methodLabel = o.paymentMethod === 'instapay' ? '🟣 InstaPay (إنستاباي)' : '🔴 Vodafone Cash (فودافون كاش)';
       const timeStr = new Date(o.createdAt).toLocaleString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-      const waRawDigits = String(o.whatsappPhone || o.senderPhone || '').replace(/[^0-9]/g, '');
+      const waRawDigits = normalizeAdminDigits(o.whatsappPhone || o.senderPhone || '').replace(/[^0-9]/g, '');
       const waIntlDigits = waRawDigits.startsWith('0') ? ('2' + waRawDigits) : waRawDigits;
       const psnShortLabel = isStoreOrder ? formatPsnShortLabel(o) : '';
       const currentDraftCode =
@@ -974,7 +1100,9 @@ function renderOrders(orders, forceRender = false) {
           : (o.deliveredCode3 || '');
 
       let timeBombBadge = '';
-      if (!isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)) {
+      if (isStoreOrder && o.status === 'approved' && o.deliveredCode) {
+        timeBombBadge = `<div style="font-size:0.81rem; color:#00ff88; background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); padding:5px 9px; border-radius:7px; margin-top:6px;">🔒 <strong>حفظ دائم (Permanent):</strong> الكود محفوظ للأبد في سجل المبيعات و Track Order (بدون تدمير ذاتي)</div>`;
+      } else if (!isStoreOrder && (o.status === 'approved' || o.status === 'expired' || o.isBurned)) {
         if (!o.firstAccessedAt) {
           timeBombBadge = `<div style="font-size:0.83rem; color:var(--cyan); background:rgba(0,240,255,0.08); border:1px solid rgba(0,240,255,0.3); padding:4px 8px; border-radius:6px; margin-top:6px;">⏳ <strong>Time-Bomb:</strong> لم يُفتح بعد (مهلة ساعة واحدة جاهزة تبدأ عند أول فتح)</div>`;
         } else {
@@ -996,6 +1124,10 @@ function renderOrders(orders, forceRender = false) {
         : isStoreOrder
         ? `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,240,255,0.16); border:1px solid rgba(0,240,255,0.55); color:var(--cyan); box-shadow:0 0 10px rgba(0,240,255,0.16);">🎮 بطاقة PSN</span>`
         : `<span style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:900; padding:3px 10px; border-radius:999px; background:rgba(0,255,136,0.14); border:1px solid rgba(0,255,136,0.45); color:var(--green);">⚡ باقة PC</span>`;
+
+      const waDualBtnHtml = waIntlDigits
+        ? `<button type="button" class="btn btn-wa-send" style="width:100%; justify-content:center; padding:10px 12px; font-size:0.86rem;" data-wa="${escapeHtml(waIntlDigits)}" data-pkg="${escapeHtml(psnShortLabel || o.packageName || '')}" data-steam="${isSteamOrder ? '1' : '0'}" onclick="openPsnWhatsappWithCode('${o.id}', this.getAttribute('data-wa'), this.getAttribute('data-pkg'), this.getAttribute('data-steam'), true)">💬 Send via WhatsApp</button>`
+        : '';
 
       const psnCodeDeliverySection = isStoreOrder
         ? (isTripleCodeOrder
@@ -1030,9 +1162,12 @@ function renderOrders(orders, forceRender = false) {
                  </div>
                  <input type="text" id="gift-code-3-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="Code 3 - $10: MNOP-9012-QRST" value="${escapeHtml(currentDraftCode3)}" oninput="saveGiftCode3Draft('${o.id}', this.value)" autocomplete="off" />
 
-                 <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem; margin-top:6px;" onclick="deliverPsnCode('${o.id}', this)">
-                   ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الـ 3 أكواد المحفوظة ($50 + $20 + $10)' : '✅ تأكيد الطلب وإرسال الـ 3 أكواد ($50 + $20 + $10)'}
-                 </button>
+                 <div class="dual-delivery-actions">
+                   <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 12px; font-size:0.84rem;" onclick="deliverPsnCode('${o.id}', this)">
+                     ${o.status === 'approved' && o.deliveredCode ? '💾 Update Saved Codes' : '✅ Save & Deliver on Website'}
+                   </button>
+                   ${waDualBtnHtml}
+                 </div>
                </div>`
             : isDualCodeOrder
             ? `<div class="psn-code-delivery-box">
@@ -1056,9 +1191,12 @@ function renderOrders(orders, forceRender = false) {
                  </div>
                  <input type="text" id="gift-code-2-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="Code 2 - $20: WXYZ-5678-IJKL" value="${escapeHtml(currentDraftCode2)}" oninput="saveGiftCode2Draft('${o.id}', this.value)" autocomplete="off" />
 
-                 <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem;" onclick="deliverPsnCode('${o.id}', this)">
-                   ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الكودين المحفوظين ($50 + $20)' : '✅ تأكيد الطلب وإرسال الكودين ($50 + $20)'}
-                 </button>
+                 <div class="dual-delivery-actions">
+                   <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 12px; font-size:0.84rem;" onclick="deliverPsnCode('${o.id}', this)">
+                     ${o.status === 'approved' && o.deliveredCode ? '💾 Update Saved Codes' : '✅ Save & Deliver on Website'}
+                   </button>
+                   ${waDualBtnHtml}
+                 </div>
                </div>`
             : `<div class="psn-code-delivery-box">
                  <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:4px;">
@@ -1070,9 +1208,12 @@ function renderOrders(orders, forceRender = false) {
                    }
                  </div>
                  <input type="text" id="gift-code-input-${o.id}" class="gift-code-input" dir="ltr" placeholder="${isSteamOrder ? 'مثال: XXXXX-XXXXX-XXXXX' : 'مثال: ABCD-1234-EFGH'}" value="${escapeHtml(currentDraftCode)}" oninput="saveGiftCodeDraft('${o.id}', this.value)" autocomplete="off" />
-                 <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 14px; font-size:0.9rem;" onclick="deliverPsnCode('${o.id}', this)">
-                   ${o.status === 'approved' && o.deliveredCode ? '💾 تحديث الكود المحفوظ للعميل' : '✅ تأكيد الطلب وإرسال الكود'}
-                 </button>
+                 <div class="dual-delivery-actions">
+                   <button type="button" class="btn btn-accept" style="width:100%; justify-content:center; padding:10px 12px; font-size:0.84rem;" onclick="deliverPsnCode('${o.id}', this)">
+                     ${o.status === 'approved' && o.deliveredCode ? '💾 Update Saved Code' : '✅ Save & Deliver on Website'}
+                   </button>
+                   ${waDualBtnHtml}
+                 </div>
                </div>`)
         : '';
 

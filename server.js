@@ -360,15 +360,20 @@ function mergeOrderLists(...lists) {
         const bestToken = (newer.accessToken && newer.accessToken !== 'RESTORED_FROM_TELEGRAM')
           ? newer.accessToken
           : ((older.accessToken && older.accessToken !== 'RESTORED_FROM_TELEGRAM') ? older.accessToken : newer.accessToken);
+        const isStoreOrderMerged = (newer.orderType || older.orderType) === 'gaming_store';
         map.set(id, {
           ...older,
           ...newer,
           accessToken: bestToken,
           screenshotFileIds: newer.screenshotFileIds || older.screenshotFileIds,
           screenshotMime: newer.screenshotMime || older.screenshotMime,
-          deliveredCode: newer.deliveredCode !== undefined ? newer.deliveredCode : (older.deliveredCode || ''),
-          deliveredCode2: newer.deliveredCode2 !== undefined ? newer.deliveredCode2 : (older.deliveredCode2 || ''),
+          deliveredCode: newer.deliveredCode || older.deliveredCode || '',
+          deliveredCode2: newer.deliveredCode2 || older.deliveredCode2 || '',
+          deliveredCode3: newer.deliveredCode3 || older.deliveredCode3 || '',
           deliveredAt: newer.deliveredAt || older.deliveredAt || '',
+          status: (isStoreOrderMerged && newer.status === 'expired') ? 'approved' : newer.status,
+          isBurned: isStoreOrderMerged ? false : Boolean(newer.isBurned || older.isBurned),
+          permanentAccess: isStoreOrderMerged ? true : Boolean(newer.permanentAccess),
           updatedAt: Math.max(tExisting, tItem) ? new Date(Math.max(tExisting, tItem)).toISOString() : new Date().toISOString()
         });
       }
@@ -1335,7 +1340,14 @@ async function handleRequest(req, res) {
         return sendJson(res, 400, { error: 'صورة إيصال التحويل غير صالحة أو فارغة. يرجى رفع صورة صحيحة.' });
       }
 
-      const orderId = 'TL-' + Math.floor(100000 + Math.random() * 900000);
+      const existingOrdersForId = loadOrders();
+      const existingOrderIds = new Set(existingOrdersForId.map((o) => String(o.id || '').toUpperCase()));
+      let orderId = 'TL-' + Math.floor(100000 + Math.random() * 900000);
+      let idAttempt = 0;
+      while (existingOrderIds.has(orderId) && idAttempt < 20) {
+        orderId = 'TL-' + Math.floor(100000 + Math.random() * 900000);
+        idAttempt++;
+      }
       const accessToken = crypto.randomBytes(16).toString('hex');
       const settings = loadSettings();
 
@@ -1592,12 +1604,15 @@ async function handleRequest(req, res) {
       );
 
       if (matchedOrder.orderType === 'gaming_store') {
-        const isApproved = matchedOrder.status === 'approved';
+        const isApproved = matchedOrder.status === 'approved' || matchedOrder.status === 'delivered';
+        const isDelivered = Boolean(isApproved && matchedOrder.deliveredCode);
         return sendJson(res, 200, {
           ok: true,
           id: matchedOrder.id,
           accessToken: matchedOrder.accessToken,
           orderType: 'gaming_store',
+          permanentAccess: true,
+          noSelfDestruct: true,
           packageName: matchedOrder.packageName,
           storeProductId: matchedOrder.storeProductId || '',
           storeCategory: matchedOrder.storeCategory || '',
@@ -1610,13 +1625,14 @@ async function handleRequest(req, res) {
           deliveredCode2: isApproved ? (matchedOrder.deliveredCode2 || '') : '',
           deliveredCode3: isApproved ? (matchedOrder.deliveredCode3 || '') : '',
           deliveredAt: isApproved ? (matchedOrder.deliveredAt || '') : '',
+          deliveryStatus: isDelivered ? 'delivered' : matchedOrder.status,
           whatsappPhone: matchedOrder.whatsappPhone || matchedOrder.senderPhone || '',
           gameAccount: matchedOrder.gameAccount || '',
           customerName: matchedOrder.customerName,
           paymentMethod: matchedOrder.paymentMethod,
           amountEgp: matchedOrder.amountEgp,
-          status: matchedOrder.status,
-          paymentStatus: matchedOrder.status,
+          status: matchedOrder.status === 'delivered' ? 'approved' : matchedOrder.status,
+          paymentStatus: matchedOrder.status === 'delivered' ? 'approved' : matchedOrder.status,
           createdAt: matchedOrder.createdAt,
           updatedAt: matchedOrder.updatedAt
         });
@@ -1736,10 +1752,13 @@ async function handleRequest(req, res) {
       }
 
       if (order.orderType === 'gaming_store') {
-        const isApproved = order.status === 'approved';
+        const isApproved = order.status === 'approved' || order.status === 'delivered';
+        const isDelivered = Boolean(isApproved && order.deliveredCode);
         return sendJson(res, 200, {
           id: order.id,
           orderType: 'gaming_store',
+          permanentAccess: true,
+          noSelfDestruct: true,
           packageName: order.packageName,
           storeProductId: order.storeProductId || '',
           storeCategory: order.storeCategory || '',
@@ -1752,13 +1771,14 @@ async function handleRequest(req, res) {
           deliveredCode2: isApproved ? (order.deliveredCode2 || '') : '',
           deliveredCode3: isApproved ? (order.deliveredCode3 || '') : '',
           deliveredAt: isApproved ? (order.deliveredAt || '') : '',
+          deliveryStatus: isDelivered ? 'delivered' : order.status,
           whatsappPhone: order.whatsappPhone || order.senderPhone || '',
           gameAccount: order.gameAccount || '',
           customerName: order.customerName,
           paymentMethod: order.paymentMethod,
           amountEgp: order.amountEgp,
-          status: order.status,
-          paymentStatus: order.status,
+          status: order.status === 'delivered' ? 'approved' : order.status,
+          paymentStatus: order.status === 'delivered' ? 'approved' : order.status,
           createdAt: order.createdAt,
           updatedAt: order.updatedAt
         });
@@ -2249,6 +2269,9 @@ async function handleRequest(req, res) {
         }
         orders[idx].deliveredAt = new Date().toISOString();
         orders[idx].status = 'approved';
+        orders[idx].deliveryStatus = 'delivered';
+        orders[idx].isBurned = false;
+        orders[idx].permanentAccess = true;
         orders[idx].updatedAt = new Date().toISOString();
       } else if (action === 'reset-timer') {
         if (orders[idx].orderType !== 'gaming_store') {
