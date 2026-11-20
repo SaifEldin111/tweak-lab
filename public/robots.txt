@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /pc
+Allow: /store
+Allow: /guides
 Disallow: /admin
 Disallow: /admin/
 Disallow: /api/
