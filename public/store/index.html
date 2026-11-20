@@ -1395,26 +1395,23 @@
         opacity 1.15s cubic-bezier(0.22, 1, 0.36, 1),
         transform 4.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: opacity, transform;
-      filter: saturate(1.12) contrast(1.05);
+      filter: brightness(1.10) contrast(1.05) saturate(1.10);
+      -webkit-filter: brightness(1.10) contrast(1.05) saturate(1.10);
     }
     .gta6-slide.active {
-      opacity: 1;
+      opacity: 0.95;
       transform: scale(1.085) translateZ(0);
     }
-    /* Directional dark gradient overlay: bg-gradient-to-r from-black/95 via-black/80 to-black/45 */
+    /* Light smart bottom-up vignette: bg-gradient-to-t from-black/80 via-black/25 to-black/10 */
     .gta6-gradient-overlay {
       position: absolute;
       inset: 0;
       z-index: 1;
       pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.80) 54%, rgba(0, 0, 0, 0.45) 100%),
-        linear-gradient(180deg, rgba(4, 7, 14, 0.35) 0%, rgba(4, 7, 14, 0.85) 100%);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.80) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.10) 100%);
     }
     html[dir="rtl"] .gta6-gradient-overlay {
-      background:
-        linear-gradient(270deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.80) 54%, rgba(0, 0, 0, 0.45) 100%),
-        linear-gradient(180deg, rgba(4, 7, 14, 0.35) 0%, rgba(4, 7, 14, 0.85) 100%);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.80) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.10) 100%);
     }
     .gta6-banner-content {
       position: relative;
@@ -1491,7 +1488,8 @@
       color: #ffffff;
       letter-spacing: -0.3px;
       margin-bottom: 6px;
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+      filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.95));
     }
     .gta6-title .gta6-vice-gradient {
       background: linear-gradient(90deg, #ff6ec7 0%, #ffb86c 50%, #00f0ff 100%);
@@ -1504,10 +1502,11 @@
       display: block;
       font-size: 0.92rem;
       font-weight: 700;
-      color: #e2e8f0;
+      color: #f1f5f9;
       line-height: 1.65;
       margin-top: 6px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.92);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+      filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.95));
     }
     .gta6-trust-row {
       display: flex;
@@ -2170,12 +2169,18 @@
     .coming-soon-glass-card,
     .payment-info-card,
     .faq-item,
-    .gta6-bundle-card,
     .footer-guides-bar {
       background: rgba(9, 9, 11, 0.35) !important;
       backdrop-filter: blur(12px) !important;
       -webkit-backdrop-filter: blur(12px) !important;
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+    .gta6-bundle-card {
+      background: rgba(0, 0, 0, 0.45) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
     }
     .product-card:hover,
@@ -2225,11 +2230,15 @@
       .filter-tabs-wrap,
       .coming-soon-glass-card,
       .payment-info-card,
-      .faq-item,
-      .gta6-bundle-card {
+      .faq-item {
         background: rgba(9, 9, 11, 0.42) !important;
         backdrop-filter: blur(8px) !important;
         -webkit-backdrop-filter: blur(8px) !important;
+      }
+      .gta6-bundle-card {
+        background: rgba(0, 0, 0, 0.45) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
       }
       .modal-dialog {
         background: rgba(9, 9, 11, 0.84) !important;
